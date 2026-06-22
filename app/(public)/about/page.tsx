@@ -115,50 +115,62 @@ const certifications = [
 export default function AboutPage() {
   return (
     <>
-      {/* Hero */}
-      <Section spacing="tight">
-        <Container size="narrow">
-          <Reveal>
-            <div className="text-center pt-24 pb-12">
-              <p className="font-mono-tight text-xs uppercase tracking-[0.25em] text-secondary mb-4">
-                About Me
-              </p>
-              <h1 className="font-display text-4xl md:text-5xl font-semibold mb-4">
-                Designer. Engineer.{' '}
-                <br className="hidden sm:block" />
-                <span className="gradient-text">Problem Solver.</span>
-              </h1>
-              <p className="text-mist-1 text-lg max-w-2xl mx-auto leading-relaxed">
-                I&apos;m <span className="text-paper font-medium">Raymond Gaius</span> — a
-                Product Designer and AI Engineer passionate about building digital
-                experiences people can trust.
-              </p>
-            </div>
-          </Reveal>
-        </Container>
-      </Section>
+      {/* Hero — full-bleed portrait layout */}
+      <section className="relative min-h-screen overflow-hidden">
+        {/* Background portrait — replace /img/about-portrait.jpg with your image */}
+        <div className="absolute inset-0 bg-gradient-to-br from-ink via-ink to-ink-deep">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/img/about-portrait.jpg"
+            alt="Raymond Gaius"
+            className="h-full w-full object-cover object-center opacity-60 mix-blend-overlay"
+          />
+        </div>
 
-      {/* Bio */}
-      <Section>
-        <Container size="narrow">
-          <Reveal>
-            <GlassCard className="p-8">
-              <p className="text-mist-1 leading-relaxed mb-4">
-                I help businesses and startups grow through innovative design,
-                strategic thinking, and technology-driven solutions. From branding
-                and product design to digital transformation — I turn bold ideas
-                into meaningful experiences.
-              </p>
-              <p className="text-mist-1 leading-relaxed">
-                With expertise spanning UI/UX, frontend development, and AI, I
-                bridge the gap between creative vision and technical execution.
-                Every project I take on is driven by one goal: build something
-                people can trust.
-              </p>
-            </GlassCard>
-          </Reveal>
+        {/* Gradient overlays for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/80 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-ink via-transparent to-ink/30" />
+
+        {/* Content */}
+        <Container size="wide" className="relative z-10">
+          <div className="flex min-h-screen flex-col justify-end px-6 pb-16 pt-32 md:px-12 lg:px-20">
+            <div className="grid grid-cols-1 gap-12 md:grid-cols-2 md:items-end">
+              {/* Left: label + headline */}
+              <Reveal>
+                <div>
+                  <p className="font-mono-tight text-xs uppercase tracking-[0.25em] text-secondary mb-4">
+                    About Me
+                  </p>
+                  <h1 className="font-display text-5xl font-semibold leading-[1.05] tracking-tight text-paper md:text-6xl lg:text-7xl">
+                    Designer. Engineer.
+                    <br />
+                    <span className="gradient-text">Problem Solver.</span>
+                  </h1>
+                </div>
+              </Reveal>
+
+              {/* Right: bio + CTA */}
+              <Reveal index={1}>
+                <div className="md:pb-2">
+                  <p className="text-mist-1 leading-relaxed mb-6 max-w-md">
+                    I&apos;m <span className="text-paper font-medium">Raymond Gaius</span> — a
+                    Product Designer and AI Engineer passionate about building digital
+                    experiences people can trust. I help businesses grow through
+                    innovative design, strategic thinking, and technology-driven solutions.
+                  </p>
+                  <Link
+                    href="/contact"
+                    className="group inline-flex items-center gap-3 rounded-full border border-(--line) bg-paper/5 px-6 py-3 text-sm font-medium text-paper transition-all hover:border-primary hover:bg-primary hover:shadow-[0_0_30px_rgba(var(--primary-rgb),0.3)]"
+                  >
+                    Get In Touch
+                    <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+                  </Link>
+                </div>
+              </Reveal>
+            </div>
+          </div>
         </Container>
-      </Section>
+      </section>
 
       {/* Journey Timeline */}
       <Section>

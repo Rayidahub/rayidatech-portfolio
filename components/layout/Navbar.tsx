@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
 import StatusPill from '@/components/ui/StatusPill';
+import ThemeToggle from '@/components/ui/ThemeToggle';
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -61,7 +62,8 @@ export default function Navbar() {
           })}
         </div>
 
-        <div className="hidden md:block">
+        <div className="hidden items-center gap-2 md:flex">
+          <ThemeToggle />
           <StatusPill />
         </div>
 
@@ -89,7 +91,10 @@ export default function Navbar() {
                 {link.label}
               </Link>
             ))}
-            <StatusPill className="mt-2 self-start" />
+            <div className="flex items-center gap-3 mt-2">
+              <ThemeToggle />
+              <StatusPill />
+            </div>
           </div>
         </div>
       )}

@@ -46,25 +46,40 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${geist.variable} ${geistMono.variable} text-paper antialiased`}
       >
+        {/* Prevent theme flash before hydration */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  const theme = localStorage.getItem('theme') || 'dark';
+                  document.documentElement.setAttribute('data-theme', theme);
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+
         {/* Full-screen fixed background image */}
         <div className="fixed inset-0" aria-hidden="true" style={{ zIndex: 0 }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/bgmain.png"
+            src="/img/bgmain.jpg"
             alt=""
             className="h-full w-full object-cover"
             style={{ filter: 'blur(12px)', transform: 'scale(1.1)' }}
           />
         </div>
-        {/* Dark translucent overlay + blur */}
+        {/* Theme-aware translucent overlay + blur */}
         <div
           className="fixed inset-0 pointer-events-none"
           aria-hidden="true"
           style={{
-            background: 'rgba(26, 26, 46, 0.55)',
-            backdropFilter: 'blur(80px)',
-            WebkitBackdropFilter: 'blur(50px)',
+            background: 'var(--bg-overlay)',
+            backdropFilter: 'blur(var(--bg-blur))',
+            WebkitBackdropFilter: 'blur(var(--bg-blur))',
             zIndex: 1,
+            transition: 'background 0.3s ease, backdrop-filter 0.3s ease',
           }}
         />
         <div className="relative" style={{ zIndex: 2 }}>

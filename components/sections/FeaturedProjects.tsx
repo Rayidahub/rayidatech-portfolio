@@ -1,10 +1,10 @@
 import { supabase } from '@/lib/supabase/client';
 import type { Project } from '@/types/project';
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Briefcase, Calendar, Sparkles, Tag } from 'lucide-react';
 import Container from '@/components/ui/Container';
 import Section from '@/components/ui/Section';
-import GlassCard from '@/components/ui/GlassCard';
+import PremiumCard from '@/components/ui/PremiumCard';
 import Reveal from '@/components/ui/Reveal';
 
 async function getFeaturedProjects(): Promise<Project[]> {
@@ -54,55 +54,65 @@ export default async function FeaturedProjects() {
         </Reveal>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projects.map((project, index) => (
-            <Reveal key={project.id} index={index}>
-              <Link
-                href={`/projects/${project.slug}`}
-                className="group block"
-              >
-                <GlassCard className="overflow-hidden p-0 h-full transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1">
-                  {/* Cover Image */}
-                  <div className="aspect-video bg-gradient-to-br from-primary/20 to-secondary/10 flex items-center justify-center">
-                    {project.cover_image ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={project.cover_image}
-                        alt={project.title}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <span className="text-mist-2 text-sm">No image</span>
-                    )}
-                  </div>
+          {projects.map((project, index) => {
+            const firstTag = project.tags?.[0];
+            const badgeLabel = project.featured ? 'Featured' : firstTag || 'Project';
 
-                  {/* Content */}
-                  <div className="p-5">
-                    {project.tags && project.tags.length > 0 && (
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="bg-primary/10 text-mist-1 font-mono-tight text-xs px-2 py-1 rounded-full">
-                          {project.tags[0]}
-                        </span>
-                      </div>
-                    )}
-
-                    <h3 className="font-display text-lg font-semibold mb-1 text-paper group-hover:text-secondary transition-colors">
-                      {project.title}
-                    </h3>
-
-                    <p className="text-mist-1 text-sm line-clamp-2">
-                      {project.description}
-                    </p>
-
-                    {project.role && (
-                      <p className="text-mist-2 text-xs mt-2">
-                        {project.role}
-                      </p>
-                    )}
-                  </div>
-                </GlassCard>
-              </Link>
-            </Reveal>
-          ))}
+            return (
+              <Reveal key={project.id} index={index}>
+                <Link
+                  href={`/projects/${project.slug}`}
+                  className="group block"
+                >
+                  <PremiumCard
+                    imageSrc={project.cover_image}
+                    imageAlt={project.title}
+                    badge={badgeLabel}
+                    title={project.title}
+                    subtitle={project.role}
+                    description={project.description}
+                    primaryMetric={project.duration || 'View →'}
+                    bottomSpecs={[
+                      {
+                        icon: <Briefcase className="w-3.5 h-3.5" />,
+                        label: project.role || 'Product Design',
+                      },
+                      {
+                        icon: <Calendar className="w-3.5 h-3.5" />,
+                        label: project.duration || '—',
+                      },
+                      {
+                        icon: <Tag className="w-3.5 h-3.5" />,
+                        label: firstTag || 'Project',
+                      },
+                    ]}
+                    hoverBadge={{
+                      icon: <Sparkles className="w-3.5 h-3.5" />,
+                      label: firstTag || 'Project',
+                    }}
+                    hoverMetrics={[
+                      {
+                        icon: <Calendar className="w-3.5 h-3.5" />,
+                        label: project.duration || '—',
+                      },
+                      {
+                        icon: <Briefcase className="w-3.5 h-3.5" />,
+                        label: project.role || 'Product Design',
+                      },
+                      {
+                        icon: <Tag className="w-3.5 h-3.5" />,
+                        label: firstTag
+                          ? `${project.tags?.length || 0} tags`
+                          : 'Project',
+                      },
+                    ]}
+                    tags={project.tags || []}
+                    ctaLabel="View Project"
+                  />
+                </Link>
+              </Reveal>
+            );
+          })}
         </div>
       </Container>
     </Section>
