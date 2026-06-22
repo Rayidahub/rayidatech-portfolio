@@ -39,7 +39,21 @@ CREATE TABLE contacts (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- 4. Testimonials Table
+-- 5. Services Table
+CREATE TABLE services (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  title TEXT NOT NULL,
+  slug TEXT UNIQUE NOT NULL,
+  headline TEXT NOT NULL,
+  description TEXT NOT NULL,
+  content TEXT NOT NULL,
+  features TEXT[] NOT NULL DEFAULT '{}',
+  icon_name TEXT NOT NULL DEFAULT 'Palette',
+  "order" INTEGER NOT NULL DEFAULT 0,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 6. Testimonials Table
 CREATE TABLE testimonials (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   name TEXT NOT NULL,
@@ -53,6 +67,7 @@ CREATE TABLE testimonials (
 ALTER TABLE projects ENABLE ROW LEVEL SECURITY;
 ALTER TABLE posts ENABLE ROW LEVEL SECURITY;
 ALTER TABLE contacts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE services ENABLE ROW LEVEL SECURITY;
 ALTER TABLE testimonials ENABLE ROW LEVEL SECURITY;
 
 -- 6. Create Policies (who can read/write)
@@ -76,6 +91,13 @@ CREATE POLICY "Allow public insert access to contacts"
 
 CREATE POLICY "Allow authenticated read access to contacts"
   ON contacts FOR SELECT USING (auth.role() = 'authenticated');
+
+-- Services: Anyone can read, only authenticated can write
+CREATE POLICY "Allow public read access to services"
+  ON services FOR SELECT USING (true);
+
+CREATE POLICY "Allow authenticated insert access to services"
+  ON services FOR INSERT WITH CHECK (auth.role() = 'authenticated');
 
 -- Testimonials: Anyone can read, only authenticated can write
 CREATE POLICY "Allow public read access to testimonials"

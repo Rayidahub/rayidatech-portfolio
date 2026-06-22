@@ -1,26 +1,265 @@
 @import "tailwindcss";
 
+/*
+  Design tokens — Rayida Tech / Raymond Gaius portfolio
+  Direction: Linear / Vercel / Stripe / Framer — dark mode only.
+  Brand palette: violet/cyan/navy (matches Rayida Tech / Raytexta brand family).
+*/
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --ink: #1a1a2e; /* tertiary brand navy, used as page background */
+  --ink-deep: #0d0d18; /* darker layer for depth — section dividers, recessed panels */
+  --paper: #f2f2f2; /* accent2 — primary text, slightly soft white rather than pure #fff */
+
+  --primary: #8000ff; /* violet — primary accent, CTAs, links */
+  --primary-rgb: 128, 0, 255;
+  --secondary: #00d1ff; /* cyan — secondary accent, used for highlights/gradients */
+  --secondary-rgb: 0, 209, 255;
+  --accent-soft: #ccccff; /* accent1 — soft lavender, used for subtle tints/hover states */
+
+  --signal: var(--primary); /* kept as alias so existing components referencing "signal" still work */
+  --signal-rgb: var(--primary-rgb);
+  --signal-dim: rgba(128, 0, 255, 0.14);
+  --signal-dim-strong: rgba(128, 0, 255, 0.24);
+
+  --mist-1: #b8b8c8; /* body copy on dark navy */
+  --mist-2: #7d7d92; /* captions, metadata */
+
+  --line: rgba(242, 242, 242, 0.08);
+  --line-strong: rgba(242, 242, 242, 0.16);
+
+  --glass-bg: rgba(242, 242, 242, 0.04);
+  --glass-bg-strong: rgba(242, 242, 242, 0.07);
+
+  /* Section rhythm — generous, Linear-style spacing */
+  --section-py: clamp(5rem, 10vw, 9rem);
+  --section-py-tight: clamp(3rem, 6vw, 5rem);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --color-ink: var(--ink);
+  --color-ink-deep: var(--ink-deep);
+  --color-paper: var(--paper);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-accent-soft: var(--accent-soft);
+  --color-signal: var(--signal);
+  --color-mist-1: var(--mist-1);
+  --color-mist-2: var(--mist-2);
+  --font-display: var(--font-geist-sans);
+  --font-body: var(--font-inter);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  background: var(--ink);
+  color-scheme: dark;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--paper);
+  font-family: var(--font-body), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Display headings use the tighter grotesk with negative tracking */
+.font-display {
+  font-family: var(--font-display), system-ui, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.font-mono-tight {
+  font-family: var(--font-mono), monospace;
+  letter-spacing: 0.01em;
+}
+
+/* Glass surface utility — used sparingly: nav, cards, the status pill */
+.glass {
+  background: var(--glass-bg);
+  border: 1px solid var(--line);
+  backdrop-filter: blur(80px);
+  
+}
+
+.glass-strong {
+  background: var(--glass-bg-strong);
+  border: 1px solid var(--line-strong);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+/* Signature element: pulsing availability dot */
+@keyframes signal-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(128, 0, 255, 0.45);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(128, 0, 255, 0);
+  }
+}
+
+.signal-dot {
+  background: var(--primary);
+  animation: signal-pulse 2.4s ease-out infinite;
+}
+
+/* The one signature flourish: violet -> cyan gradient text, used once per page max */
+.gradient-text {
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Gentle floating animation for hero visual */
+@keyframes hero-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+.hero-float {
+  animation: hero-float 6s ease-in-out infinite;
+}
+
+/* Infinite horizontal marquee scroll */
+@keyframes marquee-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: marquee-scroll 30s linear infinite;
+}
+
+/* Scroll-down indicator bounce */
+@keyframes scroll-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+.scroll-indicator {
+  animation: scroll-bounce 2s ease-in-out infinite;
+}
+
+/* Primary button glow on hover */
+.btn-glow {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+.btn-glow::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 0 20px rgba(var(--primary-rgb), 0.4), 0 0 60px rgba(var(--primary-rgb), 0.15);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.btn-glow:hover::after {
+  opacity: 1;
+}
+
+/* Gradient section separator */
+.section-separator {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--primary), var(--secondary), var(--primary), transparent);
+  opacity: 0.2;
+}
+
+/* Card hover: subtle lift + glow */
+.card-hover {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.3s ease,
+              border-color 0.3s ease;
+}
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(var(--primary-rgb), 0.15),
+              0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Icon hover: scale + glow */
+.icon-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.icon-hover:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(var(--primary-rgb), 0.3);
+}
+
+/* Animated gradient border — rotates gradient for shimmer effect */
+@keyframes border-rotate {
+  0% { --border-angle: 0deg; }
+  100% { --border-angle: 360deg; }
+}
+
+.cta-border-glow {
+  position: relative;
+  border-radius: 1rem;
+}
+.cta-border-glow::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--border-angle, 0deg),
+    var(--primary),
+    var(--secondary),
+    var(--primary),
+    transparent,
+    var(--primary)
+  );
+  animation: border-rotate 4s linear infinite;
+  z-index: -1;
+  opacity: 0.6;
+}
+@supports not (background: conic-gradient(red, blue)) {
+  .cta-border-glow::before {
+    background: var(--primary);
+  }
+}
+@property --border-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+/* Number count-up for stats */
+@keyframes count-fade {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.stat-number {
+  animation: count-fade 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .signal-dot {
+    animation: none;
+  }
+  .hero-float {
+    animation: none;
+  }
+  .marquee-track {
+    animation: none;
+  }
+  .scroll-indicator {
+    animation: none;
+  }
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Visible keyboard focus, kept brand-consistent */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+::selection {
+  background: var(--signal-dim-strong);
+  color: var(--paper);
 }

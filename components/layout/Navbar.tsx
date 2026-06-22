@@ -1,65 +1,95 @@
-// components/layout/Navbar.tsx
 'use client';
 
-import { useState } from 'react';
+// components/layout/Navbar.tsx
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
+import StatusPill from '@/components/ui/StatusPill';
+
+const navLinks = [
+  { href: '/', label: 'Home' },
+  { href: '/about', label: 'About' },
+  { href: '/projects', label: 'Projects' },
+  { href: '/blog', label: 'Blog' },
+  { href: '/contact', label: 'Contact' },
+];
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
 
-  const navLinks = [
-    { href: '/', label: 'Home' },
-    { href: '/about', label: 'About' },
-    { href: '/projects', label: 'Projects' },
-    { href: '/blog', label: 'Blog' },
-    { href: '/contact', label: 'Contact' },
-  ];
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    const timeout = window.setTimeout(() => setIsOpen(false), 0);
+    return () => window.clearTimeout(timeout);
+  }, [pathname]);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-sm border-b border-white/5">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-        {/* Logo */}
-        <Link href="/" className="text-xl font-bold text-white">
-          Raymond<span className="text-teal-400">.dev</span>
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ${
+        scrolled ? 'glass' : 'border-b border-transparent'
+      }`}
+    >
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 md:px-8">
+        <Link href="/" className="font-display text-lg font-semibold text-paper">
+          Raymond<span className="text-signal">.</span>
         </Link>
 
-        {/* Desktop Menu */}
-        <div className="hidden md:flex gap-8">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="text-gray-400 hover:text-teal-400 transition-colors text-sm font-medium"
-            >
-              {link.label}
-            </Link>
-          ))}
+        <div className="hidden items-center gap-8 md:flex">
+          {navLinks.map((link) => {
+            const active = pathname === link.href;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`text-sm transition-colors ${
+                  active ? 'text-paper' : 'text-mist-1 hover:text-paper'
+                }`}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
         </div>
 
-        {/* Mobile Menu Button */}
+        <div className="hidden md:block">
+          <StatusPill />
+        </div>
+
         <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden text-gray-400 hover:text-teal-400 transition-colors"
+          onClick={() => setIsOpen((v) => !v)}
+          className="text-mist-1 transition-colors hover:text-paper md:hidden"
+          aria-label={isOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={isOpen}
         >
-          {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
       </div>
 
-      {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden bg-black/95 border-b border-white/5 py-4 px-6">
-          <div className="flex flex-col gap-4">
+        <div className="glass-strong border-t border-(--line) px-6 py-6 md:hidden">
+          <div className="flex flex-col gap-5">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                onClick={() => setIsOpen(false)}
-                className="text-gray-400 hover:text-teal-400 transition-colors text-sm font-medium"
+                className={`text-base ${
+                  pathname === link.href ? 'text-paper' : 'text-mist-1'
+                }`}
               >
                 {link.label}
               </Link>
             ))}
+            <StatusPill className="mt-2 self-start" />
           </div>
         </div>
       )}
