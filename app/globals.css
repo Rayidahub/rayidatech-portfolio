@@ -265,6 +265,17 @@ body {
   animation: count-fade 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
+/* Radial gradient for background glows */
+.bg-radial-glow {
+  background: radial-gradient(circle, var(--tw-gradient-from), var(--tw-gradient-to));
+}
+
+/* Subtle dot grid pattern */
+.bg-dot-pattern {
+  background-image: radial-gradient(circle, var(--line) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .signal-dot {
     animation: none;

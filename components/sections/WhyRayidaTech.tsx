@@ -86,7 +86,14 @@ const mobilePoints = [
 
 export default function WhyRayidaTech() {
   return (
-    <Section>
+    <Section className="bg-[var(--ink-deep)] relative overflow-hidden">
+      {/* Subtle radial glow behind graph */}
+      <div
+        className="pointer-events-none absolute inset-0 hidden lg:block"
+        aria-hidden="true"
+      >
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40rem] h-[40rem] rounded-full bg-radial-glow from-primary/5 via-secondary/5 to-transparent" />
+      </div>
       <Container size="default">
         <Reveal>
           <div className="text-center mb-16 md:mb-20">
