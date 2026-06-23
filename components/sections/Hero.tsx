@@ -3,13 +3,49 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import StatusPill from '@/components/ui/StatusPill';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { defaultHeroSlides, type HeroSlide } from '@/lib/data/hero-slides';
 
-const headlineWords = ['Build.', 'Scale.', 'Dominate Your', 'Digital Presence'];
+interface HeroProps {
+  slides?: HeroSlide[];
+}
 
-export default function Hero() {
+export default function Hero({ slides }: HeroProps) {
+  const heroSlides = slides && slides.length > 0 ? slides : defaultHeroSlides;
+  const [current, setCurrent] = useState(0);
+  const [direction, setDirection] = useState(1);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDirection(1);
+      setCurrent((prev) => (prev + 1) % heroSlides.length);
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, [current, heroSlides.length]);
+
+  const goTo = (index: number) => {
+    setDirection(index > current ? 1 : -1);
+    setCurrent(index);
+  };
+
+  const slide = heroSlides[current];
+
   return (
-    <section className="relative flex min-h-screen overflow-hidden">
+    <section className="relative flex overflow-hidden">
+      {/* Deep-space horizon background — uses CSS variables so it responds to light/dark theme */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        aria-hidden="true"
+        style={{
+          background: `
+            radial-gradient(ellipse 80% 40% at 50% 0%, rgba(var(--secondary-rgb), 0.42) 0%, rgba(var(--primary-rgb), 0.22) 30%, transparent 55%),
+            radial-gradient(ellipse 120% 70% at 50% 0%, rgba(var(--primary-rgb), 0.18) 0%, transparent 50%),
+            linear-gradient(180deg, var(--ink-deep) 0%, var(--ink) 100%)
+          `,
+        }}
+      />
+
       {/* Left content column */}
       <div className="relative z-10 flex w-full flex-col justify-center px-6 pt-28 pb-20 md:w-[55%] md:px-12 lg:px-20 xl:px-28">
         <div className="max-w-2xl">
@@ -19,41 +55,49 @@ export default function Hero() {
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
           >
             <StatusPill className="mb-8" />
-
-            <p className="mb-4 font-mono-tight text-xs uppercase tracking-[0.25em] text-secondary">
-              Rayida Tech
-            </p>
           </motion.div>
 
-          <h1 className="font-display text-4xl font-semibold leading-[1.05] tracking-tight text-paper md:text-5xl lg:text-6xl xl:text-7xl">
-            {headlineWords.map((word, i) => (
-              <motion.span
-                key={i}
-                className={i === headlineWords.length - 1 ? 'gradient-text' : ''}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: 0.6,
-                  delay: 0.15 + i * 0.1,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
-                style={{ display: 'inline-block', marginRight: i < headlineWords.length - 1 ? '0.3em' : undefined }}
-              >
-                {i === 0 || i === 1 ? word + (i === 1 ? '' : ' ') : word}
-                {i < headlineWords.length - 1 && <br />}
-              </motion.span>
-            ))}
-          </h1>
+          <AnimatePresence mode="wait" custom={direction}>
+            <motion.div
+              key={current}
+              custom={direction}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <p className="mb-4 font-mono-tight text-xs uppercase tracking-[0.25em] text-secondary">
+                {slide.label}
+              </p>
 
-          <motion.p
-            className="mt-6 max-w-md text-base leading-relaxed text-mist-1 md:text-lg"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          >
-            We design and develop powerful digital solutions that help
-            startups and businesses grow, stand out, and succeed.
-          </motion.p>
+              <h1 className="font-display text-4xl font-semibold leading-[1.05] tracking-tight text-paper md:text-5xl lg:text-6xl xl:text-7xl">
+                {slide.words.map((word, i) => (
+                  <motion.span
+                    key={i}
+                    className={i === slide.words.length - 1 ? 'gradient-text' : ''}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      duration: 0.5,
+                      delay: 0.1 + i * 0.08,
+                      ease: [0.16, 1, 0.3, 1],
+                    }}
+                    style={{
+                      display: 'inline-block',
+                      marginRight: i < slide.words.length - 1 ? '0.3em' : undefined,
+                    }}
+                  >
+                    {word}
+                    {i < slide.words.length - 1 && <br />}
+                  </motion.span>
+                ))}
+              </h1>
+
+              <p className="mt-6 max-w-md text-base leading-relaxed text-mist-1 md:text-lg">
+                {slide.body}
+              </p>
+            </motion.div>
+          </AnimatePresence>
 
           <motion.div
             className="mt-10 flex items-center gap-5"
@@ -79,56 +123,66 @@ export default function Hero() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 1.1 }}
         >
-          <span className="font-mono-tight text-xs text-mist-2">01</span>
+          <span className="font-mono-tight text-xs text-mist-2">
+            {String(current + 1).padStart(2, '0')}
+          </span>
           <div className="flex items-center gap-1.5">
-            <span className="h-0.5 w-8 rounded-full bg-paper" />
-            <span className="h-0.5 w-8 rounded-full bg-paper/20" />
-            <span className="h-0.5 w-8 rounded-full bg-paper/20" />
-            <span className="h-0.5 w-8 rounded-full bg-paper/20" />
+            {heroSlides.map((_, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={() => goTo(i)}
+                className={`h-0.5 w-8 rounded-full transition-colors duration-300 ${
+                  i === current ? 'bg-paper' : 'bg-paper/20 hover:bg-paper/40'
+                }`}
+                aria-label={`Go to slide ${i + 1}`}
+              />
+            ))}
           </div>
-          <span className="font-mono-tight text-xs text-mist-2">05</span>
+          <span className="font-mono-tight text-xs text-mist-2">
+            {String(heroSlides.length).padStart(2, '0')}
+          </span>
         </motion.div>
       </div>
 
-      {/* Right visual column */}
-      <div className="relative hidden md:block md:w-[45%]">
-        {/* Ambient glow behind image */}
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center" aria-hidden="true">
-          <div
-            className="h-[55vh] w-[55vh] rounded-full opacity-40 blur-3xl"
-            style={{
-              background:
-                'radial-gradient(circle at 50% 50%, rgba(128,0,255,0.55) 0%, rgba(0,209,255,0.18) 50%, transparent 70%)',
-            }}
-          />
-        </div>
-
-        {/* Circular rim light */}
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center" aria-hidden="true">
-          <div
-            className="h-[48vh] w-[48vh] rounded-full border border-primary/20 opacity-60"
-            style={{
-              background:
-                'radial-gradient(circle at 50% 50%, rgba(128,0,255,0.12) 0%, transparent 70%)',
-            }}
-          />
-        </div>
-
-        {/* Hero image */}
-        <motion.div
-          className="absolute inset-0 flex items-center justify-center p-8 lg:p-12 hero-float"
+      {/* Right visual column — portrait silhouette blend */}
+      <div className="relative hidden h-[85vh] md:block md:w-[45%]">
+        <div
+          className="absolute inset-0 flex items-end justify-center"
           aria-hidden="true"
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/logobg.png"
-            alt=""
-            className="h-full max-h-[75vh] w-auto object-contain opacity-90 drop-shadow-[0_0_60px_rgba(128,0,255,0.25)]"
-          />
-        </motion.div>
+          <AnimatePresence initial={false} custom={direction} mode="wait">
+            <motion.div
+              key={current}
+              custom={direction}
+              variants={{
+                enter: (d: number) => ({ x: d > 0 ? 60 : -60, opacity: 0 }),
+                center: { x: 0, opacity: 1 },
+                exit: (d: number) => ({ x: d > 0 ? -60 : 60, opacity: 0 }),
+              }}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="relative h-[85vh] w-full max-w-[34rem]"
+              style={{
+                WebkitMaskImage:
+                  'linear-gradient(to top, transparent 0%, black 12%, black 100%), linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)',
+                maskImage:
+                  'linear-gradient(to top, transparent 0%, black 12%, black 100%), linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)',
+                WebkitMaskComposite: 'source-in',
+                maskComposite: 'intersect',
+              }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={slide.image}
+                alt=""
+                className="h-full w-full object-contain object-bottom"
+              />
+            </motion.div>
+          </AnimatePresence>
+        </div>
       </div>
 
       {/* Mobile ambient glow */}
@@ -137,7 +191,7 @@ export default function Hero() {
         aria-hidden="true"
         style={{
           background:
-            'radial-gradient(ellipse at 80% 50%, rgba(128,0,255,0.2) 0%, rgba(0,209,255,0.08) 40%, transparent 70%)',
+            'radial-gradient(ellipse at 80% 50%, rgba(var(--primary-rgb), 0.2) 0%, rgba(var(--secondary-rgb), 0.08) 40%, transparent 70%)',
         }}
       />
 

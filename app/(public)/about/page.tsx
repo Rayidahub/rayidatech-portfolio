@@ -3,13 +3,13 @@ import Container from '@/components/ui/Container';
 import Section from '@/components/ui/Section';
 import GlassCard from '@/components/ui/GlassCard';
 import Reveal from '@/components/ui/Reveal';
+import AboutHero from '@/components/sections/AboutHero';
 import {
   Palette,
   Code,
   Users,
   Lightbulb,
   Award,
-  Rocket,
   ArrowRight,
   CheckCircle,
 } from 'lucide-react';
@@ -115,69 +115,15 @@ const certifications = [
 export default function AboutPage() {
   return (
     <>
-      {/* Hero — full-bleed portrait layout */}
-      <section className="relative min-h-screen overflow-hidden">
-        {/* Background portrait — replace /img/about-portrait.jpg with your image */}
-        <div className="absolute inset-0 bg-gradient-to-br from-ink via-ink to-ink-deep">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/img/about-portrait.jpg"
-            alt="Raymond Gaius"
-            className="h-full w-full object-cover object-center opacity-60 mix-blend-overlay"
-          />
-        </div>
-
-        {/* Gradient overlays for text readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/80 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-ink via-transparent to-ink/30" />
-
-        {/* Content */}
-        <Container size="wide" className="relative z-10">
-          <div className="flex min-h-screen flex-col justify-end px-6 pb-16 pt-32 md:px-12 lg:px-20">
-            <div className="grid grid-cols-1 gap-12 md:grid-cols-2 md:items-end">
-              {/* Left: label + headline */}
-              <Reveal>
-                <div>
-                  <p className="font-mono-tight text-xs uppercase tracking-[0.25em] text-secondary mb-4">
-                    About Me
-                  </p>
-                  <h1 className="font-display text-5xl font-semibold leading-[1.05] tracking-tight text-paper md:text-6xl lg:text-7xl">
-                    Designer. Engineer.
-                    <br />
-                    <span className="gradient-text">Problem Solver.</span>
-                  </h1>
-                </div>
-              </Reveal>
-
-              {/* Right: bio + CTA */}
-              <Reveal index={1}>
-                <div className="md:pb-2">
-                  <p className="text-mist-1 leading-relaxed mb-6 max-w-md">
-                    I&apos;m <span className="text-paper font-medium">Raymond Gaius</span> — a
-                    Product Designer and AI Engineer passionate about building digital
-                    experiences people can trust. I help businesses grow through
-                    innovative design, strategic thinking, and technology-driven solutions.
-                  </p>
-                  <Link
-                    href="/contact"
-                    className="group inline-flex items-center gap-3 rounded-full border border-(--line) bg-paper/5 px-6 py-3 text-sm font-medium text-paper transition-all hover:border-primary hover:bg-primary hover:shadow-[0_0_30px_rgba(var(--primary-rgb),0.3)]"
-                  >
-                    Get In Touch
-                    <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
-                  </Link>
-                </div>
-              </Reveal>
-            </div>
-          </div>
-        </Container>
-      </section>
+      {/* Hero — full-screen portrait-blend layout */}
+      <AboutHero />
 
       {/* Journey Timeline */}
       <Section>
         <Container size="narrow">
           <Reveal>
             <h2 className="font-display text-2xl md:text-3xl font-semibold mb-10 text-center">
-              My <span className="gradient-text">Journey</span>
+              My <span className="text-secondary">Journey</span>
             </h2>
           </Reveal>
 
@@ -210,7 +156,7 @@ export default function AboutPage() {
         <Container size="default">
           <Reveal>
             <h2 className="font-display text-2xl md:text-3xl font-semibold mb-2 text-center">
-              How I <span className="gradient-text">Work</span>
+              How I <span className="text-secondary">Work</span>
             </h2>
             <p className="text-mist-1 text-center mb-10 max-w-xl mx-auto">
               A structured approach that keeps every project focused and effective.
@@ -240,7 +186,7 @@ export default function AboutPage() {
         <Container size="wide">
           <Reveal>
             <h2 className="font-display text-2xl md:text-3xl font-semibold mb-10 text-center">
-              Skills &amp; <span className="gradient-text">Expertise</span>
+              Skills &amp; <span className="text-secondary">Expertise</span>
             </h2>
           </Reveal>
 
@@ -301,7 +247,7 @@ export default function AboutPage() {
         <Container size="wide">
           <Reveal>
             <h2 className="font-display text-2xl md:text-3xl font-semibold mb-2 text-center">
-              Featured <span className="gradient-text">Projects</span>
+              Featured <span className="text-secondary">Projects</span>
             </h2>
             <p className="text-mist-1 text-center mb-10 max-w-xl mx-auto">
               A selection of work I&apos;m proud of.
@@ -335,7 +281,7 @@ export default function AboutPage() {
         <Container size="default">
           <Reveal>
             <h2 className="font-display text-2xl md:text-3xl font-semibold mb-10 text-center">
-              <span className="gradient-text">Certifications</span>
+              <span className="text-secondary">Certifications</span>
             </h2>
           </Reveal>
 

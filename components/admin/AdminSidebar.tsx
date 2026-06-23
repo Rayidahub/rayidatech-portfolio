@@ -8,6 +8,7 @@ import {
   Package,
   FileText,
   Mail,
+  Image,
 } from 'lucide-react'
 
 const navItems = [
@@ -15,6 +16,7 @@ const navItems = [
   { href: '/admin/projects', label: 'Projects', icon: Briefcase },
   { href: '/admin/services', label: 'Services', icon: Package },
   { href: '/admin/blog', label: 'Blog', icon: FileText },
+  { href: '/admin/hero', label: 'Hero Slides', icon: Image },
   { href: '/admin/contacts', label: 'Contacts', icon: Mail },
 ]
 
