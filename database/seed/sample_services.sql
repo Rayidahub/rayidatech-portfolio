@@ -97,4 +97,20 @@ INSERT INTO services (title, slug, headline, description, content, features, ico
   ],
   'GraduationCap',
   6
+),
+(
+  'Social Media Management',
+  'social-media-management',
+  'Audiences That Engage',
+  'Your audience is online — make sure your brand shows up consistently.',
+  'I help businesses plan, create, and manage content that builds community and drives results. From content strategy to scheduling and engagement, every post is intentional.',
+  ARRAY[
+    'Content strategy & calendar planning',
+    'Platform-specific content creation',
+    'Community management & engagement',
+    'Analytics & performance reporting',
+    'Brand voice & consistency'
+  ],
+  'Megaphone',
+  7
 );

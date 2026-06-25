@@ -5,6 +5,9 @@ import { createClient } from '@/lib/supabase/browser'
 import { useRouter, useParams } from 'next/navigation'
 import { Save, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
+import { SERVICE_CATEGORIES } from '@/lib/data/services'
+import CaseStudyFields from '@/components/admin/CaseStudyFields'
+import type { CaseStudy } from '@/types/project'
 
 export default function EditProject() {
   const router = useRouter()
@@ -23,7 +26,9 @@ export default function EditProject() {
     duration: '',
     link: '',
     featured: false,
+    category: '',
     tags: '',
+    case_study: {} as CaseStudy,
   })
 
   const generateSlug = useCallback((title: string) => {
@@ -54,6 +59,12 @@ export default function EditProject() {
           setLoading(false)
           return
         }
+        const existingTags = Array.isArray(data.tags) ? data.tags : []
+        const knownTitles = new Set<string>(SERVICE_CATEGORIES)
+        const category =
+          existingTags.find((t: string) => knownTitles.has(t)) || ''
+        const otherTags = existingTags.filter((t: string) => t !== category)
+
         setForm({
           title: data.title,
           slug: data.slug,
@@ -64,7 +75,9 @@ export default function EditProject() {
           duration: data.duration ?? '',
           link: data.link ?? '',
           featured: data.featured ?? false,
-          tags: Array.isArray(data.tags) ? data.tags.join(', ') : '',
+          category,
+          tags: otherTags.join(', '),
+          case_study: (data.case_study as CaseStudy) || {},
         })
         setLoading(false)
       })
@@ -76,10 +89,14 @@ export default function EditProject() {
     setError('')
 
     const supabase = createClient()
-    const tags = form.tags
+    const categoryTag = form.category.trim()
+    const additionalTags = form.tags
       .split(',')
       .map((t) => t.trim())
       .filter(Boolean)
+    const tags = categoryTag
+      ? [categoryTag, ...additionalTags.filter((t) => t !== categoryTag)]
+      : additionalTags
 
     const { error: updateError } = await supabase
       .from('projects')
@@ -94,6 +111,7 @@ export default function EditProject() {
         link: form.link || null,
         featured: form.featured,
         tags: tags.length > 0 ? tags : null,
+        case_study: Object.keys(form.case_study).length > 0 ? form.case_study : null,
       })
       .eq('id', params.id)
 
@@ -213,7 +231,23 @@ export default function EditProject() {
             />
           </div>
           <div className="sm:col-span-2">
-            <label className="block text-sm text-mist-1 mb-1.5">Tags (comma-separated)</label>
+            <label className="block text-sm text-mist-1 mb-1.5">Service Category *</label>
+            <select
+              value={form.category}
+              onChange={(e) => setForm((p) => ({ ...p, category: e.target.value }))}
+              required
+              className="w-full bg-white/5 border border-(--line) rounded-lg px-3 py-2.5 text-sm text-paper focus:outline-none focus:border-primary/50 transition-colors"
+            >
+              <option value="" disabled>Select a service category</option>
+              {SERVICE_CATEGORIES.map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="sm:col-span-2">
+            <label className="block text-sm text-mist-1 mb-1.5">Additional Tags (comma-separated)</label>
             <input
               type="text"
               value={form.tags}
@@ -232,6 +266,16 @@ export default function EditProject() {
               <span className="text-sm text-mist-1">Featured project</span>
             </label>
           </div>
+        </div>
+
+        <div className="sm:col-span-2 border-t border-(--line) pt-8">
+          <h2 className="font-display text-xl font-semibold text-paper mb-6">
+            Case Study
+          </h2>
+          <CaseStudyFields
+            value={form.case_study}
+            onChange={(case_study) => setForm((p) => ({ ...p, case_study }))}
+          />
         </div>
 
         <div className="flex justify-end">

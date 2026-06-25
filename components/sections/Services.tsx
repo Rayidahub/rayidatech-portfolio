@@ -9,6 +9,7 @@ import {
   Image,
   Monitor,
   GraduationCap,
+  Megaphone,
 } from 'lucide-react';
 
 const services = [
@@ -53,6 +54,13 @@ const services = [
     description:
       'Digital skills training that prepares you for the future of work.',
     accent: 'from-secondary/20 to-primary/10',
+  },
+  {
+    icon: Megaphone,
+    title: 'Social Media Management',
+    description:
+      'Strategic content and community management that grows your audience.',
+    accent: 'from-primary/20 to-secondary/10',
   },
 ];
 

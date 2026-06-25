@@ -5,6 +5,7 @@ import {
   Image,
   Monitor,
   GraduationCap,
+  Megaphone,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -15,6 +16,7 @@ const iconMap: Record<string, LucideIcon> = {
   Image,
   Monitor,
   GraduationCap,
+  Megaphone,
 };
 
 export function getServiceIcon(name: string): LucideIcon {

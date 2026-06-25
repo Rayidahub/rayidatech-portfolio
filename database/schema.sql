@@ -13,6 +13,7 @@ CREATE TABLE projects (
   duration TEXT,
   link TEXT,
   tags TEXT[],
+  case_study JSONB DEFAULT NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
