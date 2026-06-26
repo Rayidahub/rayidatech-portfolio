@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { Plus, Edit, ExternalLink } from 'lucide-react'
 import DeleteButton from './DeleteButton'
+import { normalizeSlug } from '@/lib/slug'
 
 export default async function AdminProjects() {
   const supabase = await createClient()
@@ -62,7 +63,7 @@ export default async function AdminProjects() {
                 <td className="px-4 py-3 text-right">
                   <div className="inline-flex items-center gap-2">
                     <Link
-                      href={`/projects/${project.slug}`}
+                      href={`/projects/${normalizeSlug(project.slug)}`}
                       target="_blank"
                       className="p-1.5 text-mist-2 hover:text-paper transition-colors"
                     >

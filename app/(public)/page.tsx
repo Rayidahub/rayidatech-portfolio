@@ -3,9 +3,11 @@ import TrustBar from '@/components/sections/TrustBar';
 import StatsBar from '@/components/sections/StatsBar';
 import WhatWeDo from '@/components/sections/WhatWeDo';
 import Services from '@/components/sections/Services';
+import ComingSoon from '@/components/sections/ComingSoon';
 import WhyRayidaTech from '@/components/sections/WhyRayidaTech';
 import PortfolioTeaser from '@/components/sections/PortfolioTeaser';
 import Testimonials from '@/components/sections/Testimonials';
+import Newsletter from '@/components/sections/Newsletter';
 import FinalCTA from '@/components/sections/FinalCTA';
 import { createClient } from '@/lib/supabase/server';
 import { toHeroSlides, type HeroSlideRow } from '@/lib/data/hero-slides';
@@ -31,9 +33,11 @@ export default async function Home() {
       <StatsBar />
       <WhatWeDo />
       <Services />
+      <ComingSoon />
       <WhyRayidaTech />
       <PortfolioTeaser />
       <Testimonials />
+      <Newsletter />
       <FinalCTA />
     </main>
   );

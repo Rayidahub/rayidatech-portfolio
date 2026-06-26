@@ -6,6 +6,8 @@ import Section from '@/components/ui/Section';
 import Reveal from '@/components/ui/Reveal';
 import ProjectsFilter from '@/components/sections/ProjectsFilter';
 
+export const revalidate = 3600;
+
 async function getProjects(): Promise<Project[]> {
   const { data, error } = await supabase
     .from('projects')
@@ -42,12 +44,15 @@ export default async function ProjectsPage() {
   ]);
 
   return (
-    <main className="min-h-screen">
-      <Section spacing="tight">
+    <main className="min-h-screen bg-ink">
+      <Section spacing="tight" className="pt-32">
         <Container size="wide">
           <Reveal>
-            <div className="mb-10">
-              <h1 className="text-4xl md:text-5xl font-display font-bold mb-4">
+            <div className="mb-12">
+              <p className="font-mono-tight text-xs uppercase tracking-[0.25em] text-secondary mb-4">
+                Portfolio
+              </p>
+              <h1 className="font-display text-4xl md:text-5xl font-semibold mb-4 text-paper">
                 My <span className="gradient-text">Projects</span>
               </h1>
               <p className="text-mist-1 text-lg max-w-2xl">
@@ -58,7 +63,7 @@ export default async function ProjectsPage() {
           </Reveal>
 
           {projects.length === 0 ? (
-            <div className="text-center py-20">
+            <div className="text-center py-20 glass rounded-2xl">
               <p className="text-mist-2">No projects yet. Check back soon!</p>
             </div>
           ) : (

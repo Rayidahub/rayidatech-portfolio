@@ -6,6 +6,7 @@ import Container from '@/components/ui/Container';
 import Section from '@/components/ui/Section';
 import PremiumCard from '@/components/ui/PremiumCard';
 import Reveal from '@/components/ui/Reveal';
+import { normalizeSlug } from '@/lib/slug';
 
 async function getFeaturedProjects(): Promise<Project[]> {
   const { data, error } = await supabase
@@ -61,7 +62,7 @@ export default async function FeaturedProjects() {
             return (
               <Reveal key={project.id} index={index}>
                 <Link
-                  href={`/projects/${project.slug}`}
+                  href={`/projects/${normalizeSlug(project.slug)}`}
                   className="group block"
                 >
                   <PremiumCard

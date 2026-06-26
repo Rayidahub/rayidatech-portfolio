@@ -5,7 +5,8 @@ This file is auto-loaded at the start of every session. Read it before making an
 ## Stack (verify against actual package.json — versions move fast)
 - Next.js 16.x, App Router, TypeScript, Tailwind CSS v4
 - React 19.x
-- Supabase (`@supabase/supabase-js`) — tables: `projects`, `posts`, `contacts`, `testimonials`, `subscribers`
+- Supabase (`@supabase/supabase-js`) — tables: `projects`, `posts`, `contacts`,
+  `testimonials`, `subscribers`, `hero_slides`, `services`, `ecosystem_products`
 - Framer Motion for animation
 - lucide-react for icons
 
@@ -38,7 +39,7 @@ route is a Promise), verify against the real installed version in
   everywhere; don't reintroduce it.
 - Glass surfaces: use the `.glass` / `.glass-strong` utility classes, not
   ad-hoc `bg-white/5 backdrop-blur` — defined once in `globals.css`.
-- One signature accent flourish: `.gradient-text` (violet → cyan), used
+- One signature accent text: `.gradient-text` (solid violet `#8000ff`), used
   **once per page maximum** on a key word. Don't overuse it.
 - Fonts: `font-display` (Geist) for headings, default body font is Inter,
   `font-mono-tight` (Geist Mono) for metadata/timestamps/labels.
@@ -58,7 +59,7 @@ route is a Promise), verify against the real installed version in
 - `lib/reading-time.ts` — `getReadingTime(content)`, used on blog pages.
 
 ## Data fetching pattern
-- Server components fetch directly from Supabase (`lib/supabase/client.ts`),
+- Server components fetch directly from Supabase (`lib/supabase/server.ts`),
   no API routes for read paths.
 - Dynamic detail pages (`app/projects/[slug]/page.tsx`,
   `app/blog/[slug]/page.tsx`) export `revalidate = 3600` (hourly ISR) —
@@ -71,7 +72,8 @@ route is a Promise), verify against the real installed version in
 
 ## What's done (do not rebuild from scratch — extend/fix, don't replace blindly)
 - Design tokens, fonts, Navbar, Footer
-- Home page: Hero, FeaturedProjects, Skills, Testimonials, Newsletter
+- Home page: Hero, TrustBar, StatsBar, WhatWeDo, Services, WhyRayidaTech,
+  PortfolioTeaser, Testimonials, ComingSoon, FinalCTA
 - About page fully rewritten — bio, journey timeline, approach, skills
   (grouped), beliefs, featured projects, certifications, and final CTA.
   Uses Container, GlassCard, Reveal, brand tokens throughout. No teal
@@ -89,19 +91,33 @@ route is a Promise), verify against the real installed version in
 - Hero section rebuilt as split-screen layout — left text, right abstract
   silhouette with violet/cyan glow. Uses font-display, gradient-text,
   StatusPill, glass ornament, brand tokens throughout. No teal remaining.
+- Admin dashboard pages for Projects, Services, Blog, Hero Slides, Contacts,
+  Coming Soon, and Testimonials (list/create/edit/delete).
+- `ecosystem_products` table + seed data + admin CRUD; ComingSoon section
+  fetches from Supabase and supports `coming_soon` / `live` status and
+  `launch_date`.
+- `testimonials` table management migration (adds `is_active`, `sort_order`)
+  + seed data + admin CRUD; Testimonials section fetches from Supabase.
+- Subtle background variation across homepage sections (alternating
+  `bg-ink-deep`, dot patterns, radial glows, gradient lines).
 
 ## What's NOT done yet
-- Project detail page (`components/sections/[slug]/page.tsx`) still has
-  teal-era styling
-- Blog list page (`app/blog/page.tsx`) still has teal-era styling
 - Projects list page (`app/projects/page.tsx`) still has teal-era styling
-- not-found.tsx only mentions "Project Not Found" — should be generic
+- `not-found.tsx` only mentions "Project Not Found" — should be generic
+- PortfolioTeaser section still hardcodes 3 projects; should pull featured
+  projects from Supabase like FeaturedProjects does
+- Services section still hardcodes the service list; admin CRUD exists but
+  the public section isn't wired up
+- StatsBar still hardcodes numbers
+- Newsletter UI doesn't exist yet (only the `subscribers` table migration)
 
 ## Suggested next
 - **Projects list port** — update `app/projects/page.tsx` to use violet/cyan
   tokens
-- **Project detail port** — update `components/sections/[slug]/page.tsx` to
+- **Project detail port** — update `app/(public)/projects/[slug]/page.tsx` to
   use violet/cyan tokens
+- **Blog list port** — update `app/blog/page.tsx` to use violet/cyan tokens
+- **Generic 404** — rewrite `not-found.tsx` to handle any missing page
 
 ## Working agreement
 - Make one focused change per task. Don't refactor unrelated files

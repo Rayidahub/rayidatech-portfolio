@@ -136,9 +136,9 @@ body {
   animation: signal-pulse 2.4s ease-out infinite;
 }
 
-/* The one signature flourish: violet -> cyan gradient text, used once per page max */
+/* Signature accent text — solid violet via background-clip */
 .gradient-text {
-  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  background: var(--primary);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;

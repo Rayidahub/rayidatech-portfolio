@@ -61,6 +61,8 @@ CREATE TABLE testimonials (
   role TEXT,
   company TEXT,
   testimonial TEXT NOT NULL,
+  is_active BOOLEAN NOT NULL DEFAULT true,
+  sort_order INTEGER NOT NULL DEFAULT 0,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 

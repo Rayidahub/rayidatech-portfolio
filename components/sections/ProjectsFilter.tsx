@@ -8,6 +8,7 @@ import type { Service } from '@/types/service';
 import { SERVICE_CATEGORIES } from '@/lib/data/services';
 import PremiumCard from '@/components/ui/PremiumCard';
 import Reveal from '@/components/ui/Reveal';
+import { normalizeSlug } from '@/lib/slug';
 
 const FALLBACK_CATEGORIES = [...SERVICE_CATEGORIES];
 
@@ -128,7 +129,7 @@ export default function ProjectsFilter({
             return (
               <Reveal key={project.id} index={index}>
                 <Link
-                  href={`/projects/${project.slug}`}
+                  href={`/projects/${normalizeSlug(project.slug)}`}
                   className="group block"
                 >
                   <PremiumCard

@@ -1,4 +1,5 @@
 // app/(public)/projects/[slug]/page.tsx
+import { createClient } from '@/lib/supabase/server';
 import { supabase } from '@/lib/supabase/client';
 import type { CaseStudy, Project } from '@/types/project';
 import Link from 'next/link';
@@ -11,28 +12,51 @@ import {
   ExternalLink,
   Tag,
 } from 'lucide-react';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import Container from '@/components/ui/Container';
 import Section from '@/components/ui/Section';
 import GlassCard from '@/components/ui/GlassCard';
 import Reveal from '@/components/ui/Reveal';
 import { SERVICE_CATEGORIES } from '@/lib/data/services';
+import { normalizeSlug } from '@/lib/slug';
 
 export const revalidate = 3600;
 
 async function getProject(slug: string): Promise<Project | null> {
+  const supabase = await createClient();
+
+  // Try an exact canonical match first.
   const { data, error } = await supabase
     .from('projects')
     .select('*')
     .eq('slug', slug)
     .single();
 
-  if (error) {
+  if (data) return data;
+
+  if (error && error.code !== 'PGRST116') {
     console.error('Error fetching project:', error);
+  }
+
+  // Fallback: tolerate legacy or manually-entered slugs with spaces/special
+  // characters by normalizing both the requested slug and stored slugs.
+  const normalizedSlug = normalizeSlug(slug);
+  const { data: allProjects, error: listError } = await supabase
+    .from('projects')
+    .select('*');
+
+  if (listError) {
+    console.error('Error fetching projects:', listError);
     return null;
   }
 
-  return data;
+  return (
+    allProjects?.find(
+      (project) =>
+        normalizeSlug(project.slug) === normalizedSlug ||
+        normalizeSlug(project.title) === normalizedSlug
+    ) || null
+  );
 }
 
 async function getNextProject(slug?: string): Promise<Project | null> {
@@ -45,9 +69,18 @@ export async function generateStaticParams() {
 
   if (!data) return [];
 
-  return data.map((project) => ({
-    slug: project.slug,
-  }));
+  // Generate static pages for normalized (URL-safe) slugs so legacy values
+  // with spaces or special characters do not become unroutable paths.
+  const seen = new Set<string>();
+  return data
+    .map((project) => ({
+      slug: normalizeSlug(project.slug),
+    }))
+    .filter((item) => {
+      if (seen.has(item.slug)) return false;
+      seen.add(item.slug);
+      return true;
+    });
 }
 
 interface ProjectPageProps {
@@ -540,7 +573,7 @@ function CaseStudyProjectPage({
       <Reveal>
         <div className="mt-24">
           {nextProject ? (
-            <Link href={`/projects/${nextProject.slug}`} className="group block">
+            <Link href={`/projects/${normalizeSlug(nextProject.slug)}`} className="group block">
               <GlassCard className="p-8 md:p-10 hover:border-(--line-strong)">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                   <div>
@@ -592,6 +625,15 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
   if (!project) {
     notFound();
+  }
+
+  // Redirect legacy/non-canonical URLs to the canonical slug, but only once
+  // the canonical slug itself has been cleaned up in the database.
+  if (
+    project.slug !== slug &&
+    project.slug === normalizeSlug(project.slug)
+  ) {
+    redirect(`/projects/${project.slug}`);
   }
 
   const hasCaseStudy =
