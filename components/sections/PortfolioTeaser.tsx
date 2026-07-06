@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase/client';
+import { createClient } from '@/lib/supabase/server';
 import type { Project } from '@/types/project';
 import Link from 'next/link';
 import { ArrowRight, Briefcase, Calendar, Sparkles, Tag } from 'lucide-react';
@@ -9,6 +9,7 @@ import Reveal from '@/components/ui/Reveal';
 import { normalizeSlug } from '@/lib/slug';
 
 async function getFeaturedProjects(): Promise<Project[]> {
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from('projects')
     .select('*')

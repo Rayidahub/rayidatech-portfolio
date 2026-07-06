@@ -1,27 +1,66 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useSyncExternalStore } from 'react';
 import { Moon, Sun } from 'lucide-react';
 
 type Theme = 'dark' | 'light';
 
-export default function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme>('dark');
-  const [mounted, setMounted] = useState(false);
+const THEME_KEY = 'theme';
+const THEME_CHANGE_EVENT = 'themechange';
 
-  useEffect(() => {
-    setMounted(true);
-    const saved = document.documentElement.getAttribute('data-theme') as Theme | null;
-    if (saved) {
-      setTheme(saved);
+function getSavedTheme(): Theme {
+  if (typeof window === 'undefined') return 'dark';
+  try {
+    const stored = window.localStorage.getItem(THEME_KEY) as Theme | null;
+    if (stored === 'light' || stored === 'dark') return stored;
+  } catch {
+    // ignore
+  }
+  return 'dark';
+}
+
+function getClientTheme(): Theme {
+  if (typeof document === 'undefined') return 'dark';
+  const attr = document.documentElement.getAttribute('data-theme') as Theme | null;
+  if (attr === 'light' || attr === 'dark') return attr;
+  return getSavedTheme();
+}
+
+function subscribe(callback: () => void) {
+  const handler = () => callback();
+  window.addEventListener(THEME_CHANGE_EVENT, handler);
+  return () => window.removeEventListener(THEME_CHANGE_EVENT, handler);
+}
+
+function setTheme(theme: Theme) {
+  if (typeof document !== 'undefined') {
+    document.documentElement.setAttribute('data-theme', theme);
+  }
+  if (typeof window !== 'undefined') {
+    try {
+      window.localStorage.setItem(THEME_KEY, theme);
+    } catch {
+      // ignore
     }
-  }, []);
+    window.dispatchEvent(new Event(THEME_CHANGE_EVENT));
+  }
+}
+
+export default function ThemeToggle() {
+  const theme = useSyncExternalStore(
+    subscribe,
+    getClientTheme,
+    () => 'dark'
+  );
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
 
   const toggleTheme = () => {
     const next = theme === 'dark' ? 'light' : 'dark';
     setTheme(next);
-    document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('theme', next);
   };
 
   if (!mounted) {

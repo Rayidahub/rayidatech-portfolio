@@ -1,3 +1,4 @@
+import { createElement } from 'react';
 import {
   Palette,
   Package,
@@ -21,4 +22,14 @@ const iconMap: Record<string, LucideIcon> = {
 
 export function getServiceIcon(name: string): LucideIcon {
   return iconMap[name] || Palette;
+}
+
+export function ServiceIcon({
+  name,
+  className,
+}: {
+  name: string;
+  className?: string;
+}) {
+  return createElement(getServiceIcon(name), { className });
 }

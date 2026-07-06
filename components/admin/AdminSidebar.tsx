@@ -11,6 +11,7 @@ import {
   Image,
   Rocket,
   MessageSquareQuote,
+  Users,
 } from 'lucide-react'
 
 const navItems = [
@@ -21,6 +22,7 @@ const navItems = [
   { href: '/admin/hero', label: 'Hero Slides', icon: Image },
   { href: '/admin/coming-soon', label: 'Coming Soon', icon: Rocket },
   { href: '/admin/testimonials', label: 'Testimonials', icon: MessageSquareQuote },
+  { href: '/admin/team', label: 'Team', icon: Users },
   { href: '/admin/contacts', label: 'Contacts', icon: Mail },
 ]
 

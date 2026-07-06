@@ -1,4 +1,5 @@
-import { supabase } from '@/lib/supabase/client';
+import type { Metadata } from 'next';
+import { createClient } from '@/lib/supabase/server';
 import type { Project } from '@/types/project';
 import type { Service } from '@/types/service';
 import Container from '@/components/ui/Container';
@@ -8,7 +9,14 @@ import ProjectsFilter from '@/components/sections/ProjectsFilter';
 
 export const revalidate = 3600;
 
+export const metadata: Metadata = {
+  title: 'Projects',
+  description:
+    'Explore a curated portfolio of design and engineering projects by Raymond Gaius — fintech, product design, and AI solutions.',
+};
+
 async function getProjects(): Promise<Project[]> {
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from('projects')
     .select('*')
@@ -24,6 +32,7 @@ async function getProjects(): Promise<Project[]> {
 }
 
 async function getServices(): Promise<Service[]> {
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from('services')
     .select('*')

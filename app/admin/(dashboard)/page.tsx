@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { Briefcase, Package, FileText, Mail } from 'lucide-react'
+import { Briefcase, Package, FileText, Mail, Users } from 'lucide-react'
 
 export default async function AdminDashboard() {
   const supabase = await createClient()
@@ -8,11 +8,13 @@ export default async function AdminDashboard() {
     { count: projectCount },
     { count: serviceCount },
     { count: postCount },
+    { count: teamCount },
     { count: contactCount },
   ] = await Promise.all([
     supabase.from('projects').select('*', { count: 'exact', head: true }),
     supabase.from('services').select('*', { count: 'exact', head: true }),
     supabase.from('posts').select('*', { count: 'exact', head: true }),
+    supabase.from('team_members').select('*', { count: 'exact', head: true }),
     supabase.from('contacts').select('*', { count: 'exact', head: true }),
   ])
 
@@ -20,6 +22,7 @@ export default async function AdminDashboard() {
     { label: 'Projects', value: projectCount ?? 0, icon: Briefcase, href: '/admin/projects' },
     { label: 'Services', value: serviceCount ?? 0, icon: Package, href: '/admin/services' },
     { label: 'Blog Posts', value: postCount ?? 0, icon: FileText, href: '/admin/blog' },
+    { label: 'Team Members', value: teamCount ?? 0, icon: Users, href: '/admin/team' },
     { label: 'Contact Entries', value: contactCount ?? 0, icon: Mail, href: '/admin/contacts' },
   ]
 

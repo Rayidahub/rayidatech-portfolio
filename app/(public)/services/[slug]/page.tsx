@@ -1,3 +1,4 @@
+import { createClient } from '@/lib/supabase/server';
 import { supabase } from '@/lib/supabase/client';
 import type { Service } from '@/types/service';
 import type { Metadata } from 'next';
@@ -7,11 +8,12 @@ import { notFound } from 'next/navigation';
 import Container from '@/components/ui/Container';
 import GlassCard from '@/components/ui/GlassCard';
 import Reveal from '@/components/ui/Reveal';
-import { getServiceIcon } from '@/lib/service-icons';
+import { ServiceIcon } from '@/lib/service-icons';
 
 export const revalidate = 3600;
 
 async function getService(slug: string): Promise<Service | null> {
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from('services')
     .select('*')
@@ -64,8 +66,6 @@ export default async function ServiceDetailPage({
     notFound();
   }
 
-  const Icon = getServiceIcon(service.icon_name);
-
   return (
     <main className="pt-32 pb-20">
       <Container size="narrow">
@@ -82,7 +82,10 @@ export default async function ServiceDetailPage({
         <Reveal>
           <div className="mb-10">
             <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
-              <Icon className="w-6 h-6 text-secondary" />
+              <ServiceIcon
+                name={service.icon_name}
+                className="w-6 h-6 text-secondary"
+              />
             </div>
             <p className="font-mono-tight text-xs text-secondary mb-2 uppercase tracking-[0.15em]">
               {service.title}

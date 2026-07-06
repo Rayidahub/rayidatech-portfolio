@@ -12,7 +12,6 @@ import {
   Image as ImageIcon,
   Music,
   Play,
-  ExternalLink,
 } from 'lucide-react';
 import Container from '@/components/ui/Container';
 import GlassCard from '@/components/ui/GlassCard';
@@ -266,13 +265,13 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <p className="text-sm text-mist-2">WhatsApp</p>
-                    <p className="font-medium text-paper">07014478376</p>
+                    <p className="font-medium text-paper">Chat on WhatsApp</p>
                   </div>
                 </a>
 
                 {/* Email */}
                 <a
-                  href="mailto:rayidatech@gmail.com"
+                  href="mailto:rayidagaius@gmail.com"
                   className="flex items-center gap-4 text-mist-1 hover:text-secondary transition-colors group"
                 >
                   <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center group-hover:bg-primary/20 transition-colors">
@@ -280,13 +279,13 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <p className="text-sm text-mist-2">Email</p>
-                    <p className="font-medium text-paper">rayidatech@gmail.com</p>
+                    <p className="font-medium text-paper">rayidagaius@gmail.com</p>
                   </div>
                 </a>
 
                 {/* Website */}
                 <a
-                  href="https://rayidatech.wordpress.com/"
+                  href="https://rayidatech.name.ng"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-4 text-mist-1 hover:text-secondary transition-colors group"
@@ -296,7 +295,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <p className="text-sm text-mist-2">Website</p>
-                    <p className="font-medium text-paper">rayidatech.wordpress.com</p>
+                    <p className="font-medium text-paper">rayidatech.name.ng</p>
                   </div>
                 </a>
               </div>

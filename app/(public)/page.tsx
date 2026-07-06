@@ -5,6 +5,7 @@ import WhatWeDo from '@/components/sections/WhatWeDo';
 import Services from '@/components/sections/Services';
 import ComingSoon from '@/components/sections/ComingSoon';
 import WhyRayidaTech from '@/components/sections/WhyRayidaTech';
+import Team from '@/components/sections/Team';
 import PortfolioTeaser from '@/components/sections/PortfolioTeaser';
 import Testimonials from '@/components/sections/Testimonials';
 import Newsletter from '@/components/sections/Newsletter';
@@ -35,6 +36,7 @@ export default async function Home() {
       <Services />
       <ComingSoon />
       <WhyRayidaTech />
+      <Team />
       <PortfolioTeaser />
       <Testimonials />
       <Newsletter />

@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { createClient } from '@/lib/supabase/server';
 import type { Post } from '@/types/post';
 import Link from 'next/link';
@@ -8,6 +9,12 @@ import GlassCard from '@/components/ui/GlassCard';
 import Reveal from '@/components/ui/Reveal';
 
 export const revalidate = 3600;
+
+export const metadata: Metadata = {
+  title: 'Blog',
+  description:
+    'Thoughts on product design, AI engineering, and building digital experiences people can trust — by Raymond Gaius.',
+};
 
 async function getPosts(): Promise<Post[]> {
   const supabase = await createClient();

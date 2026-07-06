@@ -9,9 +9,9 @@ import StatusPill from '@/components/ui/StatusPill';
 import ThemeToggle from '@/components/ui/ThemeToggle';
 
 const navLinks = [
-  { href: '/', label: 'Home' },
   { href: '/about', label: 'About' },
   { href: '/projects', label: 'Projects' },
+  { href: '/services', label: 'Services' },
   { href: '/blog', label: 'Blog' },
   { href: '/contact', label: 'Contact' },
 ];

@@ -1,9 +1,17 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import Container from '@/components/ui/Container';
 import Section from '@/components/ui/Section';
 import GlassCard from '@/components/ui/GlassCard';
 import Reveal from '@/components/ui/Reveal';
 import AboutHero from '@/components/sections/AboutHero';
+import Team from '@/components/sections/Team';
+
+export const metadata: Metadata = {
+  title: 'About',
+  description:
+    'Learn more about Raymond Gaius — Product Designer & AI Engineer at Rayida Tech. Background, skills, approach, and featured work.',
+};
 import {
   Palette,
   Code,
@@ -241,6 +249,9 @@ export default function AboutPage() {
           </Reveal>
         </Container>
       </Section>
+
+      {/* Team */}
+      <Team />
 
       {/* Featured Projects */}
       <Section>

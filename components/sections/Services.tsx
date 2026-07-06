@@ -3,11 +3,12 @@ import Container from '@/components/ui/Container';
 import Section from '@/components/ui/Section';
 import GlassCard from '@/components/ui/GlassCard';
 import Reveal from '@/components/ui/Reveal';
-import { supabase } from '@/lib/supabase/client';
+import { createClient } from '@/lib/supabase/server';
 import type { Service } from '@/types/service';
-import { getServiceIcon } from '@/lib/service-icons';
+import { ServiceIcon } from '@/lib/service-icons';
 
 async function getServices(): Promise<Service[]> {
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from('services')
     .select('id, title, slug, description, icon_name, "order"')
@@ -46,7 +47,6 @@ export default async function Services() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((service, index) => {
-            const Icon = getServiceIcon(service.icon_name);
             const accent =
               index % 2 === 0
                 ? 'from-primary/20 to-secondary/10'
@@ -65,7 +65,10 @@ export default async function Services() {
                       {String(index + 1).padStart(2, '0')}
                     </span>
                     <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center mb-4 icon-hover">
-                      <Icon className="w-5 h-5 text-secondary transition-transform duration-300 group-hover:scale-110" />
+                      <ServiceIcon
+                        name={service.icon_name}
+                        className="w-5 h-5 text-secondary transition-transform duration-300 group-hover:scale-110"
+                      />
                     </div>
                     <h3 className="font-display text-lg font-semibold mb-2 text-paper group-hover:text-secondary transition-colors duration-300">
                       {service.title}
