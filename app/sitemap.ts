@@ -1,7 +1,8 @@
 import type { MetadataRoute } from 'next';
 import { createClient } from '@/lib/supabase/server';
+import { getBaseUrl } from '@/lib/url';
 
-const BASE_URL = 'https://rayidatech.name.ng';
+const BASE_URL = getBaseUrl();
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const supabase = await createClient();

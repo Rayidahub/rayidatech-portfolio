@@ -1,4 +1,7 @@
 import type { MetadataRoute } from 'next';
+import { getBaseUrl } from '@/lib/url';
+
+const BASE_URL = getBaseUrl();
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -9,6 +12,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/admin/', '/admin'],
       },
     ],
-    sitemap: 'https://rayidatech.name.ng/sitemap.xml',
+    sitemap: `${BASE_URL}/sitemap.xml`,
   };
 }

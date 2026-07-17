@@ -1,6 +1,7 @@
 // app/layout.tsx
 import type { Metadata } from 'next';
 import { Inter, Geist, Geist_Mono } from 'next/font/google';
+import { getBaseUrl } from '@/lib/url';
 import './globals.css';
 
 const inter = Inter({
@@ -19,7 +20,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://rayidatech.name.ng'),
+  metadataBase: new URL(getBaseUrl()),
   title: {
     default: 'Raymond Gaius | Product Designer & AI Engineer',
     template: '%s | Raymond Gaius',
@@ -30,7 +31,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Raymond Gaius | Product Designer & AI Engineer',
     description: 'Building digital experiences people can trust.',
-    url: 'https://rayidatech.name.ng',
+    url: getBaseUrl(),
     siteName: 'Raymond Gaius',
     type: 'website',
   },

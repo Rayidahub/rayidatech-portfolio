@@ -1,0 +1,10 @@
+{
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "www.rayidatech.name.ng" }],
+      "destination": "https://rayidatech.name.ng/$1",
+      "permanent": true
+    }
+  ]
+}
