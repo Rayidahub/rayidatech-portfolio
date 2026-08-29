@@ -10,7 +10,7 @@ const logos = [
 ];
 
 export default function TrustBar() {
-  const doubled = [...logos, ...logos];
+  const track = [...logos, ...logos, ...logos];
 
   return (
     <section className="relative overflow-hidden py-14 border-y border-(--line) bg-[var(--ink-deep)]">
@@ -29,11 +29,11 @@ export default function TrustBar() {
       </p>
 
       <div className="relative">
-        <div className="marquee-track flex items-center gap-6 whitespace-nowrap">
-          {doubled.map((name, i) => (
+        <div className="marquee-track flex items-center whitespace-nowrap w-max will-change-transform">
+          {track.map((name, i) => (
             <span
               key={`${name}-${i}`}
-              className="inline-flex items-center gap-2.5 glass rounded-full px-5 py-2.5 text-sm font-medium text-mist-1 hover:text-paper transition-all duration-300 hover:-translate-y-0.5 hover:border-(--line-strong) cursor-default"
+              className="inline-flex items-center gap-2.5 glass rounded-full px-5 py-2.5 mr-6 text-sm font-medium text-mist-1 hover:text-paper transition-all duration-300 hover:-translate-y-0.5 hover:border-(--line-strong) cursor-default"
             >
               <span className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-xs text-secondary font-semibold">
                 {name.charAt(0)}

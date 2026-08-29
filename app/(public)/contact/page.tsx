@@ -9,9 +9,10 @@ import {
   Send,
   CheckCircle,
   Loader2,
-  Image as ImageIcon,
-  Music,
-  Play,
+  Clock,
+  MapPin,
+  ChevronDown,
+  AlertCircle,
 } from 'lucide-react';
 import Container from '@/components/ui/Container';
 import GlassCard from '@/components/ui/GlassCard';
@@ -26,6 +27,35 @@ const projectTypes = [
   'Graphic Design',
   'Tech Education',
   'Other',
+];
+
+const socialLinks = [
+  { name: 'LinkedIn', url: 'https://www.linkedin.com/in/rayida-tech', handle: '@rayida-tech' },
+  { name: 'Instagram', url: 'https://instagram.com/rayidatech', handle: '@rayidatech' },
+  { name: 'X / Twitter', url: 'https://x.com/rayidatech', handle: '@rayidatech' },
+  { name: 'TikTok', url: 'https://tiktok.com/@rayidatech', handle: '@rayidatech' },
+  { name: 'YouTube', url: 'https://youtube.com/@rayidatech', handle: '@rayidatech' },
+];
+
+const contactMethods = [
+  {
+    label: 'WhatsApp',
+    value: 'Chat on WhatsApp',
+    href: 'https://wa.link/tlezg8',
+    icon: MessageCircle,
+  },
+  {
+    label: 'Email',
+    value: 'rayidagaius@gmail.com',
+    href: 'mailto:rayidagaius@gmail.com',
+    icon: Mail,
+  },
+  {
+    label: 'Website',
+    value: 'rayidatech.name.ng',
+    href: 'https://rayidatech.name.ng',
+    icon: Globe,
+  },
 ];
 
 export default function ContactPage() {
@@ -82,284 +112,305 @@ export default function ContactPage() {
     }
   };
 
+  const inputClassName =
+    'w-full px-4 py-3 bg-[var(--glass-bg)] border border-(--line) rounded-xl text-paper placeholder:text-mist-2 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all';
+
   return (
-    <main className="min-h-screen pt-32 pb-20">
-      <Container size="default">
-        {/* Section 19: Hero */}
+    <main className="relative min-h-screen pt-28 pb-24 overflow-hidden">
+      {/* Background glows */}
+      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+        <div
+          className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] opacity-40"
+          style={{
+            background:
+              'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(var(--primary-rgb), 0.18) 0%, rgba(var(--secondary-rgb), 0.08) 40%, transparent 70%)',
+          }}
+        />
+        <div
+          className="absolute bottom-0 right-0 w-[40rem] h-[40rem] rounded-full opacity-20 blur-3xl"
+          style={{
+            background:
+              'radial-gradient(circle, rgba(var(--secondary-rgb), 0.22) 0%, transparent 60%)',
+          }}
+        />
+      </div>
+
+      {/* Top gradient line */}
+      <div
+        className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-full h-px opacity-30"
+        style={{
+          background:
+            'linear-gradient(90deg, transparent, var(--primary), var(--secondary), transparent)',
+        }}
+        aria-hidden="true"
+      />
+
+      <Container size="default" className="relative z-10">
+        {/* Hero */}
         <Reveal>
-          <div className="mb-12">
-            <h1 className="font-display text-4xl md:text-5xl font-semibold mb-4">
-              Get In <span className="gradient-text">Touch</span>
+          <div className="max-w-2xl mb-14">
+            <p className="font-mono-tight text-xs uppercase tracking-[0.25em] text-secondary mb-4">
+              Contact
+            </p>
+            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-semibold leading-[1.05] mb-5">
+              Let&apos;s build something{' '}
+              <span className="gradient-text">great</span> together
             </h1>
-            <p className="text-mist-1 text-lg max-w-2xl">
-              Have a project in mind? Let&apos;s talk.
+            <p className="text-mist-1 text-lg">
+              Have a project in mind? Send the details and I&apos;ll get back to you within 24 hours.
             </p>
           </div>
         </Reveal>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          {/* Section 20: Form */}
-          <Reveal>
-            <form onSubmit={handleSubmit} className="space-y-5">
-              {/* Full Name */}
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-mist-1 mb-1.5">
-                  Full Name <span className="text-secondary">*</span>
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 bg-[var(--glass-bg)] border border-(--line) rounded-lg text-paper placeholder:text-mist-2 focus:outline-none focus:border-primary transition-colors"
-                  placeholder="Your full name"
-                />
-              </div>
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-10">
+          {/* Form */}
+          <Reveal className="lg:col-span-3">
+            <GlassCard className="p-6 md:p-8" hover={false}>
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  {/* Full Name */}
+                  <div>
+                    <label htmlFor="name" className="block text-sm font-medium text-mist-1 mb-1.5">
+                      Full Name <span className="text-secondary">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
+                      className={inputClassName}
+                      placeholder="John Doe"
+                    />
+                  </div>
 
-              {/* Email Address */}
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-mist-1 mb-1.5">
-                  Email Address <span className="text-secondary">*</span>
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 bg-[var(--glass-bg)] border border-(--line) rounded-lg text-paper placeholder:text-mist-2 focus:outline-none focus:border-primary transition-colors"
-                  placeholder="you@example.com"
-                />
-              </div>
+                  {/* Email Address */}
+                  <div>
+                    <label htmlFor="email" className="block text-sm font-medium text-mist-1 mb-1.5">
+                      Email Address <span className="text-secondary">*</span>
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                      className={inputClassName}
+                      placeholder="you@example.com"
+                    />
+                  </div>
 
-              {/* Phone Number */}
-              <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-mist-1 mb-1.5">
-                  Phone Number
-                </label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 bg-[var(--glass-bg)] border border-(--line) rounded-lg text-paper placeholder:text-mist-2 focus:outline-none focus:border-primary transition-colors"
-                  placeholder="+234 800 000 0000"
-                />
-              </div>
+                  {/* Phone Number */}
+                  <div>
+                    <label htmlFor="phone" className="block text-sm font-medium text-mist-1 mb-1.5">
+                      Phone Number
+                    </label>
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      className={inputClassName}
+                      placeholder="+234 800 000 0000"
+                    />
+                  </div>
 
-              {/* Company */}
-              <div>
-                <label htmlFor="company" className="block text-sm font-medium text-mist-1 mb-1.5">
-                  Company <span className="text-mist-2">(Optional)</span>
-                </label>
-                <input
-                  type="text"
-                  id="company"
-                  name="company"
-                  value={formData.company}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 bg-[var(--glass-bg)] border border-(--line) rounded-lg text-paper placeholder:text-mist-2 focus:outline-none focus:border-primary transition-colors"
-                  placeholder="Your company"
-                />
-              </div>
+                  {/* Company */}
+                  <div>
+                    <label htmlFor="company" className="block text-sm font-medium text-mist-1 mb-1.5">
+                      Company <span className="text-mist-2">(Optional)</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="company"
+                      name="company"
+                      value={formData.company}
+                      onChange={handleChange}
+                      className={inputClassName}
+                      placeholder="Your company"
+                    />
+                  </div>
+                </div>
 
-              {/* Project Type */}
-              <div>
-                <label htmlFor="project_type" className="block text-sm font-medium text-mist-1 mb-1.5">
-                  Project Type <span className="text-secondary">*</span>
-                </label>
-                <select
-                  id="project_type"
-                  name="project_type"
-                  value={formData.project_type}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 bg-[var(--glass-bg)] border border-(--line) rounded-lg text-paper focus:outline-none focus:border-primary transition-colors appearance-none"
+                {/* Project Type */}
+                <div>
+                  <label htmlFor="project_type" className="block text-sm font-medium text-mist-1 mb-1.5">
+                    Project Type <span className="text-secondary">*</span>
+                  </label>
+                  <div className="relative">
+                    <select
+                      id="project_type"
+                      name="project_type"
+                      value={formData.project_type}
+                      onChange={handleChange}
+                      required
+                      className={`${inputClassName} appearance-none pr-10`}
+                    >
+                      <option value="" disabled className="bg-[var(--ink)]">
+                        Select a project type
+                      </option>
+                      {projectTypes.map((type) => (
+                        <option key={type} value={type} className="bg-[var(--ink)]">
+                          {type}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-mist-2 pointer-events-none" />
+                  </div>
+                </div>
+
+                {/* Message */}
+                <div>
+                  <label htmlFor="message" className="block text-sm font-medium text-mist-1 mb-1.5">
+                    Message <span className="text-secondary">*</span>
+                  </label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    required
+                    rows={5}
+                    className={`${inputClassName} resize-none`}
+                    placeholder="Tell me about your project, goals, and timeline..."
+                  />
+                </div>
+
+                {/* Submit Button */}
+                <button
+                  type="submit"
+                  disabled={status === 'loading'}
+                  className="btn-glow w-full bg-primary hover:bg-primary/90 disabled:opacity-60 text-paper font-medium px-6 py-3.5 rounded-xl transition-all flex items-center justify-center gap-2"
                 >
-                  <option value="" disabled className="bg-[var(--ink)]">
-                    Select a project type
-                  </option>
-                  {projectTypes.map((type) => (
-                    <option key={type} value={type} className="bg-[var(--ink)]">
-                      {type}
-                    </option>
-                  ))}
-                </select>
-              </div>
+                  {status === 'loading' ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-5 h-5" />
+                      Send Message
+                    </>
+                  )}
+                </button>
 
-              {/* Message */}
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium text-mist-1 mb-1.5">
-                  Message <span className="text-secondary">*</span>
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  required
-                  rows={4}
-                  className="w-full px-4 py-3 bg-[var(--glass-bg)] border border-(--line) rounded-lg text-paper placeholder:text-mist-2 focus:outline-none focus:border-primary transition-colors resize-none"
-                  placeholder="Tell me about your project..."
-                />
-              </div>
+                {/* Status Messages */}
+                <div aria-live="polite">
+                  {status === 'success' && (
+                    <div className="flex items-start gap-3 text-secondary bg-secondary/10 border border-secondary/20 p-4 rounded-xl">
+                      <CheckCircle className="w-5 h-5 shrink-0 mt-0.5" />
+                      <div>
+                        <p className="font-medium">Message sent successfully!</p>
+                        <p className="text-sm text-mist-1">I&apos;ll get back to you as soon as possible.</p>
+                      </div>
+                    </div>
+                  )}
 
-              {/* Submit Button */}
-              <button
-                type="submit"
-                disabled={status === 'loading'}
-                className="w-full bg-primary hover:bg-primary/80 disabled:opacity-50 text-paper font-medium px-6 py-3 rounded-lg transition-all flex items-center justify-center gap-2"
-              >
-                {status === 'loading' ? (
-                  <>
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                    Sending...
-                  </>
-                ) : (
-                  <>
-                    <Send className="w-5 h-5" />
-                    Send Message
-                  </>
-                )}
-              </button>
-
-              {/* Success Message */}
-              {status === 'success' && (
-                <div className="flex items-center gap-2 text-secondary bg-secondary/10 p-4 rounded-lg">
-                  <CheckCircle className="w-5 h-5 shrink-0" />
-                  <span>Message sent successfully! I&apos;ll get back to you soon.</span>
+                  {status === 'error' && (
+                    <div className="flex items-start gap-3 text-red-400 bg-red-500/10 border border-red-500/20 p-4 rounded-xl">
+                      <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
+                      <div>
+                        <p className="font-medium">Something went wrong</p>
+                        <p className="text-sm">{errorMessage || 'Failed to send message. Please try again.'}</p>
+                      </div>
+                    </div>
+                  )}
                 </div>
-              )}
-
-              {/* Error Message */}
-              {status === 'error' && (
-                <div className="flex items-center gap-2 text-red-400 bg-red-500/10 p-4 rounded-lg">
-                  <span className="shrink-0">&#10060;</span>
-                  <span>{errorMessage || 'Failed to send message. Please try again.'}</span>
-                </div>
-              )}
-            </form>
+              </form>
+            </GlassCard>
           </Reveal>
 
-          {/* Sections 21-23: Direct Info, Social, Availability */}
-          <Reveal index={1}>
-            <GlassCard className="p-8">
-              <h3 className="text-xl font-semibold mb-6 text-paper">
-                Reach Me Directly
-              </h3>
+          {/* Contact Info */}
+          <Reveal index={1} className="lg:col-span-2">
+            <div className="space-y-6">
+              <GlassCard className="p-6 md:p-8" hover={false}>
+                <h3 className="font-display text-xl font-semibold mb-6 text-paper">
+                  Reach me directly
+                </h3>
 
-              <div className="space-y-6">
-                {/* WhatsApp */}
-                <a
-                  href="https://wa.link/tlezg8"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-4 text-mist-1 hover:text-secondary transition-colors group"
-                >
-                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                    <MessageCircle className="w-5 h-5 text-secondary" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-mist-2">WhatsApp</p>
-                    <p className="font-medium text-paper">Chat on WhatsApp</p>
-                  </div>
-                </a>
-
-                {/* Email */}
-                <a
-                  href="mailto:rayidagaius@gmail.com"
-                  className="flex items-center gap-4 text-mist-1 hover:text-secondary transition-colors group"
-                >
-                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                    <Mail className="w-5 h-5 text-secondary" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-mist-2">Email</p>
-                    <p className="font-medium text-paper">rayidagaius@gmail.com</p>
-                  </div>
-                </a>
-
-                {/* Website */}
-                <a
-                  href="https://rayidatech.name.ng"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-4 text-mist-1 hover:text-secondary transition-colors group"
-                >
-                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                    <Globe className="w-5 h-5 text-secondary" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-mist-2">Website</p>
-                    <p className="font-medium text-paper">rayidatech.name.ng</p>
-                  </div>
-                </a>
-              </div>
-
-              {/* Section 22: Social */}
-              <div className="mt-8 pt-8 border-t border-(--line)">
-                <p className="text-sm font-medium text-mist-1 mb-4">Follow Us</p>
-                <div className="flex flex-wrap gap-3">
-                  <a
-                    href="https://www.linkedin.com/in/rayida-tech"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center hover:bg-primary/20 transition-colors"
-                    aria-label="LinkedIn"
-                  >
-                    <Globe className="w-4 h-4 text-secondary" />
-                  </a>
-                  <a
-                    href="https://instagram.com/rayidatech"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center hover:bg-primary/20 transition-colors"
-                    aria-label="Instagram"
-                  >
-                    <ImageIcon className="w-4 h-4 text-secondary" />
-                  </a>
-                  <a
-                    href="https://x.com/rayidatech"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center hover:bg-primary/20 transition-colors"
-                    aria-label="X (Twitter)"
-                  >
-                    <MessageCircle className="w-4 h-4 text-secondary" />
-                  </a>
-                  <a
-                    href="https://tiktok.com/@rayidatech"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center hover:bg-primary/20 transition-colors"
-                    aria-label="TikTok"
-                  >
-                    <Music className="w-4 h-4 text-secondary" />
-                  </a>
-                  <a
-                    href="https://youtube.com/@rayidatech"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center hover:bg-primary/20 transition-colors"
-                    aria-label="YouTube"
-                  >
-                    <Play className="w-4 h-4 text-secondary" />
-                  </a>
+                <div className="space-y-5">
+                  {contactMethods.map((method) => {
+                    const Icon = method.icon;
+                    return (
+                      <a
+                        key={method.label}
+                        href={method.href}
+                        target={method.href.startsWith('http') ? '_blank' : undefined}
+                        rel={method.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                        className="flex items-center gap-4 text-mist-1 hover:text-paper transition-colors group"
+                      >
+                        <div className="w-11 h-11 bg-primary/10 rounded-xl flex items-center justify-center group-hover:bg-primary/20 group-hover:scale-105 transition-all">
+                          <Icon className="w-5 h-5 text-secondary" />
+                        </div>
+                        <div>
+                          <p className="text-xs text-mist-2 font-mono-tight uppercase tracking-wider">
+                            {method.label}
+                          </p>
+                          <p className="font-medium text-paper">{method.value}</p>
+                        </div>
+                      </a>
+                    );
+                  })}
                 </div>
-              </div>
 
-              {/* Section 23: Availability */}
-              <div className="mt-8 pt-8 border-t border-(--line)">
-                <StatusPill />
-                <p className="text-xs text-mist-2 mt-2">
-                  Reply within 24 hours.
-                </p>
-              </div>
-            </GlassCard>
+                {/* Availability */}
+                <div className="mt-8 pt-6 border-t border-(--line)">
+                  <StatusPill />
+                  <div className="mt-4 space-y-2">
+                    <div className="flex items-center gap-2 text-sm text-mist-1">
+                      <Clock className="w-4 h-4 text-secondary" />
+                      <span>Reply within 24 hours</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-mist-1">
+                      <MapPin className="w-4 h-4 text-secondary" />
+                      <span>Remote / Worldwide</span>
+                    </div>
+                  </div>
+                </div>
+              </GlassCard>
+
+              {/* Social Links */}
+              <GlassCard className="p-6 md:p-8" hover={false}>
+                <h3 className="font-display text-lg font-semibold mb-4 text-paper">
+                  Follow along
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {socialLinks.map((link) => (
+                    <a
+                      key={link.name}
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group flex items-center justify-between px-4 py-3 rounded-xl border border-(--line) bg-[var(--glass-bg)] hover:border-(--line-strong) hover:bg-[var(--glass-bg-strong)] transition-all"
+                    >
+                      <div>
+                        <p className="text-sm font-medium text-paper group-hover:text-secondary transition-colors">
+                          {link.name}
+                        </p>
+                        <p className="text-xs text-mist-2">{link.handle}</p>
+                      </div>
+                      <svg
+                        className="w-4 h-4 text-mist-2 group-hover:text-secondary transition-colors"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M7 17L17 7M17 7H7M17 7v10"
+                        />
+                      </svg>
+                    </a>
+                  ))}
+                </div>
+              </GlassCard>
+            </div>
           </Reveal>
         </div>
       </Container>
