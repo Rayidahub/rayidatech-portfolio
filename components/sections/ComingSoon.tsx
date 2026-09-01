@@ -102,8 +102,8 @@ function ProductCard({ product }: { product: EcosystemProduct }) {
   const formattedDate = formatLaunchDate(product.launch_date);
 
   return (
-    <GlassCard className="h-full p-7 md:p-8">
-      <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mb-6 bg-primary/10">
+    <GlassCard className="h-full p-7 md:p-8 group">
+      <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mb-6 bg-primary/10 group-hover:bg-primary/20 group-hover:scale-105 transition-all duration-300">
         {product.emoji}
       </div>
       <div className="flex flex-wrap items-center gap-2.5 mb-3">

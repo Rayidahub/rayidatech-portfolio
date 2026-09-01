@@ -112,66 +112,35 @@ export default function ContactPage() {
     }
   };
 
-  const inputClassName =
-    'w-full px-4 py-3 bg-[var(--glass-bg)] border border-(--line) rounded-xl text-paper placeholder:text-mist-2 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all';
-
   return (
-    <main className="relative min-h-screen pt-28 pb-24 overflow-hidden">
-      {/* Background glows */}
-      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-        <div
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] opacity-40"
-          style={{
-            background:
-              'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(var(--primary-rgb), 0.18) 0%, rgba(var(--secondary-rgb), 0.08) 40%, transparent 70%)',
-          }}
-        />
-        <div
-          className="absolute bottom-0 right-0 w-[40rem] h-[40rem] rounded-full opacity-20 blur-3xl"
-          style={{
-            background:
-              'radial-gradient(circle, rgba(var(--secondary-rgb), 0.22) 0%, transparent 60%)',
-          }}
-        />
-      </div>
-
-      {/* Top gradient line */}
-      <div
-        className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-full h-px opacity-30"
-        style={{
-          background:
-            'linear-gradient(90deg, transparent, var(--primary), var(--secondary), transparent)',
-        }}
-        aria-hidden="true"
-      />
-
-      <Container size="default" className="relative z-10">
+    <main>
+      <Container size="default">
         {/* Hero */}
         <Reveal>
-          <div className="max-w-2xl mb-14">
-            <p className="font-mono-tight text-xs uppercase tracking-[0.25em] text-secondary mb-4">
+          <div>
+            <p>
               Contact
             </p>
-            <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-semibold leading-[1.05] mb-5">
+            <h1>
               Let&apos;s build something{' '}
-              <span className="gradient-text">great</span> together
+              <span>great</span> together
             </h1>
-            <p className="text-mist-1 text-lg">
+            <p>
               Have a project in mind? Send the details and I&apos;ll get back to you within 24 hours.
             </p>
           </div>
         </Reveal>
 
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-10">
+        <div>
           {/* Form */}
-          <Reveal className="lg:col-span-3">
-            <GlassCard className="p-6 md:p-8" hover={false}>
-              <form onSubmit={handleSubmit} className="space-y-5">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <Reveal>
+            <GlassCard hover={false}>
+              <form onSubmit={handleSubmit}>
+                <div>
                   {/* Full Name */}
                   <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-mist-1 mb-1.5">
-                      Full Name <span className="text-secondary">*</span>
+                    <label htmlFor="name">
+                      Full Name <span>*</span>
                     </label>
                     <input
                       type="text"
@@ -180,15 +149,14 @@ export default function ContactPage() {
                       value={formData.name}
                       onChange={handleChange}
                       required
-                      className={inputClassName}
                       placeholder="John Doe"
                     />
                   </div>
 
                   {/* Email Address */}
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-mist-1 mb-1.5">
-                      Email Address <span className="text-secondary">*</span>
+                    <label htmlFor="email">
+                      Email Address <span>*</span>
                     </label>
                     <input
                       type="email"
@@ -197,14 +165,13 @@ export default function ContactPage() {
                       value={formData.email}
                       onChange={handleChange}
                       required
-                      className={inputClassName}
                       placeholder="you@example.com"
                     />
                   </div>
 
                   {/* Phone Number */}
                   <div>
-                    <label htmlFor="phone" className="block text-sm font-medium text-mist-1 mb-1.5">
+                    <label htmlFor="phone">
                       Phone Number
                     </label>
                     <input
@@ -213,15 +180,14 @@ export default function ContactPage() {
                       name="phone"
                       value={formData.phone}
                       onChange={handleChange}
-                      className={inputClassName}
                       placeholder="+234 800 000 0000"
                     />
                   </div>
 
                   {/* Company */}
                   <div>
-                    <label htmlFor="company" className="block text-sm font-medium text-mist-1 mb-1.5">
-                      Company <span className="text-mist-2">(Optional)</span>
+                    <label htmlFor="company">
+                      Company <span>(Optional)</span>
                     </label>
                     <input
                       type="text"
@@ -229,7 +195,6 @@ export default function ContactPage() {
                       name="company"
                       value={formData.company}
                       onChange={handleChange}
-                      className={inputClassName}
                       placeholder="Your company"
                     />
                   </div>
@@ -237,35 +202,34 @@ export default function ContactPage() {
 
                 {/* Project Type */}
                 <div>
-                  <label htmlFor="project_type" className="block text-sm font-medium text-mist-1 mb-1.5">
-                    Project Type <span className="text-secondary">*</span>
+                  <label htmlFor="project_type">
+                    Project Type <span>*</span>
                   </label>
-                  <div className="relative">
+                  <div>
                     <select
                       id="project_type"
                       name="project_type"
                       value={formData.project_type}
                       onChange={handleChange}
                       required
-                      className={`${inputClassName} appearance-none pr-10`}
                     >
-                      <option value="" disabled className="bg-[var(--ink)]">
+                      <option value="" disabled>
                         Select a project type
                       </option>
                       {projectTypes.map((type) => (
-                        <option key={type} value={type} className="bg-[var(--ink)]">
+                        <option key={type} value={type}>
                           {type}
                         </option>
                       ))}
                     </select>
-                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-mist-2 pointer-events-none" />
+                    <ChevronDown />
                   </div>
                 </div>
 
                 {/* Message */}
                 <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-mist-1 mb-1.5">
-                    Message <span className="text-secondary">*</span>
+                  <label htmlFor="message">
+                    Message <span>*</span>
                   </label>
                   <textarea
                     id="message"
@@ -274,25 +238,20 @@ export default function ContactPage() {
                     onChange={handleChange}
                     required
                     rows={5}
-                    className={`${inputClassName} resize-none`}
                     placeholder="Tell me about your project, goals, and timeline..."
                   />
                 </div>
 
                 {/* Submit Button */}
-                <button
-                  type="submit"
-                  disabled={status === 'loading'}
-                  className="btn-glow w-full bg-primary hover:bg-primary/90 disabled:opacity-60 text-paper font-medium px-6 py-3.5 rounded-xl transition-all flex items-center justify-center gap-2"
-                >
+                <button type="submit" disabled={status === 'loading'}>
                   {status === 'loading' ? (
                     <>
-                      <Loader2 className="w-5 h-5 animate-spin" />
+                      <Loader2 />
                       Sending...
                     </>
                   ) : (
                     <>
-                      <Send className="w-5 h-5" />
+                      <Send />
                       Send Message
                     </>
                   )}
@@ -301,21 +260,21 @@ export default function ContactPage() {
                 {/* Status Messages */}
                 <div aria-live="polite">
                   {status === 'success' && (
-                    <div className="flex items-start gap-3 text-secondary bg-secondary/10 border border-secondary/20 p-4 rounded-xl">
-                      <CheckCircle className="w-5 h-5 shrink-0 mt-0.5" />
+                    <div>
+                      <CheckCircle />
                       <div>
-                        <p className="font-medium">Message sent successfully!</p>
-                        <p className="text-sm text-mist-1">I&apos;ll get back to you as soon as possible.</p>
+                        <p>Message sent successfully!</p>
+                        <p>I&apos;ll get back to you as soon as possible.</p>
                       </div>
                     </div>
                   )}
 
                   {status === 'error' && (
-                    <div className="flex items-start gap-3 text-red-400 bg-red-500/10 border border-red-500/20 p-4 rounded-xl">
-                      <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
+                    <div>
+                      <AlertCircle />
                       <div>
-                        <p className="font-medium">Something went wrong</p>
-                        <p className="text-sm">{errorMessage || 'Failed to send message. Please try again.'}</p>
+                        <p>Something went wrong</p>
+                        <p>{errorMessage || 'Failed to send message. Please try again.'}</p>
                       </div>
                     </div>
                   )}
@@ -325,14 +284,14 @@ export default function ContactPage() {
           </Reveal>
 
           {/* Contact Info */}
-          <Reveal index={1} className="lg:col-span-2">
-            <div className="space-y-6">
-              <GlassCard className="p-6 md:p-8" hover={false}>
-                <h3 className="font-display text-xl font-semibold mb-6 text-paper">
+          <Reveal index={1}>
+            <div>
+              <GlassCard hover={false}>
+                <h3>
                   Reach me directly
                 </h3>
 
-                <div className="space-y-5">
+                <div>
                   {contactMethods.map((method) => {
                     const Icon = method.icon;
                     return (
@@ -341,16 +300,15 @@ export default function ContactPage() {
                         href={method.href}
                         target={method.href.startsWith('http') ? '_blank' : undefined}
                         rel={method.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                        className="flex items-center gap-4 text-mist-1 hover:text-paper transition-colors group"
                       >
-                        <div className="w-11 h-11 bg-primary/10 rounded-xl flex items-center justify-center group-hover:bg-primary/20 group-hover:scale-105 transition-all">
-                          <Icon className="w-5 h-5 text-secondary" />
+                        <div>
+                          <Icon />
                         </div>
                         <div>
-                          <p className="text-xs text-mist-2 font-mono-tight uppercase tracking-wider">
+                          <p>
                             {method.label}
                           </p>
-                          <p className="font-medium text-paper">{method.value}</p>
+                          <p>{method.value}</p>
                         </div>
                       </a>
                     );
@@ -358,15 +316,15 @@ export default function ContactPage() {
                 </div>
 
                 {/* Availability */}
-                <div className="mt-8 pt-6 border-t border-(--line)">
+                <div>
                   <StatusPill />
-                  <div className="mt-4 space-y-2">
-                    <div className="flex items-center gap-2 text-sm text-mist-1">
-                      <Clock className="w-4 h-4 text-secondary" />
+                  <div>
+                    <div>
+                      <Clock />
                       <span>Reply within 24 hours</span>
                     </div>
-                    <div className="flex items-center gap-2 text-sm text-mist-1">
-                      <MapPin className="w-4 h-4 text-secondary" />
+                    <div>
+                      <MapPin />
                       <span>Remote / Worldwide</span>
                     </div>
                   </div>
@@ -374,32 +332,20 @@ export default function ContactPage() {
               </GlassCard>
 
               {/* Social Links */}
-              <GlassCard className="p-6 md:p-8" hover={false}>
-                <h3 className="font-display text-lg font-semibold mb-4 text-paper">
+              <GlassCard hover={false}>
+                <h3>
                   Follow along
                 </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
                   {socialLinks.map((link) => (
-                    <a
-                      key={link.name}
-                      href={link.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group flex items-center justify-between px-4 py-3 rounded-xl border border-(--line) bg-[var(--glass-bg)] hover:border-(--line-strong) hover:bg-[var(--glass-bg-strong)] transition-all"
-                    >
+                    <a key={link.name} href={link.url} target="_blank" rel="noopener noreferrer">
                       <div>
-                        <p className="text-sm font-medium text-paper group-hover:text-secondary transition-colors">
+                        <p>
                           {link.name}
                         </p>
-                        <p className="text-xs text-mist-2">{link.handle}</p>
+                        <p>{link.handle}</p>
                       </div>
-                      <svg
-                        className="w-4 h-4 text-mist-2 group-hover:text-secondary transition-colors"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                      >
+                      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"

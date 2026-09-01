@@ -67,8 +67,18 @@ export default async function Testimonials() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {testimonials.map((item, index) => (
-            <Reveal key={item.id} index={index}>
+            <Reveal
+              key={item.id}
+              index={index}
+              direction={index % 2 === 0 ? 'left' : 'right'}
+            >
               <GlassCard className="p-6 group relative h-full">
+                <div className="flex items-center justify-between mb-3">
+                  <Quote className="w-6 h-6 text-secondary/30" aria-hidden="true" />
+                  <span className="font-mono-tight text-[10px] text-mist-2 tabular-nums">
+                    {String(index + 1).padStart(2, '0')} / {String(testimonials.length).padStart(2, '0')}
+                  </span>
+                </div>
                 <p className="text-sm text-mist-1 leading-relaxed mb-6 italic border-l-2 border-(--line-strong) pl-4">
                   &ldquo;{item.testimonial}&rdquo;
                 </p>

@@ -15,13 +15,10 @@ export default function Section({
   spacing = 'default',
   id,
 }: SectionProps) {
-  const padding =
-    spacing === 'tight'
-      ? 'py-[var(--section-py-tight)]'
-      : 'py-[var(--section-py)]';
+  const py = spacing === 'tight' ? 'py-[var(--section-py-tight)]' : 'py-[var(--section-py)]';
 
   return (
-    <section id={id} className={`${padding} ${className}`}>
+    <section id={id} className={`${py} ${className}`}>
       {children}
     </section>
   );

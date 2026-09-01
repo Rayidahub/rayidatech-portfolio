@@ -43,7 +43,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${inter.variable} ${geist.variable} ${geistMono.variable} text-paper antialiased`}
       >
@@ -53,7 +53,7 @@ export default function RootLayout({
             __html: `
               (function() {
                 try {
-                  const theme = localStorage.getItem('theme') || 'dark';
+                  const theme = localStorage.getItem('theme') || 'light';
                   document.documentElement.setAttribute('data-theme', theme);
                 } catch (e) {}
               })();
@@ -61,31 +61,7 @@ export default function RootLayout({
           }}
         />
 
-        {/* Full-screen fixed background image */}
-        <div className="fixed inset-0" aria-hidden="true" style={{ zIndex: 0 }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/img/bgmain.jpg"
-            alt=""
-            className="h-full w-full object-cover"
-            style={{ filter: 'blur(12px)', transform: 'scale(1.1)' }}
-          />
-        </div>
-        {/* Theme-aware translucent overlay + blur */}
-        <div
-          className="fixed inset-0 pointer-events-none"
-          aria-hidden="true"
-          style={{
-            background: 'var(--bg-overlay)',
-            backdropFilter: 'blur(var(--bg-blur))',
-            WebkitBackdropFilter: 'blur(var(--bg-blur))',
-            zIndex: 1,
-            transition: 'background 0.3s ease, backdrop-filter 0.3s ease',
-          }}
-        />
-        <div className="relative" style={{ zIndex: 2 }}>
-          {children}
-        </div>
+        {children}
       </body>
     </html>
   );

@@ -56,10 +56,12 @@ export default async function PortfolioTeaser() {
         <Reveal>
           <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-12">
             <div>
-              <h2 className="font-display text-3xl md:text-4xl font-semibold mb-2">
+              <p className="font-mono-tight text-xs uppercase tracking-[0.25em] text-secondary mb-3">
+                Real work. Real impact.
+              </p>
+              <h2 className="font-display text-3xl md:text-5xl font-semibold">
                 Featured <span className="gradient-text">Projects</span>
               </h2>
-              <p className="text-mist-1">Real work. Real impact.</p>
             </div>
             <Link
               href="/projects"
@@ -74,7 +76,9 @@ export default async function PortfolioTeaser() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((project, index) => {
             const firstTag = project.tags?.[0];
-            const badgeLabel = project.featured ? 'Featured' : firstTag || 'Project';
+            const badgeLabel = project.featured
+              ? 'Featured'
+              : firstTag || 'Project';
 
             return (
               <Reveal key={project.id} index={index}>

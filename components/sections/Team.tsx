@@ -50,7 +50,7 @@ function SocialLink({
       target="_blank"
       rel="noopener noreferrer"
       aria-label={label}
-      className="w-8 h-8 rounded-full bg-white/5 border border-(--line) flex items-center justify-center text-mist-2 hover:text-secondary hover:border-secondary/30 hover:bg-secondary/10 transition-all duration-300"
+      className="w-8 h-8 rounded-full glass flex items-center justify-center text-mist-2 hover:text-secondary hover:border-secondary/30 hover:bg-secondary/10 transition-all duration-300"
     >
       <Icon className="w-3.5 h-3.5" />
     </a>
@@ -114,7 +114,7 @@ export default async function Team() {
 
             return (
               <Reveal key={member.id} index={index}>
-                <GlassCard className="p-6 text-center h-full group">
+                <GlassCard className="p-7 md:p-8 text-center h-full group">
                   {/* Avatar */}
                   <div className="relative mx-auto mb-5">
                     {member.photo_url ? (

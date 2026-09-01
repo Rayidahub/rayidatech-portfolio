@@ -53,7 +53,11 @@ export default async function Services() {
                 : 'from-secondary/20 to-primary/10';
 
             return (
-              <Reveal key={service.id} index={index}>
+              <Reveal
+                key={service.id}
+                index={index}
+                direction={index % 2 === 0 ? 'left' : 'right'}
+              >
                 <Link href={`/services/${service.slug}`} className="block h-full">
                   <GlassCard className="p-6 group relative overflow-hidden h-full">
                     {/* Left accent gradient strip */}

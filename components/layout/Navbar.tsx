@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
 import StatusPill from '@/components/ui/StatusPill';
 import ThemeToggle from '@/components/ui/ThemeToggle';
+import Container from '@/components/ui/Container';
 
 const navLinks = [
   { href: '/about', label: 'About' },
@@ -40,7 +41,7 @@ export default function Navbar() {
         scrolled ? 'glass' : 'border-b border-transparent'
       }`}
     >
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 md:px-8">
+      <Container size="wide" className="flex items-center justify-between py-4">
         <Link href="/" className="font-display text-lg font-semibold text-paper">
           Raymond<span className="text-signal">.</span>
         </Link>
@@ -62,9 +63,15 @@ export default function Navbar() {
           })}
         </div>
 
-        <div className="hidden items-center gap-2 md:flex">
+        <div className="hidden items-center gap-3 md:flex">
           <ThemeToggle />
           <StatusPill />
+          <Link
+            href="/contact"
+            className="btn-glow rounded-full bg-primary px-5 py-2 text-sm font-medium text-paper transition-colors hover:bg-primary/80"
+          >
+            Start a Project
+          </Link>
         </div>
 
         <button
@@ -75,7 +82,7 @@ export default function Navbar() {
         >
           {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
-      </div>
+      </Container>
 
       {isOpen && (
         <div className="glass-strong border-t border-(--line) px-6 py-6 md:hidden">
@@ -95,6 +102,12 @@ export default function Navbar() {
               <ThemeToggle />
               <StatusPill />
             </div>
+            <Link
+              href="/contact"
+              className="btn-glow mt-1 rounded-full bg-primary px-5 py-2.5 text-center text-sm font-medium text-paper transition-colors hover:bg-primary/80"
+            >
+              Start a Project
+            </Link>
           </div>
         </div>
       )}

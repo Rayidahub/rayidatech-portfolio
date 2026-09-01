@@ -64,38 +64,30 @@ export default function ProjectsFilter({
 
   return (
     <div>
-      {/* Search + category filters */}
-      <div className="mb-10 space-y-6">
-        <div className="relative max-w-md">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-mist-2 pointer-events-none" />
+      <div>
+        <div>
+          <Search />
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search projects by name, role, or tag..."
-            className="w-full glass rounded-full pl-11 pr-10 py-3 text-sm text-paper placeholder:text-mist-2 focus:outline-none focus:ring-2 focus:ring-primary/50"
           />
           {query && (
             <button
               onClick={() => setQuery('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-mist-2 hover:text-paper transition-colors"
               aria-label="Clear search"
             >
-              <X className="w-4 h-4" />
+              <X />
             </button>
           )}
         </div>
 
-        <div className="flex flex-wrap gap-2">
+        <div>
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setCategory(cat)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
-                category === cat
-                  ? 'bg-primary text-paper shadow-lg shadow-primary/20'
-                  : 'glass text-mist-1 hover:text-paper hover:border-(--line-strong)'
-              }`}
             >
               {cat}
             </button>
@@ -103,35 +95,29 @@ export default function ProjectsFilter({
         </div>
       </div>
 
-      <p className="text-mist-2 text-sm mb-6">
+      <p>
         {filteredProjects.length}{' '}
         {filteredProjects.length === 1 ? 'project' : 'projects'} found
       </p>
 
       {filteredProjects.length === 0 ? (
-        <div className="text-center py-20 glass rounded-2xl">
-          <p className="text-mist-1 mb-3">No projects match your filters.</p>
-          <button
-            onClick={clearFilters}
-            className="text-secondary hover:text-secondary/80 text-sm font-medium"
-          >
+        <div>
+          <p>No projects match your filters.</p>
+          <button onClick={clearFilters}>
             Clear filters
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredProjects.map((project, index) => {
+        <div>
+          {filteredProjects.map((project) => {
             const firstTag = project.tags?.[0];
             const badgeLabel = project.featured
               ? 'Featured'
               : firstTag || 'Project';
 
             return (
-              <Reveal key={project.id} index={index}>
-                <Link
-                  href={`/projects/${normalizeSlug(project.slug)}`}
-                  className="group block"
-                >
+              <Reveal key={project.id}>
+                <Link href={`/projects/${normalizeSlug(project.slug)}`}>
                   <PremiumCard
                     imageSrc={project.cover_image}
                     imageAlt={project.title}
@@ -142,33 +128,33 @@ export default function ProjectsFilter({
                     primaryMetric={project.duration || 'View →'}
                     bottomSpecs={[
                       {
-                        icon: <Briefcase className="w-3.5 h-3.5" />,
+                        icon: <Briefcase />,
                         label: project.role || 'Product Design',
                       },
                       {
-                        icon: <Calendar className="w-3.5 h-3.5" />,
+                        icon: <Calendar />,
                         label: project.duration || '—',
                       },
                       {
-                        icon: <Tag className="w-3.5 h-3.5" />,
+                        icon: <Tag />,
                         label: firstTag || 'Project',
                       },
                     ]}
                     hoverBadge={{
-                      icon: <Sparkles className="w-3.5 h-3.5" />,
+                      icon: <Sparkles />,
                       label: firstTag || 'Project',
                     }}
                     hoverMetrics={[
                       {
-                        icon: <Calendar className="w-3.5 h-3.5" />,
+                        icon: <Calendar />,
                         label: project.duration || '—',
                       },
                       {
-                        icon: <Briefcase className="w-3.5 h-3.5" />,
+                        icon: <Briefcase />,
                         label: project.role || 'Product Design',
                       },
                       {
-                        icon: <Tag className="w-3.5 h-3.5" />,
+                        icon: <Tag />,
                         label: firstTag
                           ? `${project.tags?.length || 0} tags`
                           : 'Project',

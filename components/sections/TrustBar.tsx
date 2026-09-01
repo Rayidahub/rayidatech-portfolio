@@ -24,7 +24,7 @@ export default function TrustBar() {
         aria-hidden="true"
       />
 
-      <p className="text-center text-sm text-mist-2 mb-8 font-mono-tight uppercase tracking-[0.2em]">
+      <p className="text-center font-mono-tight text-xs uppercase tracking-[0.25em] text-mist-2 mb-8">
         Trusted by startups, businesses, and founders
       </p>
 
@@ -43,9 +43,9 @@ export default function TrustBar() {
           ))}
         </div>
 
-        {/* Fade edges */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-24 md:w-32 bg-gradient-to-r from-[var(--ink-deep)] to-transparent z-10" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-24 md:w-32 bg-gradient-to-l from-[var(--ink-deep)] to-transparent z-10" />
+        {/* Edge fades */}
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[var(--ink-deep)] to-transparent" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-[var(--ink-deep)] to-transparent" />
       </div>
     </section>
   );

@@ -1,6 +1,7 @@
 // components/layout/Footer.tsx
 import Link from 'next/link';
-import { Mail, MessageCircle, MapPin, Phone, ArrowUpRight } from 'lucide-react';
+import { Mail, MessageCircle, MapPin, Phone } from 'lucide-react';
+import Container from '@/components/ui/Container';
 
 // Brand icons are not bundled in this lucide-react version; use lightweight SVGs.
 function GitHubIcon({ className }: { className?: string }) {
@@ -21,11 +22,14 @@ function LinkedInIcon({ className }: { className?: string }) {
 
 const WHATSAPP_URL = 'https://wa.link/tlezg8';
 
-const navLinks = [
+const navigateLinks = [
   { href: '/', label: 'Home' },
   { href: '/about', label: 'About' },
   { href: '/projects', label: 'Projects' },
   { href: '/services', label: 'Services' },
+];
+
+const moreLinks = [
   { href: '/blog', label: 'Blog' },
   { href: '/contact', label: 'Contact' },
 ];
@@ -68,17 +72,23 @@ export default function Footer() {
         aria-hidden="true"
       />
 
-      <div className="mx-auto max-w-7xl px-6 md:px-8 py-16 md:py-20">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
+      {/* Subtle dot-grid texture */}
+      <div
+        className="pointer-events-none absolute inset-0 bg-dot-pattern opacity-[0.5]"
+        aria-hidden="true"
+      />
+
+      <Container size="wide" className="relative z-10 py-16 md:py-20">
+        <div className="grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-4">
           {/* Column 1: Brand */}
-          <div>
-            <Link href="/" className="inline-block font-display text-2xl font-semibold text-paper mb-4">
+          <div className="col-span-2 sm:col-span-4 lg:col-span-1">
+            <Link href="/" className="inline-block font-display text-xl font-semibold text-paper mb-4">
               Raymond<span className="text-primary">.</span>
             </Link>
-            <p className="text-mist-1 text-sm leading-relaxed max-w-xs mb-6">
+            <p className="text-mist-1 text-sm leading-relaxed max-w-xs mb-5">
               Product Designer & AI Engineer building digital experiences people can trust.
             </p>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
               {socialLinks.map((social) => {
                 const Icon = social.icon;
                 return (
@@ -87,7 +97,7 @@ export default function Footer() {
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-full glass flex items-center justify-center text-mist-1 hover:text-paper hover:border-(--line-strong) transition-all duration-300"
+                    className="text-mist-2 hover:text-paper transition-colors duration-300"
                     aria-label={social.label}
                   >
                     <Icon className="h-4 w-4" />
@@ -97,39 +107,57 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Column 2: Quick Links */}
+          {/* Column 2: Navigate */}
           <div>
-            <h3 className="font-display text-sm font-semibold text-paper uppercase tracking-wider mb-5">
-              Quick Links
+            <h3 className="font-display text-sm font-semibold text-paper mb-4">
+              Navigate
             </h3>
             <ul className="space-y-3">
-              {navLinks.map((link) => (
+              {navigateLinks.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="group inline-flex items-center gap-1 text-sm text-mist-1 hover:text-secondary transition-colors duration-300"
+                    className="text-sm text-mist-1 hover:text-paper transition-colors duration-300"
                   >
                     {link.label}
-                    <ArrowUpRight className="w-3 h-3 opacity-0 -translate-y-0.5 translate-x-0.5 group-hover:opacity-100 group-hover:translate-y-0 group-hover:translate-x-0 transition-all duration-300" />
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Column 3: Contact */}
+          {/* Column 3: More */}
           <div>
-            <h3 className="font-display text-sm font-semibold text-paper uppercase tracking-wider mb-5">
-              Get in Touch
+            <h3 className="font-display text-sm font-semibold text-paper mb-4">
+              More
             </h3>
-            <ul className="space-y-4">
+            <ul className="space-y-3">
+              {moreLinks.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-sm text-mist-1 hover:text-paper transition-colors duration-300"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Column 4: Contact */}
+          <div>
+            <h3 className="font-display text-sm font-semibold text-paper mb-4">
+              Contact
+            </h3>
+            <ul className="space-y-3">
               <li>
                 <a
                   href="mailto:rayidagaius@gmail.com"
-                  className="group flex items-start gap-3 text-sm text-mist-1 hover:text-paper transition-colors duration-300"
+                  className="flex items-start gap-2 text-sm text-mist-1 hover:text-paper transition-colors duration-300"
                 >
-                  <Mail className="w-4 h-4 text-secondary mt-0.5 shrink-0" />
-                  <span>rayidagaius@gmail.com</span>
+                  <Mail className="w-3.5 h-3.5 text-secondary mt-0.5 shrink-0" />
+                  <span>Email</span>
                 </a>
               </li>
               <li>
@@ -137,15 +165,15 @@ export default function Footer() {
                   href={WHATSAPP_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex items-start gap-3 text-sm text-mist-1 hover:text-paper transition-colors duration-300"
+                  className="flex items-start gap-2 text-sm text-mist-1 hover:text-paper transition-colors duration-300"
                 >
-                  <Phone className="w-4 h-4 text-secondary mt-0.5 shrink-0" />
-                  <span>WhatsApp Message</span>
+                  <Phone className="w-3.5 h-3.5 text-secondary mt-0.5 shrink-0" />
+                  <span>WhatsApp</span>
                 </a>
               </li>
               <li>
-                <div className="flex items-start gap-3 text-sm text-mist-1">
-                  <MapPin className="w-4 h-4 text-secondary mt-0.5 shrink-0" />
+                <div className="flex items-start gap-2 text-sm text-mist-1">
+                  <MapPin className="w-3.5 h-3.5 text-secondary mt-0.5 shrink-0" />
                   <span>Nigeria — Working globally</span>
                 </div>
               </li>
@@ -154,15 +182,18 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-16 pt-8 border-t border-(--line) flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="mt-12 pt-6 border-t border-(--line) flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-mist-2 font-mono-tight">
             &copy; {currentYear} Raymond Gaius. All rights reserved.
           </p>
-          <p className="text-xs text-mist-2 font-mono-tight">
-            Designed & Built with precision.
-          </p>
+          <div className="flex items-center gap-2">
+            <span className="signal-dot h-1.5 w-1.5 rounded-full" aria-hidden="true" />
+            <span className="text-xs text-mist-2 font-mono-tight">
+              Available for projects
+            </span>
+          </div>
         </div>
-      </div>
+      </Container>
     </footer>
   );
 }

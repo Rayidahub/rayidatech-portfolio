@@ -53,18 +53,18 @@ export default async function ProjectsPage() {
   ]);
 
   return (
-    <main className="min-h-screen bg-ink">
-      <Section spacing="tight" className="pt-32">
+    <main>
+      <Section>
         <Container size="wide">
           <Reveal>
-            <div className="mb-12">
-              <p className="font-mono-tight text-xs uppercase tracking-[0.25em] text-secondary mb-4">
+            <div>
+              <p>
                 Portfolio
               </p>
-              <h1 className="font-display text-4xl md:text-5xl font-semibold mb-4 text-paper">
-                My <span className="gradient-text">Projects</span>
+              <h1>
+                My <span>Projects</span>
               </h1>
-              <p className="text-mist-1 text-lg max-w-2xl">
+              <p>
                 Each project tells a story. Here are some of the products and
                 experiences I&apos;ve designed.
               </p>
@@ -72,8 +72,8 @@ export default async function ProjectsPage() {
           </Reveal>
 
           {projects.length === 0 ? (
-            <div className="text-center py-20 glass rounded-2xl">
-              <p className="text-mist-2">No projects yet. Check back soon!</p>
+            <div>
+              <p>No projects yet. Check back soon!</p>
             </div>
           ) : (
             <ProjectsFilter projects={projects} services={services} />

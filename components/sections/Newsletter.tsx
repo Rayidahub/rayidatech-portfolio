@@ -4,6 +4,7 @@ import { useState, FormEvent } from 'react';
 import { ArrowRight, Loader2, CheckCircle2 } from 'lucide-react';
 import Container from '@/components/ui/Container';
 import Section from '@/components/ui/Section';
+import GlassCard from '@/components/ui/GlassCard';
 import Reveal from '@/components/ui/Reveal';
 import { supabase } from '@/lib/supabase/client';
 
@@ -59,7 +60,7 @@ export default function Newsletter() {
 
       <Container size="default">
         <Reveal>
-          <div className="glass rounded-2xl p-8 md:p-12 relative overflow-hidden">
+          <GlassCard hover={false} className="p-8 md:p-12 relative overflow-hidden">
             {/* Soft glow */}
             <div
               className="pointer-events-none absolute -top-24 -right-24 w-64 h-64 rounded-full opacity-30 blur-3xl"
@@ -136,7 +137,7 @@ export default function Newsletter() {
                 </p>
               </form>
             </div>
-          </div>
+          </GlassCard>
         </Reveal>
       </Container>
     </Section>

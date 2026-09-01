@@ -73,12 +73,13 @@ export default function WhatWeDo() {
             <p className="font-mono-tight text-xs uppercase tracking-[0.25em] text-secondary mb-4">
               Process
             </p>
-            <h2 className="font-display text-3xl md:text-4xl font-semibold mb-4 text-paper">
+            <h2 className="font-display text-3xl md:text-4xl font-semibold leading-tight text-paper">
               How I <span className="gradient-text">Work</span>
+              <br />
+              <span className="text-mist-1">A structured approach.</span>
             </h2>
-            <p className="text-mist-1 text-lg max-w-xl mx-auto">
-              A structured approach that keeps every project focused and
-              effective.
+            <p className="text-mist-1 text-lg max-w-xl mx-auto mt-4">
+              That keeps every project focused and effective.
             </p>
           </div>
         </Reveal>
@@ -86,11 +87,11 @@ export default function WhatWeDo() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {steps.map((step, index) => (
             <Reveal key={step.number} index={index}>
-              <div className="glass rounded-2xl card-hover p-6 text-center h-full">
-                <span className="font-mono-tight text-2xl font-bold text-secondary/50">
+              <div className="glass group rounded-2xl card-hover p-7 h-full relative overflow-hidden">
+                <span className="font-display text-5xl font-bold text-primary/15 group-hover:text-primary/25 transition-colors duration-300">
                   {step.number}
                 </span>
-                <h3 className="font-display text-lg font-semibold text-paper mt-3 mb-2">
+                <h3 className="font-display text-xl font-semibold text-paper mt-4 mb-2 group-hover:text-secondary transition-colors duration-300">
                   {step.title}
                 </h3>
                 <p className="text-mist-1 text-sm leading-relaxed">

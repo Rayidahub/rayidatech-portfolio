@@ -10,6 +10,7 @@ import PortfolioTeaser from '@/components/sections/PortfolioTeaser';
 import Testimonials from '@/components/sections/Testimonials';
 import Newsletter from '@/components/sections/Newsletter';
 import FinalCTA from '@/components/sections/FinalCTA';
+import MarqueeCTA from '@/components/sections/MarqueeCTA';
 import { createClient } from '@/lib/supabase/server';
 import { toHeroSlides, type HeroSlideRow } from '@/lib/data/hero-slides';
 
@@ -41,6 +42,7 @@ export default async function Home() {
       <Testimonials />
       <Newsletter />
       <FinalCTA />
+      <MarqueeCTA />
     </main>
   );
 }

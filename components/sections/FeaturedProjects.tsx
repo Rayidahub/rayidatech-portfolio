@@ -36,36 +36,30 @@ export default async function FeaturedProjects() {
     <Section>
       <Container size="wide">
         <Reveal>
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-12">
+          <div>
             <div>
-              <h2 className="font-display text-3xl md:text-4xl font-semibold mb-2">
-                Featured <span className="gradient-text">Projects</span>
+              <h2>
+                Featured <span>Projects</span>
               </h2>
-              <p className="text-mist-1">
+              <p>
                 Some of my best work — handpicked for you.
               </p>
             </div>
-            <Link
-              href="/projects"
-              className="inline-flex items-center gap-2 text-secondary hover:text-secondary/80 transition-colors mt-4 sm:mt-0 text-sm font-medium"
-            >
+            <Link href="/projects">
               View All Projects
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight />
             </Link>
           </div>
         </Reveal>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projects.map((project, index) => {
+        <div>
+          {projects.map((project) => {
             const firstTag = project.tags?.[0];
             const badgeLabel = project.featured ? 'Featured' : firstTag || 'Project';
 
             return (
-              <Reveal key={project.id} index={index}>
-                <Link
-                  href={`/projects/${normalizeSlug(project.slug)}`}
-                  className="group block"
-                >
+              <Reveal key={project.id}>
+                <Link href={`/projects/${normalizeSlug(project.slug)}`}>
                   <PremiumCard
                     imageSrc={project.cover_image}
                     imageAlt={project.title}
@@ -76,33 +70,33 @@ export default async function FeaturedProjects() {
                     primaryMetric={project.duration || 'View →'}
                     bottomSpecs={[
                       {
-                        icon: <Briefcase className="w-3.5 h-3.5" />,
+                        icon: <Briefcase />,
                         label: project.role || 'Product Design',
                       },
                       {
-                        icon: <Calendar className="w-3.5 h-3.5" />,
+                        icon: <Calendar />,
                         label: project.duration || '—',
                       },
                       {
-                        icon: <Tag className="w-3.5 h-3.5" />,
+                        icon: <Tag />,
                         label: firstTag || 'Project',
                       },
                     ]}
                     hoverBadge={{
-                      icon: <Sparkles className="w-3.5 h-3.5" />,
+                      icon: <Sparkles />,
                       label: firstTag || 'Project',
                     }}
                     hoverMetrics={[
                       {
-                        icon: <Calendar className="w-3.5 h-3.5" />,
+                        icon: <Calendar />,
                         label: project.duration || '—',
                       },
                       {
-                        icon: <Briefcase className="w-3.5 h-3.5" />,
+                        icon: <Briefcase />,
                         label: project.role || 'Product Design',
                       },
                       {
-                        icon: <Tag className="w-3.5 h-3.5" />,
+                        icon: <Tag />,
                         label: firstTag
                           ? `${project.tags?.length || 0} tags`
                           : 'Project',

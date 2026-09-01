@@ -67,50 +67,44 @@ export default async function ServiceDetailPage({
   }
 
   return (
-    <main className="pt-32 pb-20">
+    <main>
       <Container size="narrow">
         <Reveal>
-          <Link
-            href="/services"
-            className="inline-flex items-center gap-2 text-mist-1 hover:text-secondary transition-colors mb-8 text-sm"
-          >
-            <ArrowLeft className="w-4 h-4" />
+          <Link href="/services">
+            <ArrowLeft />
             Back to Services
           </Link>
         </Reveal>
 
         <Reveal>
-          <div className="mb-10">
-            <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
-              <ServiceIcon
-                name={service.icon_name}
-                className="w-6 h-6 text-secondary"
-              />
+          <div>
+            <div>
+              <ServiceIcon name={service.icon_name} />
             </div>
-            <p className="font-mono-tight text-xs text-secondary mb-2 uppercase tracking-[0.15em]">
+            <p>
               {service.title}
             </p>
-            <h1 className="font-display text-3xl md:text-4xl font-semibold mb-4 text-paper">
+            <h1>
               {service.headline}
             </h1>
-            <p className="text-mist-1 text-lg leading-relaxed">
+            <p>
               {service.content}
             </p>
           </div>
         </Reveal>
 
         <Reveal>
-          <GlassCard className="p-8">
-            <h2 className="font-display text-xl font-semibold mb-6 text-paper">
+          <GlassCard>
+            <h2>
               What You Get
             </h2>
-            <ul className="space-y-4">
+            <ul>
               {service.features.map((feature, index) => (
-                <li key={index} className="flex items-start gap-3">
-                  <span className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
-                    <Check className="w-3 h-3 text-secondary" />
+                <li key={index}>
+                  <span>
+                    <Check />
                   </span>
-                  <span className="text-mist-1">{feature}</span>
+                  <span>{feature}</span>
                 </li>
               ))}
             </ul>
@@ -118,12 +112,9 @@ export default async function ServiceDetailPage({
         </Reveal>
 
         <Reveal>
-          <div className="mt-12 pt-8 border-t border-(--line)">
-            <Link
-              href="/services"
-              className="inline-flex items-center gap-2 text-mist-1 hover:text-secondary transition-colors text-sm"
-            >
-              <ArrowLeft className="w-4 h-4" />
+          <div>
+            <Link href="/services">
+              <ArrowLeft />
               Back to all services
             </Link>
           </div>

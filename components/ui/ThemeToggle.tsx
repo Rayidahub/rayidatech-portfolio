@@ -9,18 +9,18 @@ const THEME_KEY = 'theme';
 const THEME_CHANGE_EVENT = 'themechange';
 
 function getSavedTheme(): Theme {
-  if (typeof window === 'undefined') return 'dark';
+  if (typeof window === 'undefined') return 'light';
   try {
     const stored = window.localStorage.getItem(THEME_KEY) as Theme | null;
     if (stored === 'light' || stored === 'dark') return stored;
   } catch {
     // ignore
   }
-  return 'dark';
+  return 'light';
 }
 
 function getClientTheme(): Theme {
-  if (typeof document === 'undefined') return 'dark';
+  if (typeof document === 'undefined') return 'light';
   const attr = document.documentElement.getAttribute('data-theme') as Theme | null;
   if (attr === 'light' || attr === 'dark') return attr;
   return getSavedTheme();
@@ -50,7 +50,7 @@ export default function ThemeToggle() {
   const theme = useSyncExternalStore(
     subscribe,
     getClientTheme,
-    () => 'dark'
+    () => 'light'
   );
   const mounted = useSyncExternalStore(
     () => () => {},
@@ -68,9 +68,9 @@ export default function ThemeToggle() {
       <button
         type="button"
         aria-label="Toggle theme"
-        className="rounded-full p-2 text-mist-2 transition-colors hover:text-paper"
+        className="flex h-9 w-9 items-center justify-center rounded-full text-mist-1 transition-colors hover:text-paper"
       >
-        <Moon className="h-5 w-5" />
+        <Moon className="h-4 w-4" />
       </button>
     );
   }
@@ -80,9 +80,9 @@ export default function ThemeToggle() {
       type="button"
       onClick={toggleTheme}
       aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-      className="rounded-full p-2 text-mist-2 transition-colors hover:text-paper hover:bg-paper/5"
+      className="flex h-9 w-9 items-center justify-center rounded-full text-mist-1 transition-colors hover:text-paper"
     >
-      {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+      {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
     </button>
   );
 }
