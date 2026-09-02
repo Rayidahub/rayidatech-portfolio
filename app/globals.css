@@ -109,6 +109,20 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Theme-aware brand logo swap — light-text mark on dark mode, dark-text mark on light mode */
+.logo-light {
+  display: block;
+}
+.logo-dark {
+  display: none;
+}
+html[data-theme="dark"] .logo-light {
+  display: none;
+}
+html[data-theme="dark"] .logo-dark {
+  display: block;
+}
+
 /* Display headings use the tighter grotesk with negative tracking */
 .font-display {
   font-family: var(--font-display), system-ui, sans-serif;

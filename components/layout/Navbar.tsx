@@ -3,6 +3,7 @@
 // components/layout/Navbar.tsx
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
 import StatusPill from '@/components/ui/StatusPill';
@@ -42,8 +43,23 @@ export default function Navbar() {
       }`}
     >
       <Container size="wide" className="flex items-center justify-between py-4">
-        <Link href="/" className="font-display text-lg font-semibold text-paper">
-          Raymond<span className="text-signal">.</span>
+        <Link href="/" className="flex items-center" aria-label="Rayida Tech">
+          <Image
+            src="/brand/logo-light.png"
+            alt="Rayida Tech"
+            width={419}
+            height={120}
+            className="logo-light h-8 w-auto md:h-9"
+            priority
+          />
+          <Image
+            src="/brand/logo-dark.png"
+            alt="Rayida Tech"
+            width={419}
+            height={120}
+            className="logo-dark h-8 w-auto md:h-9"
+            priority
+          />
         </Link>
 
         <div className="hidden items-center gap-8 md:flex">

@@ -1,5 +1,6 @@
 // components/layout/Footer.tsx
 import Link from 'next/link';
+import Image from 'next/image';
 import { Mail, MessageCircle, MapPin, Phone } from 'lucide-react';
 import Container from '@/components/ui/Container';
 
@@ -82,8 +83,21 @@ export default function Footer() {
         <div className="grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-4">
           {/* Column 1: Brand */}
           <div className="col-span-2 sm:col-span-4 lg:col-span-1">
-            <Link href="/" className="inline-block font-display text-xl font-semibold text-paper mb-4">
-              Raymond<span className="text-primary">.</span>
+            <Link href="/" className="inline-block mb-4" aria-label="Rayida Tech">
+              <Image
+                src="/brand/logo-light.png"
+                alt="Rayida Tech"
+                width={419}
+                height={120}
+                className="logo-light h-9 w-auto"
+              />
+              <Image
+                src="/brand/logo-dark.png"
+                alt="Rayida Tech"
+                width={419}
+                height={120}
+                className="logo-dark h-9 w-auto"
+              />
             </Link>
             <p className="text-mist-1 text-sm leading-relaxed max-w-xs mb-5">
               Product Designer & AI Engineer building digital experiences people can trust.
