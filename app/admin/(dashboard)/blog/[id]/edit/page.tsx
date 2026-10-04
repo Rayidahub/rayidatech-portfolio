@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/browser'
 import { useRouter, useParams } from 'next/navigation'
 import { Save, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
+import ImageUploadField from '@/components/admin/ImageUploadField'
 
 export default function EditPost() {
   const router = useRouter()
@@ -168,12 +169,12 @@ export default function EditPost() {
             />
           </div>
           <div className="sm:col-span-2">
-            <label className="block text-sm text-mist-1 mb-1.5">Cover Image URL</label>
-            <input
-              type="url"
+            <ImageUploadField
+              label="Cover Image"
               value={form.cover_image}
-              onChange={(e) => setForm((p) => ({ ...p, cover_image: e.target.value }))}
-              className="w-full bg-white/5 border border-(--line) rounded-lg px-3 py-2.5 text-sm text-paper placeholder:text-mist-2 focus:outline-none focus:border-primary/50 transition-colors"
+              onChange={(url) => setForm((p) => ({ ...p, cover_image: url }))}
+              folder="blog"
+              description="Upload a cover banner from your device (PNG, JPG, WebP) or paste an image URL"
             />
           </div>
           <div className="sm:col-span-2">

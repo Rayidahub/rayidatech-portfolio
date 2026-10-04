@@ -315,10 +315,12 @@ body {
 .logo-dark {
   display: none !important;
 }
-html[data-theme="dark"] .logo-light {
+html[data-theme="dark"] .logo-light,
+html.dark .logo-light {
   display: none !important;
 }
-html[data-theme="dark"] .logo-dark {
+html[data-theme="dark"] .logo-dark,
+html.dark .logo-dark {
   display: inline-block !important;
   width: auto;
   max-width: 100%;

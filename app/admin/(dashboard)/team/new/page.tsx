@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/browser'
 import { useRouter } from 'next/navigation'
 import { Save, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
+import ImageUploadField from '@/components/admin/ImageUploadField'
 
 export default function NewTeamMember() {
   const router = useRouter()
@@ -110,13 +111,13 @@ export default function NewTeamMember() {
           </div>
 
           <div className="sm:col-span-2">
-            <label className="block text-sm text-mist-1 mb-1.5">Photo URL</label>
-            <input
-              type="url"
+            <ImageUploadField
+              label="Profile Photo"
               value={form.photo_url}
-              onChange={(e) => setForm((p) => ({ ...p, photo_url: e.target.value }))}
-              className="w-full bg-white/5 border border-(--line) rounded-lg px-3 py-2.5 text-sm text-paper placeholder:text-mist-2 focus:outline-none focus:border-primary/50 transition-colors"
-              placeholder="https://..."
+              onChange={(url) => setForm((p) => ({ ...p, photo_url: url }))}
+              folder="team"
+              aspectRatio="aspect-[4/5]"
+              description="Upload a team member headshot/photo from your device"
             />
           </div>
 

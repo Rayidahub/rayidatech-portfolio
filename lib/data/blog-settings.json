@@ -1,0 +1,16 @@
+{
+  "id": "default",
+  "badge_text": "Insights & Perspectives",
+  "headline_prefix": "Thoughts on Design, Tech &",
+  "headline_accent": "Growth",
+  "headline_suffix": "",
+  "subheadline": "Practical perspectives on product design, AI engineering, building scalable systems, and design-led company building by Raymond Gaius.",
+  "author_name": "Raymond Gaius",
+  "author_role": "Product Designer & AI Engineer",
+  "author_bio": "Product Designer & AI Engineer at Rayida Tech. Building digital experiences people can trust across fintech, AI interfaces, and scalable SaaS ecosystems.",
+  "author_twitter": "https://twitter.com/rayidatech",
+  "author_github": "https://github.com/Rayidahub",
+  "author_linkedin": "https://linkedin.com/in/rayida-tech",
+  "newsletter_headline": "Stay in the loop",
+  "newsletter_subheadline": "Get insights on design, AI engineering, product thinking, and behind-the-scenes updates — no spam, just value."
+}

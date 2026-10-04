@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { Mail, MessageCircle, MapPin, Phone } from 'lucide-react';
 import Container from '@/components/ui/Container';
+import BrandLogo from '@/components/ui/BrandLogo';
 
 // Brand icons are not bundled in this lucide-react version; use lightweight SVGs.
 function GitHubIcon({ className }: { className?: string }) {
@@ -82,8 +83,8 @@ export default function Footer() {
         <div className="grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-4">
           {/* Column 1: Brand */}
           <div className="col-span-2 sm:col-span-4 lg:col-span-1">
-            <Link href="/" className="inline-block font-display text-xl font-semibold text-paper mb-4">
-              Raymond<span className="text-primary">.</span>
+            <Link href="/" className="inline-flex items-center mb-4">
+              <BrandLogo />
             </Link>
             <p className="text-mist-1 text-sm leading-relaxed max-w-xs mb-5">
               Product Designer & AI Engineer building digital experiences people can trust.

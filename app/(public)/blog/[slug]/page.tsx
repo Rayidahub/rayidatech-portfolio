@@ -1,42 +1,68 @@
 import { createClient } from '@/lib/supabase/server';
-import { supabase } from '@/lib/supabase/client';
 import type { Post } from '@/types/post';
 import type { Metadata } from 'next';
-import Link from 'next/link';
-import { ArrowLeft, Calendar, Clock, Tag } from 'lucide-react';
 import { notFound } from 'next/navigation';
-import Container from '@/components/ui/Container';
-import Section from '@/components/ui/Section';
-import GlassCard from '@/components/ui/GlassCard';
-import Reveal from '@/components/ui/Reveal';
-import { getReadingTime } from '@/lib/reading-time';
+import { fallbackPosts } from '@/lib/data/posts';
+import { getBlogSettings } from '@/lib/data/blog-settings';
+import BlogPostClient from '@/components/blog/BlogPostClient';
 
 export const revalidate = 3600;
 
 async function getPost(slug: string): Promise<Post | null> {
-  const supabase = await createClient();
-  const { data, error } = await supabase
-    .from('posts')
-    .select('*')
-    .eq('slug', slug)
-    .single();
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from('posts')
+      .select('*')
+      .eq('slug', slug)
+      .eq('published', true)
+      .maybeSingle();
 
-  if (error) {
-    console.error('Error fetching post:', error);
-    return null;
+    if (!error && data) {
+      return data as Post;
+    }
+  } catch {
+    // Supabase query error fallback
   }
 
-  return data as Post;
+  // Check fallback posts
+  const fallback = fallbackPosts.find((p) => p.slug === slug);
+  return fallback || null;
+}
+
+async function getRelatedPosts(currentSlug: string): Promise<Post[]> {
+  try {
+    const supabase = await createClient();
+    const { data } = await supabase
+      .from('posts')
+      .select('*')
+      .eq('published', true)
+      .neq('slug', currentSlug)
+      .limit(2);
+
+    if (data && data.length > 0) {
+      return data as Post[];
+    }
+  } catch {
+    // Supabase fallback
+  }
+
+  return fallbackPosts.filter((p) => p.slug !== currentSlug).slice(0, 2);
 }
 
 export async function generateStaticParams() {
-  const { data } = await supabase.from('posts').select('slug');
+  try {
+    const supabase = await createClient();
+    const { data } = await supabase.from('posts').select('slug').eq('published', true);
 
-  if (!data) return [];
+    const dbSlugs = data ? data.map((p) => ({ slug: p.slug })) : [];
+    const fallbackSlugs = fallbackPosts.map((p) => ({ slug: p.slug }));
 
-  return data.map((post) => ({
-    slug: post.slug,
-  }));
+    const unique = new Set([...dbSlugs.map((s) => s.slug), ...fallbackSlugs.map((s) => s.slug)]);
+    return Array.from(unique).map((slug) => ({ slug }));
+  } catch {
+    return fallbackPosts.map((p) => ({ slug: p.slug }));
+  }
 }
 
 export async function generateMetadata({
@@ -47,11 +73,17 @@ export async function generateMetadata({
   const { slug } = await params;
   const post = await getPost(slug);
 
-  if (!post) return { title: 'Post Not Found' };
+  if (!post) return { title: 'Article Not Found | Raymond Gaius' };
 
   return {
     title: `${post.title} | Raymond Gaius`,
     description: post.excerpt,
+    openGraph: {
+      title: post.title,
+      description: post.excerpt,
+      type: 'article',
+      images: post.cover_image ? [{ url: post.cover_image }] : undefined,
+    },
   };
 }
 
@@ -67,97 +99,10 @@ export default async function BlogPostPage({
     notFound();
   }
 
-  const readingTime = getReadingTime(post.content);
+  const [relatedPosts, settings] = await Promise.all([
+    getRelatedPosts(slug),
+    getBlogSettings(),
+  ]);
 
-  return (
-    <main>
-      <Section>
-        <Container size="narrow">
-          <Reveal>
-            <Link href="/blog">
-              <ArrowLeft />
-              Back to Blog
-            </Link>
-          </Reveal>
-
-          {/* Cover Image */}
-          {post.cover_image && (
-            <Reveal>
-              <div>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={post.cover_image} alt={post.title} />
-              </div>
-            </Reveal>
-          )}
-
-          {/* Meta Info */}
-          <Reveal>
-            <div>
-              <span>
-                <Calendar />
-                {new Date(post.created_at).toLocaleDateString('en-US', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                })}
-              </span>
-              <span>
-                <Clock />
-                {readingTime} min read
-              </span>
-            </div>
-          </Reveal>
-
-          {/* Title */}
-          <Reveal>
-            <h1>
-              {post.title}
-            </h1>
-          </Reveal>
-
-          {/* Tags */}
-          {post.tags && post.tags.length > 0 && (
-            <Reveal>
-              <div>
-                {post.tags.map((tag, index) => (
-                  <span key={index}>
-                    <Tag />
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </Reveal>
-          )}
-
-          {/* Excerpt */}
-          <Reveal>
-            <p>
-              {post.excerpt}
-            </p>
-          </Reveal>
-
-          {/* Content */}
-          <Reveal>
-            <GlassCard hover={false}>
-              <div>
-                <p>
-                  {post.content}
-                </p>
-              </div>
-            </GlassCard>
-          </Reveal>
-
-          {/* Bottom Navigation */}
-          <Reveal>
-            <div>
-              <Link href="/blog">
-                <ArrowLeft />
-                Back to all posts
-              </Link>
-            </div>
-          </Reveal>
-        </Container>
-      </Section>
-    </main>
-  );
+  return <BlogPostClient post={post} relatedPosts={relatedPosts} settings={settings} />;
 }

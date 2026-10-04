@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
+import BrandLogo from '@/components/ui/BrandLogo'
 import { createClient } from '@/lib/supabase/browser'
 import { useRouter } from 'next/navigation'
 import { LogIn } from 'lucide-react'
@@ -41,30 +41,11 @@ export default function AdminLogin() {
         <div className="text-center mb-8 flex flex-col items-center">
           <Link
             href="/"
-            className="inline-flex items-center justify-center p-2 rounded-2xl transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary/40 group mb-2"
+            className="inline-flex items-center hover:opacity-80 transition-opacity mb-2"
             title="Return to main page"
           >
-            <Image
-              src="/brand/logo-light.png"
-              alt="Rayida Tech"
-              width={419}
-              height={120}
-              className="logo-light h-11 md:h-12 w-auto object-contain"
-              style={{ width: 'auto', height: 'auto', maxHeight: '48px' }}
-              priority
-            />
-            <Image
-              src="/brand/logo-dark.png"
-              alt="Rayida Tech"
-              width={419}
-              height={120}
-              className="logo-dark h-11 md:h-12 w-auto object-contain"
-              style={{ width: 'auto', height: 'auto', maxHeight: '48px' }}
-              priority
-            />
-            <span className="sr-only">Rayida Tech</span>
+            <BrandLogo className="h-10 w-auto md:h-11" priority />
           </Link>
-          <h1 className="sr-only">Sign in to Rayida Tech Admin</h1>
           <p className="text-mist-1 text-sm">Sign in to the admin panel</p>
         </div>
 

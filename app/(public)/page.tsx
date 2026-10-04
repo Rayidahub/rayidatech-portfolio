@@ -13,24 +13,28 @@ import FinalCTA from '@/components/sections/FinalCTA';
 import MarqueeCTA from '@/components/sections/MarqueeCTA';
 import { createClient } from '@/lib/supabase/server';
 import { toHeroSlides, type HeroSlideRow } from '@/lib/data/hero-slides';
+import { getHeroSettings } from '@/lib/data/hero-settings';
 
 export const revalidate = 3600;
 
 export default async function Home() {
   const supabase = await createClient();
-  const { data: rows } = await supabase
-    .from('hero_slides')
-    .select('*')
-    .eq('is_active', true)
-    .order('sort_order', { ascending: true })
-    .order('created_at', { ascending: false })
-    .returns<HeroSlideRow[]>();
+  const [rowsResult, heroSettings] = await Promise.all([
+    supabase
+      .from('hero_slides')
+      .select('*')
+      .eq('is_active', true)
+      .order('sort_order', { ascending: true })
+      .order('created_at', { ascending: false })
+      .returns<HeroSlideRow[]>(),
+    getHeroSettings(),
+  ]);
 
-  const slides = toHeroSlides(rows);
+  const slides = toHeroSlides(rowsResult.data);
 
   return (
     <main>
-      <Hero slides={slides} />
+      <Hero slides={slides} settings={heroSettings} />
       <TrustBar />
       <StatsBar />
       <WhatWeDo />

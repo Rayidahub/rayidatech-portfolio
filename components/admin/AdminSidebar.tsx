@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import BrandLogo from '@/components/ui/BrandLogo'
 import {
   LayoutDashboard,
   Briefcase,
@@ -32,8 +33,8 @@ export default function AdminSidebar() {
   return (
     <aside className="w-64 min-h-screen bg-[var(--ink-deep)] border-r border-(--line) flex flex-col">
       <div className="p-6 border-b border-(--line)">
-        <Link href="/admin" className="font-display text-lg font-semibold text-paper">
-          Rayida<span className="text-secondary">Tech</span>
+        <Link href="/" className="inline-flex items-center">
+          <BrandLogo className="h-7 w-auto" />
         </Link>
         <p className="text-mist-2 text-xs mt-1">Admin Panel</p>
       </div>

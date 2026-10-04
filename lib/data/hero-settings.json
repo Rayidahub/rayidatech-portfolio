@@ -1,0 +1,17 @@
+{
+  "id": "default",
+  "show_status_pill": true,
+  "status_pill_text": "Available for projects",
+  "status_pill_link": "/contact",
+  "status_pill_available": true,
+  "primary_cta_label": "Start Your Project",
+  "primary_cta_link": "/contact",
+  "secondary_cta_label": "View My Work",
+  "secondary_cta_link": "/projects",
+  "show_floating_stat": true,
+  "floating_stat_value": "98%",
+  "floating_stat_label": "Client Satisfaction",
+  "autoplay_enabled": true,
+  "autoplay_interval": 5
+}
+

@@ -1,6 +1,7 @@
 'use client';
 
 import type { CaseStudy } from '@/types/project';
+import ImageUploadField from '@/components/admin/ImageUploadField';
 
 interface CaseStudyFieldsProps {
   value: CaseStudy;
@@ -59,11 +60,12 @@ function ImageField({
   onChange: (value: string) => void;
 }) {
   return (
-    <Field
+    <ImageUploadField
       label={label}
       value={value}
       onChange={onChange}
-      placeholder="https://..."
+      folder="projects"
+      description="Upload case study image from your device (PNG, JPG, WebP)"
     />
   );
 }

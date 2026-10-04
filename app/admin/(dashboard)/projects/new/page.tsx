@@ -7,6 +7,7 @@ import { Save, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import { SERVICE_CATEGORIES } from '@/lib/data/services'
 import CaseStudyFields from '@/components/admin/CaseStudyFields'
+import ImageUploadField from '@/components/admin/ImageUploadField'
 import type { CaseStudy } from '@/types/project'
 
 export default function NewProject() {
@@ -140,13 +141,12 @@ export default function NewProject() {
             />
           </div>
           <div className="sm:col-span-2">
-            <label className="block text-sm text-mist-1 mb-1.5">Cover Image URL</label>
-            <input
-              type="url"
+            <ImageUploadField
+              label="Project Cover Image"
               value={form.cover_image}
-              onChange={(e) => setForm((p) => ({ ...p, cover_image: e.target.value }))}
-              className="w-full bg-white/5 border border-(--line) rounded-lg px-3 py-2.5 text-sm text-paper placeholder:text-mist-2 focus:outline-none focus:border-primary/50 transition-colors"
-              placeholder="https://..."
+              onChange={(url) => setForm((p) => ({ ...p, cover_image: url }))}
+              folder="projects"
+              description="Upload a high-resolution project cover banner from your device"
             />
           </div>
           <div>

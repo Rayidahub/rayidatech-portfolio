@@ -8,7 +8,12 @@ import GlassCard from '@/components/ui/GlassCard';
 import Reveal from '@/components/ui/Reveal';
 import { supabase } from '@/lib/supabase/client';
 
-export default function Newsletter() {
+interface NewsletterProps {
+  headline?: string;
+  subtext?: string;
+}
+
+export default function Newsletter({ headline, subtext }: NewsletterProps = {}) {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
@@ -77,11 +82,15 @@ export default function Newsletter() {
                   Newsletter
                 </p>
                 <h2 className="font-display text-2xl md:text-3xl font-semibold text-paper mb-3">
-                  Stay in the <span className="gradient-text">loop</span>
+                  {headline || (
+                    <>
+                      Stay in the <span className="gradient-text">loop</span>
+                    </>
+                  )}
                 </h2>
                 <p className="text-mist-1 text-sm md:text-base leading-relaxed max-w-md">
-                  Get insights on design, AI engineering, product thinking, and
-                  behind-the-scenes updates — no spam, just value.
+                  {subtext ||
+                    'Get insights on design, AI engineering, product thinking, and behind-the-scenes updates — no spam, just value.'}
                 </p>
               </div>
 

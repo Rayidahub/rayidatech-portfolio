@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
-import { Plus, Edit, ExternalLink } from 'lucide-react';
+import { Plus, Edit, ExternalLink, Settings, BookOpen } from 'lucide-react';
 import DeleteButton from './DeleteButton';
+import SeedBlogButton from './SeedBlogButton';
 
 export default async function AdminBlog() {
   const supabase = await createClient();
@@ -10,17 +11,47 @@ export default async function AdminBlog() {
     .select('id, title, slug, published, created_at')
     .order('created_at', { ascending: false });
 
+  const count = posts?.length || 0;
+
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="font-display text-2xl font-semibold text-paper">Blog Posts</h1>
-        <Link
-          href="/admin/blog/new"
-          className="inline-flex items-center gap-2 bg-primary hover:bg-primary/80 text-white rounded-lg px-4 py-2 text-sm font-medium transition-colors"
-        >
-          <Plus className="w-4 h-4" />
-          New Post
-        </Link>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h1 className="font-display text-2xl font-semibold text-paper">Blog Articles</h1>
+          <p className="text-xs text-mist-2 mt-0.5">
+            Manage your articles, drafts, and publication status ({count} article{count === 1 ? '' : 's'}).
+          </p>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2.5">
+          <SeedBlogButton />
+
+          <Link
+            href="/blog"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-(--line) text-mist-1 hover:text-paper text-xs font-medium transition-colors"
+          >
+            <span>View Public Page</span>
+            <ExternalLink className="w-3.5 h-3.5" />
+          </Link>
+
+          <Link
+            href="/admin/blog/settings"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-(--line) bg-[var(--glass-bg)] hover:bg-white/[0.05] text-mist-1 hover:text-paper text-xs font-medium transition-all"
+          >
+            <Settings className="w-3.5 h-3.5" />
+            <span>Page Content</span>
+          </Link>
+
+          <Link
+            href="/admin/blog/new"
+            className="inline-flex items-center gap-1.5 bg-primary hover:bg-primary/90 text-white rounded-lg px-4 py-2 text-xs font-medium transition-all shadow-md shadow-primary/20"
+          >
+            <Plus className="w-4 h-4" />
+            <span>New Post</span>
+          </Link>
+        </div>
       </div>
 
       <div className="glass rounded-xl overflow-hidden">

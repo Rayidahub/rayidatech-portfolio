@@ -1,5 +1,6 @@
+import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
-import { Mail } from 'lucide-react';
+import { Mail, Settings, Inbox, ExternalLink } from 'lucide-react';
 
 export default async function AdminContacts() {
   const supabase = await createClient();
@@ -8,10 +9,37 @@ export default async function AdminContacts() {
     .select('*')
     .order('created_at', { ascending: false });
 
+  const count = contacts?.length || 0;
+
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="font-display text-2xl font-semibold text-paper">Contact Entries</h1>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h1 className="font-display text-2xl font-semibold text-paper">Contact Inquiries</h1>
+          <p className="text-xs text-mist-2 mt-0.5">
+            {count} message{count === 1 ? '' : 's'} submitted through your public contact form.
+          </p>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <Link
+            href="/contact"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border border-(--line) text-mist-1 hover:text-paper text-xs font-medium transition-colors"
+          >
+            <span>View Public Page</span>
+            <ExternalLink className="w-3.5 h-3.5" />
+          </Link>
+
+          <Link
+            href="/admin/contacts/settings"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary hover:bg-primary/90 text-paper text-xs font-medium transition-all shadow-md shadow-primary/20"
+          >
+            <Settings className="w-4 h-4" />
+            <span>Edit Contact Page Content</span>
+          </Link>
+        </div>
       </div>
 
       <div className="glass rounded-xl overflow-hidden">

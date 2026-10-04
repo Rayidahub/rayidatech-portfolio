@@ -164,11 +164,50 @@ export default function EditHeroSlide() {
 
           <div className="sm:col-span-2">
             <ImageUploadField
-              label="Slide Image *"
+              label="Slide Silhouette / Image *"
               value={form.image}
               onChange={(url) => setForm((p) => ({ ...p, image: url }))}
+              folder="hero"
+              objectFit="contain"
+              description="Upload a transparent PNG portrait or silhouette from your device"
             />
           </div>
+
+          {form.words && (
+            <div className="sm:col-span-2 p-4 rounded-xl bg-ink-deep border border-(--line) space-y-2">
+              <span className="text-[11px] font-mono-tight text-mist-2 uppercase tracking-wider block">
+                Live Slide Preview
+              </span>
+              <div className="space-y-1">
+                {form.label && (
+                  <p className="text-xs font-mono-tight uppercase tracking-wider text-secondary">
+                    {form.label}
+                  </p>
+                )}
+                <div className="font-display text-2xl font-bold leading-tight text-paper">
+                  {form.words
+                    .split('\n')
+                    .map((l) => l.trim())
+                    .filter(Boolean)
+                    .map((line, idx, arr) => {
+                      const isLast = idx === arr.length - 1;
+                      return isLast ? (
+                        <span key={idx} className="gradient-text block">
+                          {line}
+                        </span>
+                      ) : (
+                        <span key={idx} className="block">
+                          {line}
+                        </span>
+                      );
+                    })}
+                </div>
+                {form.body && (
+                  <p className="text-xs text-mist-1 pt-1 leading-relaxed">{form.body}</p>
+                )}
+              </div>
+            </div>
+          )}
 
           <div>
             <label className="block text-sm text-mist-1 mb-1.5">Display Order</label>
