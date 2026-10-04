@@ -7,6 +7,7 @@ export interface Service {
   content: string;
   features: string[];
   icon_name: string;
+  image_url?: string | null;
   order: number;
   created_at: string;
 }

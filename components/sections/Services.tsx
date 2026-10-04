@@ -7,20 +7,25 @@ import { createClient } from '@/lib/supabase/server';
 import type { Service } from '@/types/service';
 import { ServiceIcon } from '@/lib/service-icons';
 
+import { defaultServices } from '@/lib/data/services';
+
 async function getServices(): Promise<Service[]> {
-  const supabase = await createClient();
-  const { data, error } = await supabase
-    .from('services')
-    .select('id, title, slug, description, icon_name, "order"')
-    .order('order', { ascending: true })
-    .returns<Service[]>();
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from('services')
+      .select('id, title, slug, description, icon_name, "order"')
+      .order('order', { ascending: true })
+      .returns<Service[]>();
 
-  if (error) {
-    console.error('Error fetching services:', error);
-    return [];
+    if (error || !data || data.length === 0) {
+      return defaultServices;
+    }
+
+    return data;
+  } catch {
+    return defaultServices;
   }
-
-  return data || [];
 }
 
 export default async function Services() {

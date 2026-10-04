@@ -306,6 +306,24 @@ body {
   background-size: 64px 64px;
 }
 
+/* Brand logo visibility for light/dark themes */
+.logo-light {
+  display: inline-block;
+  width: auto;
+  max-width: 100%;
+}
+.logo-dark {
+  display: none !important;
+}
+html[data-theme="dark"] .logo-light {
+  display: none !important;
+}
+html[data-theme="dark"] .logo-dark {
+  display: inline-block !important;
+  width: auto;
+  max-width: 100%;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .signal-dot {
     animation: none;

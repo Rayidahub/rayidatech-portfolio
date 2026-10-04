@@ -1,121 +1,169 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { Upload, X, Loader2 } from 'lucide-react';
-import { uploadHeroSlideImage, deleteHeroSlideImage } from '@/lib/storage';
+import { Upload, X, Loader2, Image as ImageIcon } from 'lucide-react';
 
 interface ImageUploadFieldProps {
   label?: string;
   value: string;
   onChange: (url: string) => void;
+  folder?: string;
+  description?: string;
 }
 
 export default function ImageUploadField({
-  label = 'Image',
+  label = 'Visual Showcase Image',
   value,
   onChange,
+  folder = 'services',
+  description = 'Upload an image from your device (PNG, JPG, WebP, SVG up to 10MB)',
 }: ImageUploadFieldProps) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState('');
+  const [dragOver, setDragOver] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
+  async function uploadFile(file: File) {
     setUploading(true);
     setError('');
 
-    // Best-effort cleanup of the previous image when replacing it.
-    if (value) {
-      await deleteHeroSlideImage(value);
-    }
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('folder', folder);
 
-    const { url, error: uploadError } = await uploadHeroSlideImage(file);
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
 
-    if (uploadError || !url) {
-      setError(uploadError ?? 'Upload failed');
+      const data = await res.json();
+
+      if (!res.ok || !data.url) {
+        throw new Error(data.error || 'Failed to upload image');
+      }
+
+      onChange(data.url);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Upload failed';
+      setError(message);
+    } finally {
       setUploading(false);
-      return;
     }
-
-    onChange(url);
-    setUploading(false);
   }
 
-  async function handleClear() {
-    if (value) {
-      await deleteHeroSlideImage(value);
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    uploadFile(file);
+  }
+
+  function handleDrop(e: React.DragEvent<HTMLDivElement>) {
+    e.preventDefault();
+    setDragOver(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      uploadFile(file);
     }
+  }
+
+  function handleClear() {
     onChange('');
     if (inputRef.current) inputRef.current.value = '';
   }
 
   return (
-    <div>
-      <label className="block text-sm text-mist-1 mb-1.5">{label}</label>
+    <div className="space-y-2">
+      <div className="flex items-center justify-between">
+        <label className="block text-sm font-medium text-paper">{label}</label>
+        {value && (
+          <span className="text-xs text-secondary font-mono-tight">Image attached</span>
+        )}
+      </div>
 
       {error && (
-        <p className="text-sm text-red-400 bg-red-400/10 rounded-lg px-3 py-2 mb-3">
+        <p className="text-xs text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg px-3 py-2">
           {error}
         </p>
       )}
 
       {value ? (
-        <div className="relative group rounded-lg overflow-hidden border border-(--line) bg-white/5 aspect-video">
+        <div className="relative group rounded-xl overflow-hidden border border-(--line) bg-white/5 aspect-[16/9] max-h-64 shadow-md">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={value}
-            alt="Preview"
-            className="w-full h-full object-contain"
+            alt="Uploaded Preview"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
-          <button
-            type="button"
-            onClick={handleClear}
-            disabled={uploading}
-            className="absolute top-2 right-2 p-1.5 rounded-md bg-black/60 text-paper hover:bg-red-500/80 transition-colors"
-            aria-label="Remove image"
-          >
-            <X className="w-4 h-4" />
-          </button>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-between p-3">
+            <span className="text-xs text-white/80 font-mono-tight truncate max-w-[80%]">
+              {value}
+            </span>
+            <button
+              type="button"
+              onClick={handleClear}
+              disabled={uploading}
+              className="p-1.5 rounded-lg bg-red-500/90 text-white hover:bg-red-600 transition-colors shadow-lg"
+              title="Remove image"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       ) : (
-        <button
-          type="button"
+        <div
+          onDragOver={(e) => {
+            e.preventDefault();
+            setDragOver(true);
+          }}
+          onDragLeave={() => setDragOver(false)}
+          onDrop={handleDrop}
           onClick={() => inputRef.current?.click()}
-          disabled={uploading}
-          className="flex flex-col items-center justify-center w-full aspect-video rounded-lg border border-dashed border-(--line) bg-white/5 hover:bg-white/[0.07] transition-colors"
+          className={`flex flex-col items-center justify-center w-full aspect-[16/7] rounded-xl border border-dashed transition-all cursor-pointer p-6 text-center ${
+            dragOver
+              ? 'border-secondary bg-secondary/10'
+              : 'border-(--line) bg-white/[0.03] hover:bg-white/[0.06] hover:border-secondary/40'
+          }`}
         >
           {uploading ? (
-            <>
-              <Loader2 className="w-6 h-6 text-mist-1 animate-spin mb-2" />
-              <span className="text-sm text-mist-1">Uploading...</span>
-            </>
+            <div className="flex flex-col items-center gap-2">
+              <Loader2 className="w-7 h-7 text-secondary animate-spin" />
+              <span className="text-sm font-medium text-paper">Uploading from device...</span>
+              <span className="text-xs text-mist-2">Please wait while the image is processed</span>
+            </div>
           ) : (
-            <>
-              <Upload className="w-6 h-6 text-mist-1 mb-2" />
-              <span className="text-sm text-mist-1">Click to upload image</span>
-              <span className="text-xs text-mist-2 mt-1">PNG, JPG, WebP up to 5MB</span>
-            </>
+            <div className="flex flex-col items-center">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary/15 to-secondary/15 border border-(--line) flex items-center justify-center text-secondary mb-3 shadow-inner">
+                <Upload className="w-6 h-6 text-secondary" />
+              </div>
+              <span className="text-sm font-medium text-paper mb-1">
+                Click to upload from device or drag &amp; drop
+              </span>
+              <span className="text-xs text-mist-2">{description}</span>
+            </div>
           )}
-        </button>
+        </div>
       )}
 
+      {/* Hidden file input */}
       <input
         ref={inputRef}
         type="file"
-        accept="image/png,image/jpeg,image/webp,image/gif"
+        accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml"
         onChange={handleFileChange}
         className="hidden"
       />
 
-      <input
-        type="url"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder="Or paste an image URL"
-        className="w-full mt-3 bg-white/5 border border-(--line) rounded-lg px-3 py-2.5 text-sm text-paper placeholder:text-mist-2 focus:outline-none focus:border-primary/50 transition-colors"
-      />
+      {/* Direct URL input fallback */}
+      <div className="pt-1">
+        <input
+          type="text"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder="Or paste an image URL (e.g. /img/card1.png or https://...)"
+          className="w-full bg-white/5 border border-(--line) rounded-xl px-3.5 py-2 text-xs text-paper placeholder:text-mist-2/60 focus:outline-none focus:border-secondary transition-colors font-mono-tight"
+        />
+      </div>
     </div>
   );
 }

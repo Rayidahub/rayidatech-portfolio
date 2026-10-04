@@ -122,34 +122,52 @@ const certifications = [
 
 export default function AboutPage() {
   return (
-    <>
+    <main className="bg-ink min-h-screen">
       {/* Hero — full-screen portrait-blend layout */}
       <AboutHero />
 
-      {/* Journey Timeline */}
-      <Section>
-        <Container size="narrow">
+      {/* ── Journey Timeline ── */}
+      <Section className="relative overflow-hidden">
+        <div
+          className="pointer-events-none absolute inset-0 bg-dot-pattern opacity-[0.25]"
+          aria-hidden="true"
+        />
+        <Container size="narrow" className="relative z-10">
           <Reveal>
-            <h2>
-              My <span>Journey</span>
-            </h2>
+            <div className="text-center mb-16">
+              <p className="font-mono-tight text-xs uppercase tracking-[0.25em] text-secondary mb-3">
+                Experience &amp; Career
+              </p>
+              <h2 className="font-display text-3xl md:text-5xl font-semibold text-paper">
+                My <span className="gradient-text">Journey</span>
+              </h2>
+            </div>
           </Reveal>
 
-          <div>
+          <div className="relative pl-6 sm:pl-8 md:pl-10 border-l border-(--line) space-y-8 max-w-2xl mx-auto">
             {experiences.map((exp, index) => (
               <Reveal key={exp.role} index={index}>
-                <div>
-                  <GlassCard>
-                    <div>
-                      <h3>
+                <div className="relative">
+                  {/* Stem node dot */}
+                  <div
+                    className={`absolute -left-[31px] sm:-left-[39px] md:-left-[47px] top-6 w-3 h-3 rounded-full ${
+                      index === 0
+                        ? 'bg-secondary ring-4 ring-secondary/20 signal-dot'
+                        : 'bg-primary/60 ring-4 ring-ink'
+                    }`}
+                  />
+
+                  <GlassCard className="p-6 transition-all duration-300 hover:border-primary/40 hover:-translate-y-0.5">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
+                      <h3 className="font-display text-lg font-semibold text-paper">
                         {exp.role}
                       </h3>
-                      <span>
+                      <span className="font-mono-tight text-xs text-secondary bg-secondary/10 border border-secondary/20 px-2.5 py-1 rounded-full w-fit">
                         {exp.period}
                       </span>
                     </div>
-                    <p>{exp.company}</p>
-                    <p>{exp.description}</p>
+                    <p className="text-primary font-medium text-sm mb-2">{exp.company}</p>
+                    <p className="text-mist-1 text-sm leading-relaxed">{exp.description}</p>
                   </GlassCard>
                 </div>
               </Reveal>
@@ -158,29 +176,45 @@ export default function AboutPage() {
         </Container>
       </Section>
 
-      {/* Approach */}
-      <Section>
-        <Container size="default">
+      {/* ── Approach (How I Work) ── */}
+      <Section className="bg-[var(--ink-deep)] relative overflow-hidden border-y border-(--line)">
+        <div
+          className="pointer-events-none absolute -top-40 -right-40 w-96 h-96 rounded-full bg-primary/10 blur-3xl"
+          aria-hidden="true"
+        />
+        <Container size="default" className="relative z-10">
           <Reveal>
-            <h2>
-              How I <span>Work</span>
-            </h2>
-            <p>
-              A structured approach that keeps every project focused and effective.
-            </p>
+            <div className="text-center mb-14">
+              <p className="font-mono-tight text-xs uppercase tracking-[0.25em] text-secondary mb-3">
+                Process &amp; Methodology
+              </p>
+              <h2 className="font-display text-3xl md:text-4xl font-semibold text-paper mb-3">
+                How I <span className="gradient-text">Work</span>
+              </h2>
+              <p className="text-mist-1 text-base max-w-xl mx-auto leading-relaxed">
+                A structured, user-centered approach that keeps every project focused, iterative, and high-impact.
+              </p>
+            </div>
           </Reveal>
 
-          <div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {approach.map((step, index) => (
               <Reveal key={step.title} index={index}>
-                <GlassCard>
-                  <span>
-                    {String(index + 1).padStart(2, '0')}
-                  </span>
-                  <h3>
-                    {step.title}
-                  </h3>
-                  <p>{step.description}</p>
+                <GlassCard className="p-6 h-full flex flex-col justify-between group transition-all duration-300 hover:border-secondary/40 hover:-translate-y-1">
+                  <div>
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="font-mono-tight text-3xl font-bold text-secondary/30 group-hover:text-secondary transition-colors duration-300">
+                        {String(index + 1).padStart(2, '0')}
+                      </span>
+                      <div className="w-8 h-8 rounded-full bg-secondary/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <ArrowRight className="w-4 h-4 text-secondary -rotate-45" />
+                      </div>
+                    </div>
+                    <h3 className="font-display text-lg font-semibold text-paper mb-2 group-hover:text-secondary transition-colors duration-300">
+                      {step.title}
+                    </h3>
+                    <p className="text-mist-1 text-sm leading-relaxed">{step.description}</p>
+                  </div>
                 </GlassCard>
               </Reveal>
             ))}
@@ -188,59 +222,71 @@ export default function AboutPage() {
         </Container>
       </Section>
 
-      {/* Skills */}
-      <Section>
+      {/* ── Skills & Expertise ── */}
+      <Section className="relative overflow-hidden">
         <Container size="wide">
           <Reveal>
-            <h2>
-              Skills &amp; <span>Expertise</span>
-            </h2>
+            <div className="text-center mb-14">
+              <p className="font-mono-tight text-xs uppercase tracking-[0.25em] text-secondary mb-3">
+                Capabilities &amp; Stack
+              </p>
+              <h2 className="font-display text-3xl md:text-4xl font-semibold text-paper">
+                Skills &amp; <span className="gradient-text">Expertise</span>
+              </h2>
+            </div>
           </Reveal>
 
-          <div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {skills.map((group, index) => {
-              const Icon = group.icon
+              const Icon = group.icon;
               return (
                 <Reveal key={group.group} index={index}>
-                  <GlassCard>
-                    <div>
-                      <Icon />
+                  <GlassCard className="p-6 h-full transition-all duration-300 hover:border-primary/40 hover:-translate-y-1">
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary/15 to-secondary/15 flex items-center justify-center mb-5 text-secondary border border-secondary/20 shadow-sm">
+                      <Icon className="w-6 h-6" />
                     </div>
-                    <h3>
+                    <h3 className="font-display text-lg font-semibold text-paper mb-4">
                       {group.group}
                     </h3>
-                    <ul>
+                    <ul className="space-y-2.5">
                       {group.items.map((item) => (
-                        <li key={item}>
-                          <CheckCircle />
-                          {item}
+                        <li key={item} className="flex items-center gap-2.5 text-sm text-mist-1">
+                          <CheckCircle className="w-4 h-4 text-secondary/80 shrink-0" />
+                          <span>{item}</span>
                         </li>
                       ))}
                     </ul>
                   </GlassCard>
                 </Reveal>
-              )}
-            )}
+              );
+            })}
           </div>
         </Container>
       </Section>
 
-      {/* Beliefs */}
-      <Section>
+      {/* ── Guiding Philosophy & Beliefs ── */}
+      <Section className="bg-[var(--ink-deep)] relative overflow-hidden border-y border-(--line)">
         <Container size="narrow">
           <Reveal>
-            <GlassCard>
-              <p>
-                My Philosophy
+            <GlassCard className="p-8 md:p-12 text-center relative overflow-hidden">
+              <div
+                className="pointer-events-none absolute -top-16 -right-16 w-64 h-64 rounded-full bg-primary/10 blur-3xl"
+                aria-hidden="true"
+              />
+              <p className="font-mono-tight text-xs uppercase tracking-[0.25em] text-secondary mb-4">
+                Guiding Philosophy
               </p>
-              <blockquote>
-                &ldquo;Building digital experiences people can trust.&rdquo;
+              <blockquote className="font-display text-2xl md:text-3xl lg:text-4xl font-semibold text-paper leading-snug mb-10 max-w-2xl mx-auto">
+                &ldquo;Building digital experiences people can <span className="gradient-text">trust</span>.&rdquo;
               </blockquote>
-              <div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left max-w-xl mx-auto">
                 {beliefs.map((belief) => (
-                  <div key={belief}>
-                    <span />
-                    {belief}
+                  <div
+                    key={belief}
+                    className="flex items-start gap-3 text-sm text-mist-1 p-3.5 rounded-xl bg-paper/[0.03] border border-(--line)"
+                  >
+                    <span className="w-2 h-2 rounded-full bg-secondary mt-1.5 shrink-0" />
+                    <span>{belief}</span>
                   </div>
                 ))}
               </div>
@@ -249,35 +295,43 @@ export default function AboutPage() {
         </Container>
       </Section>
 
-      {/* Team */}
+      {/* ── Team Section ── */}
       <Team />
 
-      {/* Featured Projects */}
-      <Section>
+      {/* ── Featured Projects ── */}
+      <Section className="relative overflow-hidden">
         <Container size="wide">
           <Reveal>
-            <h2>
-              Featured <span>Projects</span>
-            </h2>
-            <p>
-              A selection of work I&apos;m proud of.
-            </p>
+            <div className="text-center mb-14">
+              <p className="font-mono-tight text-xs uppercase tracking-[0.25em] text-secondary mb-3">
+                Selected Portfolio
+              </p>
+              <h2 className="font-display text-3xl md:text-4xl font-semibold text-paper mb-3">
+                Featured <span className="gradient-text">Projects</span>
+              </h2>
+              <p className="text-mist-1 text-base max-w-xl mx-auto">
+                A selection of products and experiences I&apos;m proud to have designed and built.
+              </p>
+            </div>
           </Reveal>
 
-          <div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {featuredProjects.map((project, index) => (
               <Reveal key={project.title} index={index}>
-                <Link href="/projects">
-                  <GlassCard>
-                    <p>
-                      {project.category}
-                    </p>
-                    <h3>
-                      {project.title}
-                    </h3>
-                    <span>
-                      View project <ArrowRight />
-                    </span>
+                <Link href="/projects" className="block h-full group">
+                  <GlassCard className="p-6 h-full flex flex-col justify-between transition-all duration-300 hover:border-primary/40 hover:-translate-y-1">
+                    <div>
+                      <p className="font-mono-tight text-xs text-secondary uppercase tracking-[0.15em] mb-3">
+                        {project.category}
+                      </p>
+                      <h3 className="font-display text-xl font-semibold text-paper group-hover:text-primary transition-colors duration-300">
+                        {project.title}
+                      </h3>
+                    </div>
+                    <div className="inline-flex items-center gap-2 text-sm text-primary font-medium mt-6 group-hover:translate-x-1 transition-transform duration-300">
+                      <span>View project</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </div>
                   </GlassCard>
                 </Link>
               </Reveal>
@@ -286,27 +340,32 @@ export default function AboutPage() {
         </Container>
       </Section>
 
-      {/* Certifications */}
-      <Section>
+      {/* ── Certifications ── */}
+      <Section className="bg-[var(--ink-deep)] relative overflow-hidden border-y border-(--line)">
         <Container size="default">
           <Reveal>
-            <h2>
-              <span>Certifications</span>
-            </h2>
+            <div className="text-center mb-14">
+              <p className="font-mono-tight text-xs uppercase tracking-[0.25em] text-secondary mb-3">
+                Continuous Learning
+              </p>
+              <h2 className="font-display text-3xl md:text-4xl font-semibold text-paper">
+                Verified <span className="gradient-text">Certifications</span>
+              </h2>
+            </div>
           </Reveal>
 
-          <div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {certifications.map((cert, index) => (
               <Reveal key={cert.title} index={index}>
-                <GlassCard>
-                  <div>
-                    <Award />
+                <GlassCard className="p-5 flex items-center gap-4 group transition-all duration-300 hover:border-secondary/40 hover:-translate-y-0.5">
+                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center shrink-0 border border-(--line) group-hover:scale-105 transition-transform duration-300">
+                    <Award className="w-6 h-6 text-secondary" />
                   </div>
                   <div>
-                    <p>
+                    <p className="font-display text-sm font-semibold text-paper group-hover:text-secondary transition-colors duration-300">
                       {cert.title}
                     </p>
-                    <p>{cert.issuer}</p>
+                    <p className="text-xs text-mist-2 font-mono-tight mt-0.5">{cert.issuer}</p>
                   </div>
                 </GlassCard>
               </Reveal>
@@ -315,24 +374,39 @@ export default function AboutPage() {
         </Container>
       </Section>
 
-      {/* Final CTA */}
-      <Section>
+      {/* ── Final Call To Action ── */}
+      <Section className="relative overflow-hidden py-20 md:py-28">
         <Container size="narrow">
           <Reveal>
-            <GlassCard>
-              <h2>
-                Let&apos;s Build Something
+            <GlassCard className="p-10 md:p-14 text-center relative overflow-hidden">
+              <div
+                className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-primary/15 blur-3xl"
+                aria-hidden="true"
+              />
+              <h2 className="font-display text-3xl md:text-4xl font-semibold text-paper mb-4 relative z-10">
+                Let&apos;s Build Something <span className="gradient-text">Exceptional</span>
               </h2>
-              <p>
-                Have a project in mind? I&apos;d love to hear about it.
+              <p className="text-mist-1 mb-8 max-w-md mx-auto text-base relative z-10 leading-relaxed">
+                Have a project or partnership in mind? I&apos;m currently available and ready to discuss your vision.
               </p>
-              <Link href="/contact">
-                Get In Touch <ArrowRight />
-              </Link>
+              <div className="relative z-10 flex flex-wrap items-center justify-center gap-4">
+                <Link
+                  href="/contact"
+                  className="btn-glow inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-white rounded-full px-8 py-3.5 text-sm font-medium transition-all shadow-lg shadow-primary/20"
+                >
+                  Get In Touch <ArrowRight className="w-4 h-4" />
+                </Link>
+                <Link
+                  href="/projects"
+                  className="glass inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-sm font-medium text-paper hover:text-secondary transition-colors"
+                >
+                  Explore Portfolio
+                </Link>
+              </div>
             </GlassCard>
           </Reveal>
         </Container>
       </Section>
-    </>
+    </main>
   );
 }
