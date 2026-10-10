@@ -241,8 +241,8 @@ export default function Hero({ slides, settings }: HeroProps) {
           </motion.div>
         </div>
 
-        {/* The Full-Bleed Primary Background Hero Image (Rule 1) */}
-        <div className="absolute right-0 bottom-0 top-0 w-full lg:w-[56%] xl:w-[50%] flex items-end justify-center lg:justify-end lg:pr-[60px] xl:pr-[120px]">
+        {/* Primary Hero Slide Visual Column (strictly bounded to right half, never overflows into text) */}
+        <div className="absolute right-0 bottom-0 top-0 w-full lg:w-[50%] xl:w-[48%] flex items-end justify-center lg:justify-end lg:pr-8 xl:pr-16 overflow-hidden pointer-events-none select-none">
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={current}
@@ -251,21 +251,19 @@ export default function Hero({ slides, settings }: HeroProps) {
               exit={{ opacity: 0, scale: 0.98 }}
               transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
               className="relative w-full h-full flex items-end justify-center lg:justify-end opacity-25 sm:opacity-40 lg:opacity-100"
+              style={{
+                WebkitMaskImage: 'linear-gradient(to top, transparent 0%, black 8%, black 100%)',
+                maskImage: 'linear-gradient(to top, transparent 0%, black 8%, black 100%)',
+              }}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={slide.image}
                 alt={slide.label}
-                className="h-[75vh] sm:h-[82vh] lg:h-[88vh] xl:h-[92vh] max-h-none w-auto max-w-full lg:max-w-none object-contain object-bottom drop-shadow-[0_20px_45px_rgba(0,0,0,0.85)] select-none pointer-events-none"
+                className="max-h-[75vh] sm:max-h-[82vh] lg:max-h-[86vh] xl:max-h-[90vh] w-auto max-w-full object-contain object-bottom drop-shadow-[0_20px_45px_rgba(0,0,0,0.85)] select-none pointer-events-none"
               />
             </motion.div>
           </AnimatePresence>
-
-          {/* Left-edge smooth gradient blend */}
-          <div className="absolute inset-y-0 left-0 w-32 sm:w-0 bg-gradient-to-r from-ink via-ink/60 to-transparent hidden lg:block" />
-
-          {/* Bottom grounding fade */}
-          <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-ink via-ink/80 to-transparent" />
         </div>
       </div>
 
@@ -393,8 +391,8 @@ export default function Hero({ slides, settings }: HeroProps) {
       </motion.div>
 
       {/* 5. FOREGROUND CONTENT (Editorial, Confident, Generous Whitespace) */}
-      <div className="relative z-10 w-full px-6 sm:px-12 md:px-16 lg:px-[120px]">
-        <div className="w-full max-w-3xl lg:max-w-2xl xl:max-w-3xl 2xl:max-w-4xl flex flex-col justify-center">
+      <div className="relative z-10 w-full px-6 sm:px-12 md:px-16 lg:px-[80px] xl:px-[120px]">
+        <div className="w-full max-w-xl lg:max-w-xl xl:max-w-2xl flex flex-col justify-center">
           {showStatusPill && (
             <motion.div
               initial={{ opacity: 0, y: 12 }}
