@@ -255,11 +255,6 @@ export default function Hero({ slides, settings }: HeroProps) {
             </motion.div>
           </AnimatePresence>
 
-          {/* Left-edge smooth gradient blend: guarantees 100% legibility of foreground text */}
-          <div className="absolute inset-y-0 left-0 w-32 sm:w-48 bg-gradient-to-r from-ink via-ink/60 to-transparent hidden lg:block" />
-
-          {/* Bottom grounding fade */}
-          <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-ink via-ink/80 to-transparent" />
         </div>
       </div>
 
