@@ -4,10 +4,17 @@ import { Plus, Edit, ExternalLink, Sparkles, Package } from 'lucide-react'
 import DeleteButton from './DeleteButton'
 import SeedServicesButton from './SeedServicesButton'
 import { ServiceIcon } from '@/lib/service-icons'
+import SectionAccessDenied from '@/components/admin/SectionAccessDenied'
+import { verifySectionAccess } from '@/lib/data/admin-users'
 
 export const dynamic = 'force-dynamic'
 
 export default async function AdminServices() {
+  const { authorized, currentUser } = await verifySectionAccess('services')
+  if (!authorized) {
+    return <SectionAccessDenied sectionTitle="Services" role={currentUser?.role} />
+  }
+
   const supabase = await createClient()
   const { data: services } = await supabase
     .from('services')
