@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { createClient } from '@/lib/supabase/server';
-import { saveHeroSettings } from '@/lib/data/hero-settings';
+import { getHeroSettings, saveHeroSettings } from '@/lib/data/hero-settings';
 import { defaultHeroSlides } from '@/lib/data/hero-slides';
 import type { HeroSettings } from '@/types/hero-settings';
 
@@ -24,6 +24,48 @@ export async function updateHeroSettingsAction(
       success: false,
       error: error?.message || 'Failed to update hero settings.',
     };
+  }
+}
+
+export async function toggleHeroAutoplayAction(
+  enabled: boolean
+): Promise<{ success: boolean; settings?: HeroSettings; error?: string }> {
+  try {
+    const current = await getHeroSettings();
+    const updated: HeroSettings = {
+      ...current,
+      autoplay_enabled: enabled,
+    };
+    const result = await saveHeroSettings(updated);
+    if (result.success) {
+      revalidatePath('/');
+      revalidatePath('/admin/hero');
+      revalidatePath('/admin/hero/settings');
+    }
+    return { success: result.success, settings: updated, error: result.error };
+  } catch (err: any) {
+    return { success: false, error: err?.message || 'Failed to toggle autoplay.' };
+  }
+}
+
+export async function updateHeroSpeedAction(
+  seconds: number
+): Promise<{ success: boolean; settings?: HeroSettings; error?: string }> {
+  try {
+    const current = await getHeroSettings();
+    const updated: HeroSettings = {
+      ...current,
+      autoplay_interval: Math.max(1, Math.min(60, seconds)),
+    };
+    const result = await saveHeroSettings(updated);
+    if (result.success) {
+      revalidatePath('/');
+      revalidatePath('/admin/hero');
+      revalidatePath('/admin/hero/settings');
+    }
+    return { success: result.success, settings: updated, error: result.error };
+  } catch (err: any) {
+    return { success: false, error: err?.message || 'Failed to update slider speed.' };
   }
 }
 

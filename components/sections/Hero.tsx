@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowRight, Briefcase, Award, ShieldCheck, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowRight, Briefcase, Award, ShieldCheck, ChevronLeft, ChevronRight, Play, Pause } from 'lucide-react';
 import StatusPill from '@/components/ui/StatusPill';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
@@ -37,7 +37,9 @@ export default function Hero({ slides, settings }: HeroProps) {
     settings?.floating_stat_value || (stats[0]?.value + (stats[0]?.suffix || '')) || '98%';
   const floatingStatLabel = settings?.floating_stat_label || stats[0]?.label || 'Client Satisfaction';
 
-  const autoplayEnabled = settings?.autoplay_enabled !== false;
+  const autoplayConfigured = settings?.autoplay_enabled !== false;
+  const [isPaused, setIsPaused] = useState(!autoplayConfigured);
+  const [isHovered, setIsHovered] = useState(false);
   const autoplayInterval = (settings?.autoplay_interval || 5) * 1000;
 
   const { scrollYProgress } = useScroll({
@@ -48,13 +50,17 @@ export default function Hero({ slides, settings }: HeroProps) {
   const roleBadgeY = useTransform(scrollYProgress, [0, 1], [0, -25]);
 
   useEffect(() => {
-    if (!autoplayEnabled || heroSlides.length <= 1) return;
+    setIsPaused(!autoplayConfigured);
+  }, [autoplayConfigured]);
+
+  useEffect(() => {
+    if (isPaused || isHovered || heroSlides.length <= 1) return;
     const timer = setTimeout(() => {
       setDirection(1);
       setCurrent((prev) => (prev + 1) % heroSlides.length);
     }, autoplayInterval);
     return () => clearTimeout(timer);
-  }, [current, heroSlides.length, autoplayEnabled, autoplayInterval]);
+  }, [current, heroSlides.length, isPaused, isHovered, autoplayInterval]);
 
   const goTo = (index: number) => {
     setDirection(index > current ? 1 : -1);
@@ -294,8 +300,24 @@ export default function Hero({ slides, settings }: HeroProps) {
 
           <span className="h-3 w-px bg-white/10" aria-hidden="true" />
 
-          {/* Prev / Next Chevrons */}
+          {/* Flow Play / Pause & Prev / Next Controls */}
           <div className="flex items-center gap-1">
+            <button
+              type="button"
+              onClick={() => setIsPaused((prev) => !prev)}
+              className="w-6 h-6 rounded-full flex items-center justify-center text-mist-1 hover:text-paper hover:bg-white/10 transition-colors cursor-pointer"
+              aria-label={isPaused ? 'Start slider auto-flow' : 'Pause slider auto-flow'}
+              title={isPaused ? 'Start auto-flow' : 'Pause auto-flow'}
+            >
+              {isPaused ? (
+                <Play className="w-2.5 h-2.5 fill-current text-secondary" />
+              ) : (
+                <Pause className="w-2.5 h-2.5 fill-current text-secondary" />
+              )}
+            </button>
+
+            <span className="h-2.5 w-px bg-white/10 mx-0.5" aria-hidden="true" />
+
             <button
               type="button"
               onClick={() => goTo((current - 1 + heroSlides.length) % heroSlides.length)}

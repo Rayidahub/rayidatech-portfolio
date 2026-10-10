@@ -14,6 +14,13 @@ import {
   ArrowRight,
   TrendingUp,
   HelpCircle,
+  Play,
+  Pause,
+  Gauge,
+  Clock,
+  Zap,
+  Turtle,
+  Waves,
 } from 'lucide-react';
 import { updateHeroSettingsAction } from '@/app/actions/hero-settings';
 import type { HeroSettings } from '@/types/hero-settings';
@@ -365,44 +372,148 @@ export default function HeroSettingsForm({ initialSettings }: HeroSettingsFormPr
         )}
       </div>
 
-      {/* Section 4: Slider Timing & Autoplay */}
-      <div className="glass rounded-xl p-6 border border-(--line) space-y-5">
-        <div className="flex items-center gap-2 text-paper font-semibold border-b border-(--line) pb-3">
-          <Sliders className="w-4 h-4 text-primary" />
-          <h2 className="text-base font-display">Slider Timing & Autoplay</h2>
+      {/* Section 4: Slider Timing & Flow Control */}
+      <div className="glass rounded-xl p-6 border border-(--line) space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-(--line) pb-3">
+          <div className="flex items-center gap-2 text-paper font-semibold">
+            <Sliders className="w-4 h-4 text-primary" />
+            <h2 className="text-base font-display">Slider Flow & Rotation Speed</h2>
+          </div>
+          <div className="flex items-center gap-2">
+            <span
+              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono-tight font-medium border ${
+                settings.autoplay_enabled
+                  ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                  : 'bg-amber-500/10 text-amber-400 border-amber-500/30'
+              }`}
+            >
+              <span
+                className={`w-1.5 h-1.5 rounded-full ${
+                  settings.autoplay_enabled ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'
+                }`}
+              />
+              <span>{settings.autoplay_enabled ? 'FLOW RUNNING' : 'FLOW PAUSED'}</span>
+            </span>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+        {/* Start / Pause Flow Banner Control */}
+        <div className="p-4 rounded-xl bg-ink-deep border border-(--line) flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <label className="flex items-center gap-2.5 cursor-pointer text-sm text-paper mb-2">
-              <input
-                type="checkbox"
-                checked={settings.autoplay_enabled}
-                onChange={(e) => handleInputChange('autoplay_enabled', e.target.checked)}
-                className="rounded border-(--line) text-primary focus:ring-primary/20"
-              />
-              <span className="font-medium">Enable automatic slide rotation</span>
-            </label>
-            <p className="text-xs text-mist-2">
-              When checked, slides cycle forward automatically using the interval configured below.
+            <p className="text-sm font-medium text-paper">
+              {settings.autoplay_enabled
+                ? 'Automatic slide rotation is active'
+                : 'Automatic slide rotation is paused'}
+            </p>
+            <p className="text-xs text-mist-2 mt-0.5">
+              {settings.autoplay_enabled
+                ? `Slides cycle forward automatically every ${settings.autoplay_interval} seconds.`
+                : 'Slides will remain static until visitors navigate using arrows or indicator pills.'}
             </p>
           </div>
 
+          <button
+            type="button"
+            onClick={() => handleInputChange('autoplay_enabled', !settings.autoplay_enabled)}
+            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all shadow-md cursor-pointer ${
+              settings.autoplay_enabled
+                ? 'bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/40 shadow-amber-500/10'
+                : 'bg-emerald-500 hover:bg-emerald-400 text-ink-deep font-semibold shadow-emerald-500/25 hover:shadow-emerald-500/40'
+            }`}
+          >
+            {settings.autoplay_enabled ? (
+              <>
+                <Pause className="w-4 h-4 fill-current" />
+                <span>Pause Flow</span>
+              </>
+            ) : (
+              <>
+                <Play className="w-4 h-4 fill-current" />
+                <span>Start Flow</span>
+              </>
+            )}
+          </button>
+        </div>
+
+        {/* Speed Controls */}
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 text-xs font-medium text-mist-1">
+              <Gauge className="w-3.5 h-3.5 text-secondary" />
+              <span>Rotation Speed:</span>
+              <span className="font-mono-tight font-semibold text-paper text-sm bg-white/5 px-2 py-0.5 rounded border border-(--line)">
+                {settings.autoplay_interval} seconds
+              </span>
+            </div>
+            <span className="text-[11px] font-mono-tight text-mist-2">Range: 2s – 30s</span>
+          </div>
+
+          {/* Range Slider */}
+          <input
+            type="range"
+            min="2"
+            max="30"
+            step="1"
+            value={settings.autoplay_interval}
+            onChange={(e) =>
+              handleInputChange('autoplay_interval', Math.max(2, parseInt(e.target.value) || 5))
+            }
+            className="w-full h-2 bg-white/10 rounded-lg appearance-none cursor-pointer accent-[var(--secondary)]"
+          />
+
+          {/* Quick Speed Presets */}
           <div>
-            <label className="block text-xs font-medium text-mist-1 mb-1">
-              Slide Rotation Interval (seconds)
-            </label>
-            <input
-              type="number"
-              min="2"
-              max="60"
-              value={settings.autoplay_interval}
-              onChange={(e) =>
-                handleInputChange('autoplay_interval', Math.max(2, parseInt(e.target.value) || 5))
-              }
-              className={inputClass}
-            />
-            <p className="text-[11px] text-mist-2 mt-1">Recommended: 5 to 7 seconds</p>
+            <p className="text-[11px] font-mono-tight text-mist-2 mb-2">Quick presets:</p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+              {[
+                { label: 'Fast', seconds: 3, icon: Zap, hint: '3s per slide' },
+                { label: 'Standard', seconds: 5, icon: Clock, hint: '5s per slide (recommended)' },
+                { label: 'Relaxed', seconds: 8, icon: Waves, hint: '8s per slide' },
+                { label: 'Slow', seconds: 12, icon: Turtle, hint: '12s per slide' },
+              ].map((preset) => {
+                const Icon = preset.icon;
+                const isSelected = settings.autoplay_interval === preset.seconds;
+                return (
+                  <button
+                    key={preset.seconds}
+                    type="button"
+                    onClick={() => handleInputChange('autoplay_interval', preset.seconds)}
+                    className={`flex items-center gap-2 p-2.5 rounded-lg border text-xs transition-all cursor-pointer ${
+                      isSelected
+                        ? 'bg-secondary/15 border-secondary text-secondary font-semibold shadow-sm shadow-secondary/20'
+                        : 'bg-white/[0.02] border-(--line) text-mist-1 hover:text-paper hover:bg-white/[0.05]'
+                    }`}
+                  >
+                    <Icon className="w-3.5 h-3.5 shrink-0 opacity-80" />
+                    <div className="text-left">
+                      <p className="font-medium">{preset.label}</p>
+                      <p className="text-[10px] text-mist-2 font-mono-tight">{preset.hint}</p>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Live Progress Simulation Bar */}
+          <div className="pt-2">
+            <div className="flex items-center justify-between text-[11px] font-mono-tight text-mist-2 mb-1">
+              <span>Timing preview:</span>
+              <span>{settings.autoplay_enabled ? `Cycles every ${settings.autoplay_interval}s` : 'Paused'}</span>
+            </div>
+            <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
+              {settings.autoplay_enabled ? (
+                <div
+                  key={`${settings.autoplay_interval}-${settings.autoplay_enabled}`}
+                  className="h-full bg-gradient-to-r from-primary to-secondary rounded-full"
+                  style={{
+                    animation: `slider-preview-progress ${settings.autoplay_interval}s linear infinite`,
+                  }}
+                />
+              ) : (
+                <div className="h-full w-full bg-amber-500/20" />
+              )}
+            </div>
           </div>
         </div>
       </div>

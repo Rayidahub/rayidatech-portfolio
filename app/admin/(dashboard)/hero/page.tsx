@@ -1,17 +1,23 @@
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
+import { getHeroSettings } from '@/lib/data/hero-settings';
 import { Plus, Edit, Settings, ExternalLink, Sparkles } from 'lucide-react';
 import DeleteButton from './DeleteButton';
 import SeedHeroButton from './SeedHeroButton';
+import HeroFlowController from '@/components/admin/HeroFlowController';
 
 export default async function AdminHeroSlides() {
   const supabase = await createClient();
-  const { data: slides } = await supabase
-    .from('hero_slides')
-    .select('id, label, words, body, image, sort_order, is_active, created_at')
-    .order('sort_order', { ascending: true })
-    .order('created_at', { ascending: false });
+  const [slidesResult, heroSettings] = await Promise.all([
+    supabase
+      .from('hero_slides')
+      .select('id, label, words, body, image, sort_order, is_active, created_at')
+      .order('sort_order', { ascending: true })
+      .order('created_at', { ascending: false }),
+    getHeroSettings(),
+  ]);
 
+  const slides = slidesResult.data;
   const count = slides?.length || 0;
 
   return (
@@ -54,6 +60,9 @@ export default async function AdminHeroSlides() {
           </Link>
         </div>
       </div>
+
+      {/* Interactive Hero Slider Flow & Speed Controller */}
+      <HeroFlowController initialSettings={heroSettings} totalSlides={count} />
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
         {(!slides || slides.length === 0) && (
