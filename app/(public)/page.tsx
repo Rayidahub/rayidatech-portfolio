@@ -15,7 +15,7 @@ import { createClient } from '@/lib/supabase/server';
 import { toHeroSlides, type HeroSlideRow } from '@/lib/data/hero-slides';
 import { getHeroSettings } from '@/lib/data/hero-settings';
 
-export const revalidate = 3600;
+export const revalidate = 0;
 
 export default async function Home() {
   const supabase = await createClient();

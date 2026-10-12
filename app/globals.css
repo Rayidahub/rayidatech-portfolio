@@ -326,6 +326,37 @@ html.dark .logo-dark {
   max-width: 100%;
 }
 
+/* ── Theme-aware hero gradient layer visibility ── */
+html[data-theme="dark"] .hero-dark-gradient,
+html.dark .hero-dark-gradient {
+  opacity: 1 !important;
+}
+html[data-theme="dark"] .hero-light-gradient,
+html.dark .hero-light-gradient {
+  opacity: 0 !important;
+}
+html:not([data-theme="dark"]) .hero-dark-gradient {
+  opacity: 0 !important;
+}
+html:not([data-theme="dark"]) .hero-light-gradient {
+  opacity: 1 !important;
+}
+
+html[data-theme="dark"] .hero-mobile-dark-gradient,
+html.dark .hero-mobile-dark-gradient {
+  opacity: 1 !important;
+}
+html[data-theme="dark"] .hero-mobile-light-gradient,
+html.dark .hero-mobile-light-gradient {
+  opacity: 0 !important;
+}
+html:not([data-theme="dark"]) .hero-mobile-dark-gradient {
+  opacity: 0 !important;
+}
+html:not([data-theme="dark"]) .hero-mobile-light-gradient {
+  opacity: 1 !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .signal-dot {
     animation: none;

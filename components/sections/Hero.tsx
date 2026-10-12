@@ -113,7 +113,7 @@ export default function Hero({ slides, settings }: HeroProps) {
       {/* 2. THEME-AWARE DYNAMIC GRADIENT OVERLAYS (Desktop) */}
       {darkDesktopGradient !== 'none' && (
         <div
-          className={`pointer-events-none absolute inset-0 z-[1] hidden md:block transition-opacity duration-500 ease-in-out ${
+          className={`hero-dark-gradient pointer-events-none absolute inset-0 z-[1] hidden md:block transition-opacity duration-500 ease-in-out ${
             activeTheme === 'dark' ? 'opacity-100' : 'opacity-0'
           }`}
           aria-hidden="true"
@@ -123,7 +123,7 @@ export default function Hero({ slides, settings }: HeroProps) {
 
       {lightDesktopGradient !== 'none' && (
         <div
-          className={`pointer-events-none absolute inset-0 z-[1] hidden md:block transition-opacity duration-500 ease-in-out ${
+          className={`hero-light-gradient pointer-events-none absolute inset-0 z-[1] hidden md:block transition-opacity duration-500 ease-in-out ${
             activeTheme === 'light' ? 'opacity-100' : 'opacity-0'
           }`}
           aria-hidden="true"
@@ -134,7 +134,7 @@ export default function Hero({ slides, settings }: HeroProps) {
       {/* 2b. THEME-AWARE MOBILE READABILITY WASH */}
       {darkMobileGradient !== 'none' && (
         <div
-          className={`pointer-events-none absolute inset-0 z-[2] md:hidden transition-opacity duration-500 ease-in-out ${
+          className={`hero-mobile-dark-gradient pointer-events-none absolute inset-0 z-[2] md:hidden transition-opacity duration-500 ease-in-out ${
             activeTheme === 'dark' ? 'opacity-100' : 'opacity-0'
           }`}
           aria-hidden="true"
@@ -144,7 +144,7 @@ export default function Hero({ slides, settings }: HeroProps) {
 
       {lightMobileGradient !== 'none' && (
         <div
-          className={`pointer-events-none absolute inset-0 z-[2] md:hidden transition-opacity duration-500 ease-in-out ${
+          className={`hero-mobile-light-gradient pointer-events-none absolute inset-0 z-[2] md:hidden transition-opacity duration-500 ease-in-out ${
             activeTheme === 'light' ? 'opacity-100' : 'opacity-0'
           }`}
           aria-hidden="true"
