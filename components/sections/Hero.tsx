@@ -8,6 +8,8 @@ import { useEffect, useRef, useState } from 'react';
 import { defaultHeroSlides, type HeroSlide } from '@/lib/data/hero-slides';
 import { stats } from '@/lib/data/stats';
 import { useReducedMotionSafe } from '@/lib/use-reduced-motion-safe';
+import { useActiveTheme } from '@/lib/use-theme';
+import { mergeHeroGradientSettings, buildHeroGradientCss } from '@/lib/hero-gradient';
 import type { HeroSettings } from '@/types/hero-settings';
 
 interface HeroProps {
@@ -21,6 +23,7 @@ export default function Hero({ slides, settings }: HeroProps) {
   const [direction, setDirection] = useState(1);
   const sectionRef = useRef<HTMLElement>(null);
   const prefersReducedMotion = useReducedMotionSafe();
+  const activeTheme = useActiveTheme();
 
   const showStatusPill = settings?.show_status_pill !== false;
   const statusPillText = settings?.status_pill_text || 'Available for projects';
@@ -39,6 +42,17 @@ export default function Hero({ slides, settings }: HeroProps) {
   const [isPaused, setIsPaused] = useState(!autoplayConfigured);
   const [isHovered, setIsHovered] = useState(false);
   const autoplayInterval = (settings?.autoplay_interval || 5) * 1000;
+
+  // Gradient & Blur configuration
+  const gradientSettings = mergeHeroGradientSettings(settings?.gradient);
+  const blurAmount = gradientSettings.blur.enabled && gradientSettings.blur.amount > 0
+    ? gradientSettings.blur.amount
+    : 0;
+
+  const darkDesktopGradient = buildHeroGradientCss(gradientSettings, 'dark', false);
+  const lightDesktopGradient = buildHeroGradientCss(gradientSettings, 'light', false);
+  const darkMobileGradient = buildHeroGradientCss(gradientSettings, 'dark', true);
+  const lightMobileGradient = buildHeroGradientCss(gradientSettings, 'light', true);
 
   useEffect(() => {
     setIsPaused(!autoplayConfigured);
@@ -65,7 +79,7 @@ export default function Hero({ slides, settings }: HeroProps) {
       ref={sectionRef}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="relative min-h-[92vh] flex items-center overflow-hidden pt-28 pb-16 md:pt-36 md:pb-24 bg-ink"
+      className="relative min-h-[92vh] flex items-center overflow-hidden pt-28 pb-16 md:pt-36 md:pb-24 bg-ink transition-colors duration-300"
     >
       {/* 1. FULL-BLEED BACKGROUND IMAGE SLIDER (Edge-to-Edge Cinematic Cover) */}
       <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden select-none" aria-hidden="true">
@@ -79,7 +93,12 @@ export default function Hero({ slides, settings }: HeroProps) {
               opacity: { duration: 0.85, ease: [0.16, 1, 0.3, 1] },
               scale: { duration: 1.4, ease: [0.16, 1, 0.3, 1] },
             }}
-            className="absolute inset-0 w-full h-full"
+            className={`absolute inset-0 w-full h-full ${
+              blurAmount > 0
+                ? '-inset-3 w-[calc(100%+1.5rem)] h-[calc(100%+1.5rem)] scale-105'
+                : ''
+            }`}
+            style={blurAmount > 0 ? { filter: `blur(${blurAmount}px)` } : undefined}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -91,25 +110,47 @@ export default function Hero({ slides, settings }: HeroProps) {
         </AnimatePresence>
       </div>
 
-      {/* 2. CINEMATIC GRADIENT OVERLAY (Left-to-Right Desktop Grade) */}
-      <div
-        className="pointer-events-none absolute inset-0 z-[1]"
-        aria-hidden="true"
-        style={{
-          background:
-            'linear-gradient(90deg, rgba(10, 12, 24, 0.96) 0%, rgba(10, 12, 24, 0.82) 35%, rgba(10, 12, 24, 0.45) 60%, rgba(10, 12, 24, 0.08) 100%)',
-        }}
-      />
+      {/* 2. THEME-AWARE DYNAMIC GRADIENT OVERLAYS (Desktop) */}
+      {darkDesktopGradient !== 'none' && (
+        <div
+          className={`pointer-events-none absolute inset-0 z-[1] hidden md:block transition-opacity duration-500 ease-in-out ${
+            activeTheme === 'dark' ? 'opacity-100' : 'opacity-0'
+          }`}
+          aria-hidden="true"
+          style={{ background: darkDesktopGradient }}
+        />
+      )}
 
-      {/* 2b. MOBILE READABILITY WASH (Stronger gradient on small screens) */}
-      <div
-        className="pointer-events-none absolute inset-0 z-[2] md:hidden"
-        aria-hidden="true"
-        style={{
-          background:
-            'linear-gradient(180deg, rgba(10, 12, 24, 0.92) 0%, rgba(10, 12, 24, 0.85) 60%, rgba(10, 12, 24, 0.65) 100%)',
-        }}
-      />
+      {lightDesktopGradient !== 'none' && (
+        <div
+          className={`pointer-events-none absolute inset-0 z-[1] hidden md:block transition-opacity duration-500 ease-in-out ${
+            activeTheme === 'light' ? 'opacity-100' : 'opacity-0'
+          }`}
+          aria-hidden="true"
+          style={{ background: lightDesktopGradient }}
+        />
+      )}
+
+      {/* 2b. THEME-AWARE MOBILE READABILITY WASH */}
+      {darkMobileGradient !== 'none' && (
+        <div
+          className={`pointer-events-none absolute inset-0 z-[2] md:hidden transition-opacity duration-500 ease-in-out ${
+            activeTheme === 'dark' ? 'opacity-100' : 'opacity-0'
+          }`}
+          aria-hidden="true"
+          style={{ background: darkMobileGradient }}
+        />
+      )}
+
+      {lightMobileGradient !== 'none' && (
+        <div
+          className={`pointer-events-none absolute inset-0 z-[2] md:hidden transition-opacity duration-500 ease-in-out ${
+            activeTheme === 'light' ? 'opacity-100' : 'opacity-0'
+          }`}
+          aria-hidden="true"
+          style={{ background: lightMobileGradient }}
+        />
+      )}
 
       {/* 2c. FAINT TECHNICAL GRID PATTERN (Brand Texture) */}
       <div
@@ -131,7 +172,7 @@ export default function Hero({ slides, settings }: HeroProps) {
             <span className="text-mist-2">{String(heroSlides.length).padStart(2, '0')}</span>
           </span>
 
-          <span className="h-3 w-px bg-white/10" aria-hidden="true" />
+          <span className="h-3 w-px bg-(--line-strong)" aria-hidden="true" />
 
           {/* Slide Indicator Pills */}
           <div className="flex items-center gap-1.5">
@@ -150,14 +191,14 @@ export default function Hero({ slides, settings }: HeroProps) {
             ))}
           </div>
 
-          <span className="h-3 w-px bg-white/10" aria-hidden="true" />
+          <span className="h-3 w-px bg-(--line-strong)" aria-hidden="true" />
 
           {/* Flow Play / Pause & Prev / Next Controls */}
           <div className="flex items-center gap-1">
             <button
               type="button"
               onClick={() => setIsPaused((prev) => !prev)}
-              className="w-6 h-6 rounded-full flex items-center justify-center text-mist-1 hover:text-paper hover:bg-white/10 transition-colors cursor-pointer"
+              className="w-6 h-6 rounded-full flex items-center justify-center text-mist-1 hover:text-paper hover:bg-paper/10 transition-colors cursor-pointer"
               aria-label={isPaused ? 'Start slider auto-flow' : 'Pause slider auto-flow'}
               title={isPaused ? 'Start auto-flow' : 'Pause auto-flow'}
             >
@@ -168,12 +209,12 @@ export default function Hero({ slides, settings }: HeroProps) {
               )}
             </button>
 
-            <span className="h-2.5 w-px bg-white/10 mx-0.5" aria-hidden="true" />
+            <span className="h-2.5 w-px bg-(--line-strong) mx-0.5" aria-hidden="true" />
 
             <button
               type="button"
               onClick={() => goTo((current - 1 + heroSlides.length) % heroSlides.length)}
-              className="w-6 h-6 rounded-full flex items-center justify-center text-mist-1 hover:text-paper hover:bg-white/10 transition-colors cursor-pointer"
+              className="w-6 h-6 rounded-full flex items-center justify-center text-mist-1 hover:text-paper hover:bg-paper/10 transition-colors cursor-pointer"
               aria-label="Previous slide"
             >
               <ChevronLeft className="w-3.5 h-3.5" />
@@ -181,7 +222,7 @@ export default function Hero({ slides, settings }: HeroProps) {
             <button
               type="button"
               onClick={() => goTo((current + 1) % heroSlides.length)}
-              className="w-6 h-6 rounded-full flex items-center justify-center text-mist-1 hover:text-paper hover:bg-white/10 transition-colors cursor-pointer"
+              className="w-6 h-6 rounded-full flex items-center justify-center text-mist-1 hover:text-paper hover:bg-paper/10 transition-colors cursor-pointer"
               aria-label="Next slide"
             >
               <ChevronRight className="w-3.5 h-3.5" />

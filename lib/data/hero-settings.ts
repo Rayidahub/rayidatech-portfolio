@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { createClient } from '@/lib/supabase/server';
 import type { HeroSettings } from '@/types/hero-settings';
+import { defaultHeroGradientSettings, mergeHeroGradientSettings } from '@/lib/hero-gradient';
 
 export const defaultHeroSettings: HeroSettings = {
   id: 'default',
@@ -21,6 +22,8 @@ export const defaultHeroSettings: HeroSettings = {
 
   autoplay_enabled: true,
   autoplay_interval: 5,
+
+  gradient: defaultHeroGradientSettings,
 };
 
 const LOCAL_SETTINGS_FILE = path.join(process.cwd(), 'lib/data/hero-settings.json');
@@ -62,6 +65,7 @@ export async function getHeroSettings(): Promise<HeroSettings> {
       return {
         ...defaultHeroSettings,
         ...data,
+        gradient: mergeHeroGradientSettings(data.gradient),
       };
     }
   } catch {
@@ -73,6 +77,7 @@ export async function getHeroSettings(): Promise<HeroSettings> {
     return {
       ...defaultHeroSettings,
       ...local,
+      gradient: mergeHeroGradientSettings(local.gradient),
     };
   }
 
@@ -83,9 +88,10 @@ export async function getHeroSettings(): Promise<HeroSettings> {
 export async function saveHeroSettings(
   settings: HeroSettings
 ): Promise<{ success: boolean; error?: string }> {
-  const updatedSettings = {
+  const updatedSettings: HeroSettings = {
     ...settings,
     id: 'default',
+    gradient: mergeHeroGradientSettings(settings.gradient),
     updated_at: new Date().toISOString(),
   };
 
@@ -105,4 +111,3 @@ export async function saveHeroSettings(
     return { success: true };
   }
 }
-

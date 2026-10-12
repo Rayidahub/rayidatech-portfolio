@@ -13,5 +13,44 @@
   "floating_stat_label": "Client Satisfaction",
   "autoplay_enabled": true,
   "autoplay_interval": 5,
-  "updated_at": "2026-10-12T21:09:08.140Z"
+  "gradient": {
+    "enabled": true,
+    "dark": {
+      "enabled": true,
+      "color": "#0A0C18",
+      "opacity": 85,
+      "width": 65,
+      "direction": "left-to-right",
+      "stops": {
+        "start": 0,
+        "solidUntil": 35,
+        "fadeStart": 60,
+        "end": 100
+      }
+    },
+    "light": {
+      "enabled": true,
+      "color": "#FFFFFF",
+      "opacity": 90,
+      "width": 65,
+      "direction": "left-to-right",
+      "stops": {
+        "start": 0,
+        "solidUntil": 35,
+        "fadeStart": 60,
+        "end": 100
+      }
+    },
+    "mobile": {
+      "enabled": true,
+      "opacity": 88,
+      "direction": "top-to-bottom",
+      "fadeStart": 60
+    },
+    "blur": {
+      "enabled": false,
+      "amount": 0
+    }
+  },
+  "updated_at": "2026-10-13T00:00:00.000Z"
 }
