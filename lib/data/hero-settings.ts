@@ -53,6 +53,8 @@ function writeLocalSettings(data: HeroSettings): void {
 }
 
 export async function getHeroSettings(): Promise<HeroSettings> {
+  const local = readLocalSettings();
+
   try {
     const supabase = await createClient();
     const { data, error } = await supabase
@@ -65,14 +67,13 @@ export async function getHeroSettings(): Promise<HeroSettings> {
       return {
         ...defaultHeroSettings,
         ...data,
-        gradient: mergeHeroGradientSettings(data.gradient),
+        gradient: mergeHeroGradientSettings(data.gradient || local?.gradient),
       };
     }
   } catch {
     // Supabase query error fallback
   }
 
-  const local = readLocalSettings();
   if (local) {
     return {
       ...defaultHeroSettings,
@@ -103,6 +104,9 @@ export async function saveHeroSettings(
 
     if (error) {
       console.warn('Supabase hero_settings upsert error (local JSON saved):', error.message);
+      // Attempt upsert without gradient in case schema lacks the column
+      const { gradient: _, ...withoutGradient } = updatedSettings;
+      await supabase.from('hero_settings').upsert(withoutGradient);
     }
 
     return { success: true };
