@@ -1,6 +1,5 @@
 import Hero from '@/components/sections/Hero';
 import TrustBar from '@/components/sections/TrustBar';
-import StatsBar from '@/components/sections/StatsBar';
 import WhatWeDo from '@/components/sections/WhatWeDo';
 import Services from '@/components/sections/Services';
 import ComingSoon from '@/components/sections/ComingSoon';
@@ -10,7 +9,6 @@ import PortfolioTeaser from '@/components/sections/PortfolioTeaser';
 import Testimonials from '@/components/sections/Testimonials';
 import Newsletter from '@/components/sections/Newsletter';
 import FinalCTA from '@/components/sections/FinalCTA';
-import MarqueeCTA from '@/components/sections/MarqueeCTA';
 import { createClient } from '@/lib/supabase/server';
 import { toHeroSlides, type HeroSlideRow } from '@/lib/data/hero-slides';
 import { getHeroSettings } from '@/lib/data/hero-settings';
@@ -36,7 +34,6 @@ export default async function Home() {
     <main>
       <Hero slides={slides} settings={heroSettings} />
       <TrustBar />
-      <StatsBar />
       <WhatWeDo />
       <Services />
       <ComingSoon />
@@ -46,7 +43,6 @@ export default async function Home() {
       <Testimonials />
       <Newsletter />
       <FinalCTA />
-      <MarqueeCTA />
     </main>
   );
 }
