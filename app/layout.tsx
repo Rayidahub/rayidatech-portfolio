@@ -40,13 +40,41 @@ export const metadata: Metadata = {
   },
   description:
     'Raymond Gaius — Product Designer and AI Engineer at Rayida Tech. Building digital experiences people can trust.',
-  keywords: ['Raymond Gaius', 'Rayida Tech', 'Product Designer', 'AI Engineer', 'Portfolio'],
+  keywords: [
+    'Raymond Gaius',
+    'Rayida Tech',
+    'Product Designer',
+    'AI Engineer',
+    'Full Stack Developer',
+    'UI/UX Designer Nigeria',
+    'Fintech Product Design',
+    'Portfolio',
+  ],
+  authors: [{ name: 'Raymond Gaius', url: getBaseUrl() }],
+  creator: 'Raymond Gaius',
+  publisher: 'Rayida Tech',
   openGraph: {
     title: 'Raymond Gaius | Product Designer & AI Engineer',
     description: 'Building digital experiences people can trust.',
     url: getBaseUrl(),
-    siteName: 'Raymond Gaius',
+    siteName: 'Raymond Gaius — Rayida Tech',
     type: 'website',
+    locale: 'en_US',
+    images: [
+      {
+        url: '/icon.png',
+        width: 512,
+        height: 512,
+        alt: 'Raymond Gaius — Product Designer & AI Engineer',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Raymond Gaius | Product Designer & AI Engineer',
+    description: 'Building digital experiences people can trust.',
+    creator: '@Rayidahub',
+    images: ['/icon.png'],
   },
   icons: {
     icon: [
@@ -109,6 +137,46 @@ export default async function RootLayout({
         <Suspense fallback={null}>
           <ActivityTracker />
         </Suspense>
+
+        {/* Schema.org Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@graph': [
+                {
+                  '@type': 'Person',
+                  '@id': `${getBaseUrl()}/#person`,
+                  name: 'Raymond Gaius',
+                  jobTitle: 'Product Designer & AI Engineer',
+                  url: getBaseUrl(),
+                  email: 'rayidagaius@gmail.com',
+                  sameAs: [
+                    'https://github.com/Rayidahub',
+                    'https://wa.link/tlezg8',
+                  ],
+                  worksFor: {
+                    '@type': 'Organization',
+                    name: 'Rayida Tech',
+                    url: getBaseUrl(),
+                  },
+                },
+                {
+                  '@type': 'WebSite',
+                  '@id': `${getBaseUrl()}/#website`,
+                  url: getBaseUrl(),
+                  name: 'Rayida Tech — Raymond Gaius',
+                  description: 'Building digital experiences people can trust.',
+                  publisher: {
+                    '@id': `${getBaseUrl()}/#person`,
+                  },
+                },
+              ],
+            }),
+          }}
+        />
+
         {children}
       </body>
     </html>

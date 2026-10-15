@@ -18,12 +18,15 @@ import {
   Palette,
   Activity,
   MailCheck,
+  X,
 } from 'lucide-react'
 import type { AdminRole, AdminPermission } from '@/types/admin-user'
 
 interface AdminSidebarProps {
   role?: AdminRole
   permissions?: AdminPermission[]
+  isMobile?: boolean
+  onClose?: () => void
 }
 
 interface NavItem {
@@ -54,6 +57,8 @@ const navItems: NavItem[] = [
 export default function AdminSidebar({
   role = 'super_admin',
   permissions = [],
+  isMobile = false,
+  onClose,
 }: AdminSidebarProps) {
   const pathname = usePathname()
 
@@ -73,20 +78,45 @@ export default function AdminSidebar({
 
   const roleInfo = roleLabels[role] || roleLabels.editor
 
+  const handleLinkClick = () => {
+    if (isMobile && onClose) {
+      onClose()
+    }
+  }
+
   return (
-    <aside className="w-64 min-h-screen bg-[var(--ink-deep)] border-r border-(--line) flex flex-col shrink-0">
-      <div className="p-6 border-b border-(--line)">
-        <Link href="/" className="inline-flex items-center">
-          <BrandLogo className="h-7 w-auto" />
-        </Link>
-        <div className="flex items-center justify-between mt-2">
-          <p className="text-mist-2 text-xs">Admin Workspace</p>
-          <span
-            className={`text-[10px] uppercase font-mono-tight font-medium px-2 py-0.5 rounded-full border ${roleInfo.style}`}
-          >
-            {roleInfo.label}
-          </span>
+    <aside
+      className={`${
+        isMobile
+          ? 'w-full h-full flex flex-col bg-[var(--ink-deep)]'
+          : 'w-64 min-h-screen bg-[var(--ink-deep)] border-r border-(--line) flex flex-col shrink-0'
+      }`}
+    >
+      <div className="p-6 border-b border-(--line) flex items-center justify-between">
+        <div>
+          <Link href="/" onClick={handleLinkClick} className="inline-flex items-center">
+            <BrandLogo className="h-7 w-auto" />
+          </Link>
+          <div className="flex items-center gap-2 mt-2">
+            <p className="text-mist-2 text-xs">Admin Workspace</p>
+            <span
+              className={`text-[10px] uppercase font-mono-tight font-medium px-2 py-0.5 rounded-full border ${roleInfo.style}`}
+            >
+              {roleInfo.label}
+            </span>
+          </div>
         </div>
+
+        {isMobile && onClose && (
+          <button
+            type="button"
+            onClick={onClose}
+            className="p-2 rounded-lg text-mist-2 hover:text-paper hover:bg-white/5 transition-colors -mr-2"
+            aria-label="Close sidebar"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        )}
       </div>
 
       <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
@@ -101,6 +131,7 @@ export default function AdminSidebar({
             <Link
               key={item.href}
               href={item.href}
+              onClick={handleLinkClick}
               className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-colors duration-200 ${
                 isActive
                   ? 'bg-primary/20 text-secondary font-medium'
@@ -125,6 +156,7 @@ export default function AdminSidebar({
         {role === 'super_admin' && (
           <Link
             href="/admin/users"
+            onClick={handleLinkClick}
             className="flex items-center gap-2 text-xs text-secondary/80 hover:text-secondary transition-colors"
           >
             <ShieldCheck className="w-3.5 h-3.5" />
@@ -133,6 +165,7 @@ export default function AdminSidebar({
         )}
         <Link
           href="/"
+          onClick={handleLinkClick}
           className="flex items-center gap-2 text-xs text-mist-2 hover:text-paper transition-colors block"
         >
           ← Back to public site

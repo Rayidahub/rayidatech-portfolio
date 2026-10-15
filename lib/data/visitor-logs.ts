@@ -11,12 +11,12 @@ function getStoragePath(): string {
   if (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME) {
     return path.join('/tmp', 'visitor-logs.json');
   }
-  return path.join(/*turbopackIgnore: true*/ process.cwd(), 'lib/data/visitor-logs.json');
+  return path.join(process.cwd(), 'lib', 'data', 'visitor-logs.json');
 }
 
 function readLocalLogs(): VisitorLog[] {
   const primaryPath = getStoragePath();
-  const fallbackPath = path.join(/*turbopackIgnore: true*/ process.cwd(), 'lib/data/visitor-logs.json');
+  const fallbackPath = path.join(process.cwd(), 'lib', 'data', 'visitor-logs.json');
 
   for (const filePath of [primaryPath, fallbackPath]) {
     try {

@@ -1,8 +1,7 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { getAdminUserByEmail } from '@/lib/data/admin-users'
-import AdminSidebar from '@/components/admin/AdminSidebar'
-import AdminHeader from '@/components/admin/AdminHeader'
+import AdminLayoutClient from '@/components/admin/AdminLayoutClient'
 import DeactivatedNotice from '@/components/admin/DeactivatedNotice'
 import UnauthorizedNotice from '@/components/admin/UnauthorizedNotice'
 import { ROOT_SUPER_ADMIN_EMAIL } from '@/types/admin-user'
@@ -39,14 +38,13 @@ export default async function DashboardLayout({
   const name = adminProfile?.name || user.email.split('@')[0]
 
   return (
-    <div className="flex min-h-screen bg-ink">
-      <AdminSidebar role={role} permissions={permissions} />
-      <div className="flex-1 flex flex-col min-w-0">
-        <AdminHeader email={user.email} name={name} role={role} />
-        <main className="flex-1 p-6 md:p-8 overflow-y-auto">
-          {children}
-        </main>
-      </div>
-    </div>
+    <AdminLayoutClient
+      role={role}
+      permissions={permissions}
+      email={user.email}
+      name={name}
+    >
+      {children}
+    </AdminLayoutClient>
   )
 }
