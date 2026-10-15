@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { Mail, Settings, Inbox, ExternalLink } from 'lucide-react';
+import DeleteContactButton from './DeleteContactButton';
 
 export default async function AdminContacts() {
   const supabase = await createClient();
@@ -42,20 +43,21 @@ export default async function AdminContacts() {
         </div>
       </div>
 
-      <div className="glass rounded-xl overflow-hidden">
+      <div className="glass rounded-xl overflow-hidden border border-(--line)">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-(--line)">
+            <tr className="border-b border-(--line) bg-white/[0.02]">
               <th className="text-left text-mist-2 font-medium px-4 py-3">Name</th>
               <th className="text-left text-mist-2 font-medium px-4 py-3 hidden sm:table-cell">Email</th>
               <th className="text-left text-mist-2 font-medium px-4 py-3 hidden md:table-cell">Company</th>
               <th className="text-right text-mist-2 font-medium px-4 py-3">Date</th>
+              <th className="text-right text-mist-2 font-medium px-4 py-3">Action</th>
             </tr>
           </thead>
           <tbody>
             {(!contacts || contacts.length === 0) && (
               <tr>
-                <td colSpan={4} className="text-center text-mist-2 px-4 py-12">
+                <td colSpan={5} className="text-center text-mist-2 px-4 py-12">
                   No contacts yet.
                 </td>
               </tr>
@@ -71,6 +73,9 @@ export default async function AdminContacts() {
                 <td className="px-4 py-3 text-right text-mist-2 text-xs">
                   {new Date(contact.created_at).toLocaleDateString()}
                 </td>
+                <td className="px-4 py-3 text-right">
+                  <DeleteContactButton id={contact.id} name={contact.name} />
+                </td>
               </tr>
             ))}
           </tbody>
@@ -78,29 +83,35 @@ export default async function AdminContacts() {
       </div>
 
       {contacts && contacts.length > 0 && (
-        <div className="mt-6">
-          <h2 className="font-display text-lg font-semibold text-paper mb-4">Messages</h2>
+        <div className="mt-8">
+          <h2 className="font-display text-lg font-semibold text-paper mb-4">Detailed Inquiries</h2>
           <div className="space-y-4">
             {contacts.map((contact) => (
-              <div key={contact.id} className="glass rounded-xl p-5">
-                <div className="flex items-center gap-2 text-sm text-mist-1 mb-2">
-                  <Mail className="w-4 h-4 text-secondary" />
-                  <span className="font-medium text-paper">{contact.name}</span>
-                  <span className="text-mist-2">({contact.email})</span>
-                  {contact.company && (
-                    <>
-                      <span className="text-mist-2">·</span>
-                      <span>{contact.company}</span>
-                    </>
-                  )}
+              <div key={contact.id} className="glass rounded-xl p-5 border border-(--line)">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2 text-sm text-mist-1">
+                    <Mail className="w-4 h-4 text-secondary" />
+                    <span className="font-medium text-paper">{contact.name}</span>
+                    <span className="text-mist-2">({contact.email})</span>
+                    {contact.company && (
+                      <>
+                        <span className="text-mist-2">·</span>
+                        <span>{contact.company}</span>
+                      </>
+                    )}
+                  </div>
+                  <DeleteContactButton id={contact.id} name={contact.name} />
                 </div>
-                <p className="text-sm text-mist-1 leading-relaxed">{contact.message}</p>
-                {contact.phone && (
-                  <p className="text-xs text-mist-2 mt-2">Phone: {contact.phone}</p>
-                )}
-                {contact.project_type && (
-                  <p className="text-xs text-mist-2">Project Type: {contact.project_type}</p>
-                )}
+                <p className="text-sm text-mist-1 leading-relaxed whitespace-pre-wrap">{contact.message}</p>
+                <div className="flex flex-wrap items-center gap-4 mt-3 pt-3 border-t border-(--line) text-xs text-mist-2">
+                  {contact.phone && (
+                    <span>Phone: <strong className="text-paper">{contact.phone}</strong></span>
+                  )}
+                  {contact.project_type && (
+                    <span>Service: <strong className="text-paper">{contact.project_type}</strong></span>
+                  )}
+                  <span>Received: {new Date(contact.created_at).toLocaleString()}</span>
+                </div>
               </div>
             ))}
           </div>

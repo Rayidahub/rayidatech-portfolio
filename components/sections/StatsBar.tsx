@@ -46,7 +46,12 @@ function StatCard({ stat, isVisible }: { stat: Stat; isVisible: boolean }) {
   );
 }
 
-export default function StatsBar() {
+interface StatsBarProps {
+  statsList?: Stat[];
+}
+
+export default function StatsBar({ statsList }: StatsBarProps = {}) {
+  const currentStats = statsList && statsList.length > 0 ? statsList : stats;
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
 
@@ -91,7 +96,7 @@ export default function StatsBar() {
 
       <Container size="wide" className="relative z-10">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-          {stats.map((stat, index) => (
+          {currentStats.map((stat, index) => (
             <Reveal key={stat.label} index={index}>
               <StatCard stat={stat} isVisible={isVisible} />
             </Reveal>

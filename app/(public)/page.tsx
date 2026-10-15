@@ -1,5 +1,6 @@
 import Hero from '@/components/sections/Hero';
 import TrustBar from '@/components/sections/TrustBar';
+import StatsBar from '@/components/sections/StatsBar';
 import WhatWeDo from '@/components/sections/WhatWeDo';
 import Services from '@/components/sections/Services';
 import ComingSoon from '@/components/sections/ComingSoon';
@@ -34,6 +35,7 @@ export default async function Home() {
     <main>
       <Hero slides={slides} settings={heroSettings} />
       <TrustBar />
+      <StatsBar />
       <WhatWeDo />
       <Services />
       <ComingSoon />
