@@ -37,6 +37,7 @@ export interface VisitorStats {
   top_pages: { path: string; count: number }[];
   device_breakdown: { desktop: number; mobile: number; tablet: number };
   top_actions: { action: string; count: number }[];
+  is_table_missing?: boolean;
 }
 
 export interface VisitorLogFilter {

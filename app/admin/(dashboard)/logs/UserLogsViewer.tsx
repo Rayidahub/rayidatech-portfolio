@@ -28,6 +28,9 @@ import {
   Palette,
   Timer,
   AlertTriangle,
+  Copy,
+  Terminal,
+  Check,
 } from 'lucide-react';
 import {
   getVisitorLogsAction,
@@ -35,6 +38,72 @@ import {
   clearVisitorLogsAction,
 } from '@/app/actions/visitor-logs';
 import type { VisitorLog, VisitorStats } from '@/types/visitor-log';
+
+const SETUP_SQL = `-- Run this in Supabase SQL Editor:
+-- https://supabase.com/dashboard/project/grtvnrqzmbndbjljramm/sql/new
+
+CREATE TABLE IF NOT EXISTS public.visitor_logs (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  session_id TEXT NOT NULL,
+  visitor_id TEXT NOT NULL,
+  event_type TEXT NOT NULL DEFAULT 'page_view',
+  path TEXT NOT NULL,
+  page_title TEXT,
+  referrer TEXT,
+  action_label TEXT,
+  metadata JSONB DEFAULT '{}'::jsonb,
+  device_type TEXT DEFAULT 'desktop',
+  browser TEXT,
+  os TEXT,
+  ip_address TEXT,
+  country TEXT,
+  city TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_visitor_logs_created_at ON public.visitor_logs (created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_visitor_logs_visitor_id ON public.visitor_logs (visitor_id);
+CREATE INDEX IF NOT EXISTS idx_visitor_logs_session_id ON public.visitor_logs (session_id);
+CREATE INDEX IF NOT EXISTS idx_visitor_logs_event_type ON public.visitor_logs (event_type);
+CREATE INDEX IF NOT EXISTS idx_visitor_logs_path ON public.visitor_logs (path);
+
+ALTER TABLE public.visitor_logs ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Allow public insert to visitor_logs" ON public.visitor_logs;
+DROP POLICY IF EXISTS "Allow read to visitor_logs" ON public.visitor_logs;
+DROP POLICY IF EXISTS "Allow authenticated delete to visitor_logs" ON public.visitor_logs;
+
+CREATE POLICY "Allow public insert to visitor_logs"
+  ON public.visitor_logs FOR INSERT WITH CHECK (true);
+
+CREATE POLICY "Allow read to visitor_logs"
+  ON public.visitor_logs FOR SELECT USING (true);
+
+CREATE POLICY "Allow authenticated delete to visitor_logs"
+  ON public.visitor_logs FOR DELETE USING (auth.role() = 'authenticated');
+
+CREATE TABLE IF NOT EXISTS public.site_settings (
+  id TEXT PRIMARY KEY DEFAULT 'default',
+  default_theme TEXT DEFAULT 'dark',
+  allow_user_toggle BOOLEAN DEFAULT true,
+  theme_version INTEGER DEFAULT 1,
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE public.site_settings ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Allow public read to site_settings" ON public.site_settings;
+DROP POLICY IF EXISTS "Allow authenticated full to site_settings" ON public.site_settings;
+
+CREATE POLICY "Allow public read to site_settings"
+  ON public.site_settings FOR SELECT USING (true);
+
+CREATE POLICY "Allow authenticated full to site_settings"
+  ON public.site_settings FOR ALL USING (auth.role() = 'authenticated');
+
+INSERT INTO public.site_settings (id, default_theme, allow_user_toggle, theme_version)
+VALUES ('default', 'dark', true, 1)
+ON CONFLICT (id) DO NOTHING;`;
 
 interface UserLogsViewerProps {
   initialLogs: VisitorLog[];
@@ -52,6 +121,8 @@ export default function UserLogsViewer({
   const [selectedDevice, setSelectedDevice] = useState<string>('all');
   const [autoRefresh, setAutoRefresh] = useState(true);
   const [expandedLogId, setExpandedLogId] = useState<string | null>(null);
+  const [copiedSql, setCopiedSql] = useState(false);
+  const [showSqlCode, setShowSqlCode] = useState(false);
 
   const [isPending, startTransition] = useTransition();
   const [isClearing, startClearingTransition] = useTransition();
@@ -61,6 +132,15 @@ export default function UserLogsViewer({
   const triggerToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 3500);
+  };
+
+  const copySetupSql = () => {
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(SETUP_SQL);
+      setCopiedSql(true);
+      triggerToast('SQL copied to clipboard! Paste it in Supabase SQL Editor.');
+      setTimeout(() => setCopiedSql(false), 4000);
+    }
   };
 
   // Manual or automatic refresh
@@ -344,6 +424,79 @@ export default function UserLogsViewer({
           </button>
         </div>
       </div>
+
+      {/* Missing Database Table Notice */}
+      {stats.is_table_missing && (
+        <div className="p-6 rounded-2xl bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent border border-amber-500/30 space-y-4">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex items-start gap-3.5">
+              <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0 mt-0.5">
+                <AlertTriangle className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="font-display font-semibold text-paper text-sm flex items-center gap-2">
+                  <span>Supabase Database Setup Required: &apos;visitor_logs&apos; table</span>
+                  <span className="text-[10px] font-mono-tight text-amber-300 bg-amber-500/20 px-2 py-0.5 rounded-full border border-amber-500/30">
+                    Action Needed
+                  </span>
+                </h3>
+                <p className="text-xs text-mist-1 mt-1 leading-relaxed max-w-2xl">
+                  Because your live site is hosted on a serverless platform (Vercel), user activity must be saved in your cloud Supabase database. Run the migration SQL in your Supabase SQL Editor once to activate real-time tracking immediately.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+              <button
+                type="button"
+                onClick={copySetupSql}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black text-xs font-semibold shadow-md transition-all"
+              >
+                {copiedSql ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                <span>{copiedSql ? 'SQL Copied!' : 'Copy Setup SQL'}</span>
+              </button>
+
+              <a
+                href="https://supabase.com/dashboard/project/grtvnrqzmbndbjljramm/sql/new"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-amber-500/30 hover:bg-amber-500/10 text-amber-300 text-xs font-medium transition-colors"
+              >
+                <span>Open Supabase SQL Editor</span>
+                <ExternalLink className="w-3.5 h-3.5 opacity-70" />
+              </a>
+
+              <button
+                type="button"
+                onClick={() => setShowSqlCode(!showSqlCode)}
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-(--line) text-xs text-mist-2 hover:text-paper hover:bg-white/[0.04] transition-colors"
+              >
+                <Terminal className="w-3.5 h-3.5" />
+                <span>{showSqlCode ? 'Hide SQL' : 'View SQL'}</span>
+              </button>
+            </div>
+          </div>
+
+          {showSqlCode && (
+            <div className="mt-3 space-y-2">
+              <div className="flex items-center justify-between text-[11px] text-mist-2 font-mono-tight">
+                <span>PostgreSQL Migration Script (Tables: visitor_logs &amp; site_settings)</span>
+                <button
+                  type="button"
+                  onClick={copySetupSql}
+                  className="text-amber-400 hover:underline flex items-center gap-1"
+                >
+                  <Copy className="w-3 h-3" />
+                  <span>Copy code</span>
+                </button>
+              </div>
+              <pre className="p-4 rounded-xl bg-black/60 border border-white/10 font-mono text-[11px] text-amber-200/90 overflow-x-auto max-h-60">
+                {SETUP_SQL}
+              </pre>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Analytics KPI Stat Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">

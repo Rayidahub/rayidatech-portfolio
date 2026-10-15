@@ -1,36 +1,91 @@
 import fs from 'fs';
 import path from 'path';
 import { createClient } from '@/lib/supabase/server';
-import type { VisitorLog, VisitorStats, VisitorLogFilter } from '@/types/visitor-log';
+import type { VisitorLog, VisitorStats, VisitorLogFilter, DeviceType } from '@/types/visitor-log';
 
-const LOCAL_LOGS_FILE = path.join(process.cwd(), 'lib/data/visitor-logs.json');
 const MAX_LOCAL_LOGS = 500;
 
+function getStoragePath(): string {
+  // If running in serverless (e.g. Vercel), process.cwd() is read-only outside /tmp
+  if (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME) {
+    return path.join('/tmp', 'visitor-logs.json');
+  }
+  return path.join(/*turbopackIgnore: true*/ process.cwd(), 'lib/data/visitor-logs.json');
+}
+
 function readLocalLogs(): VisitorLog[] {
-  try {
-    if (fs.existsSync(LOCAL_LOGS_FILE)) {
-      const raw = fs.readFileSync(LOCAL_LOGS_FILE, 'utf-8');
-      const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed)) return parsed;
+  const primaryPath = getStoragePath();
+  const fallbackPath = path.join(/*turbopackIgnore: true*/ process.cwd(), 'lib/data/visitor-logs.json');
+
+  for (const filePath of [primaryPath, fallbackPath]) {
+    try {
+      if (fs.existsSync(filePath)) {
+        const raw = fs.readFileSync(filePath, 'utf-8');
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch {
+      // Continue to next path
     }
-  } catch (err) {
-    console.error('Failed to read local visitor logs:', err);
   }
   return [];
 }
 
 function writeLocalLogs(logs: VisitorLog[]): void {
+  const filePath = getStoragePath();
   try {
-    const dir = path.dirname(LOCAL_LOGS_FILE);
+    const dir = path.dirname(filePath);
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir, { recursive: true });
     }
-    // Retain only latest MAX_LOCAL_LOGS entries
     const trimmed = logs.slice(0, MAX_LOCAL_LOGS);
-    fs.writeFileSync(LOCAL_LOGS_FILE, JSON.stringify(trimmed, null, 2), 'utf-8');
+    fs.writeFileSync(filePath, JSON.stringify(trimmed, null, 2), 'utf-8');
   } catch (err) {
-    console.error('Failed to write local visitor logs:', err);
+    // If writing to default fails, attempt writing to /tmp
+    try {
+      const tmpPath = path.join('/tmp', 'visitor-logs.json');
+      const trimmed = logs.slice(0, MAX_LOCAL_LOGS);
+      fs.writeFileSync(tmpPath, JSON.stringify(trimmed, null, 2), 'utf-8');
+    } catch {
+      // Silently ignore if both filesystems are blocked
+    }
   }
+}
+
+export function parseUserAgent(uaString: string): {
+  device_type: DeviceType;
+  browser: string;
+  os: string;
+} {
+  const ua = uaString || '';
+  let device_type: DeviceType = 'desktop';
+  let browser = 'Unknown Browser';
+  let os = 'Unknown OS';
+
+  // Device detection
+  if (/tablet|ipad|playbook|silk/i.test(ua)) {
+    device_type = 'tablet';
+  } else if (/mobile|iphone|ipod|android|blackberry|opera mini|windows phone/i.test(ua)) {
+    device_type = 'mobile';
+  } else {
+    device_type = 'desktop';
+  }
+
+  // OS detection
+  if (/windows/i.test(ua)) os = 'Windows';
+  else if (/macintosh|mac os x/i.test(ua)) os = 'macOS';
+  else if (/android/i.test(ua)) os = 'Android';
+  else if (/iphone|ipad|ipod/i.test(ua)) os = 'iOS';
+  else if (/linux/i.test(ua)) os = 'Linux';
+
+  // Browser detection
+  if (/edg\//i.test(ua)) browser = 'Edge';
+  else if (/opr\/|opera/i.test(ua)) browser = 'Opera';
+  else if (/chrome|crios/i.test(ua)) browser = 'Chrome';
+  else if (/firefox|fxios/i.test(ua)) browser = 'Firefox';
+  else if (/safari/i.test(ua)) browser = 'Safari';
+
+  return { device_type, browser, os };
 }
 
 export async function logVisitorActivity(
@@ -72,11 +127,13 @@ export async function logVisitorActivity(
       .select('id')
       .maybeSingle();
 
-    if (!error && data?.id) {
+    if (error) {
+      console.warn('Supabase visitor_logs insert notice:', error.code, error.message);
+    } else if (data?.id) {
       newLog.id = data.id;
     }
-  } catch (err) {
-    // If Supabase table isn't migrated yet or connection drops, local log is preserved
+  } catch (err: any) {
+    console.warn('Supabase visitor_logs exception:', err?.message);
   }
 
   return { success: true, id: newLog.id };
@@ -156,6 +213,18 @@ export async function clearVisitorLogs(): Promise<{ success: boolean; error?: st
 }
 
 export async function getVisitorStats(): Promise<VisitorStats> {
+  let isTableMissing = false;
+
+  try {
+    const supabase = await createClient();
+    const { error } = await supabase.from('visitor_logs').select('id').limit(1);
+    if (error && error.code === 'PGRST205') {
+      isTableMissing = true;
+    }
+  } catch {
+    // ignore
+  }
+
   const logs = await getVisitorLogs({ limit: 500 });
 
   const totalEvents = logs.length;
@@ -208,6 +277,6 @@ export async function getVisitorStats(): Promise<VisitorStats> {
     top_pages: topPages,
     device_breakdown: deviceCounts,
     top_actions: topActions,
+    is_table_missing: isTableMissing,
   };
 }
-

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
+import { recordVisitorEventAction } from '@/app/actions/visitor-logs';
 
 function getOrSetVisitorId(): string {
   if (typeof window === 'undefined') return '';
@@ -41,19 +42,35 @@ function sendTrack(payload: Record<string, any>) {
     return;
   }
 
-  const jsonString = JSON.stringify(payload);
-
-  if (typeof navigator !== 'undefined' && navigator.sendBeacon) {
-    const blob = new Blob([jsonString], { type: 'application/json' });
-    navigator.sendBeacon('/api/track', blob);
-  } else {
-    fetch('/api/track', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: jsonString,
-      keepalive: true,
+  // 1. Primary: Next.js Server Action (immune to browser ad blockers and content filters)
+  try {
+    recordVisitorEventAction({
+      event_type: payload.event_type || 'page_view',
+      path: payload.path,
+      page_title: payload.page_title,
+      referrer: payload.referrer,
+      action_label: payload.action_label,
+      visitor_id: payload.visitor_id,
+      session_id: payload.session_id,
+      metadata: payload.metadata,
     }).catch(() => {});
-  }
+  } catch {}
+
+  // 2. Secondary fallback via beacon or fetch
+  try {
+    const jsonString = JSON.stringify(payload);
+    if (typeof navigator !== 'undefined' && navigator.sendBeacon) {
+      const blob = new Blob([jsonString], { type: 'application/json' });
+      navigator.sendBeacon('/api/track', blob);
+    } else {
+      fetch('/api/track', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: jsonString,
+        keepalive: true,
+      }).catch(() => {});
+    }
+  } catch {}
 }
 
 export default function ActivityTracker() {
