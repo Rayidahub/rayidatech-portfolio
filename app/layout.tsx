@@ -2,6 +2,7 @@
 import type { Metadata } from 'next';
 import { Inter, Geist, Geist_Mono } from 'next/font/google';
 import { getBaseUrl } from '@/lib/url';
+import { getSiteSettings } from '@/lib/data/site-settings';
 import './globals.css';
 
 const inter = Inter({
@@ -46,24 +47,47 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const siteSettings = await getSiteSettings();
+  const defaultTheme = siteSettings.default_theme || 'dark';
+  const allowToggle = siteSettings.allow_user_toggle !== false;
+  const themeVersion = siteSettings.theme_version || 1;
+
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      data-theme={defaultTheme}
+      data-allow-toggle={allowToggle ? 'true' : 'false'}
+      suppressHydrationWarning
+    >
       <body
         className={`${inter.variable} ${geist.variable} ${geistMono.variable} text-paper antialiased`}
       >
-        {/* Prevent theme flash before hydration */}
+        {/* Prevent theme flash before hydration with admin default fallback */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
                 try {
-                  const theme = localStorage.getItem('theme') || 'light';
-                  document.documentElement.setAttribute('data-theme', theme);
+                  var defaultTheme = '${defaultTheme}';
+                  var allowToggle = ${allowToggle ? 'true' : 'false'};
+                  var currentVersion = ${themeVersion};
+                  var storedVersion = parseInt(localStorage.getItem('theme_version') || '0', 10);
+                  var storedTheme = localStorage.getItem('theme');
+
+                  var finalTheme = defaultTheme;
+                  if (allowToggle && storedVersion >= currentVersion && (storedTheme === 'light' || storedTheme === 'dark')) {
+                    finalTheme = storedTheme;
+                  } else {
+                    localStorage.setItem('theme', defaultTheme);
+                    localStorage.setItem('theme_version', String(currentVersion));
+                  }
+
+                  document.documentElement.setAttribute('data-theme', finalTheme);
                 } catch (e) {}
               })();
             `,

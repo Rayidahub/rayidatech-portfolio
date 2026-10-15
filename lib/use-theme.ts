@@ -8,18 +8,22 @@ const THEME_KEY = 'theme';
 const THEME_CHANGE_EVENT = 'themechange';
 
 export function getSavedTheme(): Theme {
-  if (typeof window === 'undefined') return 'light';
+  if (typeof window === 'undefined') return 'dark';
   try {
     const stored = window.localStorage.getItem(THEME_KEY) as Theme | null;
     if (stored === 'light' || stored === 'dark') return stored;
   } catch {
     // ignore
   }
-  return 'light';
+  if (typeof document !== 'undefined') {
+    const attr = document.documentElement.getAttribute('data-theme') as Theme | null;
+    if (attr === 'light' || attr === 'dark') return attr;
+  }
+  return 'dark';
 }
 
 export function getClientTheme(): Theme {
-  if (typeof document === 'undefined') return 'light';
+  if (typeof document === 'undefined') return 'dark';
   const attr = document.documentElement.getAttribute('data-theme') as Theme | null;
   if (attr === 'light' || attr === 'dark') return attr;
   return getSavedTheme();
@@ -55,6 +59,6 @@ export function useActiveTheme(): Theme {
   return useSyncExternalStore(
     subscribe,
     getClientTheme,
-    () => 'light'
+    () => 'dark'
   );
 }

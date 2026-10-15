@@ -15,6 +15,7 @@ import {
   Users,
   ShieldCheck,
   Sliders,
+  Palette,
 } from 'lucide-react'
 import type { AdminRole, AdminPermission } from '@/types/admin-user'
 
@@ -33,6 +34,7 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard, permission: 'dashboard' },
+  { href: '/admin/settings', label: 'Theme & Appearance', icon: Palette, permission: 'dashboard' },
   { href: '/admin/projects', label: 'Projects', icon: Briefcase, permission: 'projects' },
   { href: '/admin/services', label: 'Services', icon: Package, permission: 'services' },
   { href: '/admin/blog', label: 'Blog', icon: FileText, permission: 'blog' },

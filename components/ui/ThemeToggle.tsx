@@ -9,21 +9,30 @@ const THEME_KEY = 'theme';
 const THEME_CHANGE_EVENT = 'themechange';
 
 function getSavedTheme(): Theme {
-  if (typeof window === 'undefined') return 'light';
+  if (typeof window === 'undefined') return 'dark';
   try {
     const stored = window.localStorage.getItem(THEME_KEY) as Theme | null;
     if (stored === 'light' || stored === 'dark') return stored;
   } catch {
     // ignore
   }
-  return 'light';
+  if (typeof document !== 'undefined') {
+    const attr = document.documentElement.getAttribute('data-theme') as Theme | null;
+    if (attr === 'light' || attr === 'dark') return attr;
+  }
+  return 'dark';
 }
 
 function getClientTheme(): Theme {
-  if (typeof document === 'undefined') return 'light';
+  if (typeof document === 'undefined') return 'dark';
   const attr = document.documentElement.getAttribute('data-theme') as Theme | null;
   if (attr === 'light' || attr === 'dark') return attr;
   return getSavedTheme();
+}
+
+function isToggleAllowed(): boolean {
+  if (typeof document === 'undefined') return true;
+  return document.documentElement.getAttribute('data-allow-toggle') !== 'false';
 }
 
 function subscribe(callback: () => void) {
@@ -39,6 +48,8 @@ function setTheme(theme: Theme) {
   if (typeof window !== 'undefined') {
     try {
       window.localStorage.setItem(THEME_KEY, theme);
+      const ver = window.localStorage.getItem('theme_version') || '1';
+      window.localStorage.setItem('theme_version', ver);
     } catch {
       // ignore
     }
@@ -50,7 +61,7 @@ export default function ThemeToggle() {
   const theme = useSyncExternalStore(
     subscribe,
     getClientTheme,
-    () => 'light'
+    () => 'dark'
   );
   const mounted = useSyncExternalStore(
     () => () => {},
@@ -73,6 +84,11 @@ export default function ThemeToggle() {
         <Moon className="h-4 w-4" />
       </button>
     );
+  }
+
+  // If admin locked the theme and disabled visitor toggle, hide button
+  if (!isToggleAllowed()) {
+    return null;
   }
 
   return (

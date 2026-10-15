@@ -15,13 +15,16 @@ import {
   Sparkles,
 } from 'lucide-react'
 import { ROLE_DEFINITIONS } from '@/types/admin-user'
+import { getSiteSettings } from '@/lib/data/site-settings'
+import QuickThemeCard from '@/components/admin/QuickThemeCard'
 
 export const dynamic = 'force-dynamic'
 
 export default async function AdminDashboard() {
-  const [currentUser, supabase] = await Promise.all([
+  const [currentUser, supabase, siteSettings] = await Promise.all([
     getCurrentAdminUser(),
     createClient(),
+    getSiteSettings(),
   ])
 
   const [
@@ -153,6 +156,12 @@ export default async function AdminDashboard() {
           </div>
         </div>
       </div>
+
+      {/* Quick Theme Setting Widget */}
+      <QuickThemeCard
+        initialTheme={siteSettings.default_theme}
+        allowToggle={siteSettings.allow_user_toggle}
+      />
 
       {/* Stats Grid */}
       <div>
