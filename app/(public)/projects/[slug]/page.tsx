@@ -430,18 +430,18 @@ function CaseStudyProjectPage({
             <p className="font-mono-tight text-xs uppercase tracking-[0.25em] text-secondary mb-3">
               {projectType} • Case Study
             </p>
-            <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold tracking-tight text-paper mb-6">
+            <h1 className="font-display text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold tracking-tight text-paper mb-6">
               {project.title}{' '}
               <span className="gradient-text">Case Study</span>
             </h1>
-            <p className="text-lg sm:text-xl text-mist-1 leading-relaxed max-w-3xl">
+            <p className="text-base sm:text-xl text-mist-1 leading-relaxed max-w-3xl">
               {project.description}
             </p>
           </div>
 
           {/* Metadata Specs Grid */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-10">
-            <div className="glass rounded-2xl p-4 md:p-5 border border-(--line)">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mt-8 sm:mt-10">
+            <div className="glass rounded-2xl p-3.5 sm:p-5 border border-(--line)">
               <div className="flex items-center gap-2 text-mist-2 mb-1.5">
                 <Briefcase className="w-4 h-4 text-primary" />
                 <span className="font-mono-tight text-xs uppercase tracking-wider">Role</span>

@@ -34,12 +34,12 @@ function StatCard({ stat, isVisible }: { stat: Stat; isVisible: boolean }) {
   const count = useCountUp(stat.value, 2000, isVisible);
 
   return (
-    <div className="glass flex h-48 sm:h-56 md:h-64 flex-col items-start justify-end rounded-3xl p-6 md:p-8 transition-all duration-300 hover:border-primary/40 hover:-translate-y-1">
-      <p className="font-display text-4xl sm:text-5xl md:text-6xl font-semibold gradient-text mb-2 md:mb-3 tabular-nums">
+    <div className="glass flex h-36 sm:h-52 md:h-64 flex-col items-start justify-end rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 transition-all duration-300 hover:border-primary/40 hover:-translate-y-1">
+      <p className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold gradient-text mb-1.5 md:mb-3 tabular-nums">
         {count}
         {stat.suffix}
       </p>
-      <p className="font-mono-tight text-xs uppercase tracking-[0.15em] text-mist-2">
+      <p className="font-mono-tight text-[10px] sm:text-xs uppercase tracking-[0.15em] text-mist-2 line-clamp-2">
         {stat.label}
       </p>
     </div>

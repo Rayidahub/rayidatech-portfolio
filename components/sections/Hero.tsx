@@ -79,7 +79,7 @@ export default function Hero({ slides, settings }: HeroProps) {
       ref={sectionRef}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="relative min-h-[92vh] flex items-center overflow-hidden pt-28 pb-16 md:pt-36 md:pb-24 bg-ink transition-colors duration-300"
+      className="relative min-h-[92svh] md:min-h-[92vh] flex items-center overflow-hidden pt-24 pb-14 sm:pt-28 sm:pb-16 md:pt-36 md:pb-24 bg-ink transition-colors duration-300"
     >
       {/* 1. FULL-BLEED BACKGROUND IMAGE SLIDER (Edge-to-Edge Cinematic Cover) */}
       <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden select-none" aria-hidden="true">
@@ -162,8 +162,8 @@ export default function Hero({ slides, settings }: HeroProps) {
         aria-hidden="true"
       />
 
-      {/* 3. TOP-RIGHT SLIDER / HERO NAVIGATION */}
-      <div className="absolute top-20 sm:top-24 md:top-28 right-4 sm:right-8 lg:right-16 xl:right-[120px] z-30 flex items-center gap-3">
+      {/* 3. TOP-RIGHT SLIDER / HERO NAVIGATION (Desktop / Tablet) */}
+      <div className="hidden md:flex absolute md:top-28 right-4 sm:right-8 lg:right-16 xl:right-[120px] z-30 items-center gap-3">
         <div className="glass-strong rounded-full px-4 py-2 flex items-center gap-3 border border-(--line) shadow-xl backdrop-blur-md">
           {/* Slide Counter: 01 / 06 */}
           <span className="font-mono-tight text-xs font-semibold text-paper tabular-nums tracking-wider">
@@ -232,22 +232,49 @@ export default function Hero({ slides, settings }: HeroProps) {
       </div>
 
       {/* 4. FOREGROUND CONTENT (Positioned over the darker left gradient) */}
-      <div className="relative z-10 w-full px-6 sm:px-12 md:px-16 lg:px-[80px] xl:px-[120px]">
+      <div className="relative z-10 w-full px-4 sm:px-8 md:px-12 lg:px-16 xl:px-[120px]">
         <div className="w-full max-w-xl lg:max-w-2xl xl:max-w-3xl flex flex-col justify-center">
-          {showStatusPill && (
-            <motion.div
-              initial={prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="mb-6 sm:mb-8"
-            >
-              <StatusPill
-                text={statusPillText}
-                available={statusPillAvailable}
-                href={statusPillLink}
-              />
-            </motion.div>
-          )}
+          {/* Top Status & Mobile Slider Navigation Row */}
+          <div className="flex items-center justify-between gap-3 mb-6 sm:mb-8">
+            {showStatusPill && (
+              <motion.div
+                initial={prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <StatusPill
+                  text={statusPillText}
+                  available={statusPillAvailable}
+                  href={statusPillLink}
+                />
+              </motion.div>
+            )}
+
+            {/* Mobile-only compact slide pill (prevents header/status collision on small viewports) */}
+            <div className="md:hidden glass-strong rounded-full px-3 py-1.5 flex items-center gap-2 border border-(--line) shadow-md">
+              <span className="font-mono-tight text-[11px] font-semibold text-paper tabular-nums tracking-wide">
+                {String(current + 1).padStart(2, '0')}/{String(heroSlides.length).padStart(2, '0')}
+              </span>
+              <div className="flex items-center gap-0.5">
+                <button
+                  type="button"
+                  onClick={() => goTo((current - 1 + heroSlides.length) % heroSlides.length)}
+                  className="w-5 h-5 rounded-full flex items-center justify-center text-mist-1 hover:text-paper active:scale-90 transition-transform cursor-pointer"
+                  aria-label="Previous slide"
+                >
+                  <ChevronLeft className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => goTo((current + 1) % heroSlides.length)}
+                  className="w-5 h-5 rounded-full flex items-center justify-center text-mist-1 hover:text-paper active:scale-90 transition-transform cursor-pointer"
+                  aria-label="Next slide"
+                >
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
+          </div>
 
           <AnimatePresence mode="wait" custom={direction}>
             <motion.div
@@ -265,7 +292,7 @@ export default function Hero({ slides, settings }: HeroProps) {
               </p>
 
               {/* Main Headline */}
-              <h1 className="font-display text-4xl sm:text-5xl md:text-6xl xl:text-7xl font-bold leading-[1.02] tracking-tighter text-paper">
+              <h1 className="font-display text-3xl sm:text-5xl md:text-6xl xl:text-7xl font-bold leading-[1.05] sm:leading-[1.02] tracking-tight sm:tracking-tighter text-paper">
                 {slide.words.map((word, i) => {
                   const isLast = i === slide.words.length - 1;
 
@@ -344,7 +371,7 @@ export default function Hero({ slides, settings }: HeroProps) {
             </div>
 
             <motion.div
-              className="relative z-10 flex flex-wrap items-center gap-4"
+              className="relative z-10 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto"
               initial={prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: prefersReducedMotion ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] }}
@@ -352,7 +379,7 @@ export default function Hero({ slides, settings }: HeroProps) {
               {primaryCtaLabel && (
                 <Link
                   href={primaryCtaLink}
-                  className="btn-glow group/btn inline-flex items-center gap-2 rounded-full bg-primary px-7 py-3.5 text-sm font-medium text-paper transition-all duration-300 hover:bg-primary/90"
+                  className="btn-glow group/btn inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 sm:px-7 py-3 sm:py-3.5 text-sm font-semibold text-paper transition-all duration-300 hover:bg-primary/90 text-center"
                 >
                   <span>{primaryCtaLabel}</span>
                   <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover/btn:translate-x-0.5" />
@@ -361,7 +388,7 @@ export default function Hero({ slides, settings }: HeroProps) {
               {secondaryCtaLabel && (
                 <Link
                   href={secondaryCtaLink}
-                  className="inline-flex items-center gap-2 rounded-full border border-(--line) bg-paper/5 px-7 py-3.5 text-sm font-medium text-paper transition-all duration-300 hover:border-(--line-strong) hover:bg-paper/10"
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-(--line) bg-paper/5 px-6 sm:px-7 py-3 sm:py-3.5 text-sm font-semibold text-paper transition-all duration-300 hover:border-(--line-strong) hover:bg-paper/10 text-center"
                 >
                   <span>{secondaryCtaLabel}</span>
                 </Link>
@@ -370,36 +397,36 @@ export default function Hero({ slides, settings }: HeroProps) {
           </div>
 
           {/* Stats Row with Icon Pills */}
-          <div className="mt-10 pt-8 border-t border-(--line)/40 grid grid-cols-3 gap-3 sm:gap-6 max-w-xl">
-            <div className="flex items-center gap-2.5 sm:gap-3">
-              <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-secondary shrink-0 shadow-inner">
-                <Briefcase className="w-4 h-4 sm:w-5 sm:h-5 text-secondary" />
+          <div className="mt-8 sm:mt-10 pt-6 sm:pt-8 border-t border-(--line)/40 grid grid-cols-3 gap-2 sm:gap-4 md:gap-6 max-w-xl">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-11 md:h-11 rounded-xl sm:rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-secondary shrink-0 shadow-inner">
+                <Briefcase className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-secondary" />
               </div>
-              <div>
-                <p className="font-display text-base sm:text-xl font-bold text-paper leading-none">50+</p>
-                <p className="font-mono-tight text-[10px] sm:text-xs text-mist-2 mt-1 truncate">Projects</p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2.5 sm:gap-3">
-              <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-secondary/10 border border-secondary/20 flex items-center justify-center text-secondary shrink-0 shadow-inner">
-                <Award className="w-4 h-4 sm:w-5 sm:h-5 text-secondary" />
-              </div>
-              <div>
-                <p className="font-display text-base sm:text-xl font-bold text-paper leading-none">5+ Yrs</p>
-                <p className="font-mono-tight text-[10px] sm:text-xs text-mist-2 mt-1 truncate">Experience</p>
+              <div className="min-w-0">
+                <p className="font-display text-sm sm:text-lg md:text-xl font-bold text-paper leading-none">50+</p>
+                <p className="font-mono-tight text-[9px] sm:text-[10px] md:text-xs text-mist-2 mt-1 truncate">Projects</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-2.5 sm:gap-3">
-              <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-secondary shrink-0 shadow-inner">
-                <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5 text-secondary" />
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-11 md:h-11 rounded-xl sm:rounded-2xl bg-secondary/10 border border-secondary/20 flex items-center justify-center text-secondary shrink-0 shadow-inner">
+                <Award className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-secondary" />
               </div>
-              <div>
-                <p className="font-display text-base sm:text-xl font-bold text-paper leading-none">
+              <div className="min-w-0">
+                <p className="font-display text-sm sm:text-lg md:text-xl font-bold text-paper leading-none">5+ Yrs</p>
+                <p className="font-mono-tight text-[9px] sm:text-[10px] md:text-xs text-mist-2 mt-1 truncate">Experience</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-11 md:h-11 rounded-xl sm:rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-secondary shrink-0 shadow-inner">
+                <ShieldCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-secondary" />
+              </div>
+              <div className="min-w-0">
+                <p className="font-display text-sm sm:text-lg md:text-xl font-bold text-paper leading-none truncate">
                   {floatingStatValue}
                 </p>
-                <p className="font-mono-tight text-[10px] sm:text-xs text-mist-2 mt-1 truncate">
+                <p className="font-mono-tight text-[9px] sm:text-[10px] md:text-xs text-mist-2 mt-1 truncate">
                   Satisfaction
                 </p>
               </div>

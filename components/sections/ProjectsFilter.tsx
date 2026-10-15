@@ -74,7 +74,7 @@ export default function ProjectsFilter({
       <Reveal>
         <div className="glass rounded-2xl p-4 md:p-5 border border-(--line) space-y-4 md:space-y-0 md:flex md:items-center md:justify-between md:gap-6 shadow-xl">
           {/* Category Filter Pills (Scrollable) */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-none w-full md:w-auto">
+          <div className="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-none no-scrollbar w-full md:w-auto">
             {categories.map((cat) => {
               const isActive = category === cat;
               return (

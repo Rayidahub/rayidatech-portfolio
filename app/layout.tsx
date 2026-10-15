@@ -1,10 +1,21 @@
 import { Suspense } from 'react';
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Inter, Geist, Geist_Mono } from 'next/font/google';
 import { getBaseUrl } from '@/lib/url';
 import { getSiteSettings } from '@/lib/data/site-settings';
 import ActivityTracker from '@/components/analytics/ActivityTracker';
 import './globals.css';
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  viewportFit: 'cover',
+  themeColor: [
+    { media: '(prefers-color-scheme: dark)', color: '#1a1a2e' },
+    { media: '(prefers-color-scheme: light)', color: '#f8f7fb' },
+  ],
+};
 
 const inter = Inter({
   subsets: ['latin'],

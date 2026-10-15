@@ -165,7 +165,7 @@ export default function BlogClient({ posts, settings }: BlogClientProps) {
         <Reveal>
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10 pb-6 border-b border-(--line)">
             {/* Tag Pills */}
-            <div className="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-none">
+            <div className="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-none no-scrollbar w-full md:w-auto">
               {allTags.map((tag) => {
                 const isSelected = selectedTag === tag;
                 return (

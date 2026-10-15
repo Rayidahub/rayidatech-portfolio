@@ -66,7 +66,7 @@ export default function PremiumCard({
 
   return (
     <div
-      className={`group relative w-full h-[620px] overflow-hidden rounded-[32px] bg-ink shrink-0 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[0.98] border border-(--line) shadow-lg hover:shadow-2xl hover:border-primary/40 ${className}`}
+      className={`group relative w-full h-[520px] sm:h-[580px] md:h-[620px] overflow-hidden rounded-[28px] sm:rounded-[32px] bg-ink shrink-0 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[0.98] border border-(--line) shadow-lg hover:shadow-2xl hover:border-primary/40 ${className}`}
     >
       {/* Background image — shared across both states */}
       <Image
@@ -101,26 +101,26 @@ export default function PremiumCard({
         </div>
 
         {/* Main info — Project title & Subtitle placed cleanly in the bottom shadow part */}
-        <div className="relative z-10 bottom-14 inset-x-0 px-6 flex items-end justify-between gap-4">
+        <div className="relative z-10 bottom-14 inset-x-0 px-4 sm:px-6 flex items-end justify-between gap-3 sm:gap-4">
           <div className="min-w-0 flex-1">
-            <h3 className="text-white font-display text-xl sm:text-2xl font-bold leading-tight truncate drop-shadow-md tracking-tight">
+            <h3 className="text-white font-display text-lg sm:text-2xl font-bold leading-tight truncate drop-shadow-md tracking-tight">
               {title}
             </h3>
             {subtitle && (
-              <p className="text-white/80 text-sm mt-1 truncate font-medium drop-shadow-sm">
+              <p className="text-white/80 text-xs sm:text-sm mt-0.5 sm:mt-1 truncate font-medium drop-shadow-sm">
                 {subtitle}
               </p>
             )}
           </div>
           {primaryMetric && (
-            <span className="text-secondary font-mono-tight text-sm font-semibold whitespace-nowrap drop-shadow-sm pb-0.5">
+            <span className="text-secondary font-mono-tight text-xs sm:text-sm font-semibold whitespace-nowrap drop-shadow-sm pb-0.5">
               {primaryMetric}
             </span>
           )}
         </div>
 
         {/* Bottom metadata row */}
-        <div className="relative z-10 bottom-4 inset-x-0 px-6 flex items-center gap-3 text-xs text-white/80 font-mono-tight">
+        <div className="relative z-10 bottom-4 inset-x-0 px-4 sm:px-6 flex items-center gap-2 sm:gap-3 text-xs text-white/80 font-mono-tight">
           {bottomSpecs.map((spec, i) => {
             const { icon, label } = normalizeSpec(spec);
             return (
@@ -138,7 +138,7 @@ export default function PremiumCard({
 
       {/* ── LAYER: Hover state — glass bottom sheet ── */}
       <div
-        className="absolute inset-x-0 bottom-0 h-[72%] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] bg-ink/90 backdrop-blur-xl border-t border-(--line) rounded-t-[32px] flex flex-col p-6 shadow-2xl"
+        className="absolute inset-x-0 bottom-0 h-[72%] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] bg-ink/90 backdrop-blur-xl border-t border-(--line) rounded-t-[28px] sm:rounded-t-[32px] flex flex-col p-4 sm:p-6 shadow-2xl"
         style={{ transitionTimingFunction: easeOutExpo }}
       >
         {/* Capsule badge */}
@@ -161,7 +161,7 @@ export default function PremiumCard({
         <div className="flex-1 min-h-4" />
 
         {/* Metrics row */}
-        <div className="flex items-stretch border-y border-(--line) -mx-6 px-6 py-3 opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 delay-[250ms] ease-[cubic-bezier(0.16,1,0.3,1)]">
+        <div className="flex items-stretch border-y border-(--line) -mx-4 sm:-mx-6 px-4 sm:px-6 py-3 opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 delay-[250ms] ease-[cubic-bezier(0.16,1,0.3,1)]">
           {hoverMetrics.map((metric, i) => (
             <div
               key={i}

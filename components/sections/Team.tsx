@@ -206,12 +206,12 @@ export default async function Team() {
 
                   {/* ── B. SLANTED RECTANGULAR PORTRAIT CARD ── */}
                   {/* Fixed uniform height across all cards for rigorous horizontal rhythm */}
-                  <div className="relative w-full h-[360px] sm:h-[400px] lg:h-[420px] transition-transform duration-500 ease-out group-hover:-translate-y-1">
+                  <div className="relative w-full h-[340px] sm:h-[400px] lg:h-[420px] transition-transform duration-500 ease-out group-hover:-translate-y-1">
                     <div
                       className="relative h-full w-full overflow-hidden bg-gradient-to-b from-[#22243d] via-[#141528] to-[#0a0b16] border border-white/5 shadow-2xl"
                       style={{
                         clipPath:
-                          'polygon(44px 0%, 100% 0%, calc(100% - 44px) 100%, 0% 100%)',
+                          'polygon(clamp(24px, 6vw, 44px) 0%, 100% 0%, calc(100% - clamp(24px, 6vw, 44px)) 100%, 0% 100%)',
                       }}
                     >
                       {/* Studio spotlight gradient behind subject */}
@@ -312,10 +312,10 @@ export default async function Team() {
                   {/* ── C. ANGLED NAME & ROLE INFORMATION BAR ── */}
                   <div className="relative mt-3.5 w-full transition-transform duration-300 group-hover:-translate-y-0.5">
                     <div
-                      className="relative overflow-hidden bg-[#0e0f1e]/95 backdrop-blur-md border border-white/10 py-3.5 px-6 shadow-xl transition-colors duration-300 group-hover:border-secondary/40"
+                      className="relative overflow-hidden bg-[#0e0f1e]/95 backdrop-blur-md border border-white/10 py-3 sm:py-3.5 px-4 sm:px-6 shadow-xl transition-colors duration-300 group-hover:border-secondary/40"
                       style={{
                         clipPath:
-                          'polygon(18px 0%, 100% 0%, calc(100% - 18px) 100%, 0% 100%)',
+                          'polygon(clamp(12px, 3.5vw, 18px) 0%, 100% 0%, calc(100% - clamp(12px, 3.5vw, 18px)) 100%, 0% 100%)',
                       }}
                     >
                       {/* Bottom glowing brand accent line */}

@@ -4,7 +4,7 @@ import Container from '@/components/ui/Container';
 
 export default function AboutHero() {
   return (
-    <section className="relative min-h-[85vh] lg:min-h-[92vh] w-full overflow-hidden bg-ink flex flex-col justify-end pt-28 pb-12 md:pb-16 border-b border-(--line)">
+    <section className="relative min-h-[85svh] lg:min-h-[92vh] w-full overflow-hidden bg-ink flex flex-col justify-end pt-24 sm:pt-28 pb-10 sm:pb-12 md:pb-16 border-b border-(--line)">
       {/* ── Ambient background glows ── */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[45rem] h-[45rem] rounded-full bg-radial-glow from-primary/15 via-secondary/10 to-transparent blur-3xl opacity-80" />
@@ -46,7 +46,7 @@ export default function AboutHero() {
                 <Sparkles className="w-3.5 h-3.5 text-secondary animate-pulse" />
                 <span>Strategic, bold, and built to connect</span>
               </div>
-              <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold leading-[1.05] tracking-tight text-paper">
+              <h1 className="font-display text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold leading-[1.05] tracking-tight text-paper">
                 Product
                 <br />
                 Designer
@@ -62,17 +62,17 @@ export default function AboutHero() {
                 with intelligent systems. Based in Nigeria, working globally.
               </p>
 
-              <div className="flex flex-wrap items-center gap-3">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
                 <Link
                   href="/contact"
-                  className="btn-glow inline-flex items-center gap-3 rounded-full bg-primary hover:bg-primary/90 text-white px-7 py-3 text-sm font-medium transition-all group shadow-lg shadow-primary/20"
+                  className="btn-glow inline-flex items-center justify-center gap-3 rounded-full bg-primary hover:bg-primary/90 text-white px-7 py-3 text-sm font-semibold transition-all group shadow-lg shadow-primary/20 text-center"
                 >
-                  Start a Project
+                  <span>Start a Project</span>
                   <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
                 </Link>
                 <Link
                   href="/projects"
-                  className="glass inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-medium text-paper hover:text-secondary transition-colors"
+                  className="glass inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-paper hover:text-secondary transition-colors text-center"
                 >
                   View Work
                 </Link>

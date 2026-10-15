@@ -41,20 +41,20 @@ export default function FinalCTA() {
           <div className="glass-strong rounded-2xl overflow-hidden">
             <div className="grid grid-cols-1 md:grid-cols-2 items-center">
               {/* Left: copy + CTA */}
-              <div className="p-10 md:p-14 lg:p-16 order-2 md:order-1">
+              <div className="p-6 sm:p-10 md:p-14 lg:p-16 order-2 md:order-1">
                 <p className="font-mono-tight text-xs uppercase tracking-[0.25em] text-secondary mb-3">
                   Start a project
                 </p>
-                <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-semibold mb-4 text-paper">
+                <h2 className="font-display text-2xl sm:text-4xl lg:text-5xl font-semibold mb-4 text-paper">
                   Ready to Build{' '}
                   <span className="gradient-text">Something Great?</span>
                 </h2>
-                <p className="text-mist-1 text-lg mb-8 max-w-md">
+                <p className="text-mist-1 text-base sm:text-lg mb-8 max-w-md leading-relaxed">
                   Let&apos;s turn your idea into a digital solution that works.
                 </p>
                 <Link
                   href="/contact"
-                  className="btn-glow inline-flex items-center gap-2 rounded-lg bg-primary px-8 py-3 text-sm font-medium text-paper transition-all hover:bg-primary/80"
+                  className="btn-glow inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-7 py-3.5 text-sm font-semibold text-paper transition-all hover:bg-primary/80 w-full sm:w-auto text-center"
                 >
                   Start Your Project
                   <ArrowRight className="h-4 w-4" />
@@ -62,7 +62,7 @@ export default function FinalCTA() {
               </div>
 
               {/* Right: image + glow */}
-              <div className="relative h-80 md:h-full md:min-h-[480px] order-1 md:order-2 overflow-hidden bg-gradient-to-br from-primary/10 via-transparent to-secondary/10">
+              <div className="relative h-64 sm:h-80 md:h-full md:min-h-[480px] order-1 md:order-2 overflow-hidden bg-gradient-to-br from-primary/10 via-transparent to-secondary/10">
                 {/* Background glow orb */}
                 <div
                   className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 md:w-80 md:h-80 rounded-full opacity-50 blur-3xl"
