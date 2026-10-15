@@ -9,6 +9,7 @@ import {
   logVisitorActivity,
   parseUserAgent,
 } from '@/lib/data/visitor-logs';
+import { resolveIpAddress } from '@/lib/data/ip-geo';
 import type { VisitorLog, VisitorStats, VisitorLogFilter, VisitorEventType } from '@/types/visitor-log';
 
 export async function recordVisitorEventAction(entry: {
@@ -29,20 +30,56 @@ export async function recordVisitorEventAction(entry: {
     const headersList = await headers();
     const ua = headersList.get('user-agent') || '';
     const forwardedFor = headersList.get('x-forwarded-for') || '';
-    const ip = forwardedFor.split(',')[0].trim() || headersList.get('x-real-ip') || '127.0.0.1';
-    const country = headersList.get('cf-ipcountry') || headersList.get('x-vercel-ip-country') || 'Local';
-    const city = headersList.get('cf-ipcity') || headersList.get('x-vercel-ip-city') || '';
+    const rawIp = forwardedFor.split(',')[0].trim() || headersList.get('x-real-ip') || '127.0.0.1';
+    const headerCountry = headersList.get('cf-ipcountry') || headersList.get('x-vercel-ip-country') || 'Local';
+    const headerCity = headersList.get('cf-ipcity') || headersList.get('x-vercel-ip-city') || '';
 
     const { device_type, browser, os } = parseUserAgent(ua);
+
+    // Resolve comprehensive physical address, ISP, coordinates, and network location
+    // If client provided pre-cached geo (e.g. from client IP lookup in localhost), use it as fallback
+    const clientGeo = entry.metadata?.client_geo;
+    const geo = await resolveIpAddress(rawIp, {
+      country: clientGeo?.country || headerCountry,
+      city: clientGeo?.city || headerCity,
+    });
+
+    const finalIp = clientGeo?.ip && rawIp === '127.0.0.1' ? clientGeo.ip : geo.ip || rawIp;
+    const finalCountry = geo.country && geo.country !== 'Unknown Country' && geo.country !== 'Local Development'
+      ? geo.country
+      : clientGeo?.country || headerCountry;
+    const finalCity = geo.city || clientGeo?.city || headerCity;
+    const finalRegion = geo.region || clientGeo?.region || '';
+    const finalPostalCode = geo.postal_code || clientGeo?.postal_code || '';
+    const finalFormattedAddress = geo.formatted_address || clientGeo?.formatted_address;
+    const finalLatitude = geo.latitude ?? clientGeo?.latitude;
+    const finalLongitude = geo.longitude ?? clientGeo?.longitude;
+    const finalMapsUrl = geo.maps_url || clientGeo?.maps_url;
+    const finalIsp = geo.isp || clientGeo?.isp || '';
+    const finalOrganization = geo.organization || clientGeo?.organization || '';
+    const finalTimezone = geo.timezone || clientGeo?.timezone || '';
+    const finalCountryCode = geo.country_code || clientGeo?.country_code || '';
+    const finalCountryFlag = geo.country_flag || clientGeo?.country_flag;
 
     return await logVisitorActivity({
       ...entry,
       device_type,
       browser,
       os,
-      ip_address: ip,
-      country,
-      city,
+      ip_address: finalIp,
+      country: finalCountry,
+      country_code: finalCountryCode,
+      country_flag: finalCountryFlag,
+      city: finalCity,
+      region: finalRegion,
+      postal_code: finalPostalCode,
+      formatted_address: finalFormattedAddress,
+      latitude: finalLatitude,
+      longitude: finalLongitude,
+      maps_url: finalMapsUrl,
+      isp: finalIsp,
+      organization: finalOrganization,
+      timezone: finalTimezone,
     });
   } catch (err: any) {
     console.error('Error in recordVisitorEventAction:', err);

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { logVisitorActivity } from '@/lib/data/visitor-logs';
+import { resolveIpAddress } from '@/lib/data/ip-geo';
 import type { DeviceType, VisitorEventType } from '@/types/visitor-log';
 
 function parseUserAgent(uaString: string): {
@@ -46,7 +47,6 @@ export async function POST(req: NextRequest) {
     if (contentType.includes('application/json')) {
       body = await req.json();
     } else {
-      // Beacon sent as text/plain or raw
       const rawText = await req.text();
       try {
         body = JSON.parse(rawText);
@@ -70,21 +70,45 @@ export async function POST(req: NextRequest) {
 
     // IP Extraction
     const forwardedFor = req.headers.get('x-forwarded-for') || '';
-    const ip = forwardedFor.split(',')[0].trim() || req.headers.get('x-real-ip') || '127.0.0.1';
+    const rawIp = forwardedFor.split(',')[0].trim() || req.headers.get('x-real-ip') || '127.0.0.1';
 
-    // Geo Extraction
-    const country =
+    // Geo Extraction from headers
+    const headerCountry =
       req.headers.get('cf-ipcountry') ||
       req.headers.get('x-vercel-ip-country') ||
       req.headers.get('geoip-country-code') ||
       body.country ||
       'Local';
 
-    const city =
+    const headerCity =
       req.headers.get('cf-ipcity') ||
       req.headers.get('x-vercel-ip-city') ||
       body.city ||
       '';
+
+    const clientGeo = body.metadata?.client_geo;
+    const geo = await resolveIpAddress(rawIp, {
+      country: clientGeo?.country || headerCountry,
+      city: clientGeo?.city || headerCity,
+    });
+
+    const finalIp = clientGeo?.ip && rawIp === '127.0.0.1' ? clientGeo.ip : geo.ip || rawIp;
+    const finalCountry =
+      geo.country && geo.country !== 'Unknown Country' && geo.country !== 'Local Development'
+        ? geo.country
+        : clientGeo?.country || headerCountry;
+    const finalCity = geo.city || clientGeo?.city || headerCity;
+    const finalRegion = geo.region || clientGeo?.region || '';
+    const finalPostalCode = geo.postal_code || clientGeo?.postal_code || '';
+    const finalFormattedAddress = geo.formatted_address || clientGeo?.formatted_address;
+    const finalLatitude = geo.latitude ?? clientGeo?.latitude;
+    const finalLongitude = geo.longitude ?? clientGeo?.longitude;
+    const finalMapsUrl = geo.maps_url || clientGeo?.maps_url;
+    const finalIsp = geo.isp || clientGeo?.isp || '';
+    const finalOrganization = geo.organization || clientGeo?.organization || '';
+    const finalTimezone = geo.timezone || clientGeo?.timezone || '';
+    const finalCountryCode = geo.country_code || clientGeo?.country_code || '';
+    const finalCountryFlag = geo.country_flag || clientGeo?.country_flag;
 
     const session_id = String(body.session_id || `s_${Date.now()}`);
     const visitor_id = String(body.visitor_id || `v_${Date.now()}`);
@@ -106,9 +130,20 @@ export async function POST(req: NextRequest) {
       device_type: body.device_type || device_type,
       browser,
       os,
-      ip_address: ip,
-      country,
-      city,
+      ip_address: finalIp,
+      country: finalCountry,
+      country_code: finalCountryCode,
+      country_flag: finalCountryFlag,
+      city: finalCity,
+      region: finalRegion,
+      postal_code: finalPostalCode,
+      formatted_address: finalFormattedAddress,
+      latitude: finalLatitude,
+      longitude: finalLongitude,
+      maps_url: finalMapsUrl,
+      isp: finalIsp,
+      organization: finalOrganization,
+      timezone: finalTimezone,
     });
 
     return NextResponse.json({ ok: true });
@@ -117,4 +152,3 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, error: err?.message }, { status: 500 });
   }
 }
-

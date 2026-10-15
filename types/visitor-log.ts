@@ -10,6 +10,26 @@ export type VisitorEventType =
 
 export type DeviceType = 'desktop' | 'mobile' | 'tablet' | 'unknown';
 
+export interface VisitorGeoAddress {
+  ip?: string;
+  country?: string;
+  country_code?: string;
+  country_flag?: string;
+  region?: string;
+  region_code?: string;
+  city?: string;
+  postal_code?: string;
+  formatted_address?: string;
+  latitude?: number;
+  longitude?: number;
+  maps_url?: string;
+  isp?: string;
+  organization?: string;
+  asn?: string;
+  timezone?: string;
+  currency?: string;
+}
+
 export interface VisitorLog {
   id: string;
   session_id: string;
@@ -25,7 +45,18 @@ export interface VisitorLog {
   os?: string;
   ip_address?: string;
   country?: string;
+  country_code?: string;
+  country_flag?: string;
   city?: string;
+  region?: string;
+  postal_code?: string;
+  formatted_address?: string;
+  latitude?: number;
+  longitude?: number;
+  maps_url?: string;
+  isp?: string;
+  organization?: string;
+  timezone?: string;
   created_at: string;
 }
 
@@ -37,6 +68,8 @@ export interface VisitorStats {
   top_pages: { path: string; count: number }[];
   device_breakdown: { desktop: number; mobile: number; tablet: number };
   top_actions: { action: string; count: number }[];
+  top_locations?: { location: string; count: number; flag?: string }[];
+  top_isps?: { isp: string; count: number }[];
   is_table_missing?: boolean;
 }
 
@@ -46,4 +79,3 @@ export interface VisitorLogFilter {
   device_type?: string;
   limit?: number;
 }
-

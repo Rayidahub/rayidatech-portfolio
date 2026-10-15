@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { createClient } from '@/lib/supabase/server';
 import type { VisitorLog, VisitorStats, VisitorLogFilter, DeviceType } from '@/types/visitor-log';
+import { getCountryFlag, buildFormattedAddress } from '@/lib/data/ip-geo';
 
 const MAX_LOCAL_LOGS = 500;
 
@@ -41,7 +42,6 @@ function writeLocalLogs(logs: VisitorLog[]): void {
     const trimmed = logs.slice(0, MAX_LOCAL_LOGS);
     fs.writeFileSync(filePath, JSON.stringify(trimmed, null, 2), 'utf-8');
   } catch (err) {
-    // If writing to default fails, attempt writing to /tmp
     try {
       const tmpPath = path.join('/tmp', 'visitor-logs.json');
       const trimmed = logs.slice(0, MAX_LOCAL_LOGS);
@@ -88,16 +88,118 @@ export function parseUserAgent(uaString: string): {
   return { device_type, browser, os };
 }
 
+function normalizeLog(log: VisitorLog): VisitorLog {
+  const metaAddr = log.metadata?.address || {};
+  const region = log.region || metaAddr.region || '';
+  const postal_code = log.postal_code || metaAddr.postal_code || '';
+  const country = log.country || metaAddr.country || 'Global';
+  const city = log.city || metaAddr.city || '';
+  const country_code = log.country_code || metaAddr.country_code || '';
+  const country_flag = log.country_flag || metaAddr.country_flag || getCountryFlag(country_code);
+  const formatted_address =
+    log.formatted_address ||
+    metaAddr.formatted_address ||
+    buildFormattedAddress({ city, region, postal_code, country });
+  const latitude = log.latitude ?? metaAddr.latitude;
+  const longitude = log.longitude ?? metaAddr.longitude;
+  const maps_url =
+    log.maps_url ||
+    metaAddr.maps_url ||
+    (latitude !== undefined && longitude !== undefined
+      ? `https://www.google.com/maps?q=${latitude},${longitude}`
+      : undefined);
+  const isp = log.isp || metaAddr.isp || '';
+  const organization = log.organization || metaAddr.organization || '';
+  const timezone = log.timezone || metaAddr.timezone || '';
+
+  return {
+    ...log,
+    region,
+    postal_code,
+    country,
+    country_code,
+    country_flag,
+    city,
+    formatted_address,
+    latitude,
+    longitude,
+    maps_url,
+    isp,
+    organization,
+    timezone,
+  };
+}
+
 export async function logVisitorActivity(
   entry: Omit<VisitorLog, 'id' | 'created_at'>
 ): Promise<{ success: boolean; id?: string; error?: string }> {
+  const metaAddr = entry.metadata?.address || {};
+  const country = entry.country || metaAddr.country || 'Global';
+  const city = entry.city || metaAddr.city || '';
+  const region = entry.region || metaAddr.region || '';
+  const postal_code = entry.postal_code || metaAddr.postal_code || '';
+  const country_code = entry.country_code || metaAddr.country_code || '';
+  const country_flag = entry.country_flag || metaAddr.country_flag || getCountryFlag(country_code);
+  const formatted_address =
+    entry.formatted_address ||
+    metaAddr.formatted_address ||
+    buildFormattedAddress({ city, region, postal_code, country });
+  const latitude = entry.latitude ?? metaAddr.latitude;
+  const longitude = entry.longitude ?? metaAddr.longitude;
+  const maps_url =
+    entry.maps_url ||
+    metaAddr.maps_url ||
+    (latitude !== undefined && longitude !== undefined
+      ? `https://www.google.com/maps?q=${latitude},${longitude}`
+      : undefined);
+  const isp = entry.isp || metaAddr.isp || '';
+  const organization = entry.organization || metaAddr.organization || '';
+  const timezone = entry.timezone || metaAddr.timezone || '';
+
+  const enrichedMetadata = {
+    ...(entry.metadata || {}),
+    address: {
+      ...(entry.metadata?.address || {}),
+      formatted_address,
+      city,
+      region,
+      postal_code,
+      country,
+      country_code,
+      country_flag,
+      latitude,
+      longitude,
+      maps_url,
+      isp,
+      organization,
+      timezone,
+    },
+  };
+
   const newLog: VisitorLog = {
     ...entry,
-    id: typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : `log_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`,
+    country,
+    country_code,
+    country_flag,
+    city,
+    region,
+    postal_code,
+    formatted_address,
+    latitude,
+    longitude,
+    maps_url,
+    isp,
+    organization,
+    timezone,
+    metadata: enrichedMetadata,
+    id:
+      typeof crypto !== 'undefined' && crypto.randomUUID
+        ? crypto.randomUUID()
+        : `log_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`,
     created_at: new Date().toISOString(),
   };
 
-  // 1. Prepend to local JSON
+  // 1. Prepend to local JSON storage
   const currentLogs = readLocalLogs();
   currentLogs.unshift(newLog);
   writeLocalLogs(currentLogs);
@@ -105,30 +207,74 @@ export async function logVisitorActivity(
   // 2. Insert to Supabase if available
   try {
     const supabase = await createClient();
+
+    // Try full insert with address columns
+    const fullPayload: Record<string, any> = {
+      session_id: newLog.session_id,
+      visitor_id: newLog.visitor_id,
+      event_type: newLog.event_type,
+      path: newLog.path,
+      page_title: newLog.page_title,
+      referrer: newLog.referrer,
+      action_label: newLog.action_label,
+      metadata: newLog.metadata,
+      device_type: newLog.device_type,
+      browser: newLog.browser,
+      os: newLog.os,
+      ip_address: newLog.ip_address,
+      country: newLog.country,
+      city: newLog.city,
+      region: newLog.region,
+      postal_code: newLog.postal_code,
+      formatted_address: newLog.formatted_address,
+      latitude: newLog.latitude,
+      longitude: newLog.longitude,
+      isp: newLog.isp,
+      organization: newLog.organization,
+      timezone: newLog.timezone,
+      country_code: newLog.country_code,
+      created_at: newLog.created_at,
+    };
+
     const { data, error } = await supabase
       .from('visitor_logs')
-      .insert({
-        session_id: newLog.session_id,
-        visitor_id: newLog.visitor_id,
-        event_type: newLog.event_type,
-        path: newLog.path,
-        page_title: newLog.page_title,
-        referrer: newLog.referrer,
-        action_label: newLog.action_label,
-        metadata: newLog.metadata || {},
-        device_type: newLog.device_type,
-        browser: newLog.browser,
-        os: newLog.os,
-        ip_address: newLog.ip_address,
-        country: newLog.country,
-        city: newLog.city,
-        created_at: newLog.created_at,
-      })
+      .insert(fullPayload)
       .select('id')
       .maybeSingle();
 
     if (error) {
-      console.warn('Supabase visitor_logs insert notice:', error.code, error.message);
+      // If error is due to missing new columns in Supabase, fall back to base columns
+      if (error.message?.includes('column') || error.code === '42703') {
+        const basePayload = {
+          session_id: newLog.session_id,
+          visitor_id: newLog.visitor_id,
+          event_type: newLog.event_type,
+          path: newLog.path,
+          page_title: newLog.page_title,
+          referrer: newLog.referrer,
+          action_label: newLog.action_label,
+          metadata: newLog.metadata, // Contains complete address object
+          device_type: newLog.device_type,
+          browser: newLog.browser,
+          os: newLog.os,
+          ip_address: newLog.ip_address,
+          country: newLog.country,
+          city: newLog.city,
+          created_at: newLog.created_at,
+        };
+
+        const fallbackInsert = await supabase
+          .from('visitor_logs')
+          .insert(basePayload)
+          .select('id')
+          .maybeSingle();
+
+        if (fallbackInsert.data?.id) {
+          newLog.id = fallbackInsert.data.id;
+        }
+      } else {
+        console.warn('Supabase visitor_logs insert notice:', error.code, error.message);
+      }
     } else if (data?.id) {
       newLog.id = data.id;
     }
@@ -162,19 +308,21 @@ export async function getVisitorLogs(
 
     if (filter?.search) {
       const term = `%${filter.search}%`;
-      query = query.or(`path.ilike.${term},action_label.ilike.${term},browser.ilike.${term},os.ilike.${term},visitor_id.ilike.${term}`);
+      query = query.or(
+        `path.ilike.${term},action_label.ilike.${term},browser.ilike.${term},os.ilike.${term},visitor_id.ilike.${term},ip_address.ilike.${term},city.ilike.${term},country.ilike.${term}`
+      );
     }
 
     const { data, error } = await query;
     if (!error && data && data.length > 0) {
-      return data as VisitorLog[];
+      return (data as VisitorLog[]).map(normalizeLog);
     }
   } catch {
     // Fall back to local
   }
 
   // Local fallback filtering
-  let logs = readLocalLogs();
+  let logs = readLocalLogs().map(normalizeLog);
 
   if (filter?.event_type && filter.event_type !== 'all') {
     logs = logs.filter((l) => l.event_type === filter.event_type);
@@ -192,7 +340,14 @@ export async function getVisitorLogs(
         (l.action_label && l.action_label.toLowerCase().includes(q)) ||
         (l.browser && l.browser.toLowerCase().includes(q)) ||
         (l.os && l.os.toLowerCase().includes(q)) ||
-        (l.visitor_id && l.visitor_id.toLowerCase().includes(q))
+        (l.visitor_id && l.visitor_id.toLowerCase().includes(q)) ||
+        (l.ip_address && l.ip_address.toLowerCase().includes(q)) ||
+        (l.country && l.country.toLowerCase().includes(q)) ||
+        (l.city && l.city.toLowerCase().includes(q)) ||
+        (l.region && l.region.toLowerCase().includes(q)) ||
+        (l.postal_code && l.postal_code.toLowerCase().includes(q)) ||
+        (l.formatted_address && l.formatted_address.toLowerCase().includes(q)) ||
+        (l.isp && l.isp.toLowerCase().includes(q))
     );
   }
 
@@ -234,6 +389,8 @@ export async function getVisitorStats(): Promise<VisitorStats> {
   const todaySessionSet = new Set<string>();
   const pageCountMap: Record<string, number> = {};
   const actionCountMap: Record<string, number> = {};
+  const locationCountMap: Record<string, { count: number; flag?: string }> = {};
+  const ispCountMap: Record<string, number> = {};
   const deviceCounts = { desktop: 0, mobile: 0, tablet: 0 };
 
   const todayStr = new Date().toISOString().slice(0, 10);
@@ -253,6 +410,23 @@ export async function getVisitorStats(): Promise<VisitorStats> {
       actionCountMap[log.action_label] = (actionCountMap[log.action_label] || 0) + 1;
     }
 
+    // Location aggregation
+    const locLabel =
+      log.city && log.country
+        ? `${log.city}, ${log.country}`
+        : log.country || 'Global';
+    if (locLabel && locLabel !== 'Local Development Network') {
+      if (!locationCountMap[locLabel]) {
+        locationCountMap[locLabel] = { count: 0, flag: log.country_flag };
+      }
+      locationCountMap[locLabel].count++;
+    }
+
+    // ISP aggregation
+    if (log.isp && !log.isp.toLowerCase().includes('loopback')) {
+      ispCountMap[log.isp] = (ispCountMap[log.isp] || 0) + 1;
+    }
+
     const device = (log.device_type || 'desktop').toLowerCase();
     if (device === 'mobile') deviceCounts.mobile++;
     else if (device === 'tablet') deviceCounts.tablet++;
@@ -269,6 +443,16 @@ export async function getVisitorStats(): Promise<VisitorStats> {
     .sort((a, b) => b.count - a.count)
     .slice(0, 5);
 
+  const topLocations = Object.entries(locationCountMap)
+    .map(([location, data]) => ({ location, count: data.count, flag: data.flag }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 5);
+
+  const topIsps = Object.entries(ispCountMap)
+    .map(([isp, count]) => ({ isp, count }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 5);
+
   return {
     total_events: totalEvents,
     total_page_views: pageViews,
@@ -277,6 +461,8 @@ export async function getVisitorStats(): Promise<VisitorStats> {
     top_pages: topPages,
     device_breakdown: deviceCounts,
     top_actions: topActions,
+    top_locations: topLocations,
+    top_isps: topIsps,
     is_table_missing: isTableMissing,
   };
 }
