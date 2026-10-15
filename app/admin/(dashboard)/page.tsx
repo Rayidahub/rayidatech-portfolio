@@ -13,18 +13,21 @@ import {
   UserCheck,
   ArrowRight,
   Sparkles,
+  Activity,
 } from 'lucide-react'
 import { ROLE_DEFINITIONS } from '@/types/admin-user'
 import { getSiteSettings } from '@/lib/data/site-settings'
+import { getVisitorStats } from '@/lib/data/visitor-logs'
 import QuickThemeCard from '@/components/admin/QuickThemeCard'
 
 export const dynamic = 'force-dynamic'
 
 export default async function AdminDashboard() {
-  const [currentUser, supabase, siteSettings] = await Promise.all([
+  const [currentUser, supabase, siteSettings, visitorStats] = await Promise.all([
     getCurrentAdminUser(),
     createClient(),
     getSiteSettings(),
+    getVisitorStats(),
   ])
 
   const [
@@ -44,6 +47,14 @@ export default async function AdminDashboard() {
   ])
 
   const allCards = [
+    {
+      label: 'Visitor Activity',
+      value: visitorStats.total_events,
+      icon: Activity,
+      href: '/admin/logs',
+      permission: 'dashboard' as const,
+      description: `${visitorStats.unique_visitors} unique visitors tracked`,
+    },
     {
       label: 'Projects',
       value: projectCount ?? 0,

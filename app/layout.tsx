@@ -1,8 +1,9 @@
-// app/layout.tsx
+import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { Inter, Geist, Geist_Mono } from 'next/font/google';
 import { getBaseUrl } from '@/lib/url';
 import { getSiteSettings } from '@/lib/data/site-settings';
+import ActivityTracker from '@/components/analytics/ActivityTracker';
 import './globals.css';
 
 const inter = Inter({
@@ -94,6 +95,9 @@ export default async function RootLayout({
           }}
         />
 
+        <Suspense fallback={null}>
+          <ActivityTracker />
+        </Suspense>
         {children}
       </body>
     </html>

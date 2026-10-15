@@ -12,7 +12,8 @@ export type AdminPermission =
   | 'testimonials'
   | 'team'
   | 'contacts'
-  | 'users';
+  | 'users'
+  | 'logs';
 
 export interface AdminUser {
   id: string;
@@ -82,6 +83,12 @@ export const CONTENT_PERMISSIONS: PermissionDefinition[] = [
     label: 'Contact Inquiries',
     description: 'Review messages, client inquiries, and contact settings',
     path: '/admin/contacts',
+  },
+  {
+    id: 'logs',
+    label: 'User Activity Logs',
+    description: 'Monitor real-time website visitor activity, page visits, and user interactions',
+    path: '/admin/logs',
   },
 ];
 
