@@ -66,7 +66,7 @@ export default function PremiumCard({
 
   return (
     <div
-      className={`group relative w-full h-[620px] overflow-hidden rounded-[32px] bg-ink shrink-0 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[0.98] ${className}`}
+      className={`group relative w-full h-[620px] overflow-hidden rounded-[32px] bg-ink shrink-0 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[0.98] border border-(--line) shadow-lg hover:shadow-2xl hover:border-primary/40 ${className}`}
     >
       {/* Background image — shared across both states */}
       <Image
@@ -82,49 +82,54 @@ export default function PremiumCard({
         className="absolute inset-0 flex flex-col justify-end transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:opacity-0 group-hover:pointer-events-none"
         style={{ transitionTimingFunction: easeOutExpo }}
       >
-        {/* Bottom gradient */}
-        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black via-black/60 to-transparent" />
+        {/* Bottom shadow gradient — deep & high contrast so text is always crisp */}
+        <div
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-black/95 via-black/75 to-transparent"
+          aria-hidden="true"
+        />
 
         {/* Top-left badge */}
-        <div className="absolute top-4 left-4 glass-strong text-paper rounded-full px-3 py-1 text-xs font-medium">
+        <div className="absolute top-4 left-4 glass-strong text-paper rounded-full px-3.5 py-1.5 text-xs font-medium shadow-md border border-(--line)">
           {badge}
         </div>
 
         {/* Pagination dots */}
         <div className="absolute bottom-28 left-1/2 -translate-x-1/2 flex items-center gap-1.5">
-          <span className="w-1.5 h-1.5 rounded-full bg-paper/80" />
-          <span className="w-1 h-1 rounded-full bg-paper/40" />
-          <span className="w-1 h-1 rounded-full bg-paper/40" />
+          <span className="w-1.5 h-1.5 rounded-full bg-white/90 shadow-sm" />
+          <span className="w-1 h-1 rounded-full bg-white/40" />
+          <span className="w-1 h-1 rounded-full bg-white/40" />
         </div>
 
-        {/* Main info */}
-        <div className="absolute bottom-14 inset-x-6 flex items-end justify-between gap-4">
-          <div className="min-w-0">
-            <h3 className="text-paper text-lg font-semibold leading-tight truncate">
+        {/* Main info — Project title & Subtitle placed cleanly in the bottom shadow part */}
+        <div className="relative z-10 bottom-14 inset-x-0 px-6 flex items-end justify-between gap-4">
+          <div className="min-w-0 flex-1">
+            <h3 className="text-white font-display text-xl sm:text-2xl font-bold leading-tight truncate drop-shadow-md tracking-tight">
               {title}
             </h3>
             {subtitle && (
-              <p className="text-paper/70 text-sm mt-0.5 truncate">{subtitle}</p>
+              <p className="text-white/80 text-sm mt-1 truncate font-medium drop-shadow-sm">
+                {subtitle}
+              </p>
             )}
           </div>
           {primaryMetric && (
-            <span className="text-paper/90 text-sm font-medium whitespace-nowrap">
+            <span className="text-secondary font-mono-tight text-sm font-semibold whitespace-nowrap drop-shadow-sm pb-0.5">
               {primaryMetric}
             </span>
           )}
         </div>
 
         {/* Bottom metadata row */}
-        <div className="absolute bottom-4 inset-x-6 flex items-center gap-3 text-xs text-paper/70">
+        <div className="relative z-10 bottom-4 inset-x-0 px-6 flex items-center gap-3 text-xs text-white/80 font-mono-tight">
           {bottomSpecs.map((spec, i) => {
             const { icon, label } = normalizeSpec(spec);
             return (
               <span key={i} className="flex items-center gap-1.5 truncate">
                 {i > 0 && (
-                  <span className="inline-block w-px h-3 bg-paper/20 mr-1.5" />
+                  <span className="inline-block w-px h-3 bg-white/25 mr-1.5" />
                 )}
-                {icon && <span className="shrink-0">{icon}</span>}
-                <span>{label}</span>
+                {icon && <span className="shrink-0 text-secondary">{icon}</span>}
+                <span className="truncate text-white/85">{label}</span>
               </span>
             );
           })}
@@ -133,7 +138,7 @@ export default function PremiumCard({
 
       {/* ── LAYER: Hover state — glass bottom sheet ── */}
       <div
-        className="absolute inset-x-0 bottom-0 h-[72%] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] bg-ink/80 backdrop-blur-xl border-t border-(--line) rounded-t-[32px] flex flex-col p-6"
+        className="absolute inset-x-0 bottom-0 h-[72%] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] bg-ink/90 backdrop-blur-xl border-t border-(--line) rounded-t-[32px] flex flex-col p-6 shadow-2xl"
         style={{ transitionTimingFunction: easeOutExpo }}
       >
         {/* Capsule badge */}
@@ -143,7 +148,7 @@ export default function PremiumCard({
         </div>
 
         {/* Title */}
-        <h3 className="text-paper text-xl font-semibold leading-tight mt-4 opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 delay-150 ease-[cubic-bezier(0.16,1,0.3,1)]">
+        <h3 className="text-paper font-display text-xl sm:text-2xl font-bold leading-tight mt-4 opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 delay-150 ease-[cubic-bezier(0.16,1,0.3,1)]">
           {title}
         </h3>
 
@@ -161,11 +166,11 @@ export default function PremiumCard({
             <div
               key={i}
               className={`flex items-center gap-2 flex-1 ${
-                i < hoverMetrics.length - 1 ? 'border-r border-(--line-strong)' : ''
+                i < hoverMetrics.length - 1 ? 'border-r border-(--line)' : ''
               }`}
             >
               <span className="text-secondary shrink-0">{metric.icon}</span>
-              <span className="text-xs text-mist-1 truncate">{metric.label}</span>
+              <span className="text-xs text-mist-1 truncate font-mono-tight">{metric.label}</span>
             </div>
           ))}
         </div>
@@ -189,7 +194,7 @@ export default function PremiumCard({
 
         {/* CTA */}
         <div className="pt-4 opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 delay-[350ms] ease-[cubic-bezier(0.16,1,0.3,1)]">
-          <div className="w-full bg-primary text-paper text-sm font-medium rounded-full py-3 text-center transition-colors duration-200 group-hover:bg-primary/90">
+          <div className="w-full bg-primary text-white text-sm font-medium rounded-full py-3 text-center transition-all duration-200 group-hover:brightness-110 shadow-md shadow-primary/20">
             {ctaLabel}
           </div>
         </div>
