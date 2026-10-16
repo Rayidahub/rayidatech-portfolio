@@ -4,12 +4,13 @@ import { Plus, Edit, ExternalLink, Settings, BookOpen } from 'lucide-react';
 import DeleteButton from './DeleteButton';
 import SeedBlogButton from './SeedBlogButton';
 import BlogImportButton from './BlogImportButton';
+import BlogThumbnailCell from './BlogThumbnailCell';
 
 export default async function AdminBlog() {
   const supabase = await createClient();
   const { data: posts } = await supabase
     .from('posts')
-    .select('id, title, slug, published, created_at')
+    .select('id, title, slug, cover_image, published, created_at')
     .order('created_at', { ascending: false });
 
   const count = posts?.length || 0;
@@ -56,10 +57,11 @@ export default async function AdminBlog() {
         </div>
       </div>
 
-      <div className="glass rounded-xl overflow-hidden">
+      <div className="glass rounded-xl overflow-x-auto border border-(--line)">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-(--line)">
+            <tr className="border-b border-(--line) bg-white/[0.02]">
+              <th className="text-left text-mist-2 font-medium px-4 py-3 w-20 sm:w-24">Thumbnail</th>
               <th className="text-left text-mist-2 font-medium px-4 py-3">Title</th>
               <th className="text-left text-mist-2 font-medium px-4 py-3 hidden sm:table-cell">Slug</th>
               <th className="text-center text-mist-2 font-medium px-4 py-3 hidden md:table-cell">Published</th>
@@ -69,7 +71,7 @@ export default async function AdminBlog() {
           <tbody>
             {(!posts || posts.length === 0) && (
               <tr>
-                <td colSpan={4} className="text-center text-mist-2 px-4 py-12">
+                <td colSpan={5} className="text-center text-mist-2 px-4 py-12">
                   No posts yet.
                 </td>
               </tr>
@@ -79,8 +81,24 @@ export default async function AdminBlog() {
                 key={post.id}
                 className="border-b border-(--line) last:border-0 hover:bg-white/[0.02] transition-colors"
               >
-                <td className="px-4 py-3 text-paper font-medium">{post.title}</td>
-                <td className="px-4 py-3 text-mist-1 hidden sm:table-cell">{post.slug}</td>
+                <td className="px-4 py-2.5 w-20 sm:w-24">
+                  <BlogThumbnailCell
+                    id={post.id}
+                    title={post.title}
+                    coverImage={post.cover_image}
+                  />
+                </td>
+                <td className="px-4 py-3 text-paper font-medium">
+                  <Link
+                    href={`/admin/blog/${post.id}/edit`}
+                    className="hover:text-secondary transition-colors"
+                  >
+                    {post.title}
+                  </Link>
+                </td>
+                <td className="px-4 py-3 text-mist-1 hidden sm:table-cell font-mono-tight text-xs">
+                  {post.slug}
+                </td>
                 <td className="px-4 py-3 text-center hidden md:table-cell">
                   <span
                     className={`inline-block px-2 py-0.5 rounded text-xs font-medium ${
@@ -93,20 +111,24 @@ export default async function AdminBlog() {
                   </span>
                 </td>
                 <td className="px-4 py-3 text-right">
-                  <Link
-                    href={`/blog/${post.slug}`}
-                    target="_blank"
-                    className="inline-flex p-1.5 text-mist-2 hover:text-paper transition-colors"
-                  >
-                    <ExternalLink className="w-4 h-4" />
-                  </Link>
-                  <Link
-                    href={`/admin/blog/${post.id}/edit`}
-                    className="inline-flex p-1.5 text-mist-2 hover:text-secondary transition-colors"
-                  >
-                    <Edit className="w-4 h-4" />
-                  </Link>
-                  <DeleteButton id={post.id} title={post.title} />
+                  <div className="inline-flex items-center gap-1.5">
+                    <Link
+                      href={`/blog/${post.slug}`}
+                      target="_blank"
+                      className="p-1.5 text-mist-2 hover:text-paper transition-colors"
+                      title="View live article"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                    </Link>
+                    <Link
+                      href={`/admin/blog/${post.id}/edit`}
+                      className="p-1.5 text-mist-2 hover:text-secondary transition-colors"
+                      title="Edit article"
+                    >
+                      <Edit className="w-4 h-4" />
+                    </Link>
+                    <DeleteButton id={post.id} title={post.title} />
+                  </div>
                 </td>
               </tr>
             ))}
