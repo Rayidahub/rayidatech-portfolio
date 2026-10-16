@@ -17,6 +17,7 @@ import {
 import Container from '@/components/ui/Container';
 import GlassCard from '@/components/ui/GlassCard';
 import Reveal from '@/components/ui/Reveal';
+import MarkdownContent from '@/components/ui/MarkdownContent';
 import { getReadingTime } from '@/lib/reading-time';
 import type { Post } from '@/types/post';
 import type { BlogSettings } from '@/types/blog-settings';
@@ -110,74 +111,7 @@ export default function BlogPostClient({ post, relatedPosts, settings }: BlogPos
     window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank');
   };
 
-  // Render article content with clean typography
-  const renderFormattedContent = (content: string) => {
-    const sections = content.split('\n\n');
 
-    return sections.map((section, idx) => {
-      const trimmed = section.trim();
-
-      // Heading 2
-      if (trimmed.startsWith('## ')) {
-        return (
-          <h2
-            key={idx}
-            className="font-display text-2xl sm:text-3xl font-semibold text-paper mt-10 mb-4 tracking-tight"
-          >
-            {trimmed.replace(/^## /, '')}
-          </h2>
-        );
-      }
-
-      // Heading 3
-      if (trimmed.startsWith('### ')) {
-        return (
-          <h3
-            key={idx}
-            className="font-display text-xl sm:text-2xl font-semibold text-paper mt-8 mb-3"
-          >
-            {trimmed.replace(/^### /, '')}
-          </h3>
-        );
-      }
-
-      // Code blocks
-      if (trimmed.startsWith('```')) {
-        const lines = trimmed.split('\n');
-        const code = lines.slice(1, -1).join('\n');
-        return (
-          <pre
-            key={idx}
-            className="my-6 p-4 rounded-xl bg-black/60 border border-(--line) font-mono-tight text-xs sm:text-sm text-mist-1 overflow-x-auto leading-relaxed"
-          >
-            <code>{code}</code>
-          </pre>
-        );
-      }
-
-      // Bullet list items
-      if (trimmed.startsWith('- ') || trimmed.startsWith('1. ')) {
-        const items = trimmed.split('\n').map((l) => l.replace(/^[-*] |\d+\. /, ''));
-        return (
-          <ul key={idx} className="my-5 space-y-2.5 pl-2">
-            {items.map((item, itemIdx) => (
-              <li key={itemIdx} className="flex items-start gap-2.5 text-mist-1 leading-relaxed">
-                <span className="w-1.5 h-1.5 rounded-full bg-primary mt-2.5 shrink-0" />
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
-        );
-      }
-
-      // Standard Paragraph
-      return (
-        <p key={idx} className="my-4 text-mist-1 text-base sm:text-lg leading-relaxed">
-          {trimmed}
-        </p>
-      );
-    });
-  };
 
   return (
     <main className="relative min-h-screen pt-28 pb-24 overflow-hidden bg-ink">
@@ -271,9 +205,7 @@ export default function BlogPostClient({ post, relatedPosts, settings }: BlogPos
         {/* Article Body */}
         <Reveal className="mb-12">
           <GlassCard className="p-6 sm:p-10 md:p-12 border border-(--line)" hover={false}>
-            <div className="prose prose-invert max-w-none">
-              {renderFormattedContent(post.content)}
-            </div>
+            <MarkdownContent content={post.content} />
           </GlassCard>
         </Reveal>
 

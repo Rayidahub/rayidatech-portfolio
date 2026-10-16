@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 import { Plus, Edit, ExternalLink, Settings, BookOpen } from 'lucide-react';
 import DeleteButton from './DeleteButton';
 import SeedBlogButton from './SeedBlogButton';
+import BlogImportButton from './BlogImportButton';
 
 export default async function AdminBlog() {
   const supabase = await createClient();
@@ -24,6 +25,7 @@ export default async function AdminBlog() {
         </div>
 
         <div className="flex flex-wrap items-center gap-2.5">
+          <BlogImportButton />
           <SeedBlogButton />
 
           <Link
