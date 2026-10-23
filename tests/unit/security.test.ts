@@ -1,3 +1,4 @@
+import type React from 'react';
 import { describe, it, expect } from 'vitest';
 import { renderInlineMarkdown } from '@/components/ui/MarkdownContent';
 
