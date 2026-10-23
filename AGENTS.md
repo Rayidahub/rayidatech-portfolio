@@ -6,9 +6,13 @@ This file is auto-loaded at the start of every session. Read it before making an
 - Next.js 16.x, App Router, TypeScript, Tailwind CSS v4
 - React 19.x
 - Supabase (`@supabase/supabase-js`) — tables: `projects`, `posts`, `contacts`,
-  `testimonials`, `subscribers`, `hero_slides`, `services`, `ecosystem_products`
+  `testimonials`, `subscribers`, `hero_slides`, `services`, `ecosystem_products`,
+  `team_members`, `contact_settings`, `blog_settings`, `hero_settings`, `admin_users`,
+  `site_settings`, `visitor_logs`
 - Framer Motion for animation
 - lucide-react for icons
+- Vitest for automated unit testing
+- Playwright config for end-to-end testing
 
 **Do not trust claims about "breaking changes" or fake doc paths from old context.**
 If unsure about a current Next.js/React API (e.g. whether `params` in a dynamic
@@ -57,6 +61,8 @@ route is a Promise), verify against the real installed version in
   both `app/about/page.tsx` and `components/sections/Skills.tsx`. If the
   skills list changes, edit only this file.
 - `lib/reading-time.ts` — `getReadingTime(content)`, used on blog pages.
+- `lib/slug.ts` — `normalizeSlug(title)`, URL-safe slug generator.
+- `lib/email/index.ts` — Transactional email service (Resend REST API).
 
 ## Data fetching pattern
 - Server components fetch directly from Supabase (`lib/supabase/server.ts`),
@@ -72,52 +78,42 @@ route is a Promise), verify against the real installed version in
 
 ## What's done (do not rebuild from scratch — extend/fix, don't replace blindly)
 - Design tokens, fonts, Navbar, Footer
-- Home page: Hero, TrustBar, StatsBar, WhatWeDo, Services, WhyRayidaTech,
-  PortfolioTeaser, Testimonials, ComingSoon, FinalCTA
+- Home page: Hero, TrustBar, StatsBar, WhatWeDo, Services, ComingSoon, WhyRayidaTech,
+  Team, PortfolioTeaser, Testimonials, Newsletter, FinalCTA
 - About page fully rewritten — bio, journey timeline, approach, skills
   (grouped), beliefs, featured projects, certifications, and final CTA.
-  Uses Container, GlassCard, Reveal, brand tokens throughout. No teal
-  remaining. Build confirmed passing.
-- Project Detail page (moved from broken path, case-study layout)
-- Blog Detail page (reading time added)
-- Projects grid with filter pills (All/Featured/Fintech/Design — filters by
-  `featured` boolean and by tag string match, case-insensitive)
-- Blog list with client-side search
-- `subscribers` table migration (`database/migrations/002_subscribers.sql`)
-- Sample/test project seed data (`database/seed/sample_projects.sql`)
-- Contact page rebuilt in current design system — uses Container, GlassCard,
-  Reveal, StatusPill, WhatsApp link, gradient-text heading, violet/cyan
-  tokens. Form insert logic unchanged. Build confirmed passing.
-- Hero section rebuilt as split-screen layout — left text, right abstract
-  silhouette with violet/cyan glow. Uses font-display, gradient-text,
-  StatusPill, glass ornament, brand tokens throughout. No teal remaining.
-- Admin dashboard pages for Projects, Services, Blog, Hero Slides, Contacts,
-  Coming Soon, and Testimonials (list/create/edit/delete).
-- `ecosystem_products` table + seed data + admin CRUD; ComingSoon section
-  fetches from Supabase and supports `coming_soon` / `live` status and
-  `launch_date`.
-- `testimonials` table management migration (adds `is_active`, `sort_order`)
-  + seed data + admin CRUD; Testimonials section fetches from Supabase.
-- Subtle background variation across homepage sections (alternating
-  `bg-ink-deep`, dot patterns, radial glows, gradient lines).
+  Uses Container, GlassCard, Reveal, brand tokens throughout.
+- Project Detail page with full case-study layout (`app/(public)/projects/[slug]/page.tsx`).
+- Projects list page (`app/(public)/projects/page.tsx`) ported to violet/cyan tokens with filter pills and responsive grid.
+- Blog list (`app/(public)/blog/page.tsx`) with search, categories, and settings; Blog Detail page with reading time, table of contents, and rich Markdown reader.
+- Services list and individual service detail pages (`app/(public)/services/`, `[slug]`).
+- Dedicated Team page (`app/(public)/team/page.tsx`) with reference-inspired slanted card layout.
+- Contact page rebuilt in brand design system (`app/(public)/contact/page.tsx`) with Supabase insertion, WhatsApp direct link, and transactional auto-reply/alert trigger.
+- Generic branded 404 page (`app/not-found.tsx` & `app/(public)/not-found.tsx`).
+- Hero section split-screen layout with dynamic Supabase slides (`hero_slides`) and customizable settings (`hero_settings`).
+- ComingSoon section fetching from `ecosystem_products` with launch dates and status.
+- Services section dynamically fetching from Supabase `services` with curated fallbacks.
+- PortfolioTeaser dynamically fetching featured projects (`featured = true`) from Supabase.
+- Testimonials section fetching active testimonials (`testimonials`).
+- StatsBar with counter animation and dynamic data support.
+- Newsletter section with real-time validation, duplicate handling, and direct Supabase insertion.
+- Transactional email service (`lib/email/index.ts`, `POST /api/email/notify`) powered by Resend REST API — sends admin lead alerts, customer inquiry auto-replies, and newsletter welcome emails.
+- Admin dashboard pages: Projects, Services, Blog, Hero Slides, Contacts, Coming Soon, Testimonials, Subscribers, Team, Users, Logs, and Settings (full CRUD + CSV/XLSX batch imports).
+- Visitor telemetry & analytics (`app/admin/(dashboard)/logs/`) tracking ISP, location, and hardware telemetry.
+- Automated testing suite with Vitest (`npm test`) covering slugs, reading time, email dispatch simulation, and user-agent parsing.
+- Consolidated production database schema (`database/consolidated_schema_production.sql`) covering all 15 tables, indexes, RLS policies, and storage buckets.
+- Database verification CLI (`npm run db:verify`) to check table connectivity and row counts on live Supabase.
+- Clean Next.js 16 (Turbopack) builds with zero warnings across all 45 routes.
+- Security hardening: centralized admin authentication guard (`lib/supabase/auth-guard.ts`) across all mutating Server Actions; authenticated and folder-whitelisted `/api/upload` with SVG XSS sanitizer; strict theme whitelist in `layout.tsx`; HTTP security headers (CSP, HSTS, X-Frame-Options) in `next.config.ts`; IP sliding-window rate limiting & honeypot in `/api/email/notify`; Markdown `javascript:` URI neutralization in `MarkdownContent.tsx`; encrypted HTTPS telemetry via `ipwhois.app`; and `public.visitor_logs` RLS lockdown migration (`023_secure_visitor_logs_rls.sql`).
 
-## What's NOT done yet
-- Projects list page (`app/projects/page.tsx`) still has teal-era styling
-- `not-found.tsx` only mentions "Project Not Found" — should be generic
-- PortfolioTeaser section still hardcodes 3 projects; should pull featured
-  projects from Supabase like FeaturedProjects does
-- Services section still hardcodes the service list; admin CRUD exists but
-  the public section isn't wired up
-- StatsBar still hardcodes numbers
-- Newsletter UI doesn't exist yet (only the `subscribers` table migration)
+## What's NOT done yet / Future enhancements
+- Add production `RESEND_API_KEY` and verified sender domain (`EMAIL_FROM`) to deployment environment variables (e.g. on Vercel) when ready to send live emails to visitors.
+- Run `npx playwright install` if automated browser E2E testing is desired in CI pipelines.
+- Production custom domain (`rayidatech.name.ng`) DNS verification and SSL deployment.
 
 ## Suggested next
-- **Projects list port** — update `app/projects/page.tsx` to use violet/cyan
-  tokens
-- **Project detail port** — update `app/(public)/projects/[slug]/page.tsx` to
-  use violet/cyan tokens
-- **Blog list port** — update `app/blog/page.tsx` to use violet/cyan tokens
-- **Generic 404** — rewrite `not-found.tsx` to handle any missing page
+- Set `RESEND_API_KEY` in production environment for live email dispatch.
+- Deploy to production hosting (Vercel) and verify live domain DNS.
 
 ## Working agreement
 - Make one focused change per task. Don't refactor unrelated files

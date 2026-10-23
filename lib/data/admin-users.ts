@@ -31,7 +31,7 @@ export const ADMIN_CONTENT_PERMISSION_KEYS: AdminPermission[] = [
   'contacts',
 ];
 
-const LOCAL_USERS_FILE = path.join(process.cwd(), 'lib/data/admin-users.json');
+const LOCAL_USERS_FILE = path.join(/*turbopackIgnore: true*/ process.cwd(), 'lib/data/admin-users.json');
 
 export const defaultRootSuperAdmin: AdminUser = {
   id: 'root-super-admin-01',

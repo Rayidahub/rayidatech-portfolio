@@ -45,11 +45,14 @@ export function renderInlineMarkdown(
     const linkMatch = remaining.match(/^\[([^\]]+)\]\(([^)]+)\)/);
     if (linkMatch) {
       const [full, linkText, linkUrl] = linkMatch;
-      const isExternal = linkUrl.startsWith('http') || linkUrl.startsWith('//');
+      const cleanUrl = linkUrl.trim();
+      const isSafeProtocol = /^(https?:|\/|#|mailto:|tel:)/i.test(cleanUrl);
+      const safeHref = isSafeProtocol ? cleanUrl : '#';
+      const isExternal = cleanUrl.startsWith('http') || cleanUrl.startsWith('//');
       tokens.push(
         <a
           key={`link-${keyIndex++}`}
-          href={linkUrl}
+          href={safeHref}
           target={isExternal ? '_blank' : undefined}
           rel={isExternal ? 'noopener noreferrer' : undefined}
           className="text-secondary hover:text-secondary/80 underline underline-offset-4 font-medium transition-colors inline-flex items-baseline gap-0.5"

@@ -4,12 +4,18 @@ import { revalidatePath } from 'next/cache';
 import { createClient } from '@/lib/supabase/server';
 import { getHeroSettings, saveHeroSettings } from '@/lib/data/hero-settings';
 import { defaultHeroSlides } from '@/lib/data/hero-slides';
+import { requireAdminSession } from '@/lib/supabase/auth-guard';
 import type { HeroSettings } from '@/types/hero-settings';
 
 export async function updateHeroSettingsAction(
   settings: HeroSettings
 ): Promise<{ success: boolean; error?: string }> {
   try {
+    const auth = await requireAdminSession();
+    if (!auth.authenticated) {
+      return { success: false, error: auth.error || 'Unauthorized' };
+    }
+
     const result = await saveHeroSettings(settings);
 
     if (result.success) {
@@ -19,10 +25,11 @@ export async function updateHeroSettingsAction(
     }
 
     return result;
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : 'Failed to update hero settings.';
     return {
       success: false,
-      error: error?.message || 'Failed to update hero settings.',
+      error: msg,
     };
   }
 }
@@ -31,6 +38,11 @@ export async function toggleHeroAutoplayAction(
   enabled: boolean
 ): Promise<{ success: boolean; settings?: HeroSettings; error?: string }> {
   try {
+    const auth = await requireAdminSession();
+    if (!auth.authenticated) {
+      return { success: false, error: auth.error || 'Unauthorized' };
+    }
+
     const current = await getHeroSettings();
     const updated: HeroSettings = {
       ...current,
@@ -43,8 +55,9 @@ export async function toggleHeroAutoplayAction(
       revalidatePath('/admin/hero/settings');
     }
     return { success: result.success, settings: updated, error: result.error };
-  } catch (err: any) {
-    return { success: false, error: err?.message || 'Failed to toggle autoplay.' };
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : 'Failed to toggle autoplay.';
+    return { success: false, error: msg };
   }
 }
 
@@ -52,6 +65,11 @@ export async function updateHeroSpeedAction(
   seconds: number
 ): Promise<{ success: boolean; settings?: HeroSettings; error?: string }> {
   try {
+    const auth = await requireAdminSession();
+    if (!auth.authenticated) {
+      return { success: false, error: auth.error || 'Unauthorized' };
+    }
+
     const current = await getHeroSettings();
     const updated: HeroSettings = {
       ...current,
@@ -64,8 +82,9 @@ export async function updateHeroSpeedAction(
       revalidatePath('/admin/hero/settings');
     }
     return { success: result.success, settings: updated, error: result.error };
-  } catch (err: any) {
-    return { success: false, error: err?.message || 'Failed to update slider speed.' };
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : 'Failed to update slider speed.';
+    return { success: false, error: msg };
   }
 }
 
@@ -75,6 +94,11 @@ export async function seedDefaultHeroSlidesAction(): Promise<{
   error?: string;
 }> {
   try {
+    const auth = await requireAdminSession();
+    if (!auth.authenticated) {
+      return { success: false, count: 0, error: auth.error || 'Unauthorized' };
+    }
+
     const supabase = await createClient();
 
     // Check existing slides
@@ -126,12 +150,12 @@ export async function seedDefaultHeroSlidesAction(): Promise<{
       success: true,
       count: toInsert.length,
     };
-  } catch (err: any) {
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : 'Failed to seed default hero slides.';
     return {
       success: false,
       count: 0,
-      error: err?.message || 'Failed to seed default hero slides.',
+      error: msg,
     };
   }
 }
-

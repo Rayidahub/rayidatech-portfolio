@@ -6,49 +6,41 @@ import { getCountryFlag, buildFormattedAddress } from '@/lib/data/ip-geo';
 
 const MAX_LOCAL_LOGS = 500;
 
-function getStoragePath(): string {
-  // If running in serverless (e.g. Vercel), process.cwd() is read-only outside /tmp
+const LOCAL_LOGS_FILE = path.join(/*turbopackIgnore: true*/ process.cwd(), 'lib/data/visitor-logs.json');
+const TMP_LOGS_FILE = '/tmp/visitor-logs.json';
+
+function getActiveLogPath(): string {
   if (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME) {
-    return path.join('/tmp', 'visitor-logs.json');
+    return TMP_LOGS_FILE;
   }
-  return path.join(process.cwd(), 'lib', 'data', 'visitor-logs.json');
+  return LOCAL_LOGS_FILE;
 }
 
 function readLocalLogs(): VisitorLog[] {
-  const primaryPath = getStoragePath();
-  const fallbackPath = path.join(process.cwd(), 'lib', 'data', 'visitor-logs.json');
-
-  for (const filePath of [primaryPath, fallbackPath]) {
-    try {
-      if (fs.existsSync(filePath)) {
-        const raw = fs.readFileSync(filePath, 'utf-8');
-        const parsed = JSON.parse(raw);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-      }
-    } catch {
-      // Continue to next path
+  try {
+    const filePath = getActiveLogPath();
+    if (fs.existsSync(filePath)) {
+      const raw = fs.readFileSync(filePath, 'utf-8');
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
     }
+  } catch {
+    // Continue
   }
   return [];
 }
 
 function writeLocalLogs(logs: VisitorLog[]): void {
-  const filePath = getStoragePath();
   try {
+    const filePath = getActiveLogPath();
     const dir = path.dirname(filePath);
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir, { recursive: true });
     }
     const trimmed = logs.slice(0, MAX_LOCAL_LOGS);
     fs.writeFileSync(filePath, JSON.stringify(trimmed, null, 2), 'utf-8');
-  } catch (err) {
-    try {
-      const tmpPath = path.join('/tmp', 'visitor-logs.json');
-      const trimmed = logs.slice(0, MAX_LOCAL_LOGS);
-      fs.writeFileSync(tmpPath, JSON.stringify(trimmed, null, 2), 'utf-8');
-    } catch {
-      // Silently ignore if both filesystems are blocked
-    }
+  } catch {
+    // Silently ignore if filesystem is blocked
   }
 }
 
@@ -72,10 +64,10 @@ export function parseUserAgent(uaString: string): {
   }
 
   // OS detection
-  if (/windows/i.test(ua)) os = 'Windows';
-  else if (/macintosh|mac os x/i.test(ua)) os = 'macOS';
+  if (/iphone|ipad|ipod/i.test(ua)) os = 'iOS';
   else if (/android/i.test(ua)) os = 'Android';
-  else if (/iphone|ipad|ipod/i.test(ua)) os = 'iOS';
+  else if (/windows/i.test(ua)) os = 'Windows';
+  else if (/macintosh|mac os x/i.test(ua)) os = 'macOS';
   else if (/linux/i.test(ua)) os = 'Linux';
 
   // Browser detection

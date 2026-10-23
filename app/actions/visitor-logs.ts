@@ -10,6 +10,7 @@ import {
   parseUserAgent,
 } from '@/lib/data/visitor-logs';
 import { resolveIpAddress } from '@/lib/data/ip-geo';
+import { requireAdminSession } from '@/lib/supabase/auth-guard';
 import type { VisitorLog, VisitorStats, VisitorLogFilter, VisitorEventType } from '@/types/visitor-log';
 
 export async function recordVisitorEventAction(entry: {
@@ -91,10 +92,16 @@ export async function getVisitorLogsAction(
   filter?: VisitorLogFilter
 ): Promise<{ success: boolean; logs: VisitorLog[]; error?: string }> {
   try {
+    const auth = await requireAdminSession();
+    if (!auth.authenticated) {
+      return { success: false, logs: [], error: auth.error || 'Unauthorized' };
+    }
+
     const logs = await getVisitorLogs(filter);
     return { success: true, logs };
-  } catch (err: any) {
-    return { success: false, logs: [], error: err?.message || 'Failed to fetch logs' };
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : 'Failed to fetch logs';
+    return { success: false, logs: [], error: msg };
   }
 }
 
@@ -104,10 +111,16 @@ export async function getVisitorStatsAction(): Promise<{
   error?: string;
 }> {
   try {
+    const auth = await requireAdminSession();
+    if (!auth.authenticated) {
+      return { success: false, error: auth.error || 'Unauthorized' };
+    }
+
     const stats = await getVisitorStats();
     return { success: true, stats };
-  } catch (err: any) {
-    return { success: false, error: err?.message || 'Failed to fetch stats' };
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : 'Failed to fetch stats';
+    return { success: false, error: msg };
   }
 }
 
@@ -116,10 +129,16 @@ export async function clearVisitorLogsAction(): Promise<{
   error?: string;
 }> {
   try {
+    const auth = await requireAdminSession();
+    if (!auth.authenticated) {
+      return { success: false, error: auth.error || 'Unauthorized' };
+    }
+
     const result = await clearVisitorLogs();
     revalidatePath('/admin/logs');
     return result;
-  } catch (err: any) {
-    return { success: false, error: err?.message || 'Failed to clear logs' };
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : 'Failed to clear logs';
+    return { success: false, error: msg };
   }
 }

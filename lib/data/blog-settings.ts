@@ -23,7 +23,7 @@ export const defaultBlogSettings: BlogSettings = {
     'Get insights on design, AI engineering, product thinking, and behind-the-scenes updates — no spam, just value.',
 };
 
-const LOCAL_SETTINGS_FILE = path.join(process.cwd(), 'lib/data/blog-settings.json');
+const LOCAL_SETTINGS_FILE = path.join(/*turbopackIgnore: true*/ process.cwd(), 'lib/data/blog-settings.json');
 
 function readLocalSettings(): BlogSettings | null {
   try {

@@ -10,7 +10,7 @@ export const defaultSiteSettings: SiteSettings = {
   theme_version: 1,
 };
 
-const LOCAL_SETTINGS_FILE = path.join(process.cwd(), 'lib/data/site-settings.json');
+const LOCAL_SETTINGS_FILE = path.join(/*turbopackIgnore: true*/ process.cwd(), 'lib/data/site-settings.json');
 
 function readLocalSettings(): SiteSettings | null {
   try {
@@ -72,9 +72,18 @@ export async function saveSiteSettings(
   settings: Partial<SiteSettings>
 ): Promise<{ success: boolean; error?: string; settings?: SiteSettings }> {
   const current = await getSiteSettings();
+
+  const safeDefaultTheme: ThemeMode =
+    settings.default_theme !== undefined
+      ? settings.default_theme === 'light'
+        ? 'light'
+        : 'dark'
+      : current.default_theme;
+
   const updatedSettings: SiteSettings = {
     ...current,
     ...settings,
+    default_theme: safeDefaultTheme,
     id: 'default',
     updated_at: new Date().toISOString(),
   };

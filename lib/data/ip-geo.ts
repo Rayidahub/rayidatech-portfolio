@@ -70,14 +70,14 @@ export async function resolveIpAddress(
     return cached.data;
   }
 
-  // 1. Try ip-api.com (extremely fast and detailed: country, state/region, city, zip, lat, lon, isp, org)
+  // 1. Try ipwhois.app securely over HTTPS (country, state/region, city, zip, lat, lon, isp, org)
   try {
     const targetUrl = isPrivate
-      ? 'http://ip-api.com/json/?fields=status,message,country,countryCode,region,regionName,city,zip,lat,lon,timezone,isp,org,as,query'
-      : `http://ip-api.com/json/${encodeURIComponent(ip)}?fields=status,message,country,countryCode,region,regionName,city,zip,lat,lon,timezone,isp,org,as,query`;
+      ? 'https://ipwhois.app/json/'
+      : `https://ipwhois.app/json/${encodeURIComponent(ip)}`;
 
     const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 1500);
+    const timer = setTimeout(() => controller.abort(), 2000);
 
     const res = await fetch(targetUrl, {
       signal: controller.signal,
@@ -87,21 +87,21 @@ export async function resolveIpAddress(
 
     if (res.ok) {
       const data = await res.json();
-      if (data && data.status === 'success') {
+      if (data && data.success !== false) {
         const country = data.country || fallbackHeaders?.country || 'Unknown Country';
-        const country_code = data.countryCode || '';
+        const country_code = data.country_code || '';
         const country_flag = getCountryFlag(country_code);
-        const region = data.regionName || '';
-        const region_code = data.region || '';
+        const region = data.region || '';
+        const region_code = data.region_code || '';
         const city = data.city || fallbackHeaders?.city || '';
-        const postal_code = data.zip || '';
-        const latitude = typeof data.lat === 'number' ? data.lat : undefined;
-        const longitude = typeof data.lon === 'number' ? data.lon : undefined;
+        const postal_code = data.postal || data.zip || '';
+        const latitude = typeof data.latitude === 'number' ? data.latitude : undefined;
+        const longitude = typeof data.longitude === 'number' ? data.longitude : undefined;
         const isp = data.isp || '';
         const organization = data.org || '';
-        const asn = data.as || '';
-        const timezone = data.timezone || '';
-        const resolvedIp = data.query || ip;
+        const asn = data.asn || '';
+        const timezone = typeof data.timezone === 'string' ? data.timezone : data.timezone?.id || '';
+        const resolvedIp = data.ip || ip;
 
         const formatted_address = buildFormattedAddress({
           city,

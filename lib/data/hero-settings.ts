@@ -26,7 +26,7 @@ export const defaultHeroSettings: HeroSettings = {
   gradient: defaultHeroGradientSettings,
 };
 
-const LOCAL_SETTINGS_FILE = path.join(process.cwd(), 'lib/data/hero-settings.json');
+const LOCAL_SETTINGS_FILE = path.join(/*turbopackIgnore: true*/ process.cwd(), 'lib/data/hero-settings.json');
 
 function readLocalSettings(): HeroSettings | null {
   try {

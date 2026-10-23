@@ -4,12 +4,18 @@ import { revalidatePath } from 'next/cache';
 import { saveBlogSettings } from '@/lib/data/blog-settings';
 import { fallbackPosts } from '@/lib/data/posts';
 import { createClient } from '@/lib/supabase/server';
+import { requireAdminSession } from '@/lib/supabase/auth-guard';
 import type { BlogSettings } from '@/types/blog-settings';
 
 export async function updateBlogSettingsAction(
   settings: BlogSettings
 ): Promise<{ success: boolean; error?: string }> {
   try {
+    const auth = await requireAdminSession();
+    if (!auth.authenticated) {
+      return { success: false, error: auth.error || 'Unauthorized' };
+    }
+
     const result = await saveBlogSettings(settings);
 
     revalidatePath('/blog');
@@ -17,11 +23,12 @@ export async function updateBlogSettingsAction(
     revalidatePath('/admin/blog/settings');
 
     return result;
-  } catch (err: any) {
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : 'Failed to update blog settings';
     console.error('Failed to update blog settings:', err);
     return {
       success: false,
-      error: err?.message || 'Failed to update blog settings',
+      error: msg,
     };
   }
 }
@@ -32,6 +39,11 @@ export async function seedSamplePostsAction(): Promise<{
   error?: string;
 }> {
   try {
+    const auth = await requireAdminSession();
+    if (!auth.authenticated) {
+      return { success: false, error: auth.error || 'Unauthorized' };
+    }
+
     const supabase = await createClient();
 
     // Check existing posts by slug
@@ -64,12 +76,12 @@ export async function seedSamplePostsAction(): Promise<{
     revalidatePath('/admin/blog');
 
     return { success: true, count: toInsert.length };
-  } catch (err: any) {
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : 'Failed to seed sample posts';
     console.error('Failed to seed sample posts:', err);
     return {
       success: false,
-      error: err?.message || 'Failed to seed sample posts',
+      error: msg,
     };
   }
 }
-

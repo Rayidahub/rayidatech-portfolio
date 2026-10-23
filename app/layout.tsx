@@ -93,9 +93,9 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const siteSettings = await getSiteSettings();
-  const defaultTheme = siteSettings.default_theme || 'dark';
+  const defaultTheme = siteSettings.default_theme === 'light' ? 'light' : 'dark';
   const allowToggle = siteSettings.allow_user_toggle !== false;
-  const themeVersion = siteSettings.theme_version || 1;
+  const themeVersion = Math.max(1, Math.floor(Number(siteSettings.theme_version) || 1));
 
   return (
     <html

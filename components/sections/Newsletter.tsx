@@ -49,6 +49,16 @@ export default function Newsletter({ headline, subtext }: NewsletterProps = {}) 
     setStatus('success');
     setMessage('Thanks for subscribing!');
     setEmail('');
+
+    // Asynchronously trigger welcome email
+    fetch('/api/email/notify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type: 'newsletter',
+        data: { email: trimmed },
+      }),
+    }).catch((err) => console.warn('[Newsletter] Email notify non-fatal error:', err));
   }
 
   return (

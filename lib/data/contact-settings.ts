@@ -76,7 +76,7 @@ export const defaultContactSettings: ContactSettings = {
   ],
 };
 
-const LOCAL_SETTINGS_FILE = path.join(process.cwd(), 'lib/data/contact-settings.json');
+const LOCAL_SETTINGS_FILE = path.join(/*turbopackIgnore: true*/ process.cwd(), 'lib/data/contact-settings.json');
 
 function readLocalSettings(): ContactSettings | null {
   try {

@@ -122,6 +122,25 @@ export default function ContactClient({ settings }: ContactClientProps) {
       }
 
       setStatus('success');
+
+      // Asynchronously trigger transactional email (admin alert + client auto-reply)
+      fetch('/api/email/notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'contact',
+          data: {
+            name: formData.name.trim(),
+            email: formData.email.trim(),
+            phone: formData.phone.trim() || null,
+            company: formData.company.trim() || null,
+            project_type: formData.project_type || null,
+            budget: formData.budget || null,
+            message: formattedMessage.trim(),
+          },
+        }),
+      }).catch((err) => console.warn('[ContactClient] Email notify non-fatal error:', err));
+
       setFormData({
         name: '',
         email: '',
