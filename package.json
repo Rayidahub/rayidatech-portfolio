@@ -9,7 +9,8 @@
     "lint": "eslint",
     "test": "vitest run",
     "test:watch": "vitest",
-    "db:verify": "node scripts/verify-supabase.js"
+    "db:verify": "node scripts/verify-supabase.js",
+    "email:test": "node scripts/test-email.js"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.0",
