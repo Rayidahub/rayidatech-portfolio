@@ -203,6 +203,7 @@ export async function sendContactNotification(
       to: payload.email,
       subject: 'Inquiry Received — Rayida Tech',
       html: clientHtml,
+      replyTo: adminEmail,
     }),
   ]);
 
