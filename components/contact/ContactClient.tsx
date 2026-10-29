@@ -163,35 +163,86 @@ export default function ContactClient({ settings }: ContactClientProps) {
   return (
     <main className="relative min-h-screen pb-24 overflow-hidden">
       {/* =========================================================================
-          HERO BANNER (Reference: Kassapay dark navy banner with centered title)
+          HERO BANNER (Matches Home Hero with edge-to-edge image & electric blue glow)
           ========================================================================= */}
-      <section className="relative pt-32 pb-40 md:pt-40 md:pb-52 overflow-hidden bg-gradient-to-b from-[#0f0f20] via-[#14142b] to-[#1a1a2e]">
-        {/* Ambient Glows */}
-        <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+      <section className="relative pt-32 pb-40 md:pt-40 md:pb-52 overflow-hidden bg-[#0a0e23]">
+        {/* 1. Full-bleed background image with cinematic depth */}
+        <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden select-none" aria-hidden="true">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/img/hero.jpg"
+            alt="Office & Technology background"
+            className="w-full h-full object-cover object-center md:object-[center_35%] filter brightness-[0.42] contrast-[1.12] scale-105"
+          />
+        </div>
+
+        {/* 2. Deep Blue & Sapphire Atmospheric Gradient Wash (Matches Hero Section) */}
+        <div
+          className="pointer-events-none absolute inset-0 z-[1]"
+          aria-hidden="true"
+          style={{
+            background:
+              'linear-gradient(135deg, rgba(10, 14, 35, 0.90) 0%, rgba(13, 27, 62, 0.82) 45%, rgba(0, 102, 255, 0.42) 80%, rgba(0, 209, 255, 0.35) 100%)',
+          }}
+        />
+
+        {/* 2b. Electric Blue / Cyan Radial Ambient Glow (Hero Bloom Effect) */}
+        <div className="pointer-events-none absolute inset-0 z-[2] overflow-hidden" aria-hidden="true">
           <div
-            className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[550px] rounded-full opacity-35 blur-[120px]"
+            className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[950px] h-[550px] rounded-full opacity-65 blur-[130px]"
             style={{
               background:
-                'radial-gradient(ellipse at center, rgba(var(--primary-rgb), 0.45) 0%, rgba(var(--secondary-rgb), 0.2) 50%, transparent 75%)',
+                'radial-gradient(ellipse at center, rgba(0, 209, 255, 0.45) 0%, rgba(0, 102, 255, 0.35) 40%, rgba(128, 0, 255, 0.25) 70%, transparent 85%)',
             }}
           />
-          {/* Subtle grid pattern overlay */}
           <div
-            className="absolute inset-0 opacity-[0.03]"
+            className="absolute -top-24 right-1/4 w-[480px] h-[480px] rounded-full opacity-45 blur-[100px]"
             style={{
-              backgroundImage:
-                'linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px)',
-              backgroundSize: '40px 40px',
+              background: 'radial-gradient(circle, rgba(0, 209, 255, 0.5) 0%, transparent 65%)',
             }}
           />
         </div>
 
+        {/* 2c. Seamless Bottom Fade into Page Ink (#1a1a2e) */}
+        <div
+          className="pointer-events-none absolute inset-0 z-[3]"
+          aria-hidden="true"
+          style={{
+            background:
+              'linear-gradient(to bottom, transparent 35%, rgba(26, 26, 46, 0.75) 75%, #1a1a2e 100%)',
+          }}
+        />
+
+        {/* 2d. Subtle Technical Grid Pattern (Brand Texture from globals.css) */}
+        <div
+          className="bg-grid-pattern pointer-events-none absolute inset-0 z-[4] opacity-20"
+          style={{
+            maskImage: 'linear-gradient(to bottom, black 0%, transparent 90%)',
+            WebkitMaskImage: 'linear-gradient(to bottom, black 0%, transparent 90%)',
+          }}
+          aria-hidden="true"
+        />
+
         <Container size="default" className="relative z-10 text-center">
           <Reveal>
-            <h1 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-paper mb-4">
+            {/* Category / Topic Kicker (Hero Style) */}
+            <p className="mb-3 inline-flex items-center gap-3 font-mono-tight text-xs uppercase tracking-[0.25em] text-secondary justify-center">
+              <span className="h-px w-8 bg-secondary/50" aria-hidden="true" />
+              Get In Touch
+              <span className="h-px w-8 bg-secondary/50" aria-hidden="true" />
+            </p>
+
+            <h1 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-paper mb-3 drop-shadow-lg">
               Contact us
             </h1>
-            <p className="text-mist-1 text-base sm:text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
+
+            {/* Signature Brand Accent Horizontal Bar */}
+            <div
+              className="mx-auto mb-5 h-1.5 w-20 rounded-full bg-gradient-to-r from-primary to-secondary"
+              aria-hidden="true"
+            />
+
+            <p className="text-mist-1 text-base sm:text-lg md:text-xl max-w-2xl mx-auto leading-relaxed drop-shadow-md">
               Rayida Tech is ready to provide the right solution according to your needs
             </p>
           </Reveal>
