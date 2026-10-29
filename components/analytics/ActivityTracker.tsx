@@ -1,11 +1,16 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { recordVisitorEventAction } from '@/app/actions/visitor-logs';
+import { hasConsentedTo, subscribeToConsentChanges } from '@/lib/privacy/cookie-consent';
 
 function getOrSetVisitorId(): string {
   if (typeof window === 'undefined') return '';
+  // Privacy by design: only persist visitor ID if analytics consent was granted
+  if (!hasConsentedTo('analytics')) {
+    return 'anonymous_visitor';
+  }
   const key = 'rayida_visitor_id';
   try {
     let id = localStorage.getItem(key);
@@ -21,6 +26,10 @@ function getOrSetVisitorId(): string {
 
 function getOrSetSessionId(): string {
   if (typeof window === 'undefined') return '';
+  // Privacy by design: only persist session ID if analytics consent was granted
+  if (!hasConsentedTo('analytics')) {
+    return 'anonymous_session';
+  }
   const key = 'rayida_session_id';
   try {
     let id = sessionStorage.getItem(key);
@@ -37,6 +46,8 @@ function getOrSetSessionId(): string {
 let cachedClientGeo: any = null;
 async function getCachedClientGeo(): Promise<any> {
   if (typeof window === 'undefined') return null;
+  // Privacy by design: do not resolve client IP geo if analytics consent is not granted
+  if (!hasConsentedTo('analytics')) return null;
   if (cachedClientGeo) return cachedClientGeo;
 
   try {
@@ -174,6 +185,11 @@ let sessionActionCount = 0;
 async function sendTrack(payload: TrackPayload) {
   if (typeof window === 'undefined') return;
 
+  // Enforce Cookie Consent under NDPA 2023: do not dispatch telemetry without explicit analytics consent
+  if (!hasConsentedTo('analytics')) {
+    return;
+  }
+
   // Never track admin workspace navigation
   if (payload.path && (payload.path.startsWith('/admin') || payload.path.startsWith('/api'))) {
     return;
@@ -243,11 +259,22 @@ export default function ActivityTracker() {
   const searchParams = useSearchParams();
   const pageStartTimeRef = useRef<number>(Date.now());
   const currentPathRef = useRef<string>(pathname);
+  const [analyticsConsent, setAnalyticsConsent] = useState(false);
 
-  // Pre-fetch client geolocation in background on start
   useEffect(() => {
-    getCachedClientGeo().catch(() => {});
+    setAnalyticsConsent(hasConsentedTo('analytics'));
+    const unsubscribe = subscribeToConsentChanges((consent) => {
+      setAnalyticsConsent(consent.categories.analytics);
+    });
+    return unsubscribe;
   }, []);
+
+  // Pre-fetch client geolocation in background on start only if consent was granted
+  useEffect(() => {
+    if (analyticsConsent) {
+      getCachedClientGeo().catch(() => {});
+    }
+  }, [analyticsConsent]);
 
   // 1. Page view tracking
   useEffect(() => {

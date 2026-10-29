@@ -1,8 +1,11 @@
 // components/layout/Footer.tsx
+'use client';
+
 import Link from 'next/link';
-import { Mail, MessageCircle, MapPin, Phone } from 'lucide-react';
+import { Mail, MessageCircle, MapPin, Phone, ShieldCheck, Cookie } from 'lucide-react';
 import Container from '@/components/ui/Container';
 import BrandLogo from '@/components/ui/BrandLogo';
+import { triggerOpenCookiePreferences } from '@/lib/privacy/cookie-consent';
 
 // Brand icons are not bundled in this lucide-react version; use lightweight SVGs.
 function GitHubIcon({ className }: { className?: string }) {
@@ -28,11 +31,14 @@ const navigateLinks = [
   { href: '/about', label: 'About' },
   { href: '/projects', label: 'Projects' },
   { href: '/services', label: 'Services' },
-];
-
-const moreLinks = [
   { href: '/blog', label: 'Blog' },
   { href: '/contact', label: 'Contact' },
+];
+
+const legalLinks = [
+  { href: '/privacy-policy', label: 'Privacy Policy' },
+  { href: '/terms-and-conditions', label: 'Terms & Conditions' },
+  { href: '/cookie-policy', label: 'Cookie Policy' },
 ];
 
 const socialLinks = [
@@ -52,7 +58,7 @@ const socialLinks = [
     icon: MessageCircle,
   },
   {
-    href: 'mailto:rayidagaius@gmail.com',
+    href: 'mailto:info@rayidatech.name.ng',
     label: 'Email',
     icon: Mail,
   },
@@ -80,14 +86,14 @@ export default function Footer() {
       />
 
       <Container size="wide" className="relative z-10 py-16 md:py-20">
-        <div className="grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-4">
-          {/* Column 1: Brand */}
-          <div className="col-span-2 sm:col-span-4 lg:col-span-1">
+        <div className="grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-4 lg:grid-cols-12">
+          {/* Column 1: Brand (lg:col-span-4) */}
+          <div className="col-span-2 sm:col-span-4 lg:col-span-4">
             <Link href="/" className="inline-flex items-center mb-4">
               <BrandLogo />
             </Link>
-            <p className="text-mist-1 text-sm leading-relaxed max-w-xs mb-5">
-              Product Designer & AI Engineer building digital experiences people can trust.
+            <p className="text-mist-1 text-sm leading-relaxed max-w-sm mb-5">
+              Rayida Tech — Product Designer & AI Engineer building digital experiences people can trust. Registered in Nigeria and operating globally under the NDPA 2023.
             </p>
             <div className="flex items-center gap-4">
               {socialLinks.map((social) => {
@@ -108,8 +114,8 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Column 2: Navigate */}
-          <div>
+          {/* Column 2: Navigate (lg:col-span-2 lg:col-start-6) */}
+          <div className="col-span-1 lg:col-span-2 lg:col-start-6">
             <h3 className="font-display text-sm font-semibold text-paper mb-4">
               Navigate
             </h3>
@@ -127,13 +133,14 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Column 3: More */}
-          <div>
-            <h3 className="font-display text-sm font-semibold text-paper mb-4">
-              More
+          {/* Column 3: Legal & Privacy (lg:col-span-3) */}
+          <div className="col-span-1 lg:col-span-3">
+            <h3 className="font-display text-sm font-semibold text-paper mb-4 flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 text-secondary" />
+              <span>Legal & Privacy</span>
             </h3>
             <ul className="space-y-3">
-              {moreLinks.map((link) => (
+              {legalLinks.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
@@ -143,22 +150,32 @@ export default function Footer() {
                   </Link>
                 </li>
               ))}
+              <li>
+                <button
+                  type="button"
+                  onClick={triggerOpenCookiePreferences}
+                  className="text-sm text-secondary hover:text-white transition-colors duration-300 cursor-pointer inline-flex items-center gap-1.5"
+                >
+                  <Cookie className="w-3.5 h-3.5 text-secondary" />
+                  <span>Cookie Preferences</span>
+                </button>
+              </li>
             </ul>
           </div>
 
-          {/* Column 4: Contact */}
-          <div>
+          {/* Column 4: Contact (lg:col-span-3) */}
+          <div className="col-span-2 sm:col-span-2 lg:col-span-3">
             <h3 className="font-display text-sm font-semibold text-paper mb-4">
-              Contact
+              Contact & Inquiries
             </h3>
             <ul className="space-y-3">
               <li>
                 <a
-                  href="mailto:rayidagaius@gmail.com"
+                  href="mailto:info@rayidatech.name.ng"
                   className="flex items-start gap-2 text-sm text-mist-1 hover:text-paper transition-colors duration-300"
                 >
                   <Mail className="w-3.5 h-3.5 text-secondary mt-0.5 shrink-0" />
-                  <span>Email</span>
+                  <span>info@rayidatech.name.ng</span>
                 </a>
               </li>
               <li>
@@ -169,13 +186,13 @@ export default function Footer() {
                   className="flex items-start gap-2 text-sm text-mist-1 hover:text-paper transition-colors duration-300"
                 >
                   <Phone className="w-3.5 h-3.5 text-secondary mt-0.5 shrink-0" />
-                  <span>WhatsApp</span>
+                  <span>WhatsApp Direct</span>
                 </a>
               </li>
               <li>
                 <div className="flex items-start gap-2 text-sm text-mist-1">
                   <MapPin className="w-3.5 h-3.5 text-secondary mt-0.5 shrink-0" />
-                  <span>Nigeria — Working globally</span>
+                  <span>Lagos, Nigeria • Worldwide Delivery</span>
                 </div>
               </li>
             </ul>
@@ -183,14 +200,26 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-12 pt-6 border-t border-(--line) flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-mist-2 font-mono-tight">
-            &copy; {currentYear} Raymond Gaius. All rights reserved.
-          </p>
+        <div className="mt-12 pt-6 border-t border-(--line) flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-mist-2 font-mono-tight">
+            <span>&copy; {currentYear} Rayida Tech. All rights reserved.</span>
+            <span>•</span>
+            <Link href="/privacy-policy" className="hover:text-paper transition-colors">
+              Privacy
+            </Link>
+            <span>•</span>
+            <Link href="/terms-and-conditions" className="hover:text-paper transition-colors">
+              Terms
+            </Link>
+            <span>•</span>
+            <Link href="/cookie-policy" className="hover:text-paper transition-colors">
+              Cookies
+            </Link>
+          </div>
           <div className="flex items-center gap-2">
             <span className="signal-dot h-1.5 w-1.5 rounded-full" aria-hidden="true" />
             <span className="text-xs text-mist-2 font-mono-tight">
-              Available for projects
+              Nigeria Data Protection Act (NDPA 2023) Aligned
             </span>
           </div>
         </div>

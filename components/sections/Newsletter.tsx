@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, FormEvent } from 'react';
+import Link from 'next/link';
 import { ArrowRight, Loader2, CheckCircle2 } from 'lucide-react';
 import Container from '@/components/ui/Container';
 import Section from '@/components/ui/Section';
@@ -152,7 +153,7 @@ export default function Newsletter({ headline, subtext }: NewsletterProps = {}) 
                 )}
 
                 <p className="text-xs text-mist-2">
-                  Unsubscribe anytime. Your email stays private.
+                  By subscribing, you agree to receive case studies and updates. Unsubscribe anytime. Read our <Link href="/privacy-policy" className="text-secondary hover:underline underline-offset-2">Privacy Policy</Link>.
                 </p>
               </form>
             </div>

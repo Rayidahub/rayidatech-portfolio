@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { supabase } from '@/lib/supabase/client';
 import {
   Mail,
@@ -557,6 +558,17 @@ export default function ContactClient({ settings }: ContactClientProps) {
                         <span>Send</span>
                       )}
                     </button>
+
+                    {/* Privacy Notice under NDPA 2023 */}
+                    <p className="text-xs text-mist-2 leading-relaxed text-center pt-2">
+                      Rayida Tech will use the information you provide to respond to your inquiry and manage our communication with you. We do not use this form for unsolicited marketing. For details on your rights, please read our{' '}
+                      <Link
+                        href="/privacy-policy"
+                        className="text-secondary hover:underline underline-offset-2 font-medium"
+                      >
+                        Privacy Policy
+                      </Link>.
+                    </p>
                   </form>
                 )}
               </div>
