@@ -14,6 +14,8 @@ import {
   Calendar,
   Zap,
   ChevronDown,
+  HelpCircle,
+  ArrowRight,
 } from 'lucide-react';
 import Container from '@/components/ui/Container';
 import GlassCard from '@/components/ui/GlassCard';
@@ -608,56 +610,116 @@ export default function ContactClient({ settings }: ContactClientProps) {
         )}
 
         {/* =========================================================================
-            FREQUENTLY ASKED QUESTIONS
+            FREQUENTLY ASKED QUESTIONS (Reference UI: 2-Column Accordion Layout)
             ========================================================================= */}
         {settings.faqs && settings.faqs.length > 0 && (
-          <div className="mt-20 md:mt-28 max-w-3xl mx-auto">
-            <Reveal>
-              <div className="text-center mb-10">
-                <span className="text-xs font-mono-tight uppercase tracking-wider text-secondary">
-                  Got Questions?
-                </span>
-                <h2 className="font-display text-2xl sm:text-3xl font-semibold text-paper mt-2">
-                  Frequently Asked Questions
-                </h2>
-              </div>
-            </Reveal>
+          <div className="mt-24 md:mt-32 pt-12 border-t border-(--line)/50">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+              {/* Left Column: Heading, Badge & Descriptive Text (Matches Reference Left Side) */}
+              <div className="lg:col-span-5 lg:sticky lg:top-28">
+                <Reveal>
+                  {/* Reference Pill Badge */}
+                  <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/10 border border-primary/25 text-primary text-xs font-mono-tight uppercase tracking-wider mb-5">
+                    <HelpCircle className="w-3.5 h-3.5 text-secondary" />
+                    <span>Frequently asked questions</span>
+                  </div>
 
-            <Reveal index={1}>
-              <div className="space-y-3">
-                {settings.faqs.map((faq, index) => {
-                  const isOpen = openFaq === index;
-                  return (
-                    <GlassCard
-                      key={faq.question}
-                      hover={false}
-                      className="border border-(--line) overflow-hidden transition-all duration-200"
+                  {/* Reference Main Heading with Gradient Accent on 'questions' */}
+                  <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-paper leading-[1.15]">
+                    Frequently asked{' '}
+                    <span className="gradient-text block sm:inline">questions</span>
+                  </h2>
+
+                  {/* Reference Subtitle */}
+                  <p className="text-mist-1 text-sm sm:text-base leading-relaxed mt-4 max-w-md">
+                    Everything you need to know about working with Rayida Tech, project timelines,
+                    deliverables, and payment terms. Can&apos;t find what you&apos;re looking for?
+                  </p>
+
+                  {/* Direct Contact Action */}
+                  <div className="mt-8 pt-6 border-t border-(--line) flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 text-xs text-mist-2">
+                    <span>Have an unlisted question?</span>
+                    <a
+                      href={settings.whatsapp_url || 'https://wa.link/tlezg8'}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-secondary hover:text-white font-medium transition-colors cursor-pointer group"
                     >
-                      <button
-                        type="button"
-                        onClick={() => setOpenFaq(isOpen ? null : index)}
-                        className="w-full p-5 text-left flex items-center justify-between gap-4 cursor-pointer"
-                        aria-expanded={isOpen}
-                      >
-                        <span className="font-medium text-sm sm:text-base text-paper">
-                          {faq.question}
-                        </span>
-                        <ChevronDown
-                          className={`w-4 h-4 text-mist-2 shrink-0 transition-transform duration-300 ${
-                            isOpen ? 'rotate-180 text-secondary' : ''
-                          }`}
-                        />
-                      </button>
-                      {isOpen && (
-                        <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-mist-1 leading-relaxed border-t border-(--line)/50">
-                          {faq.answer}
-                        </div>
-                      )}
-                    </GlassCard>
-                  );
-                })}
+                      <span>Ask directly on WhatsApp</span>
+                      <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
+                    </a>
+                  </div>
+                </Reveal>
               </div>
-            </Reveal>
+
+              {/* Right Column: Accordion Cards with Circular Toggle Button (Matches Reference Right Side) */}
+              <div className="lg:col-span-7">
+                <Reveal index={1}>
+                  <div className="space-y-3.5 sm:space-y-4">
+                    {settings.faqs.map((faq, index) => {
+                      const isOpen = openFaq === index;
+                      return (
+                        <div
+                          key={faq.question}
+                          onClick={() => setOpenFaq(isOpen ? null : index)}
+                          className={`rounded-2xl transition-all duration-300 overflow-hidden cursor-pointer ${
+                            isOpen
+                              ? 'bg-[#181832]/95 border border-primary/45 shadow-[0_12px_36px_-12px_rgba(128,0,255,0.25)] p-5 sm:p-6'
+                              : 'bg-[#141428]/70 hover:bg-[#181830]/80 border border-(--line) hover:border-(--line-strong) p-5 sm:p-6 group'
+                          }`}
+                        >
+                          <div
+                            className="w-full text-left flex items-center justify-between gap-4 select-none"
+                            aria-expanded={isOpen}
+                            role="button"
+                            tabIndex={0}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter' || e.key === ' ') {
+                                e.preventDefault();
+                                setOpenFaq(isOpen ? null : index);
+                              }
+                            }}
+                          >
+                            <span
+                              className={`font-display text-base sm:text-lg transition-colors leading-snug pr-2 ${
+                                isOpen
+                                  ? 'font-semibold text-paper'
+                                  : 'font-medium text-paper group-hover:text-white'
+                              }`}
+                            >
+                              {faq.question}
+                            </span>
+
+                            {/* Reference Circular Icon Toggle Button */}
+                            <div
+                              className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${
+                                isOpen
+                                  ? 'bg-primary text-white shadow-md shadow-primary/35'
+                                  : 'bg-primary/15 text-primary border border-primary/25 group-hover:bg-primary/25'
+                              }`}
+                              aria-hidden="true"
+                            >
+                              <ChevronDown
+                                className={`w-4 h-4 transition-transform duration-300 ${
+                                  isOpen ? 'rotate-180 text-white' : 'text-primary'
+                                }`}
+                              />
+                            </div>
+                          </div>
+
+                          {/* Expandable answer */}
+                          {isOpen && (
+                            <div className="pt-3.5 sm:pt-4 text-xs sm:text-sm text-mist-1 leading-relaxed border-t border-(--line)/40 mt-3.5 sm:mt-4">
+                              {faq.answer}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </Reveal>
+              </div>
+            </div>
           </div>
         )}
       </Container>
