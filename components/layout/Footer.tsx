@@ -31,6 +31,7 @@ const navigateLinks = [
   { href: '/about', label: 'About' },
   { href: '/projects', label: 'Projects' },
   { href: '/services', label: 'Services' },
+  { href: '/capabilities', label: 'Capabilities & Deck' },
   { href: '/blog', label: 'Blog' },
   { href: '/contact', label: 'Contact' },
 ];
