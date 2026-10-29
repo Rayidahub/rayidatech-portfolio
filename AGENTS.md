@@ -97,23 +97,21 @@ route is a Promise), verify against the real installed version in
 - Testimonials section fetching active testimonials (`testimonials`).
 - StatsBar with counter animation and dynamic data support.
 - Newsletter section with real-time validation, duplicate handling, and direct Supabase insertion.
-- Transactional email service (`lib/email/index.ts`, `POST /api/email/notify`) powered by Resend REST API — sends admin lead alerts, customer inquiry auto-replies, and newsletter welcome emails.
+- Transactional email service (`lib/email/index.ts`, `POST /api/email/notify`) powered by Resend REST API — sends admin lead alerts directly to Zoho (`info@rayidatech.name.ng`), customer inquiry auto-replies from verified domain (`contact@rayidatech.name.ng`), and newsletter welcome emails.
 - Admin dashboard pages: Projects, Services, Blog, Hero Slides, Contacts, Coming Soon, Testimonials, Subscribers, Team, Users, Logs, and Settings (full CRUD + CSV/XLSX batch imports).
 - Visitor telemetry & analytics (`app/admin/(dashboard)/logs/`) tracking ISP, location, and hardware telemetry.
 - Automated testing suite with Vitest (`npm test`) covering slugs, reading time, email dispatch simulation, and user-agent parsing.
-- Consolidated production database schema (`database/consolidated_schema_production.sql`) covering all 15 tables, indexes, RLS policies, and storage buckets.
+- Consolidated production database schema (`database/consolidated_schema_production.sql`) fully applied and verified on live Supabase across all 15 tables.
 - Database verification CLI (`npm run db:verify`) to check table connectivity and row counts on live Supabase.
 - Clean Next.js 16 (Turbopack) builds with zero warnings across all 45 routes.
 - Security hardening: centralized admin authentication guard (`lib/supabase/auth-guard.ts`) across all mutating Server Actions; authenticated and folder-whitelisted `/api/upload` with SVG XSS sanitizer; strict theme whitelist in `layout.tsx`; HTTP security headers (CSP, HSTS, X-Frame-Options) in `next.config.ts`; IP sliding-window rate limiting & honeypot in `/api/email/notify`; Markdown `javascript:` URI neutralization in `MarkdownContent.tsx`; encrypted HTTPS telemetry via `ipwhois.app`; and `public.visitor_logs` RLS lockdown migration (`023_secure_visitor_logs_rls.sql`).
 
 ## What's NOT done yet / Future enhancements
-- Add production `RESEND_API_KEY` and verified sender domain (`EMAIL_FROM`) to deployment environment variables (e.g. on Vercel) when ready to send live emails to visitors.
 - Run `npx playwright install` if automated browser E2E testing is desired in CI pipelines.
 - Production custom domain (`rayidatech.name.ng`) DNS verification and SSL deployment.
 
 ## Suggested next
-- Set `RESEND_API_KEY` in production environment for live email dispatch.
-- Deploy to production hosting (Vercel) and verify live domain DNS.
+- Deploy and verify live website contact form with Resend + Zoho integration.
 
 ## Working agreement
 - Make one focused change per task. Don't refactor unrelated files
