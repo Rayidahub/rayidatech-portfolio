@@ -70,20 +70,33 @@ export async function POST(req: Request) {
         );
       }
 
-      // Input sanitization and length bounds
+      // Input sanitization, email format validation and header injection prevention
       const email = payload.email.trim().toLowerCase();
-      if (!EMAIL_REGEX.test(email) || email.length > 255) {
+      if (!EMAIL_REGEX.test(email) || email.length > 255 || /[\r\n]/.test(email)) {
         return NextResponse.json({ error: 'Invalid email address format' }, { status: 400 });
       }
 
+      const sanitize = (val?: string | null) => (val ? String(val).replace(/[\r\n\t]/g, ' ').trim() : null);
+
       const sanitizedPayload: ContactNotificationPayload = {
-        name: payload.name.trim().slice(0, 100),
+        name: sanitize(payload.name)!.slice(0, 100),
         email,
-        phone: payload.phone ? String(payload.phone).trim().slice(0, 50) : null,
-        company: payload.company ? String(payload.company).trim().slice(0, 100) : null,
-        project_type: payload.project_type ? String(payload.project_type).trim().slice(0, 100) : null,
-        budget: payload.budget ? String(payload.budget).trim().slice(0, 50) : null,
+        subject: sanitize(payload.subject || payload.project_type || 'General Inquiry')?.slice(0, 150),
+        phone: sanitize(payload.phone)?.slice(0, 50),
+        company: sanitize(payload.company)?.slice(0, 100),
+        project_type: sanitize(payload.project_type || payload.subject)?.slice(0, 100),
+        budget: sanitize(payload.budget)?.slice(0, 50),
         message: payload.message.trim().slice(0, 5000),
+        submitted_at: new Date().toLocaleString('en-US', {
+          weekday: 'short',
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          timeZoneName: 'short',
+        }),
       };
 
       const results = await sendContactNotification(sanitizedPayload);

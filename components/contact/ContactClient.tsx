@@ -137,6 +137,7 @@ export default function ContactClient({ settings }: ContactClientProps) {
             phone: formData.phone.trim() || null,
             company: formData.company.trim() || null,
             project_type: formData.project_type || null,
+            subject: formData.project_type || 'Website Development',
             message: formData.message.trim(),
           },
         }),
