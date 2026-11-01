@@ -18,6 +18,7 @@ import {
   Palette,
   Activity,
   MailCheck,
+  SendHorizontal,
   X,
 } from 'lucide-react'
 import type { AdminRole, AdminPermission } from '@/types/admin-user'
@@ -51,6 +52,7 @@ const navItems: NavItem[] = [
   { href: '/admin/team', label: 'Team', icon: Users, permission: 'team' },
   { href: '/admin/contacts', label: 'Contacts', icon: Mail, permission: 'contacts' },
   { href: '/admin/subscribers', label: 'Subscribers', icon: MailCheck, permission: 'contacts' },
+  { href: '/admin/outreach', label: 'Email Outreach', icon: SendHorizontal, permission: 'outreach', badge: 'Campaigns' },
   { href: '/admin/users', label: 'Users & Roles', icon: ShieldCheck, permission: 'users', badge: 'Super' },
 ]
 

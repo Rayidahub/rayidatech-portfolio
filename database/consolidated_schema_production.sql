@@ -512,3 +512,197 @@ CREATE POLICY "Allow authenticated updates to hero-slides bucket"
 
 CREATE POLICY "Allow authenticated deletes from hero-slides bucket"
   ON storage.objects FOR DELETE USING (bucket_id = 'hero-slides' AND auth.role() = 'authenticated');
+
+
+-- ==============================================================================
+-- 23. BULK EMAIL OUTREACH & CAMPAIGN MANAGEMENT TABLES
+-- ==============================================================================
+CREATE TABLE IF NOT EXISTS public.outreach_contacts (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  business_name TEXT NOT NULL,
+  contact_name TEXT,
+  email TEXT,
+  business_type TEXT,
+  location TEXT,
+  website TEXT,
+  instagram TEXT,
+  phone TEXT,
+  notes TEXT,
+  outreach_status TEXT NOT NULL DEFAULT 'New' CHECK (
+    outreach_status IN (
+      'New',
+      'Ready to Contact',
+      'Campaign Queued',
+      'Email Sent',
+      'Replied',
+      'Interested',
+      'Follow-Up Required',
+      'Not Interested',
+      'Unsubscribed',
+      'Bounced',
+      'Invalid Email',
+      'Missing Email'
+    )
+  ),
+  last_contacted_at TIMESTAMPTZ,
+  tags TEXT[] DEFAULT '{}',
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_outreach_contacts_email ON public.outreach_contacts (LOWER(email));
+CREATE INDEX IF NOT EXISTS idx_outreach_contacts_status ON public.outreach_contacts (outreach_status);
+CREATE INDEX IF NOT EXISTS idx_outreach_contacts_location ON public.outreach_contacts (location);
+CREATE INDEX IF NOT EXISTS idx_outreach_contacts_business_type ON public.outreach_contacts (business_type);
+CREATE INDEX IF NOT EXISTS idx_outreach_contacts_created_at ON public.outreach_contacts (created_at DESC);
+
+CREATE TABLE IF NOT EXISTS public.email_campaigns (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name TEXT NOT NULL,
+  subject TEXT NOT NULL,
+  body TEXT NOT NULL,
+  provider TEXT NOT NULL DEFAULT 'resend' CHECK (provider IN ('resend', 'zoho')),
+  sender_name TEXT NOT NULL DEFAULT 'Raymond Gaius',
+  sender_email TEXT NOT NULL DEFAULT 'info@rayidatech.name.ng',
+  reply_to TEXT DEFAULT 'info@rayidatech.name.ng',
+  status TEXT NOT NULL DEFAULT 'draft' CHECK (
+    status IN ('draft', 'scheduled', 'sending', 'completed', 'paused', 'cancelled', 'failed')
+  ),
+  total_recipients INTEGER DEFAULT 0,
+  sent_count INTEGER DEFAULT 0,
+  delivered_count INTEGER DEFAULT 0,
+  failed_count INTEGER DEFAULT 0,
+  bounced_count INTEGER DEFAULT 0,
+  opened_count INTEGER DEFAULT 0,
+  clicked_count INTEGER DEFAULT 0,
+  replied_count INTEGER DEFAULT 0,
+  unsubscribed_count INTEGER DEFAULT 0,
+  parent_campaign_id UUID REFERENCES public.email_campaigns(id) ON DELETE SET NULL,
+  follow_up_delay_days INTEGER DEFAULT 0,
+  scheduled_at TIMESTAMPTZ,
+  started_at TIMESTAMPTZ,
+  completed_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_email_campaigns_status ON public.email_campaigns (status);
+CREATE INDEX IF NOT EXISTS idx_email_campaigns_created_at ON public.email_campaigns (created_at DESC);
+
+CREATE TABLE IF NOT EXISTS public.campaign_recipients (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  campaign_id UUID NOT NULL REFERENCES public.email_campaigns(id) ON DELETE CASCADE,
+  contact_id UUID REFERENCES public.outreach_contacts(id) ON DELETE SET NULL,
+  business_name TEXT NOT NULL,
+  contact_name TEXT,
+  email TEXT NOT NULL,
+  personalized_subject TEXT NOT NULL,
+  personalized_body TEXT NOT NULL,
+  provider_message_id TEXT,
+  status TEXT NOT NULL DEFAULT 'queued' CHECK (
+    status IN ('queued', 'sending', 'sent', 'delivered', 'failed', 'bounced', 'opened', 'clicked', 'unsubscribed', 'skipped')
+  ),
+  error_message TEXT,
+  retry_count INTEGER DEFAULT 0,
+  sent_at TIMESTAMPTZ,
+  delivered_at TIMESTAMPTZ,
+  opened_at TIMESTAMPTZ,
+  clicked_at TIMESTAMPTZ,
+  unsubscribed_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_campaign_recipients_campaign ON public.campaign_recipients (campaign_id);
+CREATE INDEX IF NOT EXISTS idx_campaign_recipients_email ON public.campaign_recipients (LOWER(email));
+CREATE INDEX IF NOT EXISTS idx_campaign_recipients_status ON public.campaign_recipients (status);
+CREATE INDEX IF NOT EXISTS idx_campaign_recipients_msg_id ON public.campaign_recipients (provider_message_id);
+
+CREATE TABLE IF NOT EXISTS public.email_templates (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name TEXT NOT NULL,
+  subject TEXT NOT NULL,
+  body TEXT NOT NULL,
+  description TEXT,
+  category TEXT DEFAULT 'outreach',
+  variables TEXT[] DEFAULT '{"business_name", "contact_name", "business_type", "location", "website", "sender_name", "company_name"}',
+  is_default BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS public.email_events (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  campaign_id UUID REFERENCES public.email_campaigns(id) ON DELETE SET NULL,
+  recipient_id UUID REFERENCES public.campaign_recipients(id) ON DELETE SET NULL,
+  email TEXT NOT NULL,
+  provider TEXT NOT NULL,
+  event_type TEXT NOT NULL CHECK (
+    event_type IN ('delivered', 'bounced', 'complained', 'opened', 'clicked', 'unsubscribed', 'failed')
+  ),
+  payload JSONB DEFAULT '{}'::jsonb,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_email_events_campaign ON public.email_events (campaign_id);
+CREATE INDEX IF NOT EXISTS idx_email_events_recipient ON public.email_events (recipient_id);
+CREATE INDEX IF NOT EXISTS idx_email_events_email ON public.email_events (LOWER(email));
+
+CREATE TABLE IF NOT EXISTS public.email_suppressions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  email TEXT UNIQUE NOT NULL,
+  reason TEXT NOT NULL CHECK (reason IN ('unsubscribed', 'bounced', 'complained', 'manual')),
+  source_campaign_id UUID REFERENCES public.email_campaigns(id) ON DELETE SET NULL,
+  notes TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_email_suppressions_email ON public.email_suppressions (LOWER(email));
+
+CREATE TABLE IF NOT EXISTS public.email_settings (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  default_provider TEXT NOT NULL DEFAULT 'resend' CHECK (default_provider IN ('resend', 'zoho')),
+  sender_name TEXT NOT NULL DEFAULT 'Raymond Gaius',
+  sender_email TEXT NOT NULL DEFAULT 'info@rayidatech.name.ng',
+  reply_to TEXT NOT NULL DEFAULT 'info@rayidatech.name.ng',
+  test_recipient_email TEXT DEFAULT 'rayidagaius@gmail.com',
+  company_name TEXT NOT NULL DEFAULT 'Rayida Tech',
+  company_address TEXT DEFAULT 'Abuja, Nigeria',
+  zoho_host TEXT DEFAULT 'smtppro.zoho.com',
+  zoho_port INTEGER DEFAULT 465,
+  zoho_secure BOOLEAN DEFAULT TRUE,
+  zoho_username TEXT DEFAULT 'info@rayidatech.name.ng',
+  resend_rate_limit_per_sec INTEGER DEFAULT 5,
+  zoho_rate_limit_per_min INTEGER DEFAULT 30,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+INSERT INTO public.email_settings (id, default_provider, sender_name, sender_email, reply_to, test_recipient_email, company_name)
+VALUES (
+  '00000000-0000-0000-0000-000000000001',
+  'resend',
+  'Raymond Gaius',
+  'info@rayidatech.name.ng',
+  'info@rayidatech.name.ng',
+  'rayidagaius@gmail.com',
+  'Rayida Tech'
+)
+ON CONFLICT (id) DO NOTHING;
+
+ALTER TABLE public.outreach_contacts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.email_campaigns ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.campaign_recipients ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.email_templates ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.email_events ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.email_suppressions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.email_settings ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Admins full access to outreach_contacts" ON public.outreach_contacts FOR ALL TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Admins full access to email_campaigns" ON public.email_campaigns FOR ALL TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Admins full access to campaign_recipients" ON public.campaign_recipients FOR ALL TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Admins full access to email_templates" ON public.email_templates FOR ALL TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Admins full access to email_events" ON public.email_events FOR ALL TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Admins full access to email_suppressions" ON public.email_suppressions FOR ALL TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Admins full access to email_settings" ON public.email_settings FOR ALL TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Public insert for unsubscribe suppressions" ON public.email_suppressions FOR INSERT TO anon WITH CHECK (reason = 'unsubscribed');
+CREATE POLICY "Public insert for webhook events" ON public.email_events FOR INSERT TO anon WITH CHECK (true);

@@ -12,6 +12,7 @@ export type AdminPermission =
   | 'testimonials'
   | 'team'
   | 'contacts'
+  | 'outreach'
   | 'users'
   | 'logs';
 
@@ -83,6 +84,12 @@ export const CONTENT_PERMISSIONS: PermissionDefinition[] = [
     label: 'Contact Inquiries',
     description: 'Review messages, client inquiries, and contact settings',
     path: '/admin/contacts',
+  },
+  {
+    id: 'outreach',
+    label: 'Email Outreach & Campaigns',
+    description: 'Manage prospect database, bulk campaigns, templates, and analytics',
+    path: '/admin/outreach',
   },
   {
     id: 'logs',

@@ -49,7 +49,14 @@ const TABLES = [
   'hero_settings',
   'admin_users',
   'site_settings',
-  'visitor_logs'
+  'visitor_logs',
+  'outreach_contacts',
+  'email_campaigns',
+  'campaign_recipients',
+  'email_templates',
+  'email_events',
+  'email_suppressions',
+  'email_settings'
 ];
 
 async function checkTables() {
