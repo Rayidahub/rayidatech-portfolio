@@ -29,7 +29,25 @@ export function isValidEmailAddress(email?: string | null): boolean {
 }
 
 /**
+ * Sanitizes and cleans business names that have parenthetical category tags.
+ * For example: "1420 Events (Event Planner & Decor)" -> "1420 Events"
+ */
+export function cleanBusinessName(name?: string | null): string {
+  if (!name || typeof name !== 'string') return '';
+  const trimmed = name.trim();
+  // Strip trailing or embedded parentheses such as "(Event Planner & Decor)", "(Catering)", etc.
+  const cleaned = trimmed.replace(/\s*\([^)]*\)\s*$/g, '').trim();
+  return cleaned || trimmed;
+}
+
+/**
  * High-performance string personalizer with fallbacks and guarantee of zero unresolved variables.
+ * Perfectly aligns with user's Abuja spreadsheet columns:
+ * - Business Name ({{business_name}}, {{clean_business_name}})
+ * - Business Type ({{business_type}}, {{industry}})
+ * - Area ({{area}}, {{location}})
+ * - Public Email Address ({{public_email}}, {{email}})
+ * - Public Phone Number ({{phone}}, {{phone_number}}, {{public_phone}})
  */
 export function personalizeTemplate(
   template: string,
@@ -43,9 +61,12 @@ export function personalizeTemplate(
   if (!template) return '';
 
   const businessName = (contact.business_name || '').trim();
+  const cleanBusiness = cleanBusinessName(businessName);
   const contactName = (contact.contact_name || '').trim();
   const businessType = (contact.business_type || '').trim();
   const location = (contact.location || '').trim();
+  const phone = (contact.phone || '').trim();
+  const email = (contact.email || '').trim();
   const website = (contact.website || '').trim();
   const senderName = (meta.senderName || DEFAULT_SENDER_NAME).trim();
   const companyName = (meta.companyName || DEFAULT_COMPANY_NAME).trim();
@@ -54,12 +75,13 @@ export function personalizeTemplate(
   let rendered = template;
 
   // 1. Smart Greeting fallback:
-  // If contact_name is empty, replace "Hello {{contact_name}}," with "Hello {{business_name}},"
+  // If contact_name is empty, replace "Hello {{contact_name}}," with "Hello {{business_name}}," (or clean name)
+  const greetingTarget = contactName || cleanBusiness || businessName;
   if (!contactName) {
-    if (businessName) {
-      rendered = rendered.replace(/Hello\s*\{\{contact_name\}\}/gi, `Hello ${businessName}`);
-      rendered = rendered.replace(/Hi\s*\{\{contact_name\}\}/gi, `Hi ${businessName}`);
-      rendered = rendered.replace(/Dear\s*\{\{contact_name\}\}/gi, `Dear ${businessName}`);
+    if (greetingTarget) {
+      rendered = rendered.replace(/Hello\s*\{\{contact_name\}\}/gi, `Hello ${greetingTarget}`);
+      rendered = rendered.replace(/Hi\s*\{\{contact_name\}\}/gi, `Hi ${greetingTarget}`);
+      rendered = rendered.replace(/Dear\s*\{\{contact_name\}\}/gi, `Dear ${greetingTarget}`);
     } else {
       rendered = rendered.replace(/Hello\s*\{\{contact_name\}\}/gi, 'Hello');
       rendered = rendered.replace(/Hi\s*\{\{contact_name\}\}/gi, 'Hi');
@@ -67,11 +89,20 @@ export function personalizeTemplate(
     }
   }
 
-  // 2. Direct dynamic substitutions
+  // 2. Direct dynamic substitutions (Spreadsheet title headings & variables)
+  rendered = rendered.replace(/\{\{clean_business_name\}\}/gi, cleanBusiness || businessName || 'your business');
   rendered = rendered.replace(/\{\{business_name\}\}/gi, businessName || 'your business');
-  rendered = rendered.replace(/\{\{contact_name\}\}/gi, contactName || businessName || 'there');
+  rendered = rendered.replace(/\{\{contact_name\}\}/gi, contactName || cleanBusiness || businessName || 'there');
   rendered = rendered.replace(/\{\{business_type\}\}/gi, businessType || 'your industry');
-  rendered = rendered.replace(/\{\{location\}\}/gi, location || 'your area');
+  rendered = rendered.replace(/\{\{industry\}\}/gi, businessType || 'your industry');
+  // Both {{area}} and {{location}} resolve to contact.location (e.g. "Abuja", "Wuse 2", "Kado")
+  rendered = rendered.replace(/\{\{area\}\}/gi, location || 'Abuja');
+  rendered = rendered.replace(/\{\{location\}\}/gi, location || 'Abuja');
+  rendered = rendered.replace(/\{\{public_email\}\}/gi, email || '');
+  rendered = rendered.replace(/\{\{email\}\}/gi, email || '');
+  rendered = rendered.replace(/\{\{public_phone\}\}/gi, phone || '');
+  rendered = rendered.replace(/\{\{phone_number\}\}/gi, phone || '');
+  rendered = rendered.replace(/\{\{phone\}\}/gi, phone || '');
   rendered = rendered.replace(/\{\{website\}\}/gi, website || '');
   rendered = rendered.replace(/\{\{sender_name\}\}/gi, senderName);
   rendered = rendered.replace(/\{\{company_name\}\}/gi, companyName);

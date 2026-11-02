@@ -261,9 +261,48 @@ export default function TemplatesClient({ initialTemplates }: TemplatesClientPro
               </div>
 
               <div>
-                <label className="block text-mist-1 font-medium mb-1">
-                  Email Body *
-                </label>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="block text-mist-1 font-medium">
+                    Email Body * (Personalized per recipient)
+                  </label>
+                  <span className="text-[10px] font-mono-tight text-mist-2">
+                    Click a pill to insert variable:
+                  </span>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-1.5 mb-2.5">
+                  {[
+                    { token: '{{business_name}}', label: 'Business' },
+                    { token: '{{clean_business_name}}', label: 'Clean Name' },
+                    { token: '{{business_type}}', label: 'Type' },
+                    { token: '{{area}}', label: 'Area' },
+                    { token: '{{location}}', label: 'Location' },
+                    { token: '{{public_email}}', label: 'Email' },
+                    { token: '{{phone}}', label: 'Phone' },
+                    { token: '{{contact_name}}', label: 'Contact' },
+                    { token: '{{sender_name}}', label: 'Sender' },
+                    { token: '{{company_name}}', label: 'Company' },
+                  ].map((item) => (
+                    <button
+                      key={item.token}
+                      type="button"
+                      onClick={() =>
+                        setEditingTemplate((p) =>
+                          p
+                            ? {
+                                ...p,
+                                body: `${p.body ? p.body + ' ' : ''}${item.token}`,
+                              }
+                            : null
+                        )
+                      }
+                      className="px-2 py-0.5 rounded-md bg-primary/10 hover:bg-primary/20 border border-primary/25 text-primary text-[10px] font-mono-tight transition-colors cursor-pointer"
+                    >
+                      {item.token}
+                    </button>
+                  ))}
+                </div>
+
                 <textarea
                   rows={10}
                   value={editingTemplate.body || ''}

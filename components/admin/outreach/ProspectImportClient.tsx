@@ -23,16 +23,16 @@ import { isValidEmailAddress } from '@/lib/email/outreach-utils';
 import GlassCard from '@/components/ui/GlassCard';
 import type { ColumnMapping, ImportPreviewRow, OutreachContact } from '@/types/outreach';
 
-const EXPECTED_FIELDS: Array<{ key: keyof ColumnMapping; label: string; required: boolean }> = [
-  { key: 'business_name', label: 'Business Name', required: true },
-  { key: 'contact_name', label: 'Contact Person', required: false },
-  { key: 'email', label: 'Email Address', required: false },
-  { key: 'business_type', label: 'Business Type / Industry', required: false },
-  { key: 'location', label: 'Location (City / Area)', required: false },
-  { key: 'website', label: 'Website', required: false },
-  { key: 'instagram', label: 'Instagram Handle', required: false },
-  { key: 'phone', label: 'Phone Number', required: false },
-  { key: 'notes', label: 'Notes', required: false },
+const EXPECTED_FIELDS: Array<{ key: keyof ColumnMapping; label: string; required: boolean; hint?: string }> = [
+  { key: 'business_name', label: 'Business Name', required: true, hint: 'e.g. "1420 Events", "Nana Interiors"' },
+  { key: 'business_type', label: 'Business Type', required: false, hint: 'e.g. "Event planning/decor", "Interiors"' },
+  { key: 'location', label: 'Area / Location', required: false, hint: 'e.g. "Abuja", "Wuse 2", "Kado", "Sun City"' },
+  { key: 'email', label: 'Public Email Address', required: false, hint: 'e.g. "1420eventsinfo@gmail.com"' },
+  { key: 'phone', label: 'Public Phone Number', required: false, hint: 'e.g. "08103905299"' },
+  { key: 'contact_name', label: 'Contact Person (Optional)', required: false, hint: 'Optional: if empty, email greets by Business Name' },
+  { key: 'website', label: 'Website (Optional)', required: false },
+  { key: 'instagram', label: 'Instagram Handle (Optional)', required: false },
+  { key: 'notes', label: 'Notes (Optional)', required: false },
 ];
 
 /**
@@ -160,31 +160,100 @@ export default function ProspectImportClient() {
         setSheetHeaders(headers);
         setRawRows(parsedRows);
 
-        // Auto-detect and map columns intelligently
+        // Auto-detect and map columns intelligently to match spreadsheet headers:
+        // Business Name, Business Type, Area, Public Email Address, Public Phone Number
         const autoMapping: ColumnMapping = { business_name: '', email: '' };
 
         headers.forEach((h) => {
           const lh = h.toLowerCase().trim();
-          if (lh.includes('business') || lh.includes('company') || lh.includes('brand') || lh === 'name') {
-            if (!autoMapping.business_name) autoMapping.business_name = h;
-          } else if (lh.includes('contact') || lh.includes('person') || lh.includes('owner')) {
-            if (!autoMapping.contact_name) autoMapping.contact_name = h;
-          } else if (lh.includes('email') || lh.includes('mail')) {
-            if (!autoMapping.email) autoMapping.email = h;
-          } else if (lh.includes('type') || lh.includes('industry') || lh.includes('category') || lh.includes('niche')) {
+
+          // 1. Business Type (must be checked BEFORE generic 'business' check)
+          if (
+            lh.includes('business type') ||
+            lh.includes('type of business') ||
+            lh.includes('industry') ||
+            lh.includes('category') ||
+            lh.includes('niche') ||
+            lh.includes('specialty') ||
+            lh === 'type'
+          ) {
             if (!autoMapping.business_type) autoMapping.business_type = h;
-          } else if (lh.includes('loc') || lh.includes('city') || lh.includes('address') || lh.includes('area')) {
+          }
+          // 2. Business Name
+          else if (
+            lh.includes('business name') ||
+            lh.includes('company') ||
+            lh.includes('brand') ||
+            lh === 'business' ||
+            lh === 'name' ||
+            lh.includes('store') ||
+            lh.includes('shop') ||
+            lh.includes('vendor')
+          ) {
+            if (!autoMapping.business_name) autoMapping.business_name = h;
+          }
+          // 3. Contact Person (Optional)
+          else if (
+            lh.includes('contact person') ||
+            lh.includes('contact name') ||
+            lh.includes('person') ||
+            lh.includes('owner') ||
+            lh.includes('full name')
+          ) {
+            if (!autoMapping.contact_name) autoMapping.contact_name = h;
+          }
+
+          // 4. Public Email Address (matches "Public Email Address", "Email Address", "Email")
+          if (lh.includes('email') || lh.includes('mail')) {
+            if (!autoMapping.email) autoMapping.email = h;
+          }
+
+          // 5. Area / Location (matches "Area", "Location", "City", "Address" - ignores "email address")
+          if (
+            lh === 'area' ||
+            lh.includes('area') ||
+            lh.includes('location') ||
+            lh.includes('city') ||
+            (lh.includes('address') && !lh.includes('email')) ||
+            lh.includes('town') ||
+            lh.includes('lga') ||
+            lh.includes('state')
+          ) {
             if (!autoMapping.location) autoMapping.location = h;
-          } else if (lh.includes('web') || lh.includes('site') || lh.includes('url')) {
-            if (!autoMapping.website) autoMapping.website = h;
-          } else if (lh.includes('insta') || lh.includes('ig') || lh.includes('social')) {
-            if (!autoMapping.instagram) autoMapping.instagram = h;
-          } else if (lh.includes('phone') || lh.includes('mobile') || lh.includes('tel') || lh.includes('whatsapp')) {
+          }
+
+          // 6. Public Phone Number (matches "Public Phone Number", "Phone Number", "Phone", "Mobile", "Tel")
+          if (
+            lh.includes('phone') ||
+            lh.includes('mobile') ||
+            lh.includes('tel') ||
+            lh.includes('whatsapp') ||
+            lh.includes('cell') ||
+            lh.includes('contact number')
+          ) {
             if (!autoMapping.phone) autoMapping.phone = h;
-          } else if (lh.includes('note') || lh.includes('remark') || lh.includes('comment')) {
+          }
+
+          // 7. Website
+          if (lh.includes('web') || lh.includes('site') || lh.includes('url') || lh.includes('domain')) {
+            if (!autoMapping.website) autoMapping.website = h;
+          }
+
+          // 8. Instagram Handle
+          if (lh.includes('insta') || lh.includes('ig') || lh.includes('social') || lh.includes('handle')) {
+            if (!autoMapping.instagram) autoMapping.instagram = h;
+          }
+
+          // 9. Notes
+          if (lh.includes('note') || lh.includes('remark') || lh.includes('comment') || lh.includes('description')) {
             if (!autoMapping.notes) autoMapping.notes = h;
           }
         });
+
+        // Smart fallback: if business_name is still unmapped and the first header isn't mapped, assign it
+        if (!autoMapping.business_name && headers.length > 0) {
+          autoMapping.business_name = headers[0];
+        }
 
         setMapping(autoMapping);
         setStep('mapping');
@@ -514,10 +583,11 @@ export default function ProspectImportClient() {
                   <tr>
                     <th className="px-3 py-2 text-left text-mist-2">#</th>
                     <th className="px-3 py-2 text-left text-mist-2">Business Name</th>
+                    <th className="px-3 py-2 text-left text-mist-2">Business Type</th>
+                    <th className="px-3 py-2 text-left text-mist-2">Area</th>
+                    <th className="px-3 py-2 text-left text-mist-2">Public Email Address</th>
+                    <th className="px-3 py-2 text-left text-mist-2">Phone Number</th>
                     <th className="px-3 py-2 text-left text-mist-2">Contact Person</th>
-                    <th className="px-3 py-2 text-left text-mist-2">Email</th>
-                    <th className="px-3 py-2 text-left text-mist-2">Type</th>
-                    <th className="px-3 py-2 text-left text-mist-2">Location</th>
                     <th className="px-3 py-2 text-center text-mist-2">Validation Status</th>
                   </tr>
                 </thead>
@@ -526,14 +596,19 @@ export default function ProspectImportClient() {
                     <tr key={r.rowNumber} className="hover:bg-white/[0.02]">
                       <td className="px-3 py-2 font-mono-tight text-mist-2">{r.rowNumber}</td>
                       <td className="px-3 py-2 font-medium text-paper">{r.business_name}</td>
-                      <td className="px-3 py-2 text-mist-1">
-                        {r.contact_name || <span className="italic text-mist-2">Fallback to business</span>}
-                      </td>
-                      <td className="px-3 py-2 font-mono-tight">
-                        {r.email || <span className="text-rose-400 italic">No email</span>}
-                      </td>
                       <td className="px-3 py-2 text-mist-1">{r.business_type || '—'}</td>
                       <td className="px-3 py-2 text-mist-1">{r.location || '—'}</td>
+                      <td className="px-3 py-2 font-mono-tight">
+                        {r.email ? (
+                          <span>{r.email}</span>
+                        ) : (
+                          <span className="text-rose-400 italic">Missing email</span>
+                        )}
+                      </td>
+                      <td className="px-3 py-2 font-mono-tight text-mist-1">{r.phone || '—'}</td>
+                      <td className="px-3 py-2 text-mist-1">
+                        {r.contact_name || <span className="italic text-mist-2">Uses business name</span>}
+                      </td>
                       <td className="px-3 py-2 text-center">
                         {r.isValidEmail && !r.isDuplicateInFile && (
                           <span className="inline-block px-2 py-0.5 rounded text-[10px] bg-emerald-500/15 text-emerald-400 border border-emerald-500/20">

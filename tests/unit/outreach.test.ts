@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   personalizeTemplate,
+  cleanBusinessName,
   isValidEmailAddress,
   buildHtmlEmail,
 } from '@/lib/email/outreach-utils';
@@ -32,6 +33,26 @@ describe('Outreach Personalization Engine', () => {
     expect(rendered).toContain('Raymond Gaius from Rayida Tech.');
     expect(rendered).not.toContain('{{');
     expect(rendered).not.toContain('}}');
+  });
+
+  it('correctly cleans business names with parentheses tags and resolves {{area}} and {{clean_business_name}}', () => {
+    const rawName = '1420 Events (Event Planner & Decor)';
+    expect(cleanBusinessName(rawName)).toBe('1420 Events');
+    expect(cleanBusinessName('Nana Interiors')).toBe('Nana Interiors');
+
+    const template = 'Hello {{clean_business_name}},\n\nI noticed {{business_name}} specializes in {{business_type}} in {{area}}. Contact us at {{public_email}} or {{phone}}.';
+    const contact = {
+      business_name: rawName,
+      business_type: 'Event planning/decor',
+      location: 'Abuja',
+      email: '1420eventsinfo@gmail.com',
+      phone: '08103905299',
+    };
+
+    const rendered = personalizeTemplate(template, contact);
+    expect(rendered).toContain('Hello 1420 Events,');
+    expect(rendered).toContain('1420 Events (Event Planner & Decor) specializes in Event planning/decor in Abuja.');
+    expect(rendered).toContain('Contact us at 1420eventsinfo@gmail.com or 08103905299.');
   });
 
   it('falls back to business name when contact person is missing', () => {

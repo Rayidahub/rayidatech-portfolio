@@ -255,14 +255,14 @@ export default function ContactsTableClient({
 
           <div>
             <label className="block text-[11px] font-mono-tight text-mist-2 uppercase mb-1">
-              Business Type / Industry
+              Business Type
             </label>
             <select
               value={typeFilter}
               onChange={(e) => setTypeFilter(e.target.value)}
               className="w-full bg-white/5 border border-(--line) rounded-lg px-3 py-1.5 text-xs text-paper focus:outline-none focus:border-primary/50"
             >
-              <option value="All" className="bg-ink text-paper">All Industries</option>
+              <option value="All" className="bg-ink text-paper">All Business Types</option>
               {businessTypes.map((t) => (
                 <option key={t} value={t} className="bg-ink text-paper">
                   {t}
@@ -273,14 +273,14 @@ export default function ContactsTableClient({
 
           <div>
             <label className="block text-[11px] font-mono-tight text-mist-2 uppercase mb-1">
-              Location
+              Area / Location
             </label>
             <select
               value={locationFilter}
               onChange={(e) => setLocationFilter(e.target.value)}
               className="w-full bg-white/5 border border-(--line) rounded-lg px-3 py-1.5 text-xs text-paper focus:outline-none focus:border-primary/50"
             >
-              <option value="All" className="bg-ink text-paper">All Locations</option>
+              <option value="All" className="bg-ink text-paper">All Areas</option>
               {locations.map((loc) => (
                 <option key={loc} value={loc} className="bg-ink text-paper">
                   {loc}
@@ -333,11 +333,11 @@ export default function ContactsTableClient({
                     className="w-4 h-4 rounded accent-primary cursor-pointer"
                   />
                 </th>
-                <th className="text-left text-mist-2 font-medium px-4 py-3">Business / Brand</th>
-                <th className="text-left text-mist-2 font-medium px-4 py-3">Contact Person</th>
-                <th className="text-left text-mist-2 font-medium px-4 py-3">Email Address</th>
-                <th className="text-left text-mist-2 font-medium px-4 py-3">Industry / Type</th>
-                <th className="text-left text-mist-2 font-medium px-4 py-3">Location</th>
+                <th className="text-left text-mist-2 font-medium px-4 py-3">Business Name</th>
+                <th className="text-left text-mist-2 font-medium px-4 py-3">Business Type</th>
+                <th className="text-left text-mist-2 font-medium px-4 py-3">Area / Location</th>
+                <th className="text-left text-mist-2 font-medium px-4 py-3">Public Email Address</th>
+                <th className="text-left text-mist-2 font-medium px-4 py-3">Phone</th>
                 <th className="text-center text-mist-2 font-medium px-4 py-3">Status</th>
                 <th className="text-right text-mist-2 font-medium px-4 py-3">Actions</th>
               </tr>
@@ -372,6 +372,9 @@ export default function ContactsTableClient({
                     </td>
                     <td className="px-4 py-3">
                       <div className="font-medium text-paper">{contact.business_name}</div>
+                      {contact.contact_name && (
+                        <div className="text-[11px] text-mist-2">Contact: {contact.contact_name}</div>
+                      )}
                       <div className="flex items-center gap-2 mt-0.5 text-xs text-mist-2">
                         {contact.website && (
                           <a
@@ -390,18 +393,13 @@ export default function ContactsTableClient({
                             <span>{contact.instagram}</span>
                           </span>
                         )}
-                        {contact.phone && (
-                          <span className="inline-flex items-center gap-0.5 text-mist-2">
-                            <Phone className="w-2.5 h-2.5 text-emerald-400" />
-                            <span>{contact.phone}</span>
-                          </span>
-                        )}
                       </div>
                     </td>
-                    <td className="px-4 py-3 text-mist-1 text-xs">
-                      {contact.contact_name || (
-                        <span className="text-mist-2 italic">Uses business greeting</span>
-                      )}
+                    <td className="px-4 py-3 text-xs text-mist-1">
+                      {contact.business_type || '—'}
+                    </td>
+                    <td className="px-4 py-3 text-xs text-mist-1">
+                      {contact.location || '—'}
                     </td>
                     <td className="px-4 py-3 text-xs">
                       {contact.email ? (
@@ -413,11 +411,8 @@ export default function ContactsTableClient({
                         </span>
                       )}
                     </td>
-                    <td className="px-4 py-3 text-xs text-mist-1">
-                      {contact.business_type || '—'}
-                    </td>
-                    <td className="px-4 py-3 text-xs text-mist-1">
-                      {contact.location || '—'}
+                    <td className="px-4 py-3 text-xs font-mono-tight text-mist-1">
+                      {contact.phone || '—'}
                     </td>
                     <td className="px-4 py-3 text-center">
                       <span

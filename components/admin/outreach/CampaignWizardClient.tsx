@@ -48,14 +48,32 @@ interface CampaignWizardClientProps {
 }
 
 const TEMPLATE_VARIABLES = [
-  { token: '{{business_name}}', desc: 'Business / Company name' },
-  { token: '{{contact_name}}', desc: 'Contact person (with business fallback)' },
-  { token: '{{business_type}}', desc: 'Industry / Specialty' },
-  { token: '{{location}}', desc: 'City / Area' },
-  { token: '{{website}}', desc: 'Website address' },
-  { token: '{{sender_name}}', desc: 'Sender full name' },
-  { token: '{{company_name}}', desc: 'Rayida Tech' },
+  { token: '{{business_name}}', desc: 'Business Name (matches Excel "Business Name" column)' },
+  { token: '{{clean_business_name}}', desc: 'Clean business name without (parentheses)' },
+  { token: '{{business_type}}', desc: 'Business Type (matches Excel "Business Type" column)' },
+  { token: '{{area}}', desc: 'Area (matches Excel "Area" column)' },
+  { token: '{{location}}', desc: 'Location / City' },
+  { token: '{{public_email}}', desc: 'Public Email Address (matches Excel column)' },
+  { token: '{{phone}}', desc: 'Public Phone Number (matches Excel column)' },
+  { token: '{{contact_name}}', desc: 'Contact person (falls back to Business Name if empty)' },
+  { token: '{{sender_name}}', desc: 'Sender full name (Raymond Gaius)' },
+  { token: '{{company_name}}', desc: 'Company name (Rayida Tech)' },
 ];
+
+const DEFAULT_ABUJA_TEMPLATE_BODY = `Hello {{business_name}},
+
+I came across {{business_name}} and noticed that your business specializes in {{business_type}} in {{area}}.
+
+I'm Raymond Gaius, founder and lead product engineer at Rayida Tech. We build fast, high-converting digital platforms and bespoke websites that help businesses turn casual visitors into loyal paying clients.
+
+Looking at your presence, I believe a modern, responsive website could help {{business_name}} showcase your offerings, build immediate trust, and automate customer inquiries.
+
+Would you be open to a brief 5-minute conversation or seeing a free visual concept this week?
+
+Best regards,
+Raymond Gaius
+Founder, Rayida Tech
+https://rayidatech.name.ng`;
 
 export default function CampaignWizardClient({
   contacts,
@@ -78,7 +96,7 @@ export default function CampaignWizardClient({
   // Step 2: Content & Provider
   const [campaignName, setCampaignName] = useState('');
   const [subject, setSubject] = useState(templates[0]?.subject || 'A website idea for {{business_name}}');
-  const [body, setBody] = useState(templates[0]?.body || '');
+  const [body, setBody] = useState(templates[0]?.body || DEFAULT_ABUJA_TEMPLATE_BODY);
   const [provider, setProvider] = useState<EmailProvider>(settings.default_provider || 'resend');
   const [senderName, setSenderName] = useState(settings.sender_name || 'Raymond Gaius');
   const [senderEmail, setSenderEmail] = useState(settings.sender_email || 'info@rayidatech.name.ng');
@@ -435,9 +453,10 @@ export default function CampaignWizardClient({
                       />
                     </th>
                     <th className="px-3 py-2.5 text-left text-mist-2">Business Name</th>
-                    <th className="px-3 py-2.5 text-left text-mist-2">Contact Person</th>
-                    <th className="px-3 py-2.5 text-left text-mist-2">Email</th>
-                    <th className="px-3 py-2.5 text-left text-mist-2">Location</th>
+                    <th className="px-3 py-2.5 text-left text-mist-2">Business Type</th>
+                    <th className="px-3 py-2.5 text-left text-mist-2">Area / Location</th>
+                    <th className="px-3 py-2.5 text-left text-mist-2">Public Email Address</th>
+                    <th className="px-3 py-2.5 text-left text-mist-2">Phone</th>
                     <th className="px-3 py-2.5 text-center text-mist-2">Status</th>
                   </tr>
                 </thead>
@@ -463,12 +482,16 @@ export default function CampaignWizardClient({
                           />
                         </td>
                         <td className="px-3 py-2.5 font-medium text-paper">
-                          {contact.business_name}
+                          <div>{contact.business_name}</div>
+                          {contact.contact_name && (
+                            <div className="text-[10px] text-mist-2 font-normal">Contact: {contact.contact_name}</div>
+                          )}
                         </td>
                         <td className="px-3 py-2.5 text-mist-1">
-                          {contact.contact_name || (
-                            <span className="italic text-mist-2">Uses business name</span>
-                          )}
+                          {contact.business_type || '—'}
+                        </td>
+                        <td className="px-3 py-2.5 text-mist-1">
+                          {contact.location || '—'}
                         </td>
                         <td className="px-3 py-2.5 font-mono-tight">
                           {contact.email ? (
@@ -477,8 +500,8 @@ export default function CampaignWizardClient({
                             <span className="text-rose-400 italic">Missing Email</span>
                           )}
                         </td>
-                        <td className="px-3 py-2.5 text-mist-1">
-                          {contact.location || '—'}
+                        <td className="px-3 py-2.5 font-mono-tight text-mist-1">
+                          {contact.phone || '—'}
                         </td>
                         <td className="px-3 py-2.5 text-center">
                           {isInvalid ? (
@@ -618,6 +641,15 @@ export default function CampaignWizardClient({
               />
             </div>
 
+            {/* Spreadsheet Column Alignment Banner */}
+            <div className="p-3.5 rounded-xl bg-secondary/10 border border-secondary/25 mb-4 text-xs text-mist-1 flex items-start gap-2.5">
+              <Sparkles className="w-4 h-4 text-secondary shrink-0 mt-0.5" />
+              <div className="leading-relaxed">
+                <span className="font-semibold text-paper">Direct Spreadsheet Alignment: </span>
+                Your variables match your spreadsheet columns: <code className="text-secondary bg-white/5 px-1 py-0.5 rounded text-[11px] font-mono-tight">{'{{business_name}}'}</code>, <code className="text-secondary bg-white/5 px-1 py-0.5 rounded text-[11px] font-mono-tight">{'{{business_type}}'}</code>, <code className="text-secondary bg-white/5 px-1 py-0.5 rounded text-[11px] font-mono-tight">{'{{area}}'}</code>, <code className="text-secondary bg-white/5 px-1 py-0.5 rounded text-[11px] font-mono-tight">{'{{public_email}}'}</code>, and <code className="text-secondary bg-white/5 px-1 py-0.5 rounded text-[11px] font-mono-tight">{'{{phone}}'}</code>. If your spreadsheet does not have contact person names, greetings automatically address prospects by their business name.
+              </div>
+            </div>
+
             {/* Variable Pills */}
             <div className="mb-2">
               <div className="text-[11px] font-mono-tight text-mist-2 uppercase mb-1.5 flex items-center justify-between">
@@ -726,6 +758,19 @@ export default function CampaignWizardClient({
                 <span className="font-medium text-paper text-sm">
                   {renderedSubjectPreview}
                 </span>
+              </div>
+              <div className="flex flex-wrap items-center gap-3 pt-2 border-t border-(--line) text-[11px] text-mist-2">
+                <span><strong>Business Name:</strong> <span className="text-paper">{currentPreviewContact.business_name}</span></span>
+                <span>&bull;</span>
+                <span><strong>Business Type:</strong> <span className="text-paper">{currentPreviewContact.business_type || '—'}</span></span>
+                <span>&bull;</span>
+                <span><strong>Area:</strong> <span className="text-paper">{currentPreviewContact.location || '—'}</span></span>
+                {currentPreviewContact.phone && (
+                  <>
+                    <span>&bull;</span>
+                    <span><strong>Phone:</strong> <span className="text-paper">{currentPreviewContact.phone}</span></span>
+                  </>
+                )}
               </div>
             </div>
 
