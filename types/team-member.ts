@@ -3,6 +3,7 @@ export interface TeamMemberSocialLinks {
   twitter?: string;
   github?: string;
   website?: string;
+  email?: string;
 }
 
 export interface TeamMember {
@@ -11,6 +12,7 @@ export interface TeamMember {
   role: string;
   bio: string;
   photo_url: string | null;
+  email?: string | null;
   social_links: TeamMemberSocialLinks;
   sort_order: number;
   is_active: boolean;

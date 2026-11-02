@@ -14,6 +14,7 @@ export default function NewTeamMember() {
   const [form, setForm] = useState({
     name: '',
     role: '',
+    email: '',
     bio: '',
     photo_url: '',
     linkedin: '',
@@ -30,6 +31,7 @@ export default function NewTeamMember() {
     setError('')
 
     const socialLinks: Record<string, string> = {}
+    if (form.email.trim()) socialLinks.email = form.email.trim()
     if (form.linkedin.trim()) socialLinks.linkedin = form.linkedin.trim()
     if (form.twitter.trim()) socialLinks.twitter = form.twitter.trim()
     if (form.github.trim()) socialLinks.github = form.github.trim()
@@ -86,7 +88,7 @@ export default function NewTeamMember() {
             />
           </div>
 
-          <div className="sm:col-span-2">
+          <div>
             <label className="block text-sm text-mist-1 mb-1.5">Role *</label>
             <input
               type="text"
@@ -95,6 +97,17 @@ export default function NewTeamMember() {
               required
               className="w-full bg-white/5 border border-(--line) rounded-lg px-3 py-2.5 text-sm text-paper placeholder:text-mist-2 focus:outline-none focus:border-primary/50 transition-colors"
               placeholder="Founder & Product Designer"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm text-mist-1 mb-1.5">Email Address</label>
+            <input
+              type="email"
+              value={form.email}
+              onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))}
+              className="w-full bg-white/5 border border-(--line) rounded-lg px-3 py-2.5 text-sm text-paper placeholder:text-mist-2 focus:outline-none focus:border-primary/50 transition-colors font-mono-tight"
+              placeholder="member@rayidatech.name.ng"
             />
           </div>
 
@@ -181,21 +194,27 @@ export default function NewTeamMember() {
                 type="checkbox"
                 checked={form.is_active}
                 onChange={(e) => setForm((p) => ({ ...p, is_active: e.target.checked }))}
-                className="w-4 h-4 rounded border-(--line) bg-white/5 text-primary focus:ring-primary/30"
+                className="w-4 h-4 rounded accent-primary"
               />
-              <span className="text-sm text-mist-1">Visible on site</span>
+              <span className="text-sm text-paper">Active (visible on public site)</span>
             </label>
           </div>
         </div>
 
-        <div className="flex justify-end">
+        <div className="flex items-center justify-end gap-3 pt-4 border-t border-(--line)">
+          <Link
+            href="/admin/team"
+            className="px-4 py-2 text-sm text-mist-2 hover:text-paper transition-colors"
+          >
+            Cancel
+          </Link>
           <button
             type="submit"
             disabled={saving}
             className="inline-flex items-center gap-2 bg-primary hover:bg-primary/80 text-white rounded-lg px-5 py-2.5 text-sm font-medium transition-colors disabled:opacity-50"
           >
             <Save className="w-4 h-4" />
-            {saving ? 'Saving...' : 'Save Member'}
+            {saving ? 'Saving...' : 'Create Member'}
           </button>
         </div>
       </form>

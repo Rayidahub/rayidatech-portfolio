@@ -17,6 +17,7 @@ export default function EditTeamMember() {
   const [form, setForm] = useState({
     name: '',
     role: '',
+    email: '',
     bio: '',
     photo_url: '',
     linkedin: '',
@@ -46,6 +47,7 @@ export default function EditTeamMember() {
         setForm({
           name: data.name,
           role: data.role,
+          email: data.email || socials.email || '',
           bio: data.bio,
           photo_url: data.photo_url ?? '',
           linkedin: socials.linkedin ?? '',
@@ -65,6 +67,7 @@ export default function EditTeamMember() {
     setError('')
 
     const socialLinks: Record<string, string> = {}
+    if (form.email.trim()) socialLinks.email = form.email.trim()
     if (form.linkedin.trim()) socialLinks.linkedin = form.linkedin.trim()
     if (form.twitter.trim()) socialLinks.twitter = form.twitter.trim()
     if (form.github.trim()) socialLinks.github = form.github.trim()
@@ -100,10 +103,15 @@ export default function EditTeamMember() {
 
   if (notFound) {
     return (
-      <div className="text-center py-12">
-        <p className="text-mist-1">Team member not found.</p>
-        <Link href="/admin/team" className="text-secondary text-sm mt-2 inline-block">
-          ← Back to team
+      <div className="glass rounded-xl p-8 text-center max-w-lg mx-auto">
+        <h2 className="font-display text-lg font-semibold text-paper mb-2">Member Not Found</h2>
+        <p className="text-sm text-mist-2 mb-4">The team member you are looking for does not exist.</p>
+        <Link
+          href="/admin/team"
+          className="inline-flex items-center gap-2 text-sm text-secondary hover:underline"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Back to Team
         </Link>
       </div>
     )
@@ -138,7 +146,7 @@ export default function EditTeamMember() {
             />
           </div>
 
-          <div className="sm:col-span-2">
+          <div>
             <label className="block text-sm text-mist-1 mb-1.5">Role *</label>
             <input
               type="text"
@@ -146,6 +154,17 @@ export default function EditTeamMember() {
               onChange={(e) => setForm((p) => ({ ...p, role: e.target.value }))}
               required
               className="w-full bg-white/5 border border-(--line) rounded-lg px-3 py-2.5 text-sm text-paper placeholder:text-mist-2 focus:outline-none focus:border-primary/50 transition-colors"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm text-mist-1 mb-1.5">Email Address</label>
+            <input
+              type="email"
+              value={form.email}
+              onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))}
+              className="w-full bg-white/5 border border-(--line) rounded-lg px-3 py-2.5 text-sm text-paper placeholder:text-mist-2 focus:outline-none focus:border-primary/50 transition-colors font-mono-tight"
+              placeholder="member@rayidatech.name.ng"
             />
           </div>
 
@@ -178,7 +197,6 @@ export default function EditTeamMember() {
               value={form.linkedin}
               onChange={(e) => setForm((p) => ({ ...p, linkedin: e.target.value }))}
               className="w-full bg-white/5 border border-(--line) rounded-lg px-3 py-2.5 text-sm text-paper placeholder:text-mist-2 focus:outline-none focus:border-primary/50 transition-colors"
-              placeholder="https://linkedin.com/in/..."
             />
           </div>
 
@@ -189,7 +207,6 @@ export default function EditTeamMember() {
               value={form.twitter}
               onChange={(e) => setForm((p) => ({ ...p, twitter: e.target.value }))}
               className="w-full bg-white/5 border border-(--line) rounded-lg px-3 py-2.5 text-sm text-paper placeholder:text-mist-2 focus:outline-none focus:border-primary/50 transition-colors"
-              placeholder="https://x.com/..."
             />
           </div>
 
@@ -200,7 +217,6 @@ export default function EditTeamMember() {
               value={form.github}
               onChange={(e) => setForm((p) => ({ ...p, github: e.target.value }))}
               className="w-full bg-white/5 border border-(--line) rounded-lg px-3 py-2.5 text-sm text-paper placeholder:text-mist-2 focus:outline-none focus:border-primary/50 transition-colors"
-              placeholder="https://github.com/..."
             />
           </div>
 
@@ -211,7 +227,6 @@ export default function EditTeamMember() {
               value={form.website}
               onChange={(e) => setForm((p) => ({ ...p, website: e.target.value }))}
               className="w-full bg-white/5 border border-(--line) rounded-lg px-3 py-2.5 text-sm text-paper placeholder:text-mist-2 focus:outline-none focus:border-primary/50 transition-colors"
-              placeholder="https://..."
             />
           </div>
 
@@ -231,14 +246,20 @@ export default function EditTeamMember() {
                 type="checkbox"
                 checked={form.is_active}
                 onChange={(e) => setForm((p) => ({ ...p, is_active: e.target.checked }))}
-                className="w-4 h-4 rounded border-(--line) bg-white/5 text-primary focus:ring-primary/30"
+                className="w-4 h-4 rounded accent-primary"
               />
-              <span className="text-sm text-mist-1">Visible on site</span>
+              <span className="text-sm text-paper">Active (visible on public site)</span>
             </label>
           </div>
         </div>
 
-        <div className="flex justify-end">
+        <div className="flex items-center justify-end gap-3 pt-4 border-t border-(--line)">
+          <Link
+            href="/admin/team"
+            className="px-4 py-2 text-sm text-mist-2 hover:text-paper transition-colors"
+          >
+            Cancel
+          </Link>
           <button
             type="submit"
             disabled={saving}

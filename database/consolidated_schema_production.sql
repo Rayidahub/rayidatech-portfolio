@@ -115,6 +115,7 @@ CREATE TABLE IF NOT EXISTS public.team_members (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name TEXT NOT NULL,
   role TEXT NOT NULL,
+  email TEXT,
   bio TEXT NOT NULL,
   photo_url TEXT,
   social_links JSONB NOT NULL DEFAULT '{}'::jsonb,
