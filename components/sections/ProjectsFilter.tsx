@@ -182,7 +182,7 @@ export default function ProjectsFilter({
                   className="group block h-full"
                 >
                   <PremiumCard
-                    imageSrc={cleanCover}
+                    imageSrc={cleanCover || '/img/card1.png'}
                     imageAlt={project.title}
                     badge={badgeLabel}
                     title={project.title}

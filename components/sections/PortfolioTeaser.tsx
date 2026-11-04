@@ -87,7 +87,7 @@ export default async function PortfolioTeaser() {
                   className="group block"
                 >
                   <PremiumCard
-                    imageSrc={project.cover_image}
+                    imageSrc={project.cover_image?.trim() || '/img/card1.png'}
                     imageAlt={project.title}
                     badge={badgeLabel}
                     title={project.title}

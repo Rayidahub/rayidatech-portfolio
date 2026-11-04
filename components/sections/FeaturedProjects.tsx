@@ -61,7 +61,7 @@ export default async function FeaturedProjects() {
               <Reveal key={project.id}>
                 <Link href={`/projects/${normalizeSlug(project.slug)}`}>
                   <PremiumCard
-                    imageSrc={project.cover_image}
+                    imageSrc={project.cover_image?.trim() || '/img/card1.png'}
                     imageAlt={project.title}
                     badge={badgeLabel}
                     title={project.title}

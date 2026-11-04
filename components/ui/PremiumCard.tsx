@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { ReactNode } from 'react';
+import { ReactNode, useState, useEffect } from 'react';
 
 interface SpecSlot {
   icon?: ReactNode;
@@ -15,7 +15,7 @@ interface MetricSlot {
 
 interface PremiumCardProps {
   /** Hero image src */
-  imageSrc: string;
+  imageSrc?: string | null;
   imageAlt: string;
   /** Top-left badge in default state */
   badge: string;
@@ -45,6 +45,7 @@ function normalizeSpec(spec: string | SpecSlot): SpecSlot {
 }
 
 const easeOutExpo = 'cubic-bezier(0.16, 1, 0.3, 1)';
+const DEFAULT_CARD_COVER = '/img/card1.png';
 
 export default function PremiumCard({
   imageSrc,
@@ -61,6 +62,18 @@ export default function PremiumCard({
   ctaLabel,
   className = '',
 }: PremiumCardProps) {
+  const fallbackSrc = DEFAULT_CARD_COVER;
+  const initialSrc = imageSrc && imageSrc.trim() ? imageSrc.trim() : fallbackSrc;
+  const [currentSrc, setCurrentSrc] = useState<string>(initialSrc);
+
+  useEffect(() => {
+    if (imageSrc && imageSrc.trim()) {
+      setCurrentSrc(imageSrc.trim());
+    } else {
+      setCurrentSrc(fallbackSrc);
+    }
+  }, [imageSrc]);
+
   const tagsPreview = tags.slice(0, 3);
   const extraCount = tags.length - tagsPreview.length;
 
@@ -70,11 +83,12 @@ export default function PremiumCard({
     >
       {/* Background image — shared across both states */}
       <Image
-        src={imageSrc}
-        alt={imageAlt}
+        src={currentSrc}
+        alt={imageAlt || title}
         fill
         className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        onError={() => setCurrentSrc(fallbackSrc)}
       />
 
       {/* ── LAYER: Default state ── */}
@@ -100,102 +114,120 @@ export default function PremiumCard({
           <span className="w-1 h-1 rounded-full bg-white/40" />
         </div>
 
-        {/* Main info — Project title & Subtitle placed cleanly in the bottom shadow part */}
-        <div className="relative z-10 bottom-14 inset-x-0 px-4 sm:px-6 flex items-end justify-between gap-3 sm:gap-4">
-          <div className="min-w-0 flex-1">
-            <h3 className="text-white font-display text-lg sm:text-2xl font-bold leading-tight truncate drop-shadow-md tracking-tight">
-              {title}
-            </h3>
-            {subtitle && (
-              <p className="text-white/80 text-xs sm:text-sm mt-0.5 sm:mt-1 truncate font-medium drop-shadow-sm">
-                {subtitle}
-              </p>
+        {/* Content footer */}
+        <div className="relative z-10 p-6 sm:p-7 flex flex-col gap-3">
+          <div className="flex items-end justify-between gap-4">
+            <div className="min-w-0 flex-1">
+              <h3 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-paper truncate">
+                {title}
+              </h3>
+              {subtitle && (
+                <p className="text-xs sm:text-sm text-mist-1 font-mono-tight truncate mt-0.5">
+                  {subtitle}
+                </p>
+              )}
+            </div>
+            {primaryMetric && (
+              <span className="shrink-0 font-mono-tight text-xs uppercase tracking-wider text-secondary px-3 py-1.5 rounded-full glass border border-(--line)">
+                {primaryMetric}
+              </span>
             )}
           </div>
-          {primaryMetric && (
-            <span className="text-secondary font-mono-tight text-xs sm:text-sm font-semibold whitespace-nowrap drop-shadow-sm pb-0.5">
-              {primaryMetric}
-            </span>
-          )}
-        </div>
 
-        {/* Bottom metadata row */}
-        <div className="relative z-10 bottom-4 inset-x-0 px-4 sm:px-6 flex items-center gap-2 sm:gap-3 text-xs text-white/80 font-mono-tight">
-          {bottomSpecs.map((spec, i) => {
-            const { icon, label } = normalizeSpec(spec);
-            return (
-              <span key={i} className="flex items-center gap-1.5 truncate">
-                {i > 0 && (
-                  <span className="inline-block w-px h-3 bg-white/25 mr-1.5" />
-                )}
-                {icon && <span className="shrink-0 text-secondary">{icon}</span>}
-                <span className="truncate text-white/85">{label}</span>
-              </span>
-            );
-          })}
+          {/* Quick specs / metadata row */}
+          {bottomSpecs.length > 0 && (
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-mist-1 pt-2 border-t border-white/10">
+              {bottomSpecs.map((spec, i) => {
+                const norm = normalizeSpec(spec);
+                return (
+                  <span key={i} className="inline-flex items-center gap-1.5 font-mono-tight">
+                    {norm.icon && (
+                      <span className="text-secondary/80 shrink-0">{norm.icon}</span>
+                    )}
+                    <span>{norm.label}</span>
+                  </span>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
 
-      {/* ── LAYER: Hover state — glass bottom sheet ── */}
+      {/* ── LAYER: Hover state ── */}
       <div
-        className="absolute inset-x-0 bottom-0 h-[72%] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] bg-ink/90 backdrop-blur-xl border-t border-(--line) rounded-t-[28px] sm:rounded-t-[32px] flex flex-col p-4 sm:p-6 shadow-2xl"
+        className="absolute inset-0 flex flex-col justify-between p-6 sm:p-8 opacity-0 pointer-events-none transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:opacity-100 group-hover:pointer-events-auto"
         style={{ transitionTimingFunction: easeOutExpo }}
       >
-        {/* Capsule badge */}
-        <div className="self-start flex items-center gap-1.5 bg-paper/10 text-paper rounded-full px-3 py-1.5 text-xs font-medium opacity-0 -translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 delay-100 ease-[cubic-bezier(0.16,1,0.3,1)]">
-          {hoverBadge.icon}
-          <span>{hoverBadge.label}</span>
+        {/* Full-card dark overlay for maximum legibility on hover */}
+        <div
+          className="pointer-events-none absolute inset-0 bg-ink/90 backdrop-blur-md"
+          aria-hidden="true"
+        />
+
+        {/* Top hover row: capsule badge with icon */}
+        <div className="relative z-10 flex items-center justify-between">
+          <span className="inline-flex items-center gap-1.5 rounded-full glass-strong border border-primary/30 px-3.5 py-1.5 text-xs font-medium text-secondary">
+            {hoverBadge.icon}
+            <span>{hoverBadge.label}</span>
+          </span>
+          <span className="font-mono-tight text-[11px] text-mist-2 uppercase tracking-wider">
+            Case Study
+          </span>
         </div>
 
-        {/* Title */}
-        <h3 className="text-paper font-display text-xl sm:text-2xl font-bold leading-tight mt-4 opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 delay-150 ease-[cubic-bezier(0.16,1,0.3,1)]">
-          {title}
-        </h3>
+        {/* Middle: Expanded description */}
+        <div className="relative z-10 my-auto py-4">
+          <h4 className="font-display text-xl sm:text-2xl font-bold text-paper mb-2">
+            {title}
+          </h4>
+          <p className="text-sm sm:text-base leading-relaxed text-mist-1 line-clamp-4">
+            {description}
+          </p>
+        </div>
 
-        {/* Description */}
-        <p className="text-mist-1 text-sm leading-relaxed line-clamp-3 mt-2 opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 delay-200 ease-[cubic-bezier(0.16,1,0.3,1)]">
-          {description}
-        </p>
-
-        {/* Spacer */}
-        <div className="flex-1 min-h-4" />
-
-        {/* Metrics row */}
-        <div className="flex items-stretch border-y border-(--line) -mx-4 sm:-mx-6 px-4 sm:px-6 py-3 opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 delay-[250ms] ease-[cubic-bezier(0.16,1,0.3,1)]">
-          {hoverMetrics.map((metric, i) => (
-            <div
-              key={i}
-              className={`flex items-center gap-2 flex-1 ${
-                i < hoverMetrics.length - 1 ? 'border-r border-(--line)' : ''
-              }`}
-            >
-              <span className="text-secondary shrink-0">{metric.icon}</span>
-              <span className="text-xs text-mist-1 truncate font-mono-tight">{metric.label}</span>
+        {/* Bottom hover: metrics row + tags + CTA button */}
+        <div className="relative z-10 flex flex-col gap-4 pt-4 border-t border-white/10">
+          {/* Key metrics grid */}
+          {hoverMetrics.length > 0 && (
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              {hoverMetrics.map((metric, i) => (
+                <div
+                  key={i}
+                  className="flex items-center gap-2 px-3 py-2 rounded-xl glass border border-(--line)"
+                >
+                  <span className="text-primary shrink-0">{metric.icon}</span>
+                  <span className="font-mono-tight text-paper truncate">{metric.label}</span>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-
-        {/* Tags */}
-        <div className="flex flex-wrap gap-1.5 pt-4 opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 delay-300 ease-[cubic-bezier(0.16,1,0.3,1)]">
-          {tagsPreview.map((tag) => (
-            <span
-              key={tag}
-              className="rounded-full bg-paper/10 text-mist-1 px-3 py-1 text-xs font-medium"
-            >
-              {tag}
-            </span>
-          ))}
-          {extraCount > 0 && (
-            <span className="rounded-full bg-primary/20 text-primary px-3 py-1 text-xs font-semibold">
-              +{extraCount}
-            </span>
           )}
-        </div>
 
-        {/* CTA */}
-        <div className="pt-4 opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 delay-[350ms] ease-[cubic-bezier(0.16,1,0.3,1)]">
-          <div className="w-full bg-primary text-white text-sm font-medium rounded-full py-3 text-center transition-all duration-200 group-hover:brightness-110 shadow-md shadow-primary/20">
-            {ctaLabel}
+          {/* Tags preview */}
+          {tags.length > 0 && (
+            <div className="flex flex-wrap items-center gap-1.5">
+              {tagsPreview.map((tag) => (
+                <span
+                  key={tag}
+                  className="text-[11px] font-mono-tight px-2.5 py-1 rounded-md bg-white/5 text-mist-1 border border-white/5"
+                >
+                  {tag}
+                </span>
+              ))}
+              {extraCount > 0 && (
+                <span className="text-[10px] font-mono-tight text-mist-2">
+                  +{extraCount} more
+                </span>
+              )}
+            </div>
+          )}
+
+          {/* Call to action pill */}
+          <div className="flex items-center justify-between pt-1">
+            <span className="text-xs font-semibold text-paper group-hover:text-secondary transition-colors inline-flex items-center gap-1.5">
+              <span>{ctaLabel}</span>
+              <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+            </span>
+            <span className="text-[11px] font-mono-tight text-mist-2">View details</span>
           </div>
         </div>
       </div>
