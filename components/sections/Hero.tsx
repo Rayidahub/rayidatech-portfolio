@@ -101,11 +101,13 @@ export default function Hero({ slides, settings }: HeroProps) {
             style={blurAmount > 0 ? { filter: `blur(${blurAmount}px)` } : undefined}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={slide.image}
-              alt={slide.label}
-              className="w-full h-full object-cover object-center md:object-[center_right]"
-            />
+            {slide.image ? (
+              <img
+                src={slide.image}
+                alt={slide.label}
+                className="w-full h-full object-cover object-center md:object-[center_right]"
+              />
+            ) : null}
           </motion.div>
         </AnimatePresence>
       </div>
