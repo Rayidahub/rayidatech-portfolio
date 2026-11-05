@@ -16,6 +16,7 @@ import {
   Loader2,
   Share2,
   Sparkles,
+  MessageSquare,
 } from 'lucide-react';
 import DeleteButton from '@/app/admin/(dashboard)/team/DeleteButton';
 import TeamEmailModal from '@/components/admin/team/TeamEmailModal';
@@ -23,6 +24,7 @@ import {
   updateTeamMemberEmailAction,
   exportTeamToOutreachContacts,
 } from '@/app/actions/team-email';
+import { formatWhatsAppPhoneNumber } from '@/lib/whatsapp/whatsapp-utils';
 import type { TeamMember } from '@/types/team-member';
 
 interface TeamManagementClientProps {
@@ -299,6 +301,7 @@ export default function TeamManagementClient({
                   const email = getMemberEmail(member);
                   const isSelected = selectedIds.has(member.id);
                   const isEditingThisEmail = editingEmailId === member.id;
+                  const whatsappNumber = member.social_links?.whatsapp || member.social_links?.phone;
 
                   return (
                     <tr
@@ -444,6 +447,19 @@ export default function TeamManagementClient({
                       {/* Actions */}
                       <td className="px-4 py-3 text-right">
                         <div className="inline-flex items-center gap-1">
+                          {/* Send WhatsApp Message if phone/whatsapp available */}
+                          {whatsappNumber && (
+                            <a
+                              href={`https://wa.me/${formatWhatsAppPhoneNumber(whatsappNumber)}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="p-1.5 rounded-lg text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 transition-colors"
+                              title={`Chat with ${member.name} on WhatsApp`}
+                            >
+                              <MessageSquare className="w-4 h-4" />
+                            </a>
+                          )}
+
                           {/* Send Email Action Button */}
                           <button
                             type="button"

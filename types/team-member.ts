@@ -4,6 +4,8 @@ export interface TeamMemberSocialLinks {
   github?: string;
   website?: string;
   email?: string;
+  whatsapp?: string;
+  phone?: string;
 }
 
 export interface TeamMember {

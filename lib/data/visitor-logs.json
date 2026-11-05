@@ -1,6 +1,318 @@
 [
   {
     "event_type": "page_view",
+    "path": "/login",
+    "page_title": "Raymond Gaius | Product Designer & AI Engineer",
+    "referrer": "http://localhost:3000/",
+    "action_label": "Viewed /login",
+    "visitor_id": "vis_mw2mkj8u_opurl7c",
+    "session_id": "ses_mw2mzfkn_vt1mr04",
+    "metadata": {
+      "client_geo": null,
+      "environment": {
+        "network": {
+          "effective_type": "3g",
+          "downlink_mbps": 1.5,
+          "rtt_ms": 400,
+          "save_data": false
+        },
+        "display": {
+          "screen_resolution": "1920 × 1080",
+          "viewport": "1127 × 1221",
+          "pixel_ratio": 0.800000011920929,
+          "color_depth": "24-bit",
+          "orientation": "landscape-primary",
+          "touch_points": 10,
+          "has_touch": true
+        },
+        "hardware": {
+          "cpu_cores": 4,
+          "device_memory_gb": 16
+        },
+        "locale": {
+          "language": "en-GB",
+          "languages": "en-GB, en-US, en",
+          "client_timezone": "Africa/Lagos",
+          "timezone_offset_minutes": -60
+        }
+      },
+      "attribution": {
+        "referrer_domain": "localhost"
+      },
+      "session_action_index": 1,
+      "timestamp_local": "2026-11-04T22:39:12.474Z",
+      "address": {
+        "formatted_address": "Lagos, Nigeria",
+        "city": "Lagos",
+        "region": "Lagos",
+        "postal_code": "",
+        "country": "Nigeria",
+        "country_code": "NG",
+        "country_flag": "🇳🇬",
+        "latitude": 6.4540671,
+        "longitude": 3.3946681,
+        "maps_url": "https://www.google.com/maps?q=6.4540671,3.3946681",
+        "isp": "Space Exploration Technologies Corporation",
+        "organization": "SpaceX Services, Inc.",
+        "timezone": "Africa/Lagos"
+      }
+    },
+    "device_type": "desktop",
+    "browser": "Chrome",
+    "os": "Windows",
+    "ip_address": "2605:59c1:1807:e508:c93f:4a94:c08e:7e39",
+    "country": "Nigeria",
+    "country_code": "NG",
+    "country_flag": "🇳🇬",
+    "city": "Lagos",
+    "region": "Lagos",
+    "postal_code": "",
+    "formatted_address": "Lagos, Nigeria",
+    "latitude": 6.4540671,
+    "longitude": 3.3946681,
+    "maps_url": "https://www.google.com/maps?q=6.4540671,3.3946681",
+    "isp": "Space Exploration Technologies Corporation",
+    "organization": "SpaceX Services, Inc.",
+    "timezone": "Africa/Lagos",
+    "id": "4add0a31-9ccb-47f9-a626-1c55f2152e74",
+    "created_at": "2026-11-04T22:39:12.701Z"
+  },
+  {
+    "session_id": "ses_mw2mzfkn_vt1mr04",
+    "visitor_id": "vis_mw2mkj8u_opurl7c",
+    "event_type": "page_view",
+    "path": "/login",
+    "page_title": "Raymond Gaius | Product Designer & AI Engineer",
+    "referrer": "http://localhost:3000/",
+    "action_label": "Viewed /login",
+    "metadata": {
+      "client_geo": null,
+      "environment": {
+        "network": {
+          "effective_type": "3g",
+          "downlink_mbps": 1.5,
+          "rtt_ms": 400,
+          "save_data": false
+        },
+        "display": {
+          "screen_resolution": "1920 × 1080",
+          "viewport": "1127 × 1221",
+          "pixel_ratio": 0.800000011920929,
+          "color_depth": "24-bit",
+          "orientation": "landscape-primary",
+          "touch_points": 10,
+          "has_touch": true
+        },
+        "hardware": {
+          "cpu_cores": 4,
+          "device_memory_gb": 16
+        },
+        "locale": {
+          "language": "en-GB",
+          "languages": "en-GB, en-US, en",
+          "client_timezone": "Africa/Lagos",
+          "timezone_offset_minutes": -60
+        }
+      },
+      "attribution": {
+        "referrer_domain": "localhost"
+      },
+      "session_action_index": 1,
+      "timestamp_local": "2026-11-04T22:39:12.474Z",
+      "address": {
+        "formatted_address": "Lagos, Nigeria",
+        "city": "Lagos",
+        "region": "Lagos",
+        "postal_code": "",
+        "country": "Nigeria",
+        "country_code": "NG",
+        "country_flag": "🇳🇬",
+        "latitude": 6.4540671,
+        "longitude": 3.3946681,
+        "maps_url": "https://www.google.com/maps?q=6.4540671,3.3946681",
+        "isp": "Space Exploration Technologies Corporation",
+        "organization": "SpaceX Services, Inc.",
+        "timezone": "Africa/Lagos"
+      }
+    },
+    "device_type": "desktop",
+    "browser": "Chrome",
+    "os": "Windows",
+    "ip_address": "2605:59c1:1807:e508:c93f:4a94:c08e:7e39",
+    "country": "Nigeria",
+    "country_code": "NG",
+    "country_flag": "🇳🇬",
+    "city": "Lagos",
+    "region": "Lagos",
+    "postal_code": "",
+    "formatted_address": "Lagos, Nigeria",
+    "latitude": 6.4540671,
+    "longitude": 3.3946681,
+    "maps_url": "https://www.google.com/maps?q=6.4540671,3.3946681",
+    "isp": "Space Exploration Technologies Corporation",
+    "organization": "SpaceX Services, Inc.",
+    "timezone": "Africa/Lagos",
+    "id": "ebb97992-7b4c-418b-97f2-5b236e88e6cc",
+    "created_at": "2026-11-04T22:39:12.608Z"
+  },
+  {
+    "session_id": "ses_mw2mkj8u_qpw4fof",
+    "visitor_id": "vis_mw2mkj8u_opurl7c",
+    "event_type": "page_view",
+    "path": "/",
+    "page_title": "Raymond Gaius | Product Designer & AI Engineer",
+    "referrer": "http://localhost:3000/",
+    "action_label": "Viewed Home page",
+    "metadata": {
+      "client_geo": null,
+      "environment": {
+        "network": {
+          "effective_type": "4g",
+          "downlink_mbps": 10,
+          "rtt_ms": 150,
+          "save_data": false
+        },
+        "display": {
+          "screen_resolution": "1920 × 1080",
+          "viewport": "902 × 977",
+          "pixel_ratio": 1,
+          "color_depth": "24-bit",
+          "orientation": "landscape-primary",
+          "touch_points": 10,
+          "has_touch": true
+        },
+        "hardware": {
+          "cpu_cores": 4,
+          "device_memory_gb": 16
+        },
+        "locale": {
+          "language": "en-GB",
+          "languages": "en-GB, en-US, en",
+          "client_timezone": "Africa/Lagos",
+          "timezone_offset_minutes": -60
+        }
+      },
+      "attribution": {
+        "referrer_domain": "localhost"
+      },
+      "session_action_index": 1,
+      "timestamp_local": "2026-11-04T21:49:10.104Z",
+      "address": {
+        "formatted_address": "Lagos, Nigeria",
+        "city": "Lagos",
+        "region": "Lagos",
+        "postal_code": "",
+        "country": "Nigeria",
+        "country_code": "NG",
+        "country_flag": "🇳🇬",
+        "latitude": 6.4540671,
+        "longitude": 3.3946681,
+        "maps_url": "https://www.google.com/maps?q=6.4540671,3.3946681",
+        "isp": "Space Exploration Technologies Corporation",
+        "organization": "SpaceX Services, Inc.",
+        "timezone": "Africa/Lagos"
+      }
+    },
+    "device_type": "desktop",
+    "browser": "Chrome",
+    "os": "Windows",
+    "ip_address": "2605:59c1:1807:e508:c93f:4a94:c08e:7e39",
+    "country": "Nigeria",
+    "country_code": "NG",
+    "country_flag": "🇳🇬",
+    "city": "Lagos",
+    "region": "Lagos",
+    "postal_code": "",
+    "formatted_address": "Lagos, Nigeria",
+    "latitude": 6.4540671,
+    "longitude": 3.3946681,
+    "maps_url": "https://www.google.com/maps?q=6.4540671,3.3946681",
+    "isp": "Space Exploration Technologies Corporation",
+    "organization": "SpaceX Services, Inc.",
+    "timezone": "Africa/Lagos",
+    "id": "623601ad-3fcd-4ef6-aa74-ddc376cd44c1",
+    "created_at": "2026-11-04T21:49:10.828Z"
+  },
+  {
+    "event_type": "page_view",
+    "path": "/",
+    "page_title": "Raymond Gaius | Product Designer & AI Engineer",
+    "referrer": "http://localhost:3000/",
+    "action_label": "Viewed Home page",
+    "visitor_id": "vis_mw2mkj8u_opurl7c",
+    "session_id": "ses_mw2mkj8u_qpw4fof",
+    "metadata": {
+      "client_geo": null,
+      "environment": {
+        "network": {
+          "effective_type": "4g",
+          "downlink_mbps": 10,
+          "rtt_ms": 150,
+          "save_data": false
+        },
+        "display": {
+          "screen_resolution": "1920 × 1080",
+          "viewport": "902 × 977",
+          "pixel_ratio": 1,
+          "color_depth": "24-bit",
+          "orientation": "landscape-primary",
+          "touch_points": 10,
+          "has_touch": true
+        },
+        "hardware": {
+          "cpu_cores": 4,
+          "device_memory_gb": 16
+        },
+        "locale": {
+          "language": "en-GB",
+          "languages": "en-GB, en-US, en",
+          "client_timezone": "Africa/Lagos",
+          "timezone_offset_minutes": -60
+        }
+      },
+      "attribution": {
+        "referrer_domain": "localhost"
+      },
+      "session_action_index": 1,
+      "timestamp_local": "2026-11-04T21:49:10.104Z",
+      "address": {
+        "formatted_address": "Lagos, Nigeria",
+        "city": "Lagos",
+        "region": "Lagos",
+        "postal_code": "",
+        "country": "Nigeria",
+        "country_code": "NG",
+        "country_flag": "🇳🇬",
+        "latitude": 6.4540671,
+        "longitude": 3.3946681,
+        "maps_url": "https://www.google.com/maps?q=6.4540671,3.3946681",
+        "isp": "Space Exploration Technologies Corporation",
+        "organization": "SpaceX Services, Inc.",
+        "timezone": "Africa/Lagos"
+      }
+    },
+    "device_type": "desktop",
+    "browser": "Chrome",
+    "os": "Windows",
+    "ip_address": "2605:59c1:1807:e508:c93f:4a94:c08e:7e39",
+    "country": "Nigeria",
+    "country_code": "NG",
+    "country_flag": "🇳🇬",
+    "city": "Lagos",
+    "region": "Lagos",
+    "postal_code": "",
+    "formatted_address": "Lagos, Nigeria",
+    "latitude": 6.4540671,
+    "longitude": 3.3946681,
+    "maps_url": "https://www.google.com/maps?q=6.4540671,3.3946681",
+    "isp": "Space Exploration Technologies Corporation",
+    "organization": "SpaceX Services, Inc.",
+    "timezone": "Africa/Lagos",
+    "id": "e5083447-0006-4808-930c-168e0fee9391",
+    "created_at": "2026-11-04T21:49:10.815Z"
+  },
+  {
+    "event_type": "page_view",
     "path": "/",
     "page_title": "Raymond Gaius | Product Designer & AI Engineer",
     "referrer": "",

@@ -9,6 +9,7 @@ export type OutreachStatus =
   | 'Replied'
   | 'Interested'
   | 'Follow-Up Required'
+  | 'Contacted via WhatsApp'
   | 'Not Interested'
   | 'Unsubscribed'
   | 'Bounced'

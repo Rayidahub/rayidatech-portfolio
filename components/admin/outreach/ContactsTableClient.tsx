@@ -18,12 +18,14 @@ import {
   FileSpreadsheet,
   AlertCircle,
   Building,
+  MessageSquare,
 } from 'lucide-react';
 import type { OutreachContact, OutreachStatus } from '@/types/outreach';
 import {
   saveOutreachContact,
   deleteOutreachContact,
 } from '@/app/actions/outreach-contacts';
+import WhatsAppOutreachModal from '@/components/admin/outreach/WhatsAppOutreachModal';
 
 interface ContactsTableClientProps {
   initialContacts: OutreachContact[];
@@ -45,6 +47,7 @@ const ALL_STATUSES: OutreachStatus[] = [
   'Ready to Contact',
   'Campaign Queued',
   'Email Sent',
+  'Contacted via WhatsApp',
   'Replied',
   'Interested',
   'Follow-Up Required',
@@ -70,6 +73,8 @@ export default function ContactsTableClient({
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [editingContact, setEditingContact] = useState<Partial<OutreachContact> | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isWhatsAppModalOpen, setIsWhatsAppModalOpen] = useState(false);
+  const [whatsAppContacts, setWhatsAppContacts] = useState<OutreachContact[]>([]);
   const [isPending, startTransition] = useTransition();
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -173,6 +178,8 @@ export default function ContactsTableClient({
 
   const getStatusBadge = (status: OutreachStatus) => {
     switch (status) {
+      case 'Contacted via WhatsApp':
+        return 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30 font-semibold';
       case 'Ready to Contact':
       case 'New':
         return 'bg-emerald-500/15 text-emerald-400 border-emerald-500/20';
@@ -307,6 +314,25 @@ export default function ContactsTableClient({
             </Link>
             <button
               type="button"
+              onClick={() => {
+                const withPhone = filteredContacts.filter(
+                  (c) => selectedIds.has(c.id) && c.phone && c.phone.trim().length > 0
+                );
+                if (withPhone.length === 0) {
+                  alert('None of the selected prospects have a phone number.');
+                  return;
+                }
+                setWhatsAppContacts(withPhone);
+                setIsWhatsAppModalOpen(true);
+              }}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-sm transition-all cursor-pointer"
+              title="Launch Fast-Track WhatsApp sequence for selected prospects"
+            >
+              <MessageSquare className="w-3.5 h-3.5" />
+              <span>WhatsApp Sequence ({filteredContacts.filter((c) => selectedIds.has(c.id) && c.phone?.trim()).length})</span>
+            </button>
+            <button
+              type="button"
               onClick={() => setSelectedIds(new Set())}
               className="px-2.5 py-1.5 rounded-lg text-xs text-mist-2 hover:text-paper hover:bg-white/5 transition-colors cursor-pointer"
             >
@@ -412,7 +438,24 @@ export default function ContactsTableClient({
                       )}
                     </td>
                     <td className="px-4 py-3 text-xs font-mono-tight text-mist-1">
-                      {contact.phone || '—'}
+                      {contact.phone ? (
+                        <div className="flex items-center gap-1.5">
+                          <span>{contact.phone}</span>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setWhatsAppContacts([contact]);
+                              setIsWhatsAppModalOpen(true);
+                            }}
+                            className="p-1 rounded text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 transition-colors cursor-pointer"
+                            title={`Chat with ${contact.business_name} on WhatsApp`}
+                          >
+                            <MessageSquare className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      ) : (
+                        '—'
+                      )}
                     </td>
                     <td className="px-4 py-3 text-center">
                       <span
@@ -425,6 +468,19 @@ export default function ContactsTableClient({
                     </td>
                     <td className="px-4 py-3 text-right">
                       <div className="inline-flex items-center gap-1.5">
+                        {contact.phone && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setWhatsAppContacts([contact]);
+                              setIsWhatsAppModalOpen(true);
+                            }}
+                            className="p-1.5 rounded-lg text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 transition-colors cursor-pointer"
+                            title={`Chat on WhatsApp with ${contact.business_name}`}
+                          >
+                            <MessageSquare className="w-3.5 h-3.5" />
+                          </button>
+                        )}
                         <button
                           type="button"
                           onClick={() => handleOpenEditModal(contact)}
@@ -654,6 +710,21 @@ export default function ContactsTableClient({
           </div>
         </div>
       )}
+      {/* WhatsApp Outreach Sequence Modal */}
+      <WhatsAppOutreachModal
+        isOpen={isWhatsAppModalOpen}
+        onClose={() => setIsWhatsAppModalOpen(false)}
+        contacts={whatsAppContacts}
+        onContactUpdated={(updatedId) => {
+          setContacts((prev) =>
+            prev.map((c) =>
+              c.id === updatedId
+                ? { ...c, outreach_status: 'Contacted via WhatsApp' }
+                : c
+            )
+          );
+        }}
+      />
     </div>
   );
 }
