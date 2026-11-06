@@ -83,4 +83,35 @@ describe('Brand Logo Showcase Utilities', () => {
       expect(resolveEffectiveStageMode('auto', 'dark', 'dark')).toBe('dark')
     })
   })
+
+  describe('getLogoRoleBadgeColor', () => {
+    it('returns theme colors for each variation', () => {
+      expect(getLogoRoleBadgeColor('symbol')).toContain('secondary')
+      expect(getLogoRoleBadgeColor('secondary')).toContain('purple')
+      expect(getLogoRoleBadgeColor('horizontal')).toContain('primary')
+      expect(getLogoRoleBadgeColor('monochrome')).toContain('emerald')
+    })
+  })
+
+  describe('getLogoStageOptionLabel', () => {
+    it('returns human-friendly names for stage modes', () => {
+      expect(getLogoStageOptionLabel('light')).toBe('Light')
+      expect(getLogoStageOptionLabel('dark')).toBe('Dark')
+      expect(getLogoStageOptionLabel('checkerboard')).toBe('Grid')
+      expect(getLogoStageOptionLabel('auto')).toBe('Auto')
+    })
+  })
+
+  describe('hasValidLogoUrl', () => {
+    it('validates proper logo URLs', () => {
+      expect(hasValidLogoUrl('https://example.com/logo.svg')).toBe(true)
+      expect(hasValidLogoUrl('/img/logo.png')).toBe(true)
+    })
+
+    it('rejects empty or dangerous URLs', () => {
+      expect(hasValidLogoUrl('')).toBe(false)
+      expect(hasValidLogoUrl(null)).toBe(false)
+      expect(hasValidLogoUrl('javascript:alert(1)')).toBe(false)
+    })
+  })
 })
