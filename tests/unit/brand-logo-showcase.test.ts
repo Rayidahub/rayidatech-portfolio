@@ -7,6 +7,7 @@ import {
   resolveEffectiveStageMode,
   getLogoRoleBadgeColor,
   getLogoStageOptionLabel,
+  isStageActive,
   hasValidLogoUrl,
 } from '@/lib/brand-logo-showcase'
 
@@ -111,6 +112,15 @@ describe('Brand Logo Showcase Utilities', () => {
       expect(getLogoStageOptionLabel('dark')).toBe('Dark')
       expect(getLogoStageOptionLabel('checkerboard')).toBe('Grid')
       expect(getLogoStageOptionLabel('auto')).toBe('Auto')
+    })
+  })
+
+  describe('isStageActive', () => {
+    it('accurately identifies active and inactive stage modes', () => {
+      expect(isStageActive('light', 'light')).toBe(true)
+      expect(isStageActive('dark', 'light')).toBe(false)
+      expect(isStageActive('checkerboard', 'checkerboard')).toBe(true)
+      expect(isStageActive('dark', 'dark')).toBe(true)
     })
   })
 
