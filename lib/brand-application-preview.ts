@@ -204,3 +204,24 @@ export function formatApplicationCategoryBadge(
   const clean = category.trim()
   return clean
 }
+
+/**
+ * Returns the CSS grid column span split for image vs text content.
+ */
+export function getLayoutColumnSpan(layout?: BrandApplicationLayout | string | null): {
+  imageSpan: string
+  textSpan: string
+} {
+  switch (layout) {
+    case 'hero':
+    case 'wide':
+      return { imageSpan: 'col-span-12', textSpan: 'col-span-12' }
+    case 'editorial':
+      return { imageSpan: 'col-span-12 md:col-span-8', textSpan: 'col-span-12 md:col-span-4' }
+    case 'centered':
+      return { imageSpan: 'col-span-12', textSpan: 'col-span-12' }
+    case 'split':
+    default:
+      return { imageSpan: 'col-span-12 md:col-span-7', textSpan: 'col-span-12 md:col-span-5' }
+  }
+}
