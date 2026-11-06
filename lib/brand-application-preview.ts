@@ -225,3 +225,15 @@ export function getLayoutColumnSpan(layout?: BrandApplicationLayout | string | n
       return { imageSpan: 'col-span-12 md:col-span-7', textSpan: 'col-span-12 md:col-span-5' }
   }
 }
+
+/**
+ * Truncates long context notes gracefully to a maximum length while preserving word boundaries.
+ */
+export function truncateContextNote(note?: string | null, maxLength = 120): string {
+  if (!note || !note.trim()) return ''
+  const trimmed = note.trim()
+  if (trimmed.length <= maxLength) return trimmed
+  const truncated = trimmed.slice(0, maxLength)
+  const lastSpace = truncated.lastIndexOf(' ')
+  return (lastSpace > 0 ? truncated.slice(0, lastSpace) : truncated) + '…'
+}
