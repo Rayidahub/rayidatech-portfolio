@@ -7,12 +7,29 @@ import { normalizeSlug } from '@/lib/slug'
 import { inferProjectType } from '@/lib/brand-identity'
 import { isProjectPublished, getProjectStatus, getProjectStatusBadge } from '@/lib/project-status'
 
-export default async function AdminProjects() {
+interface AdminProjectsProps {
+  searchParams: Promise<{ status?: string }>
+}
+
+export default async function AdminProjects({ searchParams }: AdminProjectsProps) {
+  const resolvedSearchParams = await searchParams
+  const currentTab = resolvedSearchParams?.status || 'all'
+
   const supabase = await createClient()
   const { data: projects } = await supabase
     .from('projects')
     .select('id, title, slug, featured, tags, case_study, created_at')
     .order('created_at', { ascending: false })
+
+  const allProjects = projects || []
+  const publishedCount = allProjects.filter(isProjectPublished).length
+  const draftCount = allProjects.length - publishedCount
+
+  const filteredProjects = allProjects.filter((p) => {
+    if (currentTab === 'published') return isProjectPublished(p)
+    if (currentTab === 'draft') return !isProjectPublished(p)
+    return true
+  })
 
   return (
     <div>
@@ -35,6 +52,40 @@ export default async function AdminProjects() {
         </div>
       </div>
 
+      {/* Status Filter Tabs */}
+      <div className="flex items-center gap-2 mb-4 border-b border-(--line) pb-2">
+        <Link
+          href="/admin/projects"
+          className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+            currentTab === 'all'
+              ? 'bg-white/10 text-paper border border-(--line)'
+              : 'text-mist-2 hover:text-paper hover:bg-white/5'
+          }`}
+        >
+          All ({allProjects.length})
+        </Link>
+        <Link
+          href="/admin/projects?status=published"
+          className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+            currentTab === 'published'
+              ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
+              : 'text-mist-2 hover:text-paper hover:bg-white/5'
+          }`}
+        >
+          Published ({publishedCount})
+        </Link>
+        <Link
+          href="/admin/projects?status=draft"
+          className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+            currentTab === 'draft'
+              ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
+              : 'text-mist-2 hover:text-paper hover:bg-white/5'
+          }`}
+        >
+          Drafts ({draftCount})
+        </Link>
+      </div>
+
       <div className="glass rounded-xl overflow-hidden border border-(--line)">
         <table className="w-full text-sm">
           <thead>
@@ -48,14 +99,18 @@ export default async function AdminProjects() {
             </tr>
           </thead>
           <tbody>
-            {(!projects || projects.length === 0) && (
+            {filteredProjects.length === 0 && (
               <tr>
                 <td colSpan={6} className="text-center text-mist-2 px-4 py-12">
-                  No projects yet. Create your first one or import via CSV/XLSX.
+                  {currentTab === 'draft'
+                    ? 'No draft projects found. You can save any project as a draft.'
+                    : currentTab === 'published'
+                    ? 'No published projects found.'
+                    : 'No projects yet. Create your first one or import via CSV/XLSX.'}
                 </td>
               </tr>
             )}
-            {projects?.map((project) => {
+            {filteredProjects.map((project) => {
               const displayType = inferProjectType(project)
               const isBrand = displayType === 'Brand Identity'
               const isPublished = isProjectPublished(project)
