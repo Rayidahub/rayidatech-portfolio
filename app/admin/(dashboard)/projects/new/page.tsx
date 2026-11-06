@@ -9,6 +9,7 @@ import ProjectClassificationCard from '@/components/admin/ProjectClassificationC
 import CaseStudyFields from '@/components/admin/CaseStudyFields'
 import BrandIdentityFields from '@/components/admin/BrandIdentityFields'
 import ImageUploadField from '@/components/admin/ImageUploadField'
+import ProjectActionBar from '@/components/admin/ProjectActionBar'
 import type { CaseStudy, BrandIdentityCaseStudy, ProjectType, ProjectStatus } from '@/types/project'
 import { buildStatusPayload, getProjectStatusBadge } from '@/lib/project-status'
 
