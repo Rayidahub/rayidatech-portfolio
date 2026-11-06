@@ -57,7 +57,14 @@ export default function ProjectActionBar({
         <span className="text-xs text-mist-2">Status:</span>
         <button
           type="button"
+          aria-label={`Current status is ${status}. Click to toggle publication status.`}
           onClick={onStatusToggle}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              onStatusToggle();
+            }
+          }}
           className={`px-3 py-1 rounded-lg text-xs font-medium border transition-colors cursor-pointer ${getStatusToggleClasses(
             status
           )}`}
