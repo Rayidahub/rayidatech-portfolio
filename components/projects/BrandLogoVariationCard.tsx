@@ -12,6 +12,7 @@ import {
   resolveEffectiveStageMode,
   getLogoRoleBadgeColor,
   getLogoAspectRecommendation,
+  isStageActive,
 } from '@/lib/brand-logo-showcase';
 
 interface BrandLogoVariationCardProps {
@@ -74,9 +75,10 @@ export default function BrandLogoVariationCard({
             type="button"
             onClick={() => setStageOverride('light')}
             aria-label="Light backdrop"
+            aria-pressed={isStageActive('light', effectiveStage)}
             title="Preview on light backdrop"
             className={`p-1 rounded text-[10px] transition-colors cursor-pointer ${
-              effectiveStage === 'light'
+              isStageActive('light', effectiveStage)
                 ? 'bg-white text-slate-900 shadow-xs'
                 : 'text-mist-2 hover:text-paper hover:bg-white/5'
             }`}
@@ -87,9 +89,10 @@ export default function BrandLogoVariationCard({
             type="button"
             onClick={() => setStageOverride('dark')}
             aria-label="Dark backdrop"
+            aria-pressed={isStageActive('dark', effectiveStage)}
             title="Preview on dark backdrop"
             className={`p-1 rounded text-[10px] transition-colors cursor-pointer ${
-              effectiveStage === 'dark'
+              isStageActive('dark', effectiveStage)
                 ? 'bg-ink text-secondary shadow-xs'
                 : 'text-mist-2 hover:text-paper hover:bg-white/5'
             }`}
@@ -100,9 +103,10 @@ export default function BrandLogoVariationCard({
             type="button"
             onClick={() => setStageOverride('checkerboard')}
             aria-label="Transparency grid backdrop"
+            aria-pressed={isStageActive('checkerboard', effectiveStage)}
             title="Preview on transparency grid"
             className={`p-1 rounded text-[10px] transition-colors cursor-pointer ${
-              effectiveStage === 'checkerboard'
+              isStageActive('checkerboard', effectiveStage)
                 ? 'bg-primary text-white shadow-xs'
                 : 'text-mist-2 hover:text-paper hover:bg-white/5'
             }`}
