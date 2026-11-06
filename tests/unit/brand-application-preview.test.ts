@@ -294,4 +294,39 @@ describe('Brand Application Preview Utilities', () => {
       expect(defTheme.accentColor).toBe('#8000ff')
     })
   })
+
+  describe('Brand Application Deliverable End-to-End Simulation', () => {
+    it('accurately resolves Luxe by Sey hair cream packaging mockup deliverable', () => {
+      const packagingApp = {
+        title: 'Product Packaging Mockup',
+        category: 'Product Packaging',
+        layout_preference: 'split',
+        description: 'High-resolution tactile application mockup on marble pedestal',
+        primary_image:
+          'https://grtvnrqzmbndbjljramm.supabase.co/storage/v1/object/public/hero-slides/projects/luxe-by-sey-jar.png',
+      }
+
+      // 1. Deliverable validation
+      expect(isValidApplicationDeliverable(packagingApp)).toBe(true)
+
+      // 2. Data payload formatting
+      const preview = formatApplicationPreviewData(packagingApp as any)
+      expect(preview.title).toBe('Product Packaging Mockup')
+      expect(preview.hasImage).toBe(true)
+      expect(preview.layout).toBe('split')
+
+      // 3. Layout aspect ratio and grid column definitions
+      expect(getLayoutAspectRatioClass(preview.layout)).toBe('aspect-[4/3] sm:aspect-[16/10]')
+      expect(getLayoutColumnSpan(preview.layout).imageSpan).toContain('md:col-span-7')
+      expect(getLayoutColumnSpan(preview.layout).textSpan).toContain('md:col-span-5')
+
+      // 4. Recommendation for category
+      expect(getRecommendedLayoutForCategory(preview.category)).toBe('split')
+
+      // 5. Context note truncation
+      expect(truncateContextNote(preview.description, 40)).toBe(
+        'High-resolution tactile application…'
+      )
+    })
+  })
 })
