@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { createClient } from '@/lib/supabase/server';
 import { getBaseUrl } from '@/lib/url';
+import { isProjectPublished } from '@/lib/project-status';
 
 const BASE_URL = getBaseUrl();
 
@@ -53,17 +54,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   const [{ data: projects }, { data: services }, { data: posts }] = await Promise.all([
-    supabase.from('projects').select('slug, created_at'),
+    supabase.from('projects').select('slug, created_at, case_study'),
     supabase.from('services').select('slug, created_at'),
     supabase.from('posts').select('slug, created_at').eq('published', true),
   ]);
 
-  const projectPages: MetadataRoute.Sitemap = (projects || []).map((project) => ({
-    url: `${BASE_URL}/projects/${project.slug}`,
-    lastModified: new Date(project.created_at),
-    changeFrequency: 'monthly',
-    priority: 0.7,
-  }));
+  const projectPages: MetadataRoute.Sitemap = (projects || [])
+    .filter(isProjectPublished)
+    .map((project) => ({
+      url: `${BASE_URL}/projects/${project.slug}`,
+      lastModified: new Date(project.created_at),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    }));
 
   const servicePages: MetadataRoute.Sitemap = (services || []).map((service) => ({
     url: `${BASE_URL}/services/${service.slug}`,
