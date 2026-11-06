@@ -66,4 +66,21 @@ describe('Brand Logo Showcase Utilities', () => {
       expect(cls).toContain('background-image')
     })
   })
+
+  describe('resolveEffectiveStageMode', () => {
+    it('honors card override when explicitly provided', () => {
+      expect(resolveEffectiveStageMode('dark', 'light', 'light')).toBe('dark')
+      expect(resolveEffectiveStageMode('checkerboard', 'dark', 'dark')).toBe('checkerboard')
+    })
+
+    it('falls back to light when globalMode is light and override is auto', () => {
+      expect(resolveEffectiveStageMode('auto', 'dark', 'light')).toBe('light')
+      expect(resolveEffectiveStageMode(undefined, 'dark', 'light')).toBe('light')
+    })
+
+    it('uses defaultStage when globalMode is dark and no card override is given', () => {
+      expect(resolveEffectiveStageMode(undefined, 'light', 'dark')).toBe('light')
+      expect(resolveEffectiveStageMode('auto', 'dark', 'dark')).toBe('dark')
+    })
+  })
 })
