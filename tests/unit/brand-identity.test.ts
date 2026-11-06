@@ -13,6 +13,8 @@ import {
   validateBrandCaseStudy,
   isBrandIdentityCaseStudy,
   filterVisibleBrandApplications,
+  getBrandColorCssVariable,
+  getTypographyFontFamily,
 } from '@/lib/brand-identity'
 
 describe('Brand Identity Architecture & Types', () => {
@@ -194,6 +196,19 @@ describe('Brand Identity Architecture & Types', () => {
       const visible = filterVisibleBrandApplications(apps as any)
       expect(visible.length).toBe(2)
       expect(visible.map((a) => a.id)).toEqual(['1', '4'])
+    })
+
+    it('derives slugified CSS variable names from brand color titles', () => {
+      const color = { name: 'Royal Velvet Purple', hex: '#8000ff' }
+      const res = getBrandColorCssVariable(color as any)
+      expect(res.variableName).toBe('--brand-royal-velvet-purple')
+      expect(res.cssValue).toBe('#8000ff')
+    })
+
+    it('generates fallback font stacks based on brand typography roles', () => {
+      expect(getTypographyFontFamily({ role: 'display', font_family: 'Playfair Display' } as any)).toContain('Playfair Display')
+      expect(getTypographyFontFamily({ role: 'accent', font_family: 'Cormorant' } as any)).toContain('serif')
+      expect(getTypographyFontFamily({ role: 'body', font_family: 'Inter' } as any)).toContain('Inter')
     })
   })
 })
