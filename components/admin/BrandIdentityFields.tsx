@@ -768,5 +768,85 @@ export default function BrandIdentityFields({ value, onChange }: BrandIdentityFi
                     </button>
                   </div>
                 </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </SectionCard>
+
+      {/* ── SECTION 5 — TYPOGRAPHY SYSTEM ── */}
+      <SectionCard
+        title={`Section 5 — Typography System (${data.typography_system.length} Typefaces)`}
+        stepNumber="05 / Typography"
+        icon={Type}
+        isOpen={openSections.typography}
+        onToggle={() => toggleSection('typography')}
+      >
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <p className="text-xs text-mist-2">
+              Define primary display, editorial serif, or body typefaces with roles and specimen sheets.
+            </p>
+            <button
+              type="button"
+              onClick={addTypography}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-primary hover:bg-primary/90 text-white font-medium text-xs transition-colors cursor-pointer"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              <span>Add Typeface</span>
+            </button>
+          </div>
+
+          {data.typography_system.length === 0 ? (
+            <div className="p-8 rounded-2xl border border-dashed border-(--line) text-center space-y-2">
+              <Type className="w-8 h-8 text-mist-2 mx-auto" />
+              <p className="text-xs text-mist-1">No typography specimens added yet.</p>
+              <button
+                type="button"
+                onClick={addTypography}
+                className="text-xs text-secondary hover:underline cursor-pointer"
+              >
+                + Add primary typeface
+              </button>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {data.typography_system.map((font) => (
+                <div
+                  key={font.id}
+                  className="p-4 sm:p-5 rounded-2xl border border-(--line) bg-white/[0.02] space-y-4"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono-tight text-secondary uppercase">
+                      {font.font_role} Font
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => removeTypography(font.id)}
+                      className="text-xs text-red-400 hover:underline flex items-center gap-1 cursor-pointer"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      <span>Remove</span>
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <TextInput
+                      label="Font Name"
+                      value={font.font_name}
+                      onChange={(val) => updateTypography(font.id, { font_name: val })}
+                      placeholder="e.g. Cormorant Garamond"
+                    />
+
+                    <div>
+                      <label className="block text-sm text-mist-1 mb-1.5">Font Role</label>
+                      <select
+                        value={font.font_role}
+                        onChange={(e) =>
+                          updateTypography(font.id, { font_role: e.target.value as BrandFontRole })
+                        }
+                        className="w-full bg-[#16162a] border border-(--line) rounded-lg px-3 py-2.5 text-sm text-paper focus:outline-none focus:border-primary/50"
+                      >
+                        <option value="Display">Display</option>
 </div></div>);
 }
