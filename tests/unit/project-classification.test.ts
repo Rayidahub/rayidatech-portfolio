@@ -174,4 +174,13 @@ describe('Project Classification Helpers', () => {
       expect(res.text).toBe('UI/UX Design')
     })
   })
+
+  describe('normalizeClassificationValues', () => {
+    it('normalizes type strings into valid ProjectType unions', () => {
+      expect(normalizeClassificationValues('brand', 'Design').projectType).toBe('Brand Identity')
+      expect(normalizeClassificationValues('web app', 'API').projectType).toBe('Web Development')
+      expect(normalizeClassificationValues('other stuff', '').projectType).toBe('Other / General')
+      expect(normalizeClassificationValues(null, null).projectType).toBe('UI/UX Design')
+    })
+  })
 })
