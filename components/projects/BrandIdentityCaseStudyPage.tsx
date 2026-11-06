@@ -31,19 +31,11 @@ import Container from '@/components/ui/Container';
 import Section from '@/components/ui/Section';
 import GlassCard from '@/components/ui/GlassCard';
 import Reveal from '@/components/ui/Reveal';
+import { parsePillList, clampLightboxIndex, formatColorClassification } from '@/lib/brand-identity';
 
 interface BrandIdentityCaseStudyPageProps {
   project: Project;
   nextProject?: Project | null;
-}
-
-function parsePills(val?: string | string[]): string[] {
-  if (!val) return [];
-  if (Array.isArray(val)) return val;
-  return val
-    .split(/[,•\n]+/)
-    .map((s) => s.trim())
-    .filter(Boolean);
 }
 
 export default function BrandIdentityCaseStudyPage({
@@ -94,8 +86,8 @@ export default function BrandIdentityCaseStudyPage({
   const logoConcept = brandData.logo_concept_description || brandData.logo_concept;
 
   // Normalized pills
-  const personalityTraits = parsePills(brandData.brand_personality);
-  const attributePills = parsePills(brandData.brand_attributes);
+  const personalityTraits = parsePillList(brandData.brand_personality);
+  const attributePills = parsePillList(brandData.brand_attributes);
 
   // Normalized conclusion
   const outcomeDesc = brandData.outcome_description || brandData.outcome;
@@ -1284,7 +1276,7 @@ export default function BrandIdentityCaseStudyPage({
               type="button"
               onClick={() => {
                 setLightboxIndex((prev) =>
-                  prev !== null && prev > 0 ? prev - 1 : allLightboxImages.length - 1
+                  clampLightboxIndex(prev ?? 0, allLightboxImages.length, -1)
                 );
               }}
               className="absolute left-6 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors z-50 cursor-pointer hidden sm:flex items-center justify-center"
@@ -1299,7 +1291,7 @@ export default function BrandIdentityCaseStudyPage({
               type="button"
               onClick={() => {
                 setLightboxIndex((prev) =>
-                  prev !== null && prev < allLightboxImages.length - 1 ? prev + 1 : 0
+                  clampLightboxIndex(prev ?? 0, allLightboxImages.length, 1)
                 );
               }}
               className="absolute right-6 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors z-50 cursor-pointer hidden sm:flex items-center justify-center"
