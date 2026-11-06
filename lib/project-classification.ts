@@ -112,3 +112,27 @@ export function formatClassificationBadge(projectType?: string | null): {
     className: getClassificationBadgeClass(type),
   }
 }
+
+/**
+ * Normalizes user-supplied classification values into safe defaults.
+ */
+export function normalizeClassificationValues(
+  projectType?: string | null,
+  category?: string | null
+): { projectType: ProjectType; category: string } {
+  let normalizedType: ProjectType = 'UI/UX Design'
+  const norm = (projectType || '').trim().toLowerCase()
+
+  if (norm.includes('brand')) {
+    normalizedType = 'Brand Identity'
+  } else if (norm.includes('web') || norm.includes('development')) {
+    normalizedType = 'Web Development'
+  } else if (norm.includes('other') || norm.includes('general')) {
+    normalizedType = 'Other / General'
+  }
+
+  return {
+    projectType: normalizedType,
+    category: (category || '').trim(),
+  }
+}
