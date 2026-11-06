@@ -20,6 +20,7 @@ import {
   getLayoutAspectRatioClass,
   getLayoutBadgeColor,
   formatApplicationPreviewData,
+  getRecommendedLayoutForCategory,
 } from '@/lib/brand-application-preview';
 
 interface BrandApplicationCardPreviewProps {
@@ -65,6 +66,7 @@ export default function BrandApplicationCardPreview({
   });
 
   const hasValidImage = Boolean(imageUrl) && !hasError;
+  const recommendedLayout = getRecommendedLayoutForCategory(category);
 
   return (
     <div className="mt-4 rounded-xl border border-(--line) bg-ink-deep/60 overflow-hidden transition-all duration-200">
@@ -84,6 +86,17 @@ export default function BrandApplicationCardPreview({
           >
             {getLayoutDisplayName(layout)}
           </span>
+
+          {onLayoutChange && recommendedLayout !== layout && (
+            <button
+              type="button"
+              onClick={() => onLayoutChange(recommendedLayout)}
+              className="hidden lg:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono-tight bg-primary/10 text-secondary border border-primary/25 hover:bg-primary/20 transition-colors cursor-pointer"
+              title={`Auto-switch to recommended ${getLayoutDisplayName(recommendedLayout)} layout`}
+            >
+              <span>💡 Rec: {getLayoutDisplayName(recommendedLayout).split(' ')[0]}</span>
+            </button>
+          )}
         </div>
 
         <div className="flex items-center gap-1.5 shrink-0">
