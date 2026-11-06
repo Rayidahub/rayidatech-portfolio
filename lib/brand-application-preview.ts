@@ -155,3 +155,24 @@ export function isEditorialLayout(layout?: BrandApplicationLayout | string | nul
 export function isWideLayout(layout?: BrandApplicationLayout | string | null): boolean {
   return layout === 'wide'
 }
+
+/**
+ * Returns the Lucide icon identifier string corresponding to a layout mode.
+ */
+export function getLayoutIconIdentifier(
+  layout?: BrandApplicationLayout | string | null
+): 'Columns' | 'Maximize2' | 'AlignCenter' | 'BookOpen' | 'Tv' {
+  switch (layout) {
+    case 'hero':
+      return 'Maximize2'
+    case 'centered':
+      return 'AlignCenter'
+    case 'editorial':
+      return 'BookOpen'
+    case 'wide':
+      return 'Tv'
+    case 'split':
+    default:
+      return 'Columns'
+  }
+}
