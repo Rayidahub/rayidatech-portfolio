@@ -109,4 +109,18 @@ describe('Project Cover Image & Thumbnail Utilities', () => {
       expect(formatCoverImageAlt('')).toBe('Project cover preview')
     })
   })
+
+  describe('isDataImageUrl', () => {
+    it('identifies valid data URLs correctly', () => {
+      expect(isDataImageUrl('data:image/png;base64,abc123==')).toBe(true)
+      expect(isDataImageUrl('data:image/jpeg;base64,xyz789==')).toBe(true)
+    })
+
+    it('rejects non-data URLs and invalid inputs', () => {
+      expect(isDataImageUrl('https://example.com/img.jpg')).toBe(false)
+      expect(isDataImageUrl('/img/local.png')).toBe(false)
+      expect(isDataImageUrl(null)).toBe(false)
+      expect(isDataImageUrl(undefined)).toBe(false)
+    })
+  })
 })
