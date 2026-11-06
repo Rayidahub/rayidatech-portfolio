@@ -133,3 +133,11 @@ export function getImageFileName(url?: string | null): string {
   const filename = segments[segments.length - 1] || 'image.jpg'
   return filename.length > 32 ? `${filename.slice(0, 29)}...` : filename
 }
+
+/**
+ * Formats image width and height into a clean resolution tag (e.g., '1920×1080').
+ */
+export function formatImageResolutionLabel(width?: number, height?: number): string | null {
+  if (!width || !height || width <= 0 || height <= 0) return null
+  return `${Math.round(width)}×${Math.round(height)}`
+}
