@@ -166,6 +166,25 @@ export function getLogoStageOptionLabel(stage: LogoStageMode): string {
 }
 
 /**
+ * Returns recommended aspect ratio and display orientation hint for a logo variation type.
+ */
+export function getLogoAspectRecommendation(type: LogoVariationType): string {
+  switch (type) {
+    case 'symbol':
+      return '1:1 Square';
+    case 'secondary':
+      return '3:4 Vertical';
+    case 'horizontal':
+      return '3:1 Banner';
+    case 'monochrome':
+      return '1:1 Vector';
+    case 'primary':
+    default:
+      return '16:9 Showcase';
+  }
+}
+
+/**
  * Checks if a particular stage option is currently active.
  */
 export function isStageActive(
