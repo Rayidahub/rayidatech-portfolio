@@ -206,4 +206,16 @@ describe('Project Classification Helpers', () => {
       expect(formatClassificationPillLabel('Other')).toBe('Other')
     })
   })
+
+  describe('isClassificationValid', () => {
+    it('returns true when both fields are non-empty', () => {
+      expect(isClassificationValid('Brand Identity', 'Graphic Design')).toBe(true)
+    })
+
+    it('returns false when either field is empty or missing', () => {
+      expect(isClassificationValid('', 'Graphic Design')).toBe(false)
+      expect(isClassificationValid('Brand Identity', '')).toBe(false)
+      expect(isClassificationValid(null, null)).toBe(false)
+    })
+  })
 })
