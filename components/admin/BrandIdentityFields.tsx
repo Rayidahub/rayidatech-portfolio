@@ -848,5 +848,205 @@ export default function BrandIdentityFields({ value, onChange }: BrandIdentityFi
                         className="w-full bg-[#16162a] border border-(--line) rounded-lg px-3 py-2.5 text-sm text-paper focus:outline-none focus:border-primary/50"
                       >
                         <option value="Display">Display</option>
+                        <option value="Heading">Heading</option>
+                        <option value="Body">Body</option>
+                        <option value="Accent">Accent</option>
+                        <option value="Monospace">Monospace</option>
+                      </select>
+                    </div>
+
+                    <TextInput
+                      label="Weight / Style"
+                      value={font.weight}
+                      onChange={(val) => updateTypography(font.id, { weight: val })}
+                      placeholder="e.g. Bold 700 / Italic"
+                    />
+                  </div>
+
+                  <TextInput
+                    label="Usage Description"
+                    value={font.usage || ''}
+                    onChange={(val) => updateTypography(font.id, { usage: val })}
+                    placeholder="e.g. Master logo typography, perfume bottle labels, packaging titles"
+                  />
+
+                  <ImageUploadField
+                    label="Typography Specimen Image"
+                    value={font.specimen_image || ''}
+                    onChange={(url) => updateTypography(font.id, { specimen_image: url })}
+                    folder="projects"
+                    description="Upload alphabet character specimen or font specimen card"
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </SectionCard>
+
+      {/* ── SECTION 6 — GRAPHIC ELEMENTS ── */}
+      <SectionCard
+        title="Section 6 — Graphic Elements, Patterns & Art Direction"
+        stepNumber="06 / Assets"
+        icon={Layers}
+        isOpen={openSections.graphic}
+        onToggle={() => toggleSection('graphic')}
+      >
+        <div className="space-y-4">
+          <TextArea
+            label="Graphic Elements Narrative"
+            value={data.graphic_elements_description || ''}
+            onChange={(val) => update('graphic_elements_description', val)}
+            placeholder="Describe the secondary visual motifs, geometric accents, foils, or embossing textures..."
+            rows={3}
+          />
+
+          <TextArea
+            label="Photography Direction"
+            value={data.photography_direction || ''}
+            onChange={(val) => update('photography_direction', val)}
+            placeholder="Editorial lighting, clean studio backdrops, macro product shots, skin texture warmth..."
+            rows={3}
+          />
+        </div>
+      </SectionCard>
+
+      {/* ── SECTION 7 — BRAND APPLICATIONS (REPEATABLE) ── */}
+      <SectionCard
+        title={`Section 7 — Brand Applications (${data.brand_applications.length} Deliverables)`}
+        stepNumber="07 / Mockups"
+        icon={Package}
+        badge="Repeatable"
+        isOpen={openSections.applications}
+        onToggle={() => toggleSection('applications')}
+      >
+        <div className="space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl bg-white/[0.02] border border-(--line)">
+            <div>
+              <h4 className="text-sm font-semibold text-paper">Dynamic Deliverable Suite</h4>
+              <p className="text-xs text-mist-2">
+                Add packaging jars, shopping bags, polo shirts, motorcycles, billboards, and social templates.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={() => addApplication('Product Packaging')}
+                className="px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-mist-1 hover:text-paper text-xs border border-(--line) cursor-pointer"
+              >
+                + Packaging
+              </button>
+              <button
+                type="button"
+                onClick={() => addApplication('Shopping Bags')}
+                className="px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-mist-1 hover:text-paper text-xs border border-(--line) cursor-pointer"
+              >
+                + Shopping Bag
+              </button>
+              <button
+                type="button"
+                onClick={() => addApplication('Merchandise')}
+                className="px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-mist-1 hover:text-paper text-xs border border-(--line) cursor-pointer"
+              >
+                + Polo / Apparel
+              </button>
+              <button
+                type="button"
+                onClick={() => addApplication('Transportation')}
+                className="px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-mist-1 hover:text-paper text-xs border border-(--line) cursor-pointer"
+              >
+                + Transport
+              </button>
+              <button
+                type="button"
+                onClick={() => addApplication('Outdoor Advertising')}
+                className="px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-mist-1 hover:text-paper text-xs border border-(--line) cursor-pointer"
+              >
+                + Billboard
+              </button>
+              <button
+                type="button"
+                onClick={() => addApplication('Digital Advertising')}
+                className="px-2.5 py-1.5 rounded-lg bg-primary hover:bg-primary/90 text-white font-medium text-xs cursor-pointer"
+              >
+                + Custom Mockup
+              </button>
+            </div>
+          </div>
+
+          {data.brand_applications.length === 0 ? (
+            <div className="p-10 rounded-2xl border border-dashed border-(--line) text-center space-y-3">
+              <Package className="w-10 h-10 text-mist-2 mx-auto" />
+              <h4 className="text-sm font-semibold text-paper">No Brand Applications Added Yet</h4>
+              <p className="text-xs text-mist-2 max-w-md mx-auto">
+                Brand applications bring the identity to life across packaging, shopping bags, polo shirts, delivery vehicles, and city billboards.
+              </p>
+              <button
+                type="button"
+                onClick={() => addApplication('Product Packaging')}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-white text-xs font-semibold hover:bg-primary/90 transition-colors cursor-pointer"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Add First Brand Deliverable</span>
+              </button>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {data.brand_applications.map((app, idx) => (
+                <div
+                  key={app.id}
+                  className={`p-5 rounded-2xl border transition-all ${
+                    app.is_visible
+                      ? 'border-(--line) bg-white/[0.02]'
+                      : 'border-white/5 bg-white/[0.005] opacity-60'
+                  }`}
+                >
+                  {/* Top Bar */}
+                  <div className="flex items-center justify-between pb-3 border-b border-(--line)/50 mb-4">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-primary/20 text-secondary text-xs font-mono font-bold shrink-0">
+                        0{idx + 1}
+                      </span>
+                      <span className="text-xs font-semibold text-paper truncate">
+                        {app.title || 'Untitled Application'}
+                      </span>
+                      <span className="text-[10px] font-mono-tight px-2 py-0.5 rounded-full bg-white/5 text-mist-2 border border-white/5">
+                        {app.category}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <button
+                        type="button"
+                        onClick={() => updateApplication(app.id, { is_visible: !app.is_visible })}
+                        className={`p-1.5 rounded-lg border transition-colors cursor-pointer ${
+                          app.is_visible
+                            ? 'border-(--line) text-secondary bg-secondary/10'
+                            : 'border-white/5 text-mist-2 hover:text-paper'
+                        }`}
+                        title={app.is_visible ? 'Visible on public site' : 'Hidden from public'}
+                      >
+                        {app.is_visible ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => duplicateApplication(app.id)}
+                        className="p-1.5 rounded-lg border border-(--line) text-mist-2 hover:text-paper hover:bg-white/5 transition-colors cursor-pointer"
+                        title="Duplicate Application"
+                      >
+                        <Copy className="w-3.5 h-3.5" />
+                      </button>
+
+                      <button
+                        type="button"
+                        disabled={idx === 0}
+                        onClick={() => moveApplication(idx, -1)}
+                        className="p-1.5 rounded-lg border border-(--line) text-mist-2 hover:text-paper hover:bg-white/5 disabled:opacity-30 transition-colors cursor-pointer"
+                        title="Move Up"
+                      >
+                        <MoveUp className="w-3.5 h-3.5" />
+                      </button>
 </div></div>);
 }
