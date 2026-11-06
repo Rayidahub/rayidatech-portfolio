@@ -17,6 +17,7 @@ import {
   formatApplicationCategoryBadge,
   getLayoutColumnSpan,
   truncateContextNote,
+  getApplicationPreviewCardTheme,
 } from '@/lib/brand-application-preview'
 
 describe('Brand Application Preview Utilities', () => {
@@ -256,6 +257,41 @@ describe('Brand Application Preview Utilities', () => {
       expect(truncateContextNote(null)).toBe('')
       expect(truncateContextNote('')).toBe('')
       expect(truncateContextNote('   ')).toBe('')
+    })
+  })
+
+  describe('getApplicationPreviewCardTheme', () => {
+    it('returns purple theme tokens for hero layout', () => {
+      const theme = getApplicationPreviewCardTheme('hero')
+      expect(theme.containerBorder).toContain('purple')
+      expect(theme.accentColor).toBe('#a855f7')
+    })
+
+    it('returns cyan theme tokens for centered layout', () => {
+      const theme = getApplicationPreviewCardTheme('centered')
+      expect(theme.containerBorder).toContain('cyan')
+      expect(theme.accentColor).toBe('#06b6d4')
+    })
+
+    it('returns emerald theme tokens for editorial layout', () => {
+      const theme = getApplicationPreviewCardTheme('editorial')
+      expect(theme.containerBorder).toContain('emerald')
+      expect(theme.accentColor).toBe('#10b981')
+    })
+
+    it('returns sky theme tokens for wide layout', () => {
+      const theme = getApplicationPreviewCardTheme('wide')
+      expect(theme.containerBorder).toContain('sky')
+      expect(theme.accentColor).toBe('#0284c7')
+    })
+
+    it('returns primary violet theme tokens for split layout and default', () => {
+      const theme = getApplicationPreviewCardTheme('split')
+      expect(theme.containerBorder).toContain('primary')
+      expect(theme.accentColor).toBe('#8000ff')
+
+      const defTheme = getApplicationPreviewCardTheme(null)
+      expect(defTheme.accentColor).toBe('#8000ff')
     })
   })
 })
