@@ -61,3 +61,11 @@ export function formatCoverImageAlt(title?: string | null): string {
   const safeTitle = (title || 'Project').trim()
   return `${safeTitle} cover preview`
 }
+
+/**
+ * Checks whether an image candidate is a base64 encoded data URI.
+ */
+export function isDataImageUrl(url?: string | null): boolean {
+  if (!url || typeof url !== 'string') return false
+  return url.trim().startsWith('data:image/')
+}
