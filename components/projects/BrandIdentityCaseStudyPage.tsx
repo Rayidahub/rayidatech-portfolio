@@ -618,5 +618,185 @@ export default function BrandIdentityCaseStudyPage({
                     />
                   </div>
                   <span
+                    className={`text-xs font-mono-tight font-medium ${
+                      logoMode === 'dark' ? 'text-paper' : 'text-slate-900'
+                    }`}
+                  >
+                    Horizontal Wordmark
+                  </span>
+                  <span
+                    className={`text-[11px] mt-0.5 ${
+                      logoMode === 'dark' ? 'text-mist-2' : 'text-slate-500'
+                    }`}
+                  >
+                    Navbars & Letterheads
+                  </span>
+                </div>
+              )}
+
+              {brandData.monochrome_logo && (
+                <div
+                  className={`rounded-2xl border p-6 flex flex-col items-center text-center transition-all ${
+                    logoMode === 'dark'
+                      ? 'bg-white/[0.02] border-(--line)'
+                      : 'bg-[#f4f4f6] border-slate-200'
+                  }`}
+                >
+                  <div className="relative w-full h-32 flex items-center justify-center mb-4">
+                    <Image
+                      src={brandData.monochrome_logo}
+                      alt="Monochrome Logo"
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+                  <span
+                    className={`text-xs font-mono-tight font-medium ${
+                      logoMode === 'dark' ? 'text-paper' : 'text-slate-900'
+                    }`}
+                  >
+                    Monochrome / 1-Color
+                  </span>
+                  <span
+                    className={`text-[11px] mt-0.5 ${
+                      logoMode === 'dark' ? 'text-mist-2' : 'text-slate-500'
+                    }`}
+                  >
+                    Embroidery & Stamping
+                  </span>
+                </div>
+              )}
+            </div>
+          </Reveal>
+        </section>
+      )}
+
+      {/* ─────────────────────────────────────────────────────────────
+          SECTION 5 — BRAND COLOR PALETTE
+          ───────────────────────────────────────────────────────────── */}
+      {colors.length > 0 && (
+        <section className="relative">
+          <Reveal>
+            <div className="flex items-center gap-3 mb-4">
+              <span className="w-8 h-[1px] bg-primary" />
+              <span className="font-mono-tight text-xs uppercase tracking-widest text-accent-soft">
+                04 / Chromatics
+              </span>
+            </div>
+            <div className="flex items-center justify-between mb-10">
+              <div>
+                <h2 className="font-display text-3xl sm:text-4xl font-semibold text-paper">
+                  Brand Color Palette
+                </h2>
+                <p className="text-xs sm:text-sm text-mist-2 mt-1">
+                  Click any HEX code to copy to clipboard
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {colors.map((color: any, idx: number) => {
+                const isCopied = copiedHex === color.hex;
+
+                return (
+                  <div
+                    key={idx}
+                    className="glass rounded-2xl overflow-hidden border border-(--line) group hover:border-primary/40 transition-all flex flex-col justify-between"
+                  >
+                    {/* Swatch Block */}
+                    <div
+                      className="h-36 sm:h-40 w-full relative transition-transform duration-300 group-hover:scale-105"
+                      style={{ backgroundColor: color.hex }}
+                    >
+                      <span className="absolute top-3 left-3 text-[10px] font-mono-tight uppercase px-2.5 py-1 rounded-full bg-black/40 backdrop-blur-md text-white border border-white/10">
+                        {color.classification || 'Color'}
+                      </span>
+                    </div>
+
+                    {/* Metadata */}
+                    <div className="p-5 space-y-4">
+                      <div>
+                        <h3 className="font-display text-base font-semibold text-paper">
+                          {color.name}
+                        </h3>
+                        {color.usage && (
+                          <p className="text-xs text-mist-2 mt-1 line-clamp-2">
+                            {color.usage}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* HEX & RGB Click-to-Copy */}
+                      <div className="space-y-1.5 pt-3 border-t border-(--line)">
+                        <button
+                          type="button"
+                          onClick={() => copyToClipboard(color.hex)}
+                          className="w-full flex items-center justify-between p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/5 transition-colors cursor-pointer group/btn"
+                        >
+                          <span className="text-xs font-mono-tight text-paper font-semibold">
+                            {color.hex.toUpperCase()}
+                          </span>
+                          <span className="inline-flex items-center gap-1 text-[11px] font-mono-tight text-mist-2 group-hover/btn:text-secondary">
+                            {isCopied ? (
+                              <>
+                                <Check className="w-3 h-3 text-emerald-400" />
+                                <span className="text-emerald-400">Copied!</span>
+                              </>
+                            ) : (
+                              <>
+                                <Copy className="w-3 h-3" />
+                                <span>Copy</span>
+                              </>
+                            )}
+                          </span>
+                        </button>
+
+                        {color.rgb && (
+                          <div className="px-2 py-1 flex items-center justify-between text-[11px] font-mono-tight text-mist-2">
+                            <span>RGB</span>
+                            <span>{color.rgb}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </Reveal>
+        </section>
+      )}
+
+      {/* ─────────────────────────────────────────────────────────────
+          SECTION 6 — TYPOGRAPHY SYSTEM
+          ───────────────────────────────────────────────────────────── */}
+      {typography.length > 0 && (
+        <section className="relative">
+          <Reveal>
+            <div className="flex items-center gap-3 mb-4">
+              <span className="w-8 h-[1px] bg-secondary" />
+              <span className="font-mono-tight text-xs uppercase tracking-widest text-secondary">
+                05 / Type
+              </span>
+            </div>
+            <h2 className="font-display text-3xl sm:text-4xl font-semibold text-paper mb-10">
+              Typography Hierarchy
+            </h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {typography.map((font: any, idx: number) => (
+                <GlassCard key={idx} hover={false} className="p-6 sm:p-8 space-y-6">
+                  <div className="flex items-center justify-between gap-4">
+                    <div>
+                      <span className="text-xs font-mono-tight uppercase tracking-wider text-secondary">
+                        {font.font_role}
+                      </span>
+                      <h3 className="font-display text-2xl sm:text-3xl font-bold text-paper mt-1">
+                        {font.font_name}
+                      </h3>
+                    </div>
+                    {font.weight && (
+                      <span className="text-xs font-mono-tight px-3 py-1 rounded-full bg-white/5 border border-(--line) text-mist-1">
+                        {font.weight}
 </div>);
 }
