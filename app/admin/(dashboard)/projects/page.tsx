@@ -4,9 +4,11 @@ import { Plus, Edit, ExternalLink } from 'lucide-react'
 import DeleteButton from './DeleteButton'
 import ProjectImportModal from './ProjectImportModal'
 import ProjectStatusToggle from './ProjectStatusToggle'
+import ProjectThumbnailCell from './ProjectThumbnailCell'
 import { normalizeSlug } from '@/lib/slug'
 import { inferProjectType } from '@/lib/brand-identity'
 import { isProjectPublished, getProjectStatus, getProjectStatusBadge } from '@/lib/project-status'
+import { getProjectCoverImage } from '@/lib/project-thumbnail'
 
 interface AdminProjectsProps {
   searchParams: Promise<{ status?: string }>
@@ -19,7 +21,7 @@ export default async function AdminProjects({ searchParams }: AdminProjectsProps
   const supabase = await createClient()
   const { data: projects } = await supabase
     .from('projects')
-    .select('id, title, slug, featured, tags, case_study, created_at')
+    .select('id, title, slug, cover_image, featured, tags, case_study, created_at')
     .order('created_at', { ascending: false })
 
   const allProjects = projects || []
@@ -91,6 +93,7 @@ export default async function AdminProjects({ searchParams }: AdminProjectsProps
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-(--line) bg-white/[0.02]">
+              <th className="text-left text-mist-2 font-medium px-4 py-3 w-20 sm:w-24">Cover</th>
               <th className="text-left text-mist-2 font-medium px-4 py-3">Title</th>
               <th className="text-left text-mist-2 font-medium px-4 py-3 hidden sm:table-cell">Slug</th>
               <th className="text-left text-mist-2 font-medium px-4 py-3 hidden md:table-cell">Type</th>
@@ -102,7 +105,7 @@ export default async function AdminProjects({ searchParams }: AdminProjectsProps
           <tbody>
             {filteredProjects.length === 0 && (
               <tr>
-                <td colSpan={6} className="text-center text-mist-2 px-4 py-12">
+                <td colSpan={7} className="text-center text-mist-2 px-4 py-12">
                   {currentTab === 'draft'
                     ? 'No draft projects found. You can save any project as a draft.'
                     : currentTab === 'published'
@@ -117,13 +120,32 @@ export default async function AdminProjects({ searchParams }: AdminProjectsProps
               const isPublished = isProjectPublished(project)
               const status = getProjectStatus(project)
               const badge = getProjectStatusBadge(status)
+              const coverImageUrl = getProjectCoverImage(project)
 
               return (
                 <tr
                   key={project.id}
                   className="border-b border-(--line) last:border-0 hover:bg-white/[0.02] transition-colors"
                 >
-                  <td className="px-4 py-3 text-paper font-medium">{project.title}</td>
+                  <td className="px-4 py-2.5 w-20 sm:w-24">
+                    <ProjectThumbnailCell
+                      id={project.id}
+                      title={project.title}
+                      slug={project.slug}
+                      coverImage={coverImageUrl}
+                      projectType={displayType}
+                      status={status}
+                      isPublished={isPublished}
+                    />
+                  </td>
+                  <td className="px-4 py-3 text-paper font-medium">
+                    <Link
+                      href={`/admin/projects/${project.id}/edit`}
+                      className="hover:text-secondary transition-colors"
+                    >
+                      {project.title}
+                    </Link>
+                  </td>
                   <td className="px-4 py-3 text-mist-1 hidden sm:table-cell font-mono-tight text-xs">
                     {project.slug}
                   </td>
