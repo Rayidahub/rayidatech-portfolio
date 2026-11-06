@@ -94,19 +94,20 @@ async function getNextProject(currentId: string, slug?: string): Promise<Project
       .select('*')
       .eq('slug', slug)
       .single();
-    if (data && data.id !== currentId) return data;
+    if (data && data.id !== currentId && isProjectPublished(data)) return data;
   }
 
-  // Find another project in the database
+  // Find another published project in the database
   const { data: otherProjects } = await supabase
     .from('projects')
     .select('*')
     .neq('id', currentId)
     .order('featured', { ascending: false })
     .order('created_at', { ascending: false })
-    .limit(1);
+    .limit(5);
 
-  return otherProjects?.[0] || null;
+  const publishedOthers = (otherProjects || []).filter(isProjectPublished);
+  return publishedOthers[0] || null;
 }
 
 export async function generateStaticParams() {
