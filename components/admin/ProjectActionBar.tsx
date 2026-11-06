@@ -43,14 +43,12 @@ export default function ProjectActionBar({
     <div
       data-testid={`project-action-bar-${position}`}
       data-status={status}
-      className={`flex flex-col sm:flex-row items-center justify-between gap-3 ${
-        isTop
+      className={`flex flex-col sm:flex-row items-center justify-between gap-3 transition-all duration-200 ${
+        isTop && isSticky
+          ? 'sticky top-3 z-30 bg-ink-deep/95 backdrop-blur-md p-3.5 rounded-xl border border-(--line) shadow-2xl mb-5'
+          : isTop
           ? 'pb-4 mb-4 border-b border-(--line)'
           : 'pt-4 border-t border-(--line)'
-      } ${
-        isSticky
-          ? 'sticky top-3 z-30 bg-ink-deep/90 backdrop-blur-md p-3.5 rounded-xl border border-(--line) shadow-2xl'
-          : ''
       } ${className}`}
     >
       {/* Status Toggle Button */}
