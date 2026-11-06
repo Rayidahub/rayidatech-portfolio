@@ -11,6 +11,10 @@ import {
   isWebDevType,
   getClassificationToggleTooltip,
   formatClassificationBadge,
+  normalizeClassificationValues,
+  getClassificationAccentColor,
+  formatClassificationPillLabel,
+  isClassificationValid,
 } from '@/lib/project-classification'
 
 describe('Project Classification Helpers', () => {
