@@ -95,3 +95,21 @@ export function getLogoStageBackgroundClass(
       return 'bg-[#0e0e1a] border-white/10 shadow-inner text-white';
   }
 }
+
+/**
+ * Resolves the effective stage mode given an optional card-level override,
+ * the card's default recommendation, and the global case-study theme toggle.
+ */
+export function resolveEffectiveStageMode(
+  cardOverride: LogoStageMode | undefined,
+  defaultStage: 'light' | 'dark' | 'checkerboard',
+  globalMode: 'dark' | 'light'
+): 'light' | 'dark' | 'checkerboard' {
+  if (cardOverride && cardOverride !== 'auto') {
+    return cardOverride;
+  }
+  if (globalMode === 'light') {
+    return 'light';
+  }
+  return defaultStage;
+}
