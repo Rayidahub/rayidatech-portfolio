@@ -12,6 +12,7 @@ import {
   isCenteredLayout,
   isEditorialLayout,
   isWideLayout,
+  getLayoutIconIdentifier,
 } from '@/lib/brand-application-preview'
 
 describe('Brand Application Preview Utilities', () => {
@@ -150,6 +151,21 @@ describe('Brand Application Preview Utilities', () => {
       expect(isWideLayout('wide')).toBe(true)
       expect(isWideLayout('hero')).toBe(false)
       expect(isWideLayout(undefined)).toBe(false)
+    })
+  })
+
+  describe('getLayoutIconIdentifier', () => {
+    it('returns the designated icon name for all layouts', () => {
+      expect(getLayoutIconIdentifier('split')).toBe('Columns')
+      expect(getLayoutIconIdentifier('hero')).toBe('Maximize2')
+      expect(getLayoutIconIdentifier('centered')).toBe('AlignCenter')
+      expect(getLayoutIconIdentifier('editorial')).toBe('BookOpen')
+      expect(getLayoutIconIdentifier('wide')).toBe('Tv')
+    })
+
+    it('falls back to Columns for null or unknown layout', () => {
+      expect(getLayoutIconIdentifier(null)).toBe('Columns')
+      expect(getLayoutIconIdentifier('unknown' as any)).toBe('Columns')
     })
   })
 })
