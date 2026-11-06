@@ -218,5 +218,205 @@ export default function BrandIdentityCaseStudyPage({
                 <span>Year</span>
               </div>
               <p className="text-sm md:text-base font-semibold text-paper">
+                {yearDisplay}
+              </p>
+            </div>
+
+            <div className="glass rounded-2xl p-4 md:p-5 border border-(--line)">
+              <div className="flex items-center gap-2 text-mist-2 text-xs font-mono-tight mb-1.5">
+                <Clock className="w-3.5 h-3.5 text-accent-soft" />
+                <span>Duration</span>
+              </div>
+              <p className="text-sm md:text-base font-semibold text-paper">
+                {project.duration || brandData.duration || '4 weeks'}
+              </p>
+            </div>
+          </div>
+
+          {/* Hero Banner Showcase */}
+          {project.cover_image && (
+            <div className="relative rounded-3xl overflow-hidden glass border border-(--line) p-2 shadow-2xl group">
+              <div className="relative aspect-[16/9] sm:aspect-[21/9] w-full rounded-2xl overflow-hidden bg-black/40">
+                <Image
+                  src={project.cover_image}
+                  alt={project.title}
+                  fill
+                  priority
+                  className="object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+                />
+              </div>
+            </div>
+          )}
+        </Reveal>
+      </section>
+
+      {/* ─────────────────────────────────────────────────────────────
+          SECTION 2 — BRAND OVERVIEW & POSITIONING
+          ───────────────────────────────────────────────────────────── */}
+      <section className="relative">
+        <Reveal>
+          <div className="flex items-center gap-3 mb-4">
+            <span className="w-8 h-[1px] bg-secondary" />
+            <span className="font-mono-tight text-xs uppercase tracking-widest text-secondary">
+              01 / Foundation
+            </span>
+          </div>
+          <h2 className="font-display text-3xl sm:text-4xl font-semibold text-paper mb-10">
+            Brand Overview & Market Positioning
+          </h2>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            {/* Left Column: Narrative */}
+            <div className="lg:col-span-7 space-y-6">
+              <GlassCard hover={false} className="p-6 sm:p-8 space-y-6">
+                <div>
+                  <h3 className="text-xs font-mono-tight uppercase text-mist-2 tracking-wider mb-2">
+                    Brand Introduction
+                  </h3>
+                  <p className="text-paper text-base sm:text-lg leading-relaxed font-light">
+                    {brandData.brand_introduction || project.description}
+                  </p>
+                </div>
+
+                {brandData.brand_story && (
+                  <div className="pt-6 border-t border-(--line)">
+                    <h3 className="text-xs font-mono-tight uppercase text-mist-2 tracking-wider mb-2">
+                      Brand Story & Heritage
+                    </h3>
+                    <p className="text-mist-1 text-sm sm:text-base leading-relaxed">
+                      {brandData.brand_story}
+                    </p>
+                  </div>
+                )}
+
+                {brandData.brand_objectives && (
+                  <div className="pt-6 border-t border-(--line)">
+                    <h3 className="text-xs font-mono-tight uppercase text-mist-2 tracking-wider mb-2">
+                      Core Brand Objectives
+                    </h3>
+                    <p className="text-mist-1 text-sm sm:text-base leading-relaxed">
+                      {brandData.brand_objectives}
+                    </p>
+                  </div>
+                )}
+              </GlassCard>
+            </div>
+
+            {/* Right Column: Strategic Parameters */}
+            <div className="lg:col-span-5 space-y-6">
+              <GlassCard hover={false} className="p-6 sm:p-8 space-y-6">
+                {brandData.brand_positioning && (
+                  <div>
+                    <h3 className="text-xs font-mono-tight uppercase text-mist-2 tracking-wider mb-2">
+                      Market Positioning
+                    </h3>
+                    <p className="text-paper font-medium text-base">
+                      {brandData.brand_positioning}
+                    </p>
+                  </div>
+                )}
+
+                {brandData.target_audience && (
+                  <div className="pt-6 border-t border-(--line)">
+                    <h3 className="text-xs font-mono-tight uppercase text-mist-2 tracking-wider mb-2">
+                      Target Audience
+                    </h3>
+                    <p className="text-mist-1 text-sm leading-relaxed">
+                      {brandData.target_audience}
+                    </p>
+                  </div>
+                )}
+
+                {personalityTraits.length > 0 && (
+                  <div className="pt-6 border-t border-(--line)">
+                    <h3 className="text-xs font-mono-tight uppercase text-mist-2 tracking-wider mb-3">
+                      Brand Personality & Archetype
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                      {personalityTraits.map((trait, idx) => (
+                        <span
+                          key={idx}
+                          className="px-3 py-1 rounded-full text-xs font-mono-tight bg-primary/15 text-accent-soft border border-primary/25"
+                        >
+                          {trait}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </GlassCard>
+
+              {brandData.overview_image && (
+                <div className="rounded-2xl overflow-hidden glass border border-(--line) p-2">
+                  <div className="relative aspect-[4/3] w-full rounded-xl overflow-hidden bg-black/30">
+                    <Image
+                      src={brandData.overview_image}
+                      alt="Brand Overview Showcase"
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </Reveal>
+      </section>
+
+      {/* ─────────────────────────────────────────────────────────────
+          SECTION 3 — BRAND STRATEGY & CREATIVE DIRECTION
+          ───────────────────────────────────────────────────────────── */}
+      {(brandData.brand_challenge ||
+        brandData.creative_direction ||
+        brandData.creative_objectives ||
+        strategyImage) && (
+        <section className="relative">
+          <Reveal>
+            <div className="flex items-center gap-3 mb-4">
+              <span className="w-8 h-[1px] bg-primary" />
+              <span className="font-mono-tight text-xs uppercase tracking-widest text-accent-soft">
+                02 / Vision
+              </span>
+            </div>
+            <h2 className="font-display text-3xl sm:text-4xl font-semibold text-paper mb-10">
+              Brand Strategy & Creative Direction
+            </h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              {brandData.brand_challenge && (
+                <GlassCard hover={false} className="p-6 sm:p-8 space-y-3">
+                  <span className="text-xs font-mono-tight uppercase tracking-wider text-secondary">
+                    The Strategic Challenge
+                  </span>
+                  <p className="text-mist-1 text-sm sm:text-base leading-relaxed">
+                    {brandData.brand_challenge}
+                  </p>
+                </GlassCard>
+              )}
+
+              {brandData.creative_direction && (
+                <GlassCard hover={false} className="p-6 sm:p-8 space-y-3">
+                  <span className="text-xs font-mono-tight uppercase tracking-wider text-accent-soft">
+                    Creative Direction & Aesthetic
+                  </span>
+                  <p className="text-mist-1 text-sm sm:text-base leading-relaxed">
+                    {brandData.creative_direction}
+                  </p>
+                </GlassCard>
+              )}
+            </div>
+
+            {attributePills.length > 0 && (
+              <div className="p-6 rounded-2xl glass border border-(--line) flex flex-wrap items-center gap-3 mb-8">
+                <span className="text-xs font-mono-tight uppercase text-mist-2 mr-2">
+                  Key Attributes:
+                </span>
+                {attributePills.map((attr, idx) => (
+                  <span
+                    key={idx}
+                    className="px-3.5 py-1.5 rounded-full text-xs font-medium bg-white/5 border border-(--line) text-paper"
+                  >
+                    ✦ {attr}
+                  </span>
 </div>);
 }
