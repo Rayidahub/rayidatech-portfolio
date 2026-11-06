@@ -115,4 +115,18 @@ describe('Project Classification Helpers', () => {
       expect(isBrandIdentityType(null)).toBe(false)
     })
   })
+
+  describe('isUIUXType', () => {
+    it('returns true for UI/UX variants', () => {
+      expect(isUIUXType('UI/UX Design')).toBe(true)
+      expect(isUIUXType('ui/ux')).toBe(true)
+      expect(isUIUXType('Product Design')).toBe(true)
+    })
+
+    it('returns false for other types or null', () => {
+      expect(isUIUXType('Brand Identity')).toBe(false)
+      expect(isUIUXType('Web Development')).toBe(false)
+      expect(isUIUXType(null)).toBe(false)
+    })
+  })
 })
