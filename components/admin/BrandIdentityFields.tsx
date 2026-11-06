@@ -638,5 +638,135 @@ export default function BrandIdentityFields({ value, onChange }: BrandIdentityFi
           />
         </div>
       </SectionCard>
+
+      {/* ── SECTION 4 — BRAND COLOR PALETTE ── */}
+      <SectionCard
+        title={`Section 4 — Brand Color Palette (${data.color_palette.length} Colors)`}
+        stepNumber="04 / Color"
+        icon={Palette}
+        isOpen={openSections.colors}
+        onToggle={() => toggleSection('colors')}
+      >
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <p className="text-xs text-mist-2">
+              Add colors with HEX codes. RGB is automatically derived with live contrast preview.
+            </p>
+            <button
+              type="button"
+              onClick={addColor}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-primary hover:bg-primary/90 text-white font-medium text-xs transition-colors cursor-pointer"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              <span>Add Brand Color</span>
+            </button>
+          </div>
+
+          {data.color_palette.length === 0 ? (
+            <div className="p-8 rounded-2xl border border-dashed border-(--line) text-center space-y-2">
+              <Palette className="w-8 h-8 text-mist-2 mx-auto" />
+              <p className="text-xs text-mist-1">No brand colors added yet.</p>
+              <button
+                type="button"
+                onClick={addColor}
+                className="text-xs text-secondary hover:underline cursor-pointer"
+              >
+                + Add your first brand swatch
+              </button>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {data.color_palette.map((color, idx) => (
+                <div
+                  key={color.id}
+                  className="p-4 rounded-xl border border-(--line) bg-white/[0.02] flex flex-col md:flex-row md:items-center justify-between gap-4"
+                >
+                  {/* Swatch preview */}
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div
+                      className="w-12 h-12 rounded-xl border border-white/20 shadow-md shrink-0 flex items-center justify-center text-xs font-mono font-bold"
+                      style={{ backgroundColor: color.hex }}
+                    />
+                    <div className="space-y-1 min-w-0">
+                      <input
+                        type="text"
+                        value={color.name}
+                        onChange={(e) => updateColor(color.id, { name: e.target.value })}
+                        placeholder="Color Name"
+                        className="bg-transparent font-semibold text-sm text-paper focus:outline-none focus:underline"
+                      />
+                      <div className="flex items-center gap-2 text-[11px] font-mono-tight text-mist-2">
+                        <span>{color.hex.toUpperCase()}</span>
+                        <span>•</span>
+                        <span>{color.rgb || hexToRgb(color.hex)}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Form controls */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 flex-1 md:max-w-xl">
+                    <input
+                      type="text"
+                      value={color.hex}
+                      onChange={(e) => updateColor(color.id, { hex: e.target.value })}
+                      placeholder="#8000FF"
+                      className="bg-white/5 border border-(--line) rounded-lg px-2.5 py-1.5 text-xs text-paper font-mono-tight focus:outline-none focus:border-primary/50"
+                    />
+
+                    <select
+                      value={color.classification}
+                      onChange={(e) =>
+                        updateColor(color.id, {
+                          classification: e.target.value as BrandColorClassification,
+                        })
+                      }
+                      className="bg-[#16162a] border border-(--line) rounded-lg px-2.5 py-1.5 text-xs text-paper focus:outline-none focus:border-primary/50"
+                    >
+                      <option value="Primary">Primary</option>
+                      <option value="Secondary">Secondary</option>
+                      <option value="Accent">Accent</option>
+                      <option value="Neutral">Neutral</option>
+                      <option value="Background">Background</option>
+                    </select>
+
+                    <input
+                      type="text"
+                      value={color.usage || ''}
+                      onChange={(e) => updateColor(color.id, { usage: e.target.value })}
+                      placeholder="e.g. Jars, logo, primary button"
+                      className="bg-white/5 border border-(--line) rounded-lg px-2.5 py-1.5 text-xs text-paper focus:outline-none focus:border-primary/50"
+                    />
+                  </div>
+
+                  {/* Ordering & deletion */}
+                  <div className="flex items-center gap-1 shrink-0 justify-end">
+                    <button
+                      type="button"
+                      disabled={idx === 0}
+                      onClick={() => moveColor(idx, -1)}
+                      className="p-1.5 rounded-lg border border-(--line) text-mist-2 hover:text-paper hover:bg-white/5 disabled:opacity-30 cursor-pointer"
+                      title="Move Up"
+                    >
+                      <MoveUp className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      type="button"
+                      disabled={idx === data.color_palette.length - 1}
+                      onClick={() => moveColor(idx, 1)}
+                      className="p-1.5 rounded-lg border border-(--line) text-mist-2 hover:text-paper hover:bg-white/5 disabled:opacity-30 cursor-pointer"
+                      title="Move Down"
+                    >
+                      <MoveDown className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => removeColor(color.id)}
+                      className="p-1.5 rounded-lg border border-red-500/20 text-red-400 hover:bg-red-500/10 transition-colors cursor-pointer"
+                      title="Delete Color"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
 </div></div>);
 }
