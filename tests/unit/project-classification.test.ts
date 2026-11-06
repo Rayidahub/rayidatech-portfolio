@@ -157,4 +157,17 @@ describe('Project Classification Helpers', () => {
       )
     })
   })
+
+  describe('formatClassificationBadge', () => {
+    it('returns formatted object with text and css classes', () => {
+      const res = formatClassificationBadge('Brand Identity')
+      expect(res.text).toBe('Brand Identity')
+      expect(res.className).toContain('bg-primary/15')
+    })
+
+    it('defaults gracefully to UI/UX Design when null', () => {
+      const res = formatClassificationBadge(null)
+      expect(res.text).toBe('UI/UX Design')
+    })
+  })
 })
