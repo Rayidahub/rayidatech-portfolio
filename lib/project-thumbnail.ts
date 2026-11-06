@@ -95,3 +95,30 @@ export function sanitizeCoverImageUrl(url?: string | null): string | null {
   if (!isValidImageUrl(url)) return null
   return url ? url.trim() : null
 }
+
+/**
+ * Returns a human-readable placeholder label when no cover image is uploaded.
+ */
+export function getCoverImagePlaceholderTitle(title?: string | null): string {
+  const safeTitle = (title || 'Project').trim()
+  return `No cover image set for "${safeTitle}". Click to add one.`
+}
+
+/**
+ * Returns the Tailwind CSS aspect ratio utility class for project thumbnails.
+ */
+export function getThumbnailAspectRatioClass(
+  ratio: '16/10' | '16/9' | '4/3' | '1/1' = '16/10'
+): string {
+  switch (ratio) {
+    case '16/9':
+      return 'aspect-video'
+    case '4/3':
+      return 'aspect-[4/3]'
+    case '1/1':
+      return 'aspect-square'
+    case '16/10':
+    default:
+      return 'aspect-[16/10]'
+  }
+}
