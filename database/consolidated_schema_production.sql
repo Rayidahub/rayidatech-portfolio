@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS public.projects (
   duration TEXT,
   link TEXT,
   tags TEXT[],
+  project_type TEXT DEFAULT 'UI/UX Design',
   case_study JSONB DEFAULT NULL,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
