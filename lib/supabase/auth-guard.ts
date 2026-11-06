@@ -1,6 +1,6 @@
 // lib/supabase/auth-guard.ts
 import { createClient } from '@/lib/supabase/server';
-import { getAdminUserByEmail, ROOT_SUPER_ADMIN_EMAIL } from '@/lib/data/admin-users';
+import { getAdminUserByEmail, ROOT_SUPER_ADMIN_EMAIL, isRootSuperAdminEmail } from '@/lib/data/admin-users';
 import type { AdminUser } from '@/types/admin-user';
 
 export interface AuthGuardResult {
@@ -31,7 +31,7 @@ export async function requireAdminSession(): Promise<AuthGuardResult> {
       };
     }
 
-    const isRoot = user.email.toLowerCase() === ROOT_SUPER_ADMIN_EMAIL.toLowerCase();
+    const isRoot = isRootSuperAdminEmail(user.email);
     const profile = await getAdminUserByEmail(user.email);
 
     if (!isRoot && (!profile || profile.is_active === false)) {
