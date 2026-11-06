@@ -10,6 +10,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "db:verify": "node scripts/verify-supabase.js",
+    "db:seed:luxe": "node scripts/seed-luxe.js",
     "email:test": "node scripts/test-email.js"
   },
   "dependencies": {
