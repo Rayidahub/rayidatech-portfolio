@@ -4,7 +4,7 @@ import { getAdminUserByEmail } from '@/lib/data/admin-users'
 import AdminLayoutClient from '@/components/admin/AdminLayoutClient'
 import DeactivatedNotice from '@/components/admin/DeactivatedNotice'
 import UnauthorizedNotice from '@/components/admin/UnauthorizedNotice'
-import { ROOT_SUPER_ADMIN_EMAIL } from '@/types/admin-user'
+import { ROOT_SUPER_ADMIN_EMAIL, isRootSuperAdminEmail } from '@/types/admin-user'
 
 export default async function DashboardLayout({
   children,
@@ -24,7 +24,7 @@ export default async function DashboardLayout({
   const adminProfile = await getAdminUserByEmail(user.email)
 
   // Guard: If authenticated user is not in admin_users and not root super admin
-  if (!adminProfile && user.email.toLowerCase() !== ROOT_SUPER_ADMIN_EMAIL.toLowerCase()) {
+  if (!adminProfile && !isRootSuperAdminEmail(user.email)) {
     return <UnauthorizedNotice email={user.email} />
   }
 
