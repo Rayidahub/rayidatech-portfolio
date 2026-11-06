@@ -136,3 +136,14 @@ export function normalizeClassificationValues(
     category: (category || '').trim(),
   }
 }
+
+/**
+ * Returns the primary accent HEX color string for a project type.
+ */
+export function getClassificationAccentColor(projectType?: string | null): string {
+  const norm = (projectType || '').toLowerCase()
+  if (norm.includes('brand')) return '#8000ff'
+  if (norm.includes('web')) return '#00d1ff'
+  if (norm.includes('ui') || norm.includes('ux')) return '#ccccff'
+  return '#ffffff'
+}
