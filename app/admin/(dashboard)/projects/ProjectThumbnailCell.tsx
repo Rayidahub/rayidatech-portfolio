@@ -88,6 +88,14 @@ export default function ProjectThumbnailCell({
             <div className="absolute inset-0 bg-ink/70 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
               <ZoomIn className="w-4 h-4 text-paper drop-shadow" />
             </div>
+
+            {/* Corner status indicator dot */}
+            <span
+              className={`absolute top-1 right-1 w-2 h-2 rounded-full ring-1 ring-ink-deep shadow-xs ${
+                status === 'draft' ? 'bg-amber-400' : 'bg-emerald-400'
+              }`}
+              title={status === 'draft' ? 'Draft cover' : 'Published cover'}
+            />
           </button>
         ) : (
           <Link
