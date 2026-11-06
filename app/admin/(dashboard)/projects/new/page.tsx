@@ -3,12 +3,14 @@
 import { useState, useCallback } from 'react'
 import { createClient } from '@/lib/supabase/browser'
 import { useRouter } from 'next/navigation'
-import { Save, ArrowLeft } from 'lucide-react'
+import { Save, ArrowLeft, Sparkles } from 'lucide-react'
 import Link from 'next/link'
-import { SERVICE_CATEGORIES } from '@/lib/data/services'
+import ServiceCategorySelect from '@/components/admin/ServiceCategorySelect'
+import ProjectTypeSelect from '@/components/admin/ProjectTypeSelect'
 import CaseStudyFields from '@/components/admin/CaseStudyFields'
+import BrandIdentityFields from '@/components/admin/BrandIdentityFields'
 import ImageUploadField from '@/components/admin/ImageUploadField'
-import type { CaseStudy } from '@/types/project'
+import type { CaseStudy, BrandIdentityCaseStudy, ProjectType } from '@/types/project'
 
 export default function NewProject() {
   const router = useRouter()
@@ -24,9 +26,10 @@ export default function NewProject() {
     duration: '',
     link: '',
     featured: false,
+    project_type: 'UI/UX Design' as ProjectType,
     category: '',
     tags: '',
-    case_study: {} as CaseStudy,
+    case_study: {} as CaseStudy | BrandIdentityCaseStudy,
   })
 
   const generateSlug = useCallback((title: string) => {
@@ -44,6 +47,33 @@ export default function NewProject() {
     }))
   }
 
+  function handleCategoryChange(category: string) {
+    setForm((prev) => {
+      // If user chooses Brand Identity, auto-align project_type
+      const updatedType =
+        category.toLowerCase() === 'brand identity'
+          ? ('Brand Identity' as ProjectType)
+          : prev.project_type;
+      return {
+        ...prev,
+        category,
+        project_type: updatedType,
+      };
+    });
+  }
+
+  function handleProjectTypeChange(project_type: ProjectType) {
+    setForm((prev) => ({
+      ...prev,
+      project_type,
+      // If user switches to Brand Identity and category is empty, auto-populate
+      category:
+        project_type === 'Brand Identity' && !prev.category
+          ? 'Brand Identity'
+          : prev.category,
+    }));
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setSaving(true)
@@ -59,6 +89,15 @@ export default function NewProject() {
       ? [categoryTag, ...additionalTags.filter((t) => t !== categoryTag)]
       : additionalTags
 
+    // Prepare case study payload with explicit type indicator
+    let caseStudyPayload: any = null
+    if (Object.keys(form.case_study).length > 0) {
+      caseStudyPayload = {
+        ...form.case_study,
+        case_study_type: form.project_type,
+      }
+    }
+
     const { error: insertError } = await supabase.from('projects').insert({
       title: form.title,
       slug: form.slug,
@@ -69,8 +108,9 @@ export default function NewProject() {
       duration: form.duration || null,
       link: form.link || null,
       featured: form.featured,
+      project_type: form.project_type,
       tags: tags.length > 0 ? tags : null,
-      case_study: Object.keys(form.case_study).length > 0 ? form.case_study : null,
+      case_study: caseStudyPayload,
     })
 
     if (insertError) {
@@ -83,6 +123,8 @@ export default function NewProject() {
     router.refresh()
   }
 
+  const isBrandIdentity = form.project_type === 'Brand Identity'
+
   return (
     <div>
       <div className="flex items-center gap-4 mb-6">
@@ -92,14 +134,61 @@ export default function NewProject() {
         >
           <ArrowLeft className="w-5 h-5" />
         </Link>
-        <h1 className="font-display text-2xl font-semibold text-paper">New Project</h1>
+        <div>
+          <h1 className="font-display text-2xl font-semibold text-paper">New Project</h1>
+          <p className="text-xs text-mist-2 mt-0.5">
+            Create a showcase project or an in-depth brand identity case study
+          </p>
+        </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="glass rounded-xl p-6 space-y-5 max-w-2xl">
+      <form onSubmit={handleSubmit} className="glass rounded-xl p-6 space-y-6 max-w-4xl">
         {error && (
           <p className="text-sm text-red-400 bg-red-400/10 rounded-lg px-3 py-2">{error}</p>
         )}
 
+        {/* Core Classification Grid */}
+        <div className="p-4 rounded-xl bg-white/[0.02] border border-(--line) space-y-4">
+          <div className="flex items-center justify-between border-b border-(--line) pb-2">
+            <span className="text-xs font-mono-tight uppercase tracking-wider text-mist-1">
+              Project Architecture & Classification
+            </span>
+            <span className="text-[11px] text-secondary font-mono-tight">
+              Determines Form & Public View
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-paper mb-1.5">
+                Project Type *
+              </label>
+              <ProjectTypeSelect
+                value={form.project_type}
+                onChange={handleProjectTypeChange}
+              />
+              <p className="text-[11px] text-mist-2 mt-1">
+                Switches the case study form and public presentation layout.
+              </p>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-paper mb-1.5">
+                Service Category *
+              </label>
+              <ServiceCategorySelect
+                value={form.category}
+                onChange={handleCategoryChange}
+                required
+              />
+              <p className="text-[11px] text-mist-2 mt-1">
+                Controls portfolio filtering tags and public taxonomy.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* General Project Meta */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="sm:col-span-2">
             <label className="block text-sm text-mist-1 mb-1.5">Title *</label>
@@ -108,6 +197,7 @@ export default function NewProject() {
               value={form.title}
               onChange={(e) => handleTitleChange(e.target.value)}
               required
+              placeholder="e.g. LUXE BY SEY — Brand Identity & Visual Design"
               className="w-full bg-white/5 border border-(--line) rounded-lg px-3 py-2.5 text-sm text-paper placeholder:text-mist-2 focus:outline-none focus:border-primary/50 transition-colors"
             />
           </div>
@@ -118,59 +208,62 @@ export default function NewProject() {
               value={form.slug}
               onChange={(e) => setForm((p) => ({ ...p, slug: e.target.value }))}
               required
+              placeholder="e.g. luxe-by-sey"
               className="w-full bg-white/5 border border-(--line) rounded-lg px-3 py-2.5 text-sm text-paper placeholder:text-mist-2 focus:outline-none focus:border-primary/50 transition-colors font-mono-tight"
             />
           </div>
           <div className="sm:col-span-2">
-            <label className="block text-sm text-mist-1 mb-1.5">Description *</label>
+            <label className="block text-sm text-mist-1 mb-1.5">Short Description *</label>
             <textarea
               value={form.description}
               onChange={(e) => setForm((p) => ({ ...p, description: e.target.value }))}
               required
               rows={2}
+              placeholder="A concise summary of the brand or digital product..."
               className="w-full bg-white/5 border border-(--line) rounded-lg px-3 py-2.5 text-sm text-paper placeholder:text-mist-2 focus:outline-none focus:border-primary/50 transition-colors resize-none"
             />
           </div>
           <div className="sm:col-span-2">
-            <label className="block text-sm text-mist-1 mb-1.5">Content (Markdown)</label>
+            <label className="block text-sm text-mist-1 mb-1.5">Content (Markdown / Overview)</label>
             <textarea
               value={form.content}
               onChange={(e) => setForm((p) => ({ ...p, content: e.target.value }))}
-              rows={8}
+              rows={6}
+              placeholder="Optional markdown notes or narrative description..."
               className="w-full bg-white/5 border border-(--line) rounded-lg px-3 py-2.5 text-sm text-paper placeholder:text-mist-2 focus:outline-none focus:border-primary/50 transition-colors font-mono-tight"
             />
           </div>
           <div className="sm:col-span-2">
             <ImageUploadField
-              label="Project Cover Image"
+              label="Project Cover Image *"
               value={form.cover_image}
               onChange={(url) => setForm((p) => ({ ...p, cover_image: url }))}
               folder="projects"
-              description="Upload a high-resolution project cover banner from your device"
+              description="High-resolution primary cover banner for portfolio cards and hero view"
             />
           </div>
           <div>
-            <label className="block text-sm text-mist-1 mb-1.5">Role</label>
+            <label className="block text-sm text-mist-1 mb-1.5">My Role</label>
             <input
               type="text"
               value={form.role}
               onChange={(e) => setForm((p) => ({ ...p, role: e.target.value }))}
               className="w-full bg-white/5 border border-(--line) rounded-lg px-3 py-2.5 text-sm text-paper placeholder:text-mist-2 focus:outline-none focus:border-primary/50 transition-colors"
-              placeholder="Lead Designer"
+              placeholder="e.g. Brand Designer & Visual Strategist"
             />
           </div>
           <div>
-            <label className="block text-sm text-mist-1 mb-1.5">Duration</label>
+            <label className="block text-sm text-mist-1 mb-1.5">Project Duration</label>
             <input
               type="text"
               value={form.duration}
               onChange={(e) => setForm((p) => ({ ...p, duration: e.target.value }))}
               className="w-full bg-white/5 border border-(--line) rounded-lg px-3 py-2.5 text-sm text-paper placeholder:text-mist-2 focus:outline-none focus:border-primary/50 transition-colors"
-              placeholder="3 months"
+              placeholder="e.g. 4 weeks"
             />
           </div>
           <div className="sm:col-span-2">
-            <label className="block text-sm text-mist-1 mb-1.5">Live Link</label>
+            <label className="block text-sm text-mist-1 mb-1.5">Live Project Link</label>
             <input
               type="url"
               value={form.link}
@@ -180,29 +273,13 @@ export default function NewProject() {
             />
           </div>
           <div className="sm:col-span-2">
-            <label className="block text-sm text-mist-1 mb-1.5">Service Category *</label>
-            <select
-              value={form.category}
-              onChange={(e) => setForm((p) => ({ ...p, category: e.target.value }))}
-              required
-              className="w-full bg-white/5 border border-(--line) rounded-lg px-3 py-2.5 text-sm text-paper focus:outline-none focus:border-primary/50 transition-colors"
-            >
-              <option value="" disabled>Select a service category</option>
-              {SERVICE_CATEGORIES.map((category) => (
-                <option key={category} value={category}>
-                  {category}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="sm:col-span-2">
             <label className="block text-sm text-mist-1 mb-1.5">Additional Tags (comma-separated)</label>
             <input
               type="text"
               value={form.tags}
               onChange={(e) => setForm((p) => ({ ...p, tags: e.target.value }))}
               className="w-full bg-white/5 border border-(--line) rounded-lg px-3 py-2.5 text-sm text-paper placeholder:text-mist-2 focus:outline-none focus:border-primary/50 transition-colors"
-              placeholder="Fintech, Design, Web"
+              placeholder="Luxury, Beauty, Visual Identity, Packaging"
             />
           </div>
           <div className="sm:col-span-2">
@@ -213,26 +290,52 @@ export default function NewProject() {
                 onChange={(e) => setForm((p) => ({ ...p, featured: e.target.checked }))}
                 className="w-4 h-4 rounded border-(--line) bg-white/5 text-primary focus:ring-primary/30"
               />
-              <span className="text-sm text-mist-1">Featured project</span>
+              <span className="text-sm text-mist-1">Featured project on homepage</span>
             </label>
           </div>
         </div>
 
-        <div className="sm:col-span-2 border-t border-(--line) pt-8">
-          <h2 className="font-display text-xl font-semibold text-paper mb-6">
-            Case Study
-          </h2>
-          <CaseStudyFields
-            value={form.case_study}
-            onChange={(case_study) => setForm((p) => ({ ...p, case_study }))}
-          />
+        {/* Dynamic Case Study Section */}
+        <div className="border-t border-(--line) pt-8">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <div className="flex items-center gap-2">
+                <h2 className="font-display text-xl font-semibold text-paper">
+                  {isBrandIdentity
+                    ? 'Brand Identity Case Study Form'
+                    : 'Case Study Form'}
+                </h2>
+                <span className="text-[11px] font-mono-tight px-2 py-0.5 rounded-full bg-secondary/15 text-secondary border border-secondary/25">
+                  {form.project_type}
+                </span>
+              </div>
+              <p className="text-xs text-mist-2 mt-1">
+                {isBrandIdentity
+                  ? 'Tailored specifically for logos, color palettes, typography, merchandise, vehicle livery, packaging & visual systems.'
+                  : 'Tailored for user pain points, flows, wireframes, component design systems and app mockups.'}
+              </p>
+            </div>
+          </div>
+
+          {isBrandIdentity ? (
+            <BrandIdentityFields
+              value={form.case_study as BrandIdentityCaseStudy}
+              onChange={(case_study) => setForm((p) => ({ ...p, case_study }))}
+            />
+          ) : (
+            <CaseStudyFields
+              category={form.category}
+              value={form.case_study as CaseStudy}
+              onChange={(case_study) => setForm((p) => ({ ...p, case_study }))}
+            />
+          )}
         </div>
 
-        <div className="flex justify-end">
+        <div className="flex justify-end pt-4 border-t border-(--line)">
           <button
             type="submit"
             disabled={saving}
-            className="inline-flex items-center gap-2 bg-primary hover:bg-primary/80 text-white rounded-lg px-5 py-2.5 text-sm font-medium transition-colors disabled:opacity-50"
+            className="inline-flex items-center gap-2 bg-primary hover:bg-primary/80 text-white rounded-lg px-6 py-2.5 text-sm font-medium transition-colors disabled:opacity-50 shadow-lg shadow-primary/20"
           >
             <Save className="w-4 h-4" />
             {saving ? 'Saving...' : 'Save Project'}
