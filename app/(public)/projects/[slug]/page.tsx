@@ -37,6 +37,7 @@ import StatusPill from '@/components/ui/StatusPill';
 import CaseStudyImageViewer from '@/components/projects/CaseStudyImageViewer';
 import ColorSwatch from '@/components/projects/ColorSwatch';
 import BrandIdentityCaseStudyPage from '@/components/projects/BrandIdentityCaseStudyPage';
+import { inferProjectType } from '@/lib/brand-identity';
 import { SERVICE_CATEGORIES } from '@/lib/data/services';
 import { getCaseStudyConfig } from '@/lib/data/case-study-templates';
 import { normalizeSlug } from '@/lib/slug';
@@ -1623,11 +1624,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   }
 
   const hasCaseStudy = !!project.case_study && Object.keys(project.case_study).length > 0;
-  const isBrandIdentity =
-    project.project_type === 'Brand Identity' ||
-    project.case_study?.case_study_type === 'Brand Identity' ||
-    (Array.isArray(project.tags) &&
-      project.tags.some((t: string) => t.toLowerCase() === 'brand identity'));
+  const isBrandIdentity = inferProjectType(project) === 'Brand Identity';
 
   const nextProject = await getNextProject(project.id, project.case_study?.next_project_slug);
 
