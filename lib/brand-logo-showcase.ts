@@ -132,3 +132,20 @@ export function getLogoRoleBadgeColor(type: LogoVariationType): string {
       return 'bg-secondary/10 text-secondary border-secondary/20';
   }
 }
+
+/**
+ * Returns human-friendly label for stage mode switcher.
+ */
+export function getLogoStageOptionLabel(stage: LogoStageMode): string {
+  switch (stage) {
+    case 'light':
+      return 'Light';
+    case 'dark':
+      return 'Dark';
+    case 'checkerboard':
+      return 'Grid';
+    case 'auto':
+    default:
+      return 'Auto';
+  }
+}
