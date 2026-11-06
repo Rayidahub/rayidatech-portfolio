@@ -10,6 +10,7 @@ import ProjectClassificationCard from '@/components/admin/ProjectClassificationC
 import CaseStudyFields from '@/components/admin/CaseStudyFields'
 import BrandIdentityFields from '@/components/admin/BrandIdentityFields'
 import ImageUploadField from '@/components/admin/ImageUploadField'
+import ProjectActionBar from '@/components/admin/ProjectActionBar'
 import { inferProjectType } from '@/lib/brand-identity'
 import { isProjectPublished, getProjectStatus, buildStatusPayload } from '@/lib/project-status'
 import type { CaseStudy, BrandIdentityCaseStudy, ProjectType, ProjectStatus } from '@/types/project'
