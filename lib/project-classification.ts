@@ -147,3 +147,14 @@ export function getClassificationAccentColor(projectType?: string | null): strin
   if (norm.includes('ui') || norm.includes('ux')) return '#ccccff'
   return '#ffffff'
 }
+
+/**
+ * Returns a shortened, mobile-friendly label for classification status pills.
+ */
+export function formatClassificationPillLabel(projectType?: string | null): string {
+  const norm = (projectType || '').toLowerCase()
+  if (norm.includes('brand')) return 'Brand'
+  if (norm.includes('web')) return 'Web'
+  if (norm.includes('ui') || norm.includes('ux')) return 'UI/UX'
+  return 'Other'
+}
