@@ -70,4 +70,20 @@ export interface BrandColor {
 }
 
 export type BrandFontRole =
+  | 'Display'
+  | 'Heading'
+  | 'Body'
+  | 'Accent'
+  | 'Monospace';
+
+export interface BrandTypography {
+  id: string;
+  font_name: string;
+  font_role: BrandFontRole;
+  weight: string;
+  usage?: string;
+  specimen_image?: string;
+}
+
+export const BRAND_APPLICATION_CATEGORIES = [
 export interface CaseStudy { [key: string]: any; }
