@@ -16,6 +16,7 @@ import {
   isValidApplicationDeliverable,
   formatApplicationCategoryBadge,
   getLayoutColumnSpan,
+  truncateContextNote,
 } from '@/lib/brand-application-preview'
 
 describe('Brand Application Preview Utilities', () => {
@@ -236,6 +237,25 @@ describe('Brand Application Preview Utilities', () => {
       expect(getLayoutColumnSpan('hero').imageSpan).toBe('col-span-12')
       expect(getLayoutColumnSpan('centered').imageSpan).toBe('col-span-12')
       expect(getLayoutColumnSpan('wide').imageSpan).toBe('col-span-12')
+    })
+  })
+
+  describe('truncateContextNote', () => {
+    it('preserves short context notes without truncation', () => {
+      expect(truncateContextNote('Short note', 50)).toBe('Short note')
+    })
+
+    it('truncates at word boundary with ellipsis', () => {
+      const long = 'This is an expansive description for the brand deliverable application mockup'
+      const truncated = truncateContextNote(long, 30)
+      expect(truncated.endsWith('…')).toBe(true)
+      expect(truncated.length).toBeLessThanOrEqual(31)
+    })
+
+    it('returns empty string for null or empty input', () => {
+      expect(truncateContextNote(null)).toBe('')
+      expect(truncateContextNote('')).toBe('')
+      expect(truncateContextNote('   ')).toBe('')
     })
   })
 })
