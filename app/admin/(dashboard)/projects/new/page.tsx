@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/browser'
 import { useRouter } from 'next/navigation'
 import { Save, ArrowLeft, Sparkles, FileText, Globe } from 'lucide-react'
@@ -147,6 +147,18 @@ export default function NewProject() {
     e.preventDefault()
     await saveProject(form.status)
   }
+
+  // Keyboard shortcut: Ctrl+S / Cmd+S saves draft immediately
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault()
+        saveProject('draft')
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [form, saving])
 
   const isBrandIdentity = form.project_type === 'Brand Identity'
 
