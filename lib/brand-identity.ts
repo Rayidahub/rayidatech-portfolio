@@ -205,3 +205,18 @@ export function validateBrandCaseStudy(data: Partial<BrandIdentityCaseStudy>): {
     errors,
   }
 }
+
+/**
+ * Type guard to check if a case study object matches BrandIdentityCaseStudy.
+ */
+export function isBrandIdentityCaseStudy(
+  caseStudy: any
+): caseStudy is BrandIdentityCaseStudy {
+  if (!caseStudy || typeof caseStudy !== 'object') return false
+  return (
+    caseStudy.case_study_type === 'Brand Identity' ||
+    caseStudy.project_type === 'Brand Identity' ||
+    Array.isArray(caseStudy.color_palette) ||
+    Array.isArray(caseStudy.brand_applications)
+  )
+}
