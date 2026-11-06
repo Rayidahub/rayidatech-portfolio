@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
 import type { Project } from '@/types/project';
-import { isProjectPublished } from '@/lib/project-status';
+import { filterPublishedProjects } from '@/lib/project-status';
 import Link from 'next/link';
 import { ArrowRight, Briefcase, Calendar, Sparkles, Tag } from 'lucide-react';
 import Container from '@/components/ui/Container';
@@ -23,7 +23,7 @@ async function getFeaturedProjects(): Promise<Project[]> {
     return [];
   }
 
-  return (data || []).filter(isProjectPublished);
+  return filterPublishedProjects(data);
 }
 
 export default async function FeaturedProjects() {
