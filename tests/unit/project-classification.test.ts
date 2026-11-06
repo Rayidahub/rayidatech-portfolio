@@ -6,6 +6,11 @@ import {
   getClassificationBadgeClass,
   getClassificationHelpText,
   getClassificationAriaLabel,
+  isBrandIdentityType,
+  isUIUXType,
+  isWebDevType,
+  getClassificationToggleTooltip,
+  formatClassificationBadge,
 } from '@/lib/project-classification'
 
 describe('Project Classification Helpers', () => {
