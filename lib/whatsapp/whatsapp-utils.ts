@@ -149,3 +149,4 @@ export function generateWhatsAppChatUrl(phone: string, message: string): string 
   const encodedText = encodeURIComponent(message.trim());
   return `https://wa.me/${cleanPhone}?text=${encodedText}`;
 }
+
