@@ -372,57 +372,17 @@ export default function NewProject() {
           )}
         </div>
 
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-(--line)">
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-mist-2">Target status:</span>
-            <button
-              type="button"
-              onClick={() =>
-                setForm((p) => ({
-                  ...p,
-                  status: p.status === 'draft' ? 'published' : 'draft',
-                  published: p.status !== 'draft',
-                }))
-              }
-              className={`px-3 py-1 rounded-lg text-xs font-medium border transition-colors cursor-pointer ${
-                form.status === 'draft'
-                  ? 'bg-amber-500/10 text-amber-300 border-amber-500/30 hover:bg-amber-500/20'
-                  : 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30 hover:bg-emerald-500/20'
-              }`}
-            >
-              Click to toggle: {form.status === 'draft' ? 'Draft Mode' : 'Live / Published'}
-            </button>
-          </div>
-
-          <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
-            <Link
-              href="/admin/projects"
-              className="px-4 py-2.5 rounded-xl text-xs text-mist-1 hover:text-paper hover:bg-white/5 transition-colors"
-            >
-              Cancel
-            </Link>
-
-            <button
-              type="button"
-              disabled={saving}
-              onClick={() => saveProject('draft')}
-              className="inline-flex items-center gap-2 bg-white/5 hover:bg-white/10 text-paper border border-(--line) hover:border-amber-500/40 rounded-xl px-5 py-2.5 text-xs font-medium transition-all disabled:opacity-50 cursor-pointer"
-            >
-              <FileText className="w-3.5 h-3.5 text-amber-400" />
-              <span>{saving ? 'Saving...' : 'Save as Draft'}</span>
-            </button>
-
-            <button
-              type="button"
-              disabled={saving}
-              onClick={() => saveProject('published')}
-              className="inline-flex items-center gap-2 bg-primary hover:bg-primary/80 text-white rounded-xl px-6 py-2.5 text-xs font-medium transition-colors disabled:opacity-50 shadow-lg shadow-primary/20 cursor-pointer"
-            >
-              <Globe className="w-3.5 h-3.5" />
-              <span>{saving ? 'Publishing...' : 'Publish Project'}</span>
-            </button>
-          </div>
-        </div>
+        {/* Bottom Control Action Bar */}
+        <ProjectActionBar
+          mode="new"
+          status={form.status}
+          saving={saving}
+          onStatusToggle={handleStatusToggle}
+          onSaveDraft={() => saveProject('draft')}
+          onSavePublish={() => saveProject('published')}
+          cancelHref="/admin/projects"
+          position="bottom"
+        />
       </form>
     </div>
   )
