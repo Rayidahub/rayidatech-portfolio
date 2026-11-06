@@ -8,6 +8,7 @@ import {
   LogoStageMode,
   getLogoVariationConfig,
   getLogoStageBackgroundClass,
+  getLogoStageBorderClass,
   resolveEffectiveStageMode,
   getLogoRoleBadgeColor,
 } from '@/lib/brand-logo-showcase';
@@ -124,7 +125,7 @@ export default function BrandLogoVariationCard({
         aria-label={`Inspect ${config.title}`}
         className={`relative w-full h-36 sm:h-40 rounded-xl border overflow-hidden flex items-center justify-center p-4 transition-all duration-300 my-3.5 cursor-zoom-in ${getLogoStageBackgroundClass(
           effectiveStage
-        )}`}
+        )} ${getLogoStageBorderClass(effectiveStage)}`}
       >
         <div className="relative w-full h-full flex items-center justify-center">
           <Image
