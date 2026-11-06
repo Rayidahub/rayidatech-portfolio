@@ -186,4 +186,20 @@ describe('Project Cover Image & Thumbnail Utilities', () => {
       expect(getThumbnailAspectRatioClass('1/1')).toBe('aspect-square')
     })
   })
+
+  describe('getImageFileName', () => {
+    it('extracts filename cleanly from simple paths', () => {
+      expect(getImageFileName('/img/projects/cover.png')).toBe('cover.png')
+      expect(getImageFileName('https://example.com/assets/banner.webp')).toBe('banner.webp')
+    })
+
+    it('strips query parameters and hashes from filename', () => {
+      expect(getImageFileName('https://images.unsplash.com/photo-123?w=800&q=80')).toBe('photo-123')
+    })
+
+    it('returns default fallback when input is empty or invalid', () => {
+      expect(getImageFileName(null)).toBe('image.jpg')
+      expect(getImageFileName('')).toBe('image.jpg')
+    })
+  })
 })
