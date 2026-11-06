@@ -198,5 +198,125 @@ export default function BrandIdentityFields({ value, onChange }: BrandIdentityFi
 
   const toggleSection = (sec: string) => {
     setOpenSections((prev) => ({ ...prev, [sec]: !prev[sec] }));
+  };
+
+  // Safe normalized state
+  const data: BrandIdentityCaseStudy = {
+    case_study_type: 'Brand Identity',
+    brand_introduction: value.brand_introduction || '',
+    brand_positioning: value.brand_positioning || '',
+    industry: value.industry || '',
+    target_audience: value.target_audience || '',
+    brand_personality: value.brand_personality || '',
+    brand_objectives: value.brand_objectives || '',
+    brand_story: value.brand_story || '',
+    overview_image: value.overview_image || '',
+
+    brand_challenge: value.brand_challenge || '',
+    creative_objectives: value.creative_objectives || '',
+    creative_direction: value.creative_direction || '',
+    visual_inspiration: value.visual_inspiration || '',
+    brand_attributes: value.brand_attributes || '',
+    strategy_gallery: value.strategy_gallery || [],
+
+    primary_logo: value.primary_logo || '',
+    logo_symbol: value.logo_symbol || '',
+    secondary_logo: value.secondary_logo || '',
+    horizontal_logo: value.horizontal_logo || '',
+    monochrome_logo: value.monochrome_logo || '',
+    logo_concept_description: value.logo_concept_description || '',
+    logo_variations_gallery: value.logo_variations_gallery || [],
+
+    color_palette: value.color_palette || [],
+    typography_system: value.typography_system || [],
+
+    graphic_elements_description: value.graphic_elements_description || '',
+    brand_patterns: value.brand_patterns || [],
+    decorative_elements: value.decorative_elements || [],
+    gradient_treatments: value.gradient_treatments || [],
+    photography_direction: value.photography_direction || '',
+    graphic_elements_gallery: value.graphic_elements_gallery || [],
+
+    brand_applications: value.brand_applications || [],
+    brand_gallery: value.brand_gallery || [],
+    gallery_layout: value.gallery_layout || 'Editorial Grid',
+
+    design_outcome: value.design_outcome || '',
+    project_impact: value.project_impact || '',
+    key_learnings: value.key_learnings || '',
+    personal_reflection: value.personal_reflection || '',
+    closing_image: value.closing_image || '',
+
+    next_project_slug: value.next_project_slug || '',
+  };
+
+  const update = <K extends keyof BrandIdentityCaseStudy>(key: K, val: BrandIdentityCaseStudy[K]) => {
+    onChange({ ...data, [key]: val });
+  };
+
+  /* ─────────────────────────────────────────────────────────────
+     COLOR PALETTE HELPERS
+     ───────────────────────────────────────────────────────────── */
+  const addColor = () => {
+    const newColor: BrandColor = {
+      id: `col_${Date.now()}`,
+      name: 'New Brand Color',
+      hex: '#8000FF',
+      rgb: 'rgb(128, 0, 255)',
+      classification: 'Primary',
+      usage: 'Primary brand touchpoints',
+    };
+    update('color_palette', [...data.color_palette, newColor]);
+  };
+
+  const updateColor = (id: string, patch: Partial<BrandColor>) => {
+    const updated = data.color_palette.map((c) => {
+      if (c.id !== id) return c;
+      const merged = { ...c, ...patch };
+      if (patch.hex) {
+        merged.rgb = hexToRgb(patch.hex);
+      }
+      return merged;
+    });
+    update('color_palette', updated);
+  };
+
+  const removeColor = (id: string) => {
+    update('color_palette', data.color_palette.filter((c) => c.id !== id));
+  };
+
+  const moveColor = (idx: number, dir: -1 | 1) => {
+    const targetIdx = idx + dir;
+    if (targetIdx < 0 || targetIdx >= data.color_palette.length) return;
+    const items = [...data.color_palette];
+    const temp = items[idx];
+    items[idx] = items[targetIdx];
+    items[targetIdx] = temp;
+    update('color_palette', items);
+  };
+
+  /* ─────────────────────────────────────────────────────────────
+     TYPOGRAPHY SYSTEM HELPERS
+     ───────────────────────────────────────────────────────────── */
+  const addTypography = () => {
+    const newFont: BrandTypography = {
+      id: `typ_${Date.now()}`,
+      font_name: 'Cormorant Garamond',
+      font_role: 'Heading',
+      weight: 'Bold 700',
+      usage: 'Luxury headline titles and packaging crests',
+      specimen_image: '',
+    };
+    update('typography_system', [...data.typography_system, newFont]);
+  };
+
+  const updateTypography = (id: string, patch: Partial<BrandTypography>) => {
+    update(
+      'typography_system',
+      data.typography_system.map((t) => (t.id === id ? { ...t, ...patch } : t))
+    );
+  };
+
+  const removeTypography = (id: string) => {
 </div></div>);
 }
