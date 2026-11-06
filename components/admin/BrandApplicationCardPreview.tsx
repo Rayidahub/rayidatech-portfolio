@@ -11,6 +11,7 @@ import {
   AlignCenter,
   BookOpen,
   Tv,
+  ZoomIn,
 } from 'lucide-react';
 import { BrandApplicationCategory, BrandApplicationLayout } from '@/types/project';
 import {
@@ -192,15 +193,24 @@ export default function BrandApplicationCardPreview({
               {layout === 'split' && (
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-center p-4 rounded-2xl glass border border-(--line)">
                   <div className="md:col-span-7">
-                    <div className="rounded-xl overflow-hidden border border-(--line) bg-black/40 shadow-md">
+                    <a
+                      href={imageUrl || '#'}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group relative block rounded-xl overflow-hidden border border-(--line) bg-black/40 shadow-md cursor-zoom-in"
+                      title="Open full resolution mockup"
+                    >
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={imageUrl || ''}
                         alt={preview.title}
                         onError={() => setHasError(true)}
-                        className={`w-full ${getLayoutAspectRatioClass('split')} object-cover`}
+                        className={`w-full ${getLayoutAspectRatioClass('split')} object-cover transition-transform duration-300 group-hover:scale-[1.02]`}
                       />
-                    </div>
+                      <div className="absolute top-2 right-2 p-1.5 rounded-lg bg-black/60 backdrop-blur text-white/80 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <ZoomIn className="w-3.5 h-3.5" />
+                      </div>
+                    </a>
                   </div>
                   <div className="md:col-span-5 space-y-2.5">
                     <span className="inline-flex px-2.5 py-0.5 rounded-full bg-secondary/15 text-secondary border border-secondary/25 text-[11px] font-mono-tight font-medium">
@@ -219,15 +229,24 @@ export default function BrandApplicationCardPreview({
               {/* 2. Hero Layout (Full-width cinematic banner) */}
               {layout === 'hero' && (
                 <div className="space-y-3.5 p-4 rounded-2xl glass border border-(--line)">
-                  <div className="rounded-xl overflow-hidden border border-(--line) bg-black/40 shadow-lg">
+                  <a
+                    href={imageUrl || '#'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group relative block rounded-xl overflow-hidden border border-(--line) bg-black/40 shadow-lg cursor-zoom-in"
+                    title="Open full resolution mockup"
+                  >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={imageUrl || ''}
                       alt={preview.title}
                       onError={() => setHasError(true)}
-                      className={`w-full ${getLayoutAspectRatioClass('hero')} object-cover`}
+                      className={`w-full ${getLayoutAspectRatioClass('hero')} object-cover transition-transform duration-300 group-hover:scale-[1.01]`}
                     />
-                  </div>
+                    <div className="absolute top-2 right-2 p-1.5 rounded-lg bg-black/60 backdrop-blur text-white/80 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <ZoomIn className="w-3.5 h-3.5" />
+                    </div>
+                  </a>
                   <div className="flex flex-wrap items-center justify-between gap-3 px-1">
                     <div>
                       <span className="text-[10px] font-mono-tight uppercase tracking-wider text-secondary">
@@ -249,15 +268,24 @@ export default function BrandApplicationCardPreview({
               {/* 3. Centered Layout (Focused Spotlight) */}
               {layout === 'centered' && (
                 <div className="max-w-lg mx-auto space-y-3.5 text-center p-4 rounded-2xl glass border border-(--line)">
-                  <div className="rounded-xl overflow-hidden border border-(--line) bg-black/40 shadow-md">
+                  <a
+                    href={imageUrl || '#'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group relative block rounded-xl overflow-hidden border border-(--line) bg-black/40 shadow-md cursor-zoom-in"
+                    title="Open full resolution mockup"
+                  >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={imageUrl || ''}
                       alt={preview.title}
                       onError={() => setHasError(true)}
-                      className={`w-full ${getLayoutAspectRatioClass('centered')} object-cover`}
+                      className={`w-full ${getLayoutAspectRatioClass('centered')} object-cover transition-transform duration-300 group-hover:scale-[1.02]`}
                     />
-                  </div>
+                    <div className="absolute top-2 right-2 p-1.5 rounded-lg bg-black/60 backdrop-blur text-white/80 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <ZoomIn className="w-3.5 h-3.5" />
+                    </div>
+                  </a>
                   <div>
                     <span className="text-[10px] font-mono-tight uppercase tracking-wider text-secondary">
                       {preview.category}
@@ -276,15 +304,24 @@ export default function BrandApplicationCardPreview({
               {layout === 'editorial' && (
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end p-4 rounded-2xl glass border border-(--line)">
                   <div className="md:col-span-8">
-                    <div className="rounded-xl overflow-hidden border border-(--line) bg-black/40 shadow-md">
+                    <a
+                      href={imageUrl || '#'}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group relative block rounded-xl overflow-hidden border border-(--line) bg-black/40 shadow-md cursor-zoom-in"
+                      title="Open full resolution mockup"
+                    >
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={imageUrl || ''}
                         alt={preview.title}
                         onError={() => setHasError(true)}
-                        className={`w-full ${getLayoutAspectRatioClass('editorial')} object-cover`}
+                        className={`w-full ${getLayoutAspectRatioClass('editorial')} object-cover transition-transform duration-300 group-hover:scale-[1.02]`}
                       />
-                    </div>
+                      <div className="absolute top-2 right-2 p-1.5 rounded-lg bg-black/60 backdrop-blur text-white/80 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <ZoomIn className="w-3.5 h-3.5" />
+                      </div>
+                    </a>
                   </div>
                   <div className="md:col-span-4 p-3.5 rounded-xl glass-strong border border-(--line) space-y-2">
                     <span className="text-[10px] font-mono-tight uppercase tracking-wider text-secondary">
@@ -303,15 +340,24 @@ export default function BrandApplicationCardPreview({
               {/* 5. Wide Layout (Expansive Panoramic) */}
               {layout === 'wide' && (
                 <div className="space-y-3 p-4 rounded-2xl glass border border-(--line)">
-                  <div className="rounded-xl overflow-hidden border border-(--line) bg-black/40 shadow-lg">
+                  <a
+                    href={imageUrl || '#'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group relative block rounded-xl overflow-hidden border border-(--line) bg-black/40 shadow-lg cursor-zoom-in"
+                    title="Open full resolution mockup"
+                  >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={imageUrl || ''}
                       alt={preview.title}
                       onError={() => setHasError(true)}
-                      className={`w-full ${getLayoutAspectRatioClass('wide')} object-cover`}
+                      className={`w-full ${getLayoutAspectRatioClass('wide')} object-cover transition-transform duration-300 group-hover:scale-[1.01]`}
                     />
-                  </div>
+                    <div className="absolute top-2 right-2 p-1.5 rounded-lg bg-black/60 backdrop-blur text-white/80 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <ZoomIn className="w-3.5 h-3.5" />
+                    </div>
+                  </a>
                   <div className="flex items-center justify-between px-1 text-xs">
                     <h4 className="font-display font-semibold text-paper">
                       {preview.title}
