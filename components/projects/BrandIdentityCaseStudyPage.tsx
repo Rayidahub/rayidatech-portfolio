@@ -798,5 +798,225 @@ export default function BrandIdentityCaseStudyPage({
                     {font.weight && (
                       <span className="text-xs font-mono-tight px-3 py-1 rounded-full bg-white/5 border border-(--line) text-mist-1">
                         {font.weight}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Visual Type Specimen Box */}
+                  <div className="p-6 rounded-xl bg-white/[0.02] border border-(--line) space-y-3">
+                    <p className="text-2xl sm:text-3xl font-display text-paper tracking-tight">
+                      Aa Bb Cc Dd Ee Ff Gg 0123
+                    </p>
+                    <p className="text-xs font-mono-tight text-mist-2 truncate">
+                      ABCDEFGHIJKLMNOPQRSTUVWXYZ • 0123456789
+                    </p>
+                  </div>
+
+                  {font.usage && (
+                    <p className="text-sm text-mist-1 leading-relaxed">
+                      {font.usage}
+                    </p>
+                  )}
+
+                  {font.specimen_image && (
+                    <div className="rounded-xl overflow-hidden glass border border-(--line) p-2">
+                      <div className="relative aspect-[16/9] w-full rounded-lg overflow-hidden bg-black/40">
+                        <Image
+                          src={font.specimen_image}
+                          alt={`${font.font_name} specimen`}
+                          fill
+                          className="object-contain"
+                        />
+                      </div>
+                    </div>
+                  )}
+                </GlassCard>
+              ))}
+            </div>
+          </Reveal>
+        </section>
+      )}
+
+      {/* ─────────────────────────────────────────────────────────────
+          SECTION 7 — GRAPHIC ELEMENTS & PATTERNS
+          ───────────────────────────────────────────────────────────── */}
+      {(brandData.graphic_elements_description || brandData.art_direction) && (
+        <section className="relative">
+          <Reveal>
+            <div className="flex items-center gap-3 mb-4">
+              <span className="w-8 h-[1px] bg-primary" />
+              <span className="font-mono-tight text-xs uppercase tracking-widest text-accent-soft">
+                06 / Motifs
+              </span>
+            </div>
+            <h2 className="font-display text-3xl sm:text-4xl font-semibold text-paper mb-10">
+              Graphic Elements & Art Direction
+            </h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {brandData.graphic_elements_description && (
+                <GlassCard hover={false} className="p-6 sm:p-8 space-y-3">
+                  <span className="text-xs font-mono-tight uppercase tracking-wider text-secondary">
+                    Patterns, Motifs & Iconography
+                  </span>
+                  <p className="text-mist-1 text-sm sm:text-base leading-relaxed">
+                    {brandData.graphic_elements_description}
+                  </p>
+                </GlassCard>
+              )}
+
+              {brandData.art_direction && (
+                <GlassCard hover={false} className="p-6 sm:p-8 space-y-3">
+                  <span className="text-xs font-mono-tight uppercase tracking-wider text-accent-soft">
+                    Photography & Visual Mood
+                  </span>
+                  <p className="text-mist-1 text-sm sm:text-base leading-relaxed">
+                    {brandData.art_direction}
+                  </p>
+                </GlassCard>
+              )}
+            </div>
+          </Reveal>
+        </section>
+      )}
+
+      {/* ─────────────────────────────────────────────────────────────
+          SECTION 8 — BRAND APPLICATIONS & REAL-WORLD DELIVERABLES
+          ───────────────────────────────────────────────────────────── */}
+      {applications.length > 0 && (
+        <section className="relative space-y-16">
+          <Reveal>
+            <div className="flex items-center gap-3 mb-4">
+              <span className="w-8 h-[1px] bg-secondary" />
+              <span className="font-mono-tight text-xs uppercase tracking-widest text-secondary">
+                07 / Deliverables
+              </span>
+            </div>
+            <div className="flex items-center justify-between mb-10">
+              <div>
+                <h2 className="font-display text-3xl sm:text-4xl font-semibold text-paper">
+                  Brand Applications & Collateral
+                </h2>
+                <p className="text-xs sm:text-sm text-mist-2 mt-1">
+                  Packaging, merchandise, vehicle livery, outdoor signage & digital assets
+                </p>
+              </div>
+            </div>
+          </Reveal>
+
+          {applications.map((app, idx) => {
+            const layout = app.layout_preference || 'split';
+
+            return (
+              <Reveal key={idx}>
+                {layout === 'hero' && (
+                  /* Hero Layout: Full-Width Cinematic */
+                  <div className="space-y-4">
+                    <div className="rounded-3xl overflow-hidden glass border border-(--line) p-2 shadow-2xl group">
+                      <div className="relative aspect-[16/9] sm:aspect-[21/9] w-full rounded-2xl overflow-hidden bg-black/40">
+                        <Image
+                          src={app.primary_image}
+                          alt={app.title}
+                          fill
+                          className="object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+                        />
+                      </div>
+                    </div>
+                    <div className="flex flex-wrap items-center justify-between gap-4 px-2">
+                      <div>
+                        <span className="text-xs font-mono-tight uppercase text-secondary">
+                          {app.category}
+                        </span>
+                        <h3 className="font-display text-xl sm:text-2xl font-semibold text-paper mt-0.5">
+                          {app.title}
+                        </h3>
+                      </div>
+                      {app.description && (
+                        <p className="text-sm text-mist-1 max-w-xl">
+                          {app.description}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {layout === 'split' && (
+                  /* Split Layout: 50/50 Editorial */
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    <div className={`lg:col-span-7 ${idx % 2 === 1 ? 'lg:order-2' : ''}`}>
+                      <div className="rounded-3xl overflow-hidden glass border border-(--line) p-2 shadow-xl group">
+                        <div className="relative aspect-[4/3] sm:aspect-[16/10] w-full rounded-2xl overflow-hidden bg-black/40">
+                          <Image
+                            src={app.primary_image}
+                            alt={app.title}
+                            fill
+                            className="object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className={`lg:col-span-5 space-y-4 ${idx % 2 === 1 ? 'lg:order-1' : ''}`}>
+                      <span className="inline-flex px-3 py-1 rounded-full bg-secondary/15 text-secondary border border-secondary/25 text-xs font-mono-tight">
+                        {app.category}
+                      </span>
+                      <h3 className="font-display text-2xl sm:text-3xl font-semibold text-paper">
+                        {app.title}
+                      </h3>
+                      {app.description && (
+                        <p className="text-mist-1 text-sm sm:text-base leading-relaxed">
+                          {app.description}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {layout === 'centered' && (
+                  /* Centered Layout: Focused Spotlight */
+                  <div className="max-w-4xl mx-auto space-y-6 text-center">
+                    <div className="rounded-3xl overflow-hidden glass border border-(--line) p-2 shadow-2xl">
+                      <div className="relative aspect-[16/10] w-full rounded-2xl overflow-hidden bg-black/40">
+                        <Image
+                          src={app.primary_image}
+                          alt={app.title}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <span className="text-xs font-mono-tight uppercase text-secondary">
+                        {app.category}
+                      </span>
+                      <h3 className="font-display text-2xl font-semibold text-paper mt-1">
+                        {app.title}
+                      </h3>
+                      {app.description && (
+                        <p className="text-sm text-mist-1 max-w-xl mx-auto mt-2">
+                          {app.description}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {layout === 'editorial' && (
+                  /* Editorial Layout: Asymmetric */
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
+                    <div className="lg:col-span-8">
+                      <div className="rounded-3xl overflow-hidden glass border border-(--line) p-2 shadow-xl">
+                        <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden bg-black/40">
+                          <Image
+                            src={app.primary_image}
+                            alt={app.title}
+                            fill
+                            className="object-cover"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="lg:col-span-4 glass rounded-2xl p-6 sm:p-8 border border-(--line) space-y-3">
+                      <span className="text-xs font-mono-tight uppercase text-secondary">
+                        {app.category}
 </div>);
 }
