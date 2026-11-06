@@ -15,3 +15,16 @@ export function getDraftButtonLabel(
   if (mode === 'new') return 'Save as Draft';
   return status === 'draft' ? 'Update Draft' : 'Switch to Draft';
 }
+
+/**
+ * Returns human-readable label for the publish button.
+ */
+export function getPublishButtonLabel(
+  mode: ProjectFormMode,
+  status: ProjectFormStatus,
+  isSaving: boolean
+): string {
+  if (isSaving) return 'Publishing...';
+  if (mode === 'new') return 'Publish Project';
+  return status === 'published' ? 'Save Changes' : 'Publish Project';
+}
