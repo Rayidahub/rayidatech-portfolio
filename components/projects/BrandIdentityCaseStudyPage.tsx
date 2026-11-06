@@ -513,13 +513,32 @@ export default function BrandIdentityCaseStudyPage({
                     : 'bg-[#fafafa] border-white/60 shadow-2xl text-slate-900'
                 }`}
               >
-                <div className="relative w-full max-w-md h-48 sm:h-64 flex items-center justify-center">
+                <div
+                  onClick={() => {
+                    setInspectingLogo({
+                      url: brandData.primary_logo,
+                      title: 'Primary Brandmark',
+                      role: 'Master Lockup',
+                    });
+                    setModalStage(logoMode);
+                  }}
+                  tabIndex={0}
+                  role="button"
+                  aria-label="Inspect Primary Brandmark"
+                  className="group relative w-full max-w-md h-48 sm:h-64 flex items-center justify-center cursor-zoom-in rounded-2xl transition-all"
+                >
                   <Image
                     src={brandData.primary_logo}
                     alt="Primary Logo"
                     fill
-                    className="object-contain"
+                    className="object-contain transition-transform duration-300 group-hover:scale-105"
                   />
+                  <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-200 rounded-2xl flex items-center justify-center backdrop-blur-xs">
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/80 text-white text-[11px] font-mono-tight border border-white/20 shadow-md">
+                      <ZoomIn className="w-3 h-3 text-secondary" />
+                      <span>Inspect Master Lockup</span>
+                    </div>
+                  </div>
                 </div>
                 <div className="mt-8 max-w-lg">
                   <span
