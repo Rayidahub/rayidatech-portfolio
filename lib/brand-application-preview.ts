@@ -237,3 +237,46 @@ export function truncateContextNote(note?: string | null, maxLength = 120): stri
   const lastSpace = truncated.lastIndexOf(' ')
   return (lastSpace > 0 ? truncated.slice(0, lastSpace) : truncated) + '…'
 }
+
+/**
+ * Returns surface token classes for the live application preview container.
+ */
+export function getApplicationPreviewCardTheme(layout?: BrandApplicationLayout | string | null): {
+  containerBorder: string
+  pillBackground: string
+  accentColor: string
+} {
+  switch (layout) {
+    case 'hero':
+      return {
+        containerBorder: 'border-purple-500/30',
+        pillBackground: 'bg-purple-500/15 text-purple-300 border-purple-500/30',
+        accentColor: '#a855f7',
+      }
+    case 'centered':
+      return {
+        containerBorder: 'border-cyan-500/30',
+        pillBackground: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30',
+        accentColor: '#06b6d4',
+      }
+    case 'editorial':
+      return {
+        containerBorder: 'border-emerald-500/30',
+        pillBackground: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+        accentColor: '#10b981',
+      }
+    case 'wide':
+      return {
+        containerBorder: 'border-sky-500/30',
+        pillBackground: 'bg-sky-500/15 text-sky-300 border-sky-500/30',
+        accentColor: '#0284c7',
+      }
+    case 'split':
+    default:
+      return {
+        containerBorder: 'border-primary/30',
+        pillBackground: 'bg-primary/15 text-secondary border-primary/30',
+        accentColor: '#8000ff',
+      }
+  }
+}
