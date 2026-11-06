@@ -28,3 +28,18 @@ export function getPublishButtonLabel(
   if (mode === 'new') return 'Publish Project';
   return status === 'published' ? 'Save Changes' : 'Publish Project';
 }
+
+/**
+ * Returns label for the inline status toggle button.
+ */
+export function getStatusToggleLabel(
+  status: ProjectFormStatus,
+  mode: ProjectFormMode = 'edit'
+): string {
+  if (mode === 'new') {
+    return status === 'draft' ? 'Click to toggle: Draft Mode' : 'Click to toggle: Live / Published';
+  }
+  return status === 'draft'
+    ? 'Currently Draft (Click to Publish)'
+    : 'Currently Published (Click to Unpublish)';
+}
