@@ -318,5 +318,165 @@ export default function BrandIdentityFields({ value, onChange }: BrandIdentityFi
   };
 
   const removeTypography = (id: string) => {
+    update('typography_system', data.typography_system.filter((t) => t.id !== id));
+  };
+
+  /* ─────────────────────────────────────────────────────────────
+     BRAND APPLICATIONS HELPERS
+     ───────────────────────────────────────────────────────────── */
+  const addApplication = (cat?: BrandApplicationCategory) => {
+    const newApp: BrandApplication = {
+      id: `app_${Date.now()}`,
+      title: cat ? `${cat} Mockup` : 'Product Packaging Jar',
+      category: cat || 'Product Packaging',
+      description: 'High-resolution tactile application mockup showcasing brand consistency.',
+      primary_image: '',
+      additional_images: [],
+      layout_preference: 'hero',
+      display_order: data.brand_applications.length + 1,
+      is_visible: true,
+    };
+    update('brand_applications', [...data.brand_applications, newApp]);
+  };
+
+  const updateApplication = (id: string, patch: Partial<BrandApplication>) => {
+    update(
+      'brand_applications',
+      data.brand_applications.map((a) => (a.id === id ? { ...a, ...patch } : a))
+    );
+  };
+
+  const removeApplication = (id: string) => {
+    update('brand_applications', data.brand_applications.filter((a) => a.id !== id));
+  };
+
+  const duplicateApplication = (id: string) => {
+    const target = data.brand_applications.find((a) => a.id === id);
+    if (!target) return;
+    const clone: BrandApplication = {
+      ...target,
+      id: `app_${Date.now()}`,
+      title: `${target.title} (Copy)`,
+      display_order: data.brand_applications.length + 1,
+    };
+    update('brand_applications', [...data.brand_applications, clone]);
+  };
+
+  const moveApplication = (idx: number, dir: -1 | 1) => {
+    const targetIdx = idx + dir;
+    if (targetIdx < 0 || targetIdx >= data.brand_applications.length) return;
+    const items = [...data.brand_applications];
+    const temp = items[idx];
+    items[idx] = items[targetIdx];
+    items[targetIdx] = temp;
+    // re-assign display orders
+    items.forEach((item, i) => {
+      item.display_order = i + 1;
+    });
+    update('brand_applications', items);
+  };
+
+  /* ─────────────────────────────────────────────────────────────
+     GALLERY HELPERS
+     ───────────────────────────────────────────────────────────── */
+  const addGalleryItem = () => {
+    const newItem: BrandGalleryItem = {
+      id: `gal_${Date.now()}`,
+      image_url: '',
+      caption: '',
+      description: '',
+      display_order: data.brand_gallery.length + 1,
+    };
+    update('brand_gallery', [...data.brand_gallery, newItem]);
+  };
+
+  const updateGalleryItem = (id: string, patch: Partial<BrandGalleryItem>) => {
+    update(
+      'brand_gallery',
+      data.brand_gallery.map((g) => (g.id === id ? { ...g, ...patch } : g))
+    );
+  };
+
+  const removeGalleryItem = (id: string) => {
+    update('brand_gallery', data.brand_gallery.filter((g) => g.id !== id));
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Indicator Pill Banner */}
+      <div className="p-4 sm:p-5 rounded-2xl glass border border-secondary/30 bg-secondary/5 flex items-start gap-4">
+        <div className="p-2.5 rounded-xl bg-secondary/20 text-secondary border border-secondary/30 shrink-0 mt-0.5">
+          <Sparkles className="w-5 h-5" />
+        </div>
+        <div className="min-w-0">
+          <div className="flex items-center gap-2">
+            <h4 className="font-display text-base font-semibold text-paper">
+              Brand Identity Case Study Architecture
+            </h4>
+            <span className="text-[10px] font-mono-tight px-2 py-0.5 rounded-full bg-secondary/15 text-secondary border border-secondary/25">
+              Production Template
+            </span>
+          </div>
+          <p className="text-xs text-mist-1 mt-1 leading-relaxed">
+            Tailored specifically for branding, luxury product packaging, logo marks, tactile collateral, color psychology, and custom merchandising mockups.
+          </p>
+        </div>
+      </div>
+
+      {/* ── SECTION 1 — BRAND OVERVIEW ── */}
+      <SectionCard
+        title="Section 1 — Brand Overview & Positioning"
+        stepNumber="01 / Foundation"
+        icon={Compass}
+        isOpen={openSections.overview}
+        onToggle={() => toggleSection('overview')}
+      >
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="sm:col-span-2">
+            <TextArea
+              label="Brand Introduction"
+              value={data.brand_introduction || ''}
+              onChange={(val) => update('brand_introduction', val)}
+              placeholder="Provide a comprehensive introduction to the brand, its origin, and industry stature..."
+              rows={4}
+              helperText="Markdown / Rich text supported"
+            />
+          </div>
+
+          <TextInput
+            label="Brand Positioning Statement"
+            value={data.brand_positioning || ''}
+            onChange={(val) => update('brand_positioning', val)}
+            placeholder="e.g. Ultra-luxury organic hair care for discerning modern women"
+          />
+
+          <TextInput
+            label="Industry / Domain"
+            value={data.industry || ''}
+            onChange={(val) => update('industry', val)}
+            placeholder="e.g. Hair & Beauty, Luxury Cosmetics"
+          />
+
+          <TextInput
+            label="Brand Personality"
+            value={data.brand_personality || ''}
+            onChange={(val) => update('brand_personality', val)}
+            placeholder="e.g. Premium, Elegant, Modern, Feminine"
+          />
+
+          <TextInput
+            label="Target Audience"
+            value={data.target_audience || ''}
+            onChange={(val) => update('target_audience', val)}
+            placeholder="e.g. Affluent women seeking clean, high-performance hair care"
+          />
+
+          <div className="sm:col-span-2">
+            <TextArea
+              label="Brand Objectives & Vision"
+              value={data.brand_objectives || ''}
+              onChange={(val) => update('brand_objectives', val)}
+              placeholder="What core commercial, aesthetic, or market goals was this brand built to accomplish?"
+              rows={3}
 </div></div>);
 }
