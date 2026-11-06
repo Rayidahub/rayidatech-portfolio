@@ -31,6 +31,7 @@ import Container from '@/components/ui/Container';
 import Section from '@/components/ui/Section';
 import GlassCard from '@/components/ui/GlassCard';
 import Reveal from '@/components/ui/Reveal';
+import BrandLogoVariationCard from '@/components/projects/BrandLogoVariationCard';
 import {
   parsePillList,
   clampLightboxIndex,
@@ -57,6 +58,15 @@ export default function BrandIdentityCaseStudyPage({
 
   // State for Lightbox Modal
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
+  // State for Logo Asset Lightbox Inspection
+  const [inspectingLogo, setInspectingLogo] = useState<{
+    url: string;
+    title: string;
+    role: string;
+  } | null>(null);
+  const [modalStage, setModalStage] = useState<'dark' | 'light' | 'checkerboard' | 'black' | 'white'>('dark');
+  const [copiedLogoUrl, setCopiedLogoUrl] = useState(false);
 
   // Normalized color palette
   const colors = (brandData.color_palette || brandData.colors || []).map((c: any) => ({
