@@ -135,4 +135,16 @@ describe('Project Cover Image & Thumbnail Utilities', () => {
       expect(isExternalImageUrl(null)).toBe(false)
     })
   })
+
+  describe('isLocalImageUrl', () => {
+    it('identifies local root-relative and dot-relative paths', () => {
+      expect(isLocalImageUrl('/img/projects/luxe.jpg')).toBe(true)
+      expect(isLocalImageUrl('./assets/banner.png')).toBe(true)
+    })
+
+    it('rejects protocol-relative and remote urls', () => {
+      expect(isLocalImageUrl('//cdn.example.com/image.png')).toBe(false)
+      expect(isLocalImageUrl('https://example.com/photo.jpg')).toBe(false)
+    })
+  })
 })
