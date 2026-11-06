@@ -9,6 +9,8 @@ export const PROJECT_TYPES = [
 
 export type ProjectType = (typeof PROJECT_TYPES)[number];
 
+export type ProjectStatus = 'draft' | 'published';
+
 /* ─────────────────────────────────────────────────────────────
    UI/UX & PRODUCT CASE STUDY SCHEMA (PRESERVED)
    ───────────────────────────────────────────────────────────── */
@@ -219,5 +221,6 @@ export interface Project {
   client?: string;
   year?: string;
   published?: boolean;
+  status?: ProjectStatus;
   case_study?: CaseStudy | BrandIdentityCaseStudy | any;
 }
