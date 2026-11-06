@@ -16,6 +16,7 @@ import type {
 import { BRAND_APPLICATION_CATEGORIES } from '@/types/project';
 import ImageUploadField from '@/components/admin/ImageUploadField';
 import BrandApplicationCardPreview from '@/components/admin/BrandApplicationCardPreview';
+import { isValidApplicationDeliverable } from '@/lib/brand-application-preview';
 import {
   Sparkles,
   ChevronDown,
@@ -999,6 +1000,17 @@ export default function BrandIdentityFields({ value, onChange }: BrandIdentityFi
                       <span className="text-[10px] font-mono-tight px-2 py-0.5 rounded-full bg-white/5 text-mist-2 border border-white/5">
                         {app.category}
                       </span>
+                      {isValidApplicationDeliverable(app) ? (
+                        <span className="hidden sm:inline-flex items-center gap-1 text-[9px] font-mono-tight px-1.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
+                          <span>Armed</span>
+                        </span>
+                      ) : (
+                        <span className="hidden sm:inline-flex items-center gap-1 text-[9px] font-mono-tight px-1.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                          <span className="h-1.5 w-1.5 rounded-full bg-amber-400"></span>
+                          <span>Needs Mockup</span>
+                        </span>
+                      )}
                     </div>
 
                     <div className="flex items-center gap-1.5 shrink-0">
