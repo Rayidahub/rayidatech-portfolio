@@ -3,14 +3,15 @@
 import { useState, useCallback } from 'react'
 import { createClient } from '@/lib/supabase/browser'
 import { useRouter } from 'next/navigation'
-import { Save, ArrowLeft, Sparkles } from 'lucide-react'
+import { Save, ArrowLeft, Sparkles, FileText, Globe } from 'lucide-react'
 import Link from 'next/link'
 import ServiceCategorySelect from '@/components/admin/ServiceCategorySelect'
 import ProjectTypeSelect from '@/components/admin/ProjectTypeSelect'
 import CaseStudyFields from '@/components/admin/CaseStudyFields'
 import BrandIdentityFields from '@/components/admin/BrandIdentityFields'
 import ImageUploadField from '@/components/admin/ImageUploadField'
-import type { CaseStudy, BrandIdentityCaseStudy, ProjectType } from '@/types/project'
+import type { CaseStudy, BrandIdentityCaseStudy, ProjectType, ProjectStatus } from '@/types/project'
+import { buildStatusPayload, getProjectStatusBadge } from '@/lib/project-status'
 
 export default function NewProject() {
   const router = useRouter()
@@ -27,6 +28,8 @@ export default function NewProject() {
     link: '',
     featured: false,
     project_type: 'UI/UX Design' as ProjectType,
+    published: true,
+    status: 'published' as ProjectStatus,
     category: '',
     tags: '',
     case_study: {} as CaseStudy | BrandIdentityCaseStudy,
@@ -74,8 +77,16 @@ export default function NewProject() {
     }));
   }
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
+  async function saveProject(statusToSave: ProjectStatus = form.status) {
+    if (!form.title.trim()) {
+      setError('Please provide a project title.')
+      return
+    }
+    if (!form.slug.trim()) {
+      setError('Please provide a project slug.')
+      return
+    }
+
     setSaving(true)
     setError('')
 
@@ -89,11 +100,16 @@ export default function NewProject() {
       ? [categoryTag, ...additionalTags.filter((t) => t !== categoryTag)]
       : additionalTags
 
-    // Prepare case study payload with explicit type indicator
+    const isDraft = statusToSave === 'draft'
+    const statusPayload = buildStatusPayload(isDraft)
+
+    // Prepare case study payload with explicit type and status indicators
     const caseStudyPayload = {
       ...(form.case_study || {}),
       case_study_type: form.project_type,
       project_type: form.project_type,
+      published: statusPayload.published,
+      status: statusPayload.status,
     }
 
     // Include project_type in tags as an additional safety guarantee
@@ -104,7 +120,7 @@ export default function NewProject() {
     const insertPayload: any = {
       title: form.title,
       slug: form.slug,
-      description: form.description,
+      description: form.description || (isDraft ? 'Draft project description' : ''),
       content: form.content,
       cover_image: form.cover_image || null,
       role: form.role || null,
@@ -127,6 +143,11 @@ export default function NewProject() {
     router.refresh()
   }
 
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    await saveProject(form.status)
+  }
+
   const isBrandIdentity = form.project_type === 'Brand Identity'
 
   return (
@@ -138,8 +159,24 @@ export default function NewProject() {
         >
           <ArrowLeft className="w-5 h-5" />
         </Link>
-        <div>
-          <h1 className="font-display text-2xl font-semibold text-paper">New Project</h1>
+        <div className="flex-1">
+          <div className="flex items-center gap-3">
+            <h1 className="font-display text-2xl font-semibold text-paper">New Project</h1>
+            <span
+              className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono-tight border ${
+                form.status === 'draft'
+                  ? 'bg-amber-500/15 text-amber-300 border-amber-500/30'
+                  : 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
+              }`}
+            >
+              <span
+                className={`w-1.5 h-1.5 rounded-full ${
+                  form.status === 'draft' ? 'bg-amber-400' : 'bg-emerald-400 animate-pulse'
+                }`}
+              />
+              <span>{form.status === 'draft' ? 'Draft' : 'Published'}</span>
+            </span>
+          </div>
           <p className="text-xs text-mist-2 mt-0.5">
             Create a showcase project or an in-depth brand identity case study
           </p>
@@ -335,15 +372,56 @@ export default function NewProject() {
           )}
         </div>
 
-        <div className="flex justify-end pt-4 border-t border-(--line)">
-          <button
-            type="submit"
-            disabled={saving}
-            className="inline-flex items-center gap-2 bg-primary hover:bg-primary/80 text-white rounded-lg px-6 py-2.5 text-sm font-medium transition-colors disabled:opacity-50 shadow-lg shadow-primary/20"
-          >
-            <Save className="w-4 h-4" />
-            {saving ? 'Saving...' : 'Save Project'}
-          </button>
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-(--line)">
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-mist-2">Target status:</span>
+            <button
+              type="button"
+              onClick={() =>
+                setForm((p) => ({
+                  ...p,
+                  status: p.status === 'draft' ? 'published' : 'draft',
+                  published: p.status !== 'draft',
+                }))
+              }
+              className={`px-3 py-1 rounded-lg text-xs font-medium border transition-colors cursor-pointer ${
+                form.status === 'draft'
+                  ? 'bg-amber-500/10 text-amber-300 border-amber-500/30 hover:bg-amber-500/20'
+                  : 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30 hover:bg-emerald-500/20'
+              }`}
+            >
+              Click to toggle: {form.status === 'draft' ? 'Draft Mode' : 'Live / Published'}
+            </button>
+          </div>
+
+          <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
+            <Link
+              href="/admin/projects"
+              className="px-4 py-2.5 rounded-xl text-xs text-mist-1 hover:text-paper hover:bg-white/5 transition-colors"
+            >
+              Cancel
+            </Link>
+
+            <button
+              type="button"
+              disabled={saving}
+              onClick={() => saveProject('draft')}
+              className="inline-flex items-center gap-2 bg-white/5 hover:bg-white/10 text-paper border border-(--line) hover:border-amber-500/40 rounded-xl px-5 py-2.5 text-xs font-medium transition-all disabled:opacity-50 cursor-pointer"
+            >
+              <FileText className="w-3.5 h-3.5 text-amber-400" />
+              <span>{saving ? 'Saving...' : 'Save as Draft'}</span>
+            </button>
+
+            <button
+              type="button"
+              disabled={saving}
+              onClick={() => saveProject('published')}
+              className="inline-flex items-center gap-2 bg-primary hover:bg-primary/80 text-white rounded-xl px-6 py-2.5 text-xs font-medium transition-colors disabled:opacity-50 shadow-lg shadow-primary/20 cursor-pointer"
+            >
+              <Globe className="w-3.5 h-3.5" />
+              <span>{saving ? 'Publishing...' : 'Publish Project'}</span>
+            </button>
+          </div>
         </div>
       </form>
     </div>
