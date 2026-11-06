@@ -69,3 +69,12 @@ export function isDataImageUrl(url?: string | null): boolean {
   if (!url || typeof url !== 'string') return false
   return url.trim().startsWith('data:image/')
 }
+
+/**
+ * Checks whether an image candidate is a remote external URL.
+ */
+export function isExternalImageUrl(url?: string | null): boolean {
+  if (!url || typeof url !== 'string') return false
+  const trimmed = url.trim()
+  return trimmed.startsWith('http://') || trimmed.startsWith('https://')
+}
