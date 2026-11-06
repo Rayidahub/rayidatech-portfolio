@@ -10,6 +10,9 @@ import {
   sanitizeCoverImageUrl,
   getCoverImagePlaceholderTitle,
   getThumbnailAspectRatioClass,
+  getImageFileName,
+  formatImageResolutionLabel,
+  getDominantColorPlaceholder,
 } from '@/lib/project-thumbnail'
 
 describe('Project Cover Image & Thumbnail Utilities', () => {
