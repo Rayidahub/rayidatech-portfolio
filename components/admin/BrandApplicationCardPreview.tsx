@@ -88,7 +88,11 @@ export default function BrandApplicationCardPreview({
         <div className="flex items-center gap-1.5 shrink-0">
           {/* Quick Layout Mode Buttons */}
           {onLayoutChange && (
-            <div className="hidden sm:flex items-center gap-1 p-0.5 rounded-lg bg-black/40 border border-white/5">
+            <div
+              role="group"
+              aria-label="Layout mode selection"
+              className="hidden sm:flex items-center gap-1 p-0.5 rounded-lg bg-black/40 border border-white/5"
+            >
               {LAYOUT_OPTIONS.map((opt) => {
                 const Icon = opt.icon;
                 const active = layout === opt.id;
@@ -96,7 +100,15 @@ export default function BrandApplicationCardPreview({
                   <button
                     key={opt.id}
                     type="button"
+                    aria-pressed={active}
+                    aria-label={`Select ${opt.label} layout`}
                     onClick={() => onLayoutChange(opt.id)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        onLayoutChange(opt.id);
+                      }
+                    }}
                     className={`inline-flex items-center gap-1 px-2 py-1 rounded text-[10px] font-mono-tight transition-colors cursor-pointer ${
                       active
                         ? 'bg-primary text-white font-medium shadow-xs'
@@ -115,7 +127,15 @@ export default function BrandApplicationCardPreview({
           {/* Toggle Preview Button */}
           <button
             type="button"
+            aria-expanded={isExpanded}
+            aria-label={isExpanded ? 'Collapse deliverable preview' : 'Expand deliverable preview'}
             onClick={() => setIsExpanded((prev) => !prev)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                setIsExpanded((prev) => !prev);
+              }
+            }}
             className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-mono-tight text-mist-2 hover:text-paper hover:bg-white/5 transition-colors cursor-pointer"
             title={isExpanded ? 'Hide Live Preview' : 'Show Live Preview'}
           >
