@@ -49,6 +49,8 @@ export default function ProjectClassificationCard({
 
   return (
     <div
+      data-testid="project-classification-card"
+      data-state={isOpen ? 'open' : 'collapsed'}
       className={`rounded-xl bg-white/[0.02] border border-(--line) overflow-hidden transition-all duration-200 ${className}`}
     >
       {/* Collapsible Header Button */}
