@@ -12,6 +12,7 @@ import {
   normalizeBrandCaseStudy,
   validateBrandCaseStudy,
   isBrandIdentityCaseStudy,
+  filterVisibleBrandApplications,
 } from '@/lib/brand-identity'
 
 describe('Brand Identity Architecture & Types', () => {
@@ -181,6 +182,18 @@ describe('Brand Identity Architecture & Types', () => {
       expect(isBrandIdentityCaseStudy(null)).toBe(false)
       expect(isBrandIdentityCaseStudy(undefined)).toBe(false)
       expect(isBrandIdentityCaseStudy('string')).toBe(false)
+    })
+
+    it('filters out invisible or empty-image brand applications', () => {
+      const apps = [
+        { id: '1', title: 'Packaging Box', image_url: '/img/box.png', is_visible: true },
+        { id: '2', title: 'Shopping Bag', image_url: '', is_visible: true },
+        { id: '3', title: 'Ribbon', image_url: '/img/ribbon.png', is_visible: false },
+        { id: '4', title: 'Business Card', image_url: '/img/card.png' },
+      ]
+      const visible = filterVisibleBrandApplications(apps as any)
+      expect(visible.length).toBe(2)
+      expect(visible.map((a) => a.id)).toEqual(['1', '4'])
     })
   })
 })
