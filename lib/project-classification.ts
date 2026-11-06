@@ -71,3 +71,12 @@ export function isBrandIdentityType(projectType?: string | null): boolean {
   if (!projectType) return false
   return projectType.trim().toLowerCase() === 'brand identity'
 }
+
+/**
+ * Checks whether the given project type string corresponds to UI/UX Design.
+ */
+export function isUIUXType(projectType?: string | null): boolean {
+  if (!projectType) return false
+  const norm = projectType.trim().toLowerCase()
+  return norm === 'ui/ux design' || norm === 'ui/ux' || norm === 'product design'
+}
