@@ -98,3 +98,17 @@ export function getClassificationToggleTooltip(isOpen: boolean): string {
     ? 'Click to collapse architecture settings'
     : 'Click to expand architecture settings'
 }
+
+/**
+ * Returns formatted badge configuration with clean display text and styling.
+ */
+export function formatClassificationBadge(projectType?: string | null): {
+  text: string
+  className: string
+} {
+  const type = (projectType || 'UI/UX Design').trim()
+  return {
+    text: type,
+    className: getClassificationBadgeClass(type),
+  }
+}
