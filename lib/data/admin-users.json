@@ -1,8 +1,8 @@
 [
   {
-    "id": "root-super-admin-01",
+    "id": "root-super-admin-rayidaweb-gmail-com",
     "email": "rayidaweb@gmail.com",
-    "name": "Raymond Gaius",
+    "name": "Raymond Gaius (Rayida Web)",
     "role": "super_admin",
     "permissions": [
       "dashboard",
@@ -18,8 +18,8 @@
     ],
     "is_active": true,
     "avatar_url": "",
-    "created_at": "2026-10-06T10:16:57.794Z",
-    "updated_at": "2026-10-06T10:16:57.794Z"
+    "created_at": "2026-11-06T08:26:15.752Z",
+    "updated_at": "2026-11-06T08:26:15.752Z"
   },
   {
     "id": "root-super-admin-01",
@@ -40,7 +40,7 @@
     ],
     "is_active": true,
     "avatar_url": "",
-    "created_at": "2026-10-01T00:00:00.000Z",
-    "updated_at": "2026-10-05T00:00:00.000Z"
+    "created_at": "2026-10-29T07:51:58.240289+00:00",
+    "updated_at": "2026-10-29T07:51:58.240289+00:00"
   }
 ]
