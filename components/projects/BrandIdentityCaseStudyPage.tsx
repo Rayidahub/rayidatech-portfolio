@@ -418,5 +418,205 @@ export default function BrandIdentityCaseStudyPage({
                   >
                     ✦ {attr}
                   </span>
+                ))}
+              </div>
+            )}
+
+            {strategyImage && (
+              <div className="rounded-3xl overflow-hidden glass border border-(--line) p-2">
+                <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden bg-black/30">
+                  <Image
+                    src={strategyImage}
+                    alt="Creative Direction & Inspiration Board"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              </div>
+            )}
+          </Reveal>
+        </section>
+      )}
+
+      {/* ─────────────────────────────────────────────────────────────
+          SECTION 4 — LOGO IDENTITY SUITE
+          ───────────────────────────────────────────────────────────── */}
+      {(brandData.primary_logo ||
+        brandData.logo_symbol ||
+        brandData.secondary_logo ||
+        brandData.horizontal_logo ||
+        brandData.monochrome_logo) && (
+        <section className="relative">
+          <Reveal>
+            <div className="flex items-center gap-3 mb-4">
+              <span className="w-8 h-[1px] bg-secondary" />
+              <span className="font-mono-tight text-xs uppercase tracking-widest text-secondary">
+                03 / Mark
+              </span>
+            </div>
+            <div className="flex flex-wrap items-center justify-between gap-4 mb-10">
+              <div>
+                <h2 className="font-display text-3xl sm:text-4xl font-semibold text-paper">
+                  Logo Identity Suite
+                </h2>
+                <p className="text-xs sm:text-sm text-mist-2 mt-1">
+                  Core mark, responsive orientations, and symbol architecture
+                </p>
+              </div>
+
+              {/* Interactive Dark/Light Canvas Toggle */}
+              <div className="flex items-center gap-1.5 p-1 rounded-xl bg-white/5 border border-(--line)">
+                <button
+                  type="button"
+                  onClick={() => setLogoMode('dark')}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${
+                    logoMode === 'dark'
+                      ? 'bg-ink text-secondary shadow-md border border-secondary/30'
+                      : 'text-mist-2 hover:text-paper'
+                  }`}
+                >
+                  <Moon className="w-3.5 h-3.5" />
+                  <span>Dark Canvas</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setLogoMode('light')}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${
+                    logoMode === 'light'
+                      ? 'bg-white text-ink shadow-md font-semibold'
+                      : 'text-mist-2 hover:text-paper'
+                  }`}
+                >
+                  <Sun className="w-3.5 h-3.5" />
+                  <span>Light Canvas</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Primary Logo Showcase Card */}
+            {brandData.primary_logo && (
+              <div
+                className={`rounded-3xl border transition-all duration-500 p-8 sm:p-14 mb-8 flex flex-col items-center justify-center text-center ${
+                  logoMode === 'dark'
+                    ? 'bg-[#121222] border-(--line) shadow-2xl'
+                    : 'bg-[#fafafa] border-white/60 shadow-2xl text-slate-900'
+                }`}
+              >
+                <div className="relative w-full max-w-md h-48 sm:h-64 flex items-center justify-center">
+                  <Image
+                    src={brandData.primary_logo}
+                    alt="Primary Logo"
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+                <div className="mt-8 max-w-lg">
+                  <span
+                    className={`text-[11px] font-mono-tight uppercase tracking-wider px-3 py-1 rounded-full border ${
+                      logoMode === 'dark'
+                        ? 'bg-secondary/10 text-secondary border-secondary/25'
+                        : 'bg-black/5 text-slate-800 border-black/10'
+                    }`}
+                  >
+                    Primary Brandmark
+                  </span>
+                  {logoConcept && (
+                    <p
+                      className={`text-sm sm:text-base mt-4 leading-relaxed ${
+                        logoMode === 'dark' ? 'text-mist-1' : 'text-slate-700'
+                      }`}
+                    >
+                      {logoConcept}
+                    </p>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Logo Variations Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {brandData.logo_symbol && (
+                <div
+                  className={`rounded-2xl border p-6 flex flex-col items-center text-center transition-all ${
+                    logoMode === 'dark'
+                      ? 'bg-white/[0.02] border-(--line)'
+                      : 'bg-[#f4f4f6] border-slate-200'
+                  }`}
+                >
+                  <div className="relative w-full h-32 flex items-center justify-center mb-4">
+                    <Image
+                      src={brandData.logo_symbol}
+                      alt="Brand Symbol"
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+                  <span
+                    className={`text-xs font-mono-tight font-medium ${
+                      logoMode === 'dark' ? 'text-paper' : 'text-slate-900'
+                    }`}
+                  >
+                    Brand Symbol / Icon
+                  </span>
+                  <span
+                    className={`text-[11px] mt-0.5 ${
+                      logoMode === 'dark' ? 'text-mist-2' : 'text-slate-500'
+                    }`}
+                  >
+                    Favicon & App Icon
+                  </span>
+                </div>
+              )}
+
+              {brandData.secondary_logo && (
+                <div
+                  className={`rounded-2xl border p-6 flex flex-col items-center text-center transition-all ${
+                    logoMode === 'dark'
+                      ? 'bg-white/[0.02] border-(--line)'
+                      : 'bg-[#f4f4f6] border-slate-200'
+                  }`}
+                >
+                  <div className="relative w-full h-32 flex items-center justify-center mb-4">
+                    <Image
+                      src={brandData.secondary_logo}
+                      alt="Secondary Logo"
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+                  <span
+                    className={`text-xs font-mono-tight font-medium ${
+                      logoMode === 'dark' ? 'text-paper' : 'text-slate-900'
+                    }`}
+                  >
+                    Secondary Lockup
+                  </span>
+                  <span
+                    className={`text-[11px] mt-0.5 ${
+                      logoMode === 'dark' ? 'text-mist-2' : 'text-slate-500'
+                    }`}
+                  >
+                    Vertical / Compact
+                  </span>
+                </div>
+              )}
+
+              {brandData.horizontal_logo && (
+                <div
+                  className={`rounded-2xl border p-6 flex flex-col items-center text-center transition-all ${
+                    logoMode === 'dark'
+                      ? 'bg-white/[0.02] border-(--line)'
+                      : 'bg-[#f4f4f6] border-slate-200'
+                  }`}
+                >
+                  <div className="relative w-full h-32 flex items-center justify-center mb-4">
+                    <Image
+                      src={brandData.horizontal_logo}
+                      alt="Horizontal Logo"
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+                  <span
 </div>);
 }
