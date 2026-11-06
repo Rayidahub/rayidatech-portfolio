@@ -183,4 +183,18 @@ describe('Project Classification Helpers', () => {
       expect(normalizeClassificationValues(null, null).projectType).toBe('UI/UX Design')
     })
   })
+
+  describe('getClassificationAccentColor', () => {
+    it('returns brand violet for Brand Identity', () => {
+      expect(getClassificationAccentColor('Brand Identity')).toBe('#8000ff')
+    })
+
+    it('returns cyan for Web Development', () => {
+      expect(getClassificationAccentColor('Web Development')).toBe('#00d1ff')
+    })
+
+    it('returns soft accent for UI/UX Design', () => {
+      expect(getClassificationAccentColor('UI/UX Design')).toBe('#ccccff')
+    })
+  })
 })
