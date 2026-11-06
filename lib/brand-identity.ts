@@ -109,3 +109,51 @@ export function parsePillList(val?: string | string[]): string[] {
     .map((s) => s.trim().replace(/^[•\-\*]\s*/, ''))
     .filter(Boolean)
 }
+
+/**
+ * Loops or clamps a lightbox gallery index safely within range.
+ */
+export function clampLightboxIndex(current: number, total: number, delta: number): number {
+  if (total <= 0) return 0
+  const next = current + delta
+  if (next < 0) return total - 1
+  if (next >= total) return 0
+  return next
+}
+
+/**
+ * Returns Tailwind CSS layout classes for brand deliverable presentation modes.
+ */
+export function getBrandApplicationLayoutClasses(mode: string): {
+  container: string
+  grid: string
+} {
+  switch (mode) {
+    case 'hero':
+      return {
+        container: 'col-span-12',
+        grid: 'grid-cols-1',
+      }
+    case 'split':
+      return {
+        container: 'col-span-12 md:col-span-6',
+        grid: 'grid-cols-1',
+      }
+    case 'editorial':
+      return {
+        container: 'col-span-12 md:col-span-8',
+        grid: 'grid-cols-1',
+      }
+    case 'wide':
+      return {
+        container: 'col-span-12',
+        grid: 'grid-cols-1 md:grid-cols-2',
+      }
+    case 'centered':
+    default:
+      return {
+        container: 'col-span-12 sm:col-span-6 lg:col-span-4',
+        grid: 'grid-cols-1',
+      }
+  }
+}
