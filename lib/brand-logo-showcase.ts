@@ -166,6 +166,16 @@ export function getLogoStageOptionLabel(stage: LogoStageMode): string {
 }
 
 /**
+ * Checks if a particular stage option is currently active.
+ */
+export function isStageActive(
+  targetStage: 'light' | 'dark' | 'checkerboard',
+  currentStage: 'light' | 'dark' | 'checkerboard'
+): boolean {
+  return targetStage === currentStage;
+}
+
+/**
  * Validates that a logo image URL string is non-empty and well-formed.
  */
 export function hasValidLogoUrl(url?: string | null): boolean {
