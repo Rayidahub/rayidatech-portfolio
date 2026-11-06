@@ -1018,5 +1018,317 @@ export default function BrandIdentityCaseStudyPage({
                     <div className="lg:col-span-4 glass rounded-2xl p-6 sm:p-8 border border-(--line) space-y-3">
                       <span className="text-xs font-mono-tight uppercase text-secondary">
                         {app.category}
-</div>);
+                      </span>
+                      <h3 className="font-display text-xl sm:text-2xl font-semibold text-paper">
+                        {app.title}
+                      </h3>
+                      {app.description && (
+                        <p className="text-sm text-mist-1 leading-relaxed">
+                          {app.description}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {layout === 'wide' && (
+                  /* Wide Layout: Expansive */
+                  <div className="space-y-4">
+                    <div className="rounded-3xl overflow-hidden glass border border-(--line) p-2 shadow-2xl">
+                      <div className="relative aspect-[21/9] w-full rounded-2xl overflow-hidden bg-black/40">
+                        <Image
+                          src={app.primary_image}
+                          alt={app.title}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between px-2">
+                      <h3 className="font-display text-xl font-semibold text-paper">
+                        {app.title}
+                      </h3>
+                      <span className="text-xs font-mono-tight text-mist-2">
+                        {app.category}
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </Reveal>
+            );
+          })}
+        </section>
+      )}
+
+      {/* ─────────────────────────────────────────────────────────────
+          SECTION 9 — CURATED BRAND GALLERY & LIGHTBOX
+          ───────────────────────────────────────────────────────────── */}
+      {galleryItems.length > 0 && (
+        <section className="relative">
+          <Reveal>
+            <div className="flex items-center gap-3 mb-4">
+              <span className="w-8 h-[1px] bg-primary" />
+              <span className="font-mono-tight text-xs uppercase tracking-widest text-accent-soft">
+                08 / Showcase
+              </span>
+            </div>
+            <div className="flex items-center justify-between mb-10">
+              <div>
+                <h2 className="font-display text-3xl sm:text-4xl font-semibold text-paper">
+                  Curated Brand Gallery
+                </h2>
+                <p className="text-xs sm:text-sm text-mist-2 mt-1">
+                  Click any image to view in high-resolution full screen
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {galleryItems.map((item: any, idx: number) => {
+                const imgUrl = item.image_url || item;
+                const caption = item.caption || 'Brand Gallery Asset';
+
+                return (
+                  <div
+                    key={idx}
+                    onClick={() => setLightboxIndex(idx)}
+                    className="rounded-2xl overflow-hidden glass border border-(--line) p-2 group cursor-pointer hover:border-primary/50 transition-all shadow-lg"
+                  >
+                    <div className="relative aspect-[4/3] w-full rounded-xl overflow-hidden bg-black/40">
+                      <Image
+                        src={imgUrl}
+                        alt={caption}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                        <div className="flex items-center justify-between w-full">
+                          <p className="text-xs text-paper font-medium truncate">
+                            {caption}
+                          </p>
+                          <Maximize2 className="w-4 h-4 text-secondary shrink-0 ml-2" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </Reveal>
+        </section>
+      )}
+
+      {/* ─────────────────────────────────────────────────────────────
+          SECTION 10 — OUTCOME, IMPACT & REFLECTION
+          ───────────────────────────────────────────────────────────── */}
+      {(outcomeDesc || impactDesc || reflectionDesc || closingImage) && (
+        <section className="relative">
+          <Reveal>
+            <div className="flex items-center gap-3 mb-4">
+              <span className="w-8 h-[1px] bg-secondary" />
+              <span className="font-mono-tight text-xs uppercase tracking-widest text-secondary">
+                09 / Conclusion
+              </span>
+            </div>
+            <h2 className="font-display text-3xl sm:text-4xl font-semibold text-paper mb-10">
+              Design Outcome & Impact
+            </h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              {outcomeDesc && (
+                <GlassCard hover={false} className="p-6 sm:p-8 space-y-3">
+                  <span className="text-xs font-mono-tight uppercase tracking-wider text-secondary">
+                    Deliverable Outcome
+                  </span>
+                  <p className="text-mist-1 text-sm sm:text-base leading-relaxed">
+                    {outcomeDesc}
+                  </p>
+                </GlassCard>
+              )}
+
+              {impactDesc && (
+                <GlassCard hover={false} className="p-6 sm:p-8 space-y-3">
+                  <span className="text-xs font-mono-tight uppercase tracking-wider text-emerald-400">
+                    Reception & Strategic Impact
+                  </span>
+                  <p className="text-mist-1 text-sm sm:text-base leading-relaxed">
+                    {impactDesc}
+                  </p>
+                </GlassCard>
+              )}
+            </div>
+
+            {reflectionDesc && (
+              <GlassCard hover={false} className="p-6 sm:p-8 space-y-3 mb-8">
+                <span className="text-xs font-mono-tight uppercase tracking-wider text-accent-soft">
+                  Designer Reflection
+                </span>
+                <p className="text-mist-1 text-sm sm:text-base leading-relaxed italic">
+                  &ldquo;{reflectionDesc}&rdquo;
+                </p>
+              </GlassCard>
+            )}
+
+            {closingImage && (
+              <div className="rounded-3xl overflow-hidden glass border border-(--line) p-2 shadow-2xl">
+                <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden bg-black/40">
+                  <Image
+                    src={closingImage}
+                    alt="Brand Showcase"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              </div>
+            )}
+          </Reveal>
+        </section>
+      )}
+
+      {/* ─────────────────────────────────────────────────────────────
+          SECTION 11 — NEXT PROJECT NAVIGATION & CALL TO ACTION
+          ───────────────────────────────────────────────────────────── */}
+      <section className="relative pt-8 border-t border-(--line)">
+        <Reveal>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+            {/* Next Project Teaser */}
+            {nextProject ? (
+              <Link
+                href={`/projects/${nextProject.slug}`}
+                className="glass rounded-2xl p-6 sm:p-8 border border-(--line) hover:border-secondary/50 transition-all group block"
+              >
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-xs font-mono-tight uppercase text-mist-2">
+                    Next Project →
+                  </span>
+                  <ArrowRight className="w-4 h-4 text-secondary transition-transform group-hover:translate-x-1" />
+                </div>
+                <h3 className="font-display text-xl sm:text-2xl font-semibold text-paper group-hover:text-secondary transition-colors">
+                  {nextProject.title}
+                </h3>
+                <p className="text-xs sm:text-sm text-mist-1 line-clamp-2 mt-1">
+                  {nextProject.description}
+                </p>
+              </Link>
+            ) : (
+              <div className="glass rounded-2xl p-6 sm:p-8 border border-(--line)">
+                <span className="text-xs font-mono-tight uppercase text-mist-2 block mb-2">
+                  Portfolio Showcase
+                </span>
+                <h3 className="font-display text-xl font-semibold text-paper">
+                  Explore More Projects
+                </h3>
+                <Link
+                  href="/projects"
+                  className="text-xs font-mono-tight text-secondary hover:underline mt-2 inline-block"
+                >
+                  View full archive →
+                </Link>
+              </div>
+            )}
+
+            {/* Direct Commission CTA */}
+            <div className="glass rounded-2xl p-6 sm:p-8 border border-(--line) bg-gradient-to-br from-primary/10 via-transparent to-secondary/10 flex flex-col justify-between space-y-4">
+              <div>
+                <span className="text-xs font-mono-tight uppercase text-accent-soft block mb-1">
+                  Ready to elevate your brand?
+                </span>
+                <h3 className="font-display text-xl sm:text-2xl font-bold text-paper">
+                  Let&apos;s build an iconic visual identity
+                </h3>
+              </div>
+              <div className="flex items-center gap-3">
+                <Link
+                  href="/contact"
+                  className="btn-glow inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-primary text-white font-medium text-xs sm:text-sm hover:brightness-110 transition-all shadow-lg shadow-primary/25"
+                >
+                  <span>Start a Project</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+                <a
+                  href="https://wa.link/tlezg8"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-paper text-xs sm:text-sm font-medium border border-(--line) transition-colors"
+                >
+                  <span>WhatsApp</span>
+                  <ExternalLink className="w-3.5 h-3.5 text-mist-2" />
+                </a>
+              </div>
+            </div>
+          </div>
+        </Reveal>
+      </section>
+
+      {/* ─────────────────────────────────────────────────────────────
+          FULLSCREEN LIGHTBOX MODAL
+          ───────────────────────────────────────────────────────────── */}
+      {lightboxIndex !== null && allLightboxImages[lightboxIndex] && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in"
+        >
+          {/* Close button */}
+          <button
+            type="button"
+            onClick={() => setLightboxIndex(null)}
+            className="absolute top-6 right-6 p-3 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors z-50 cursor-pointer"
+          >
+            <X className="w-6 h-6" />
+          </button>
+
+          {/* Previous image */}
+          {allLightboxImages.length > 1 && (
+            <button
+              type="button"
+              onClick={() => {
+                setLightboxIndex((prev) =>
+                  prev !== null && prev > 0 ? prev - 1 : allLightboxImages.length - 1
+                );
+              }}
+              className="absolute left-6 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors z-50 cursor-pointer hidden sm:flex items-center justify-center"
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+          )}
+
+          {/* Next image */}
+          {allLightboxImages.length > 1 && (
+            <button
+              type="button"
+              onClick={() => {
+                setLightboxIndex((prev) =>
+                  prev !== null && prev < allLightboxImages.length - 1 ? prev + 1 : 0
+                );
+              }}
+              className="absolute right-6 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors z-50 cursor-pointer hidden sm:flex items-center justify-center"
+            >
+              <ChevronRight className="w-6 h-6" />
+            </button>
+          )}
+
+          {/* Image Display */}
+          <div className="relative max-w-6xl max-h-[85vh] w-full h-full flex flex-col items-center justify-center">
+            <div className="relative w-full h-[75vh]">
+              <Image
+                src={allLightboxImages[lightboxIndex].url}
+                alt={allLightboxImages[lightboxIndex].title}
+                fill
+                className="object-contain"
+              />
+            </div>
+            <div className="text-center mt-4">
+              <p className="text-paper text-sm sm:text-base font-medium">
+                {allLightboxImages[lightboxIndex].title}
+              </p>
+              <span className="text-xs font-mono-tight text-mist-2">
+                {lightboxIndex + 1} of {allLightboxImages.length}
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
