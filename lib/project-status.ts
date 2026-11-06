@@ -14,8 +14,9 @@ export function isProjectPublished(project: Partial<Project> | null | undefined)
   }
 
   // 2. Explicit top-level status string check
-  if (project.status === 'draft') return false
-  if (project.status === 'published') return true
+  const topStatus = project.status?.toLowerCase()
+  if (topStatus === 'draft') return false
+  if (topStatus === 'published') return true
 
   // 3. JSONB case_study published boolean check
   const cs = project.case_study as any
@@ -24,8 +25,9 @@ export function isProjectPublished(project: Partial<Project> | null | undefined)
   }
 
   // 4. JSONB case_study status check
-  if (cs && cs.status === 'draft') return false
-  if (cs && cs.status === 'published') return true
+  const csStatus = cs?.status?.toLowerCase()
+  if (csStatus === 'draft') return false
+  if (csStatus === 'published') return true
 
   // 5. Default safe fallback for existing legacy projects
   return true

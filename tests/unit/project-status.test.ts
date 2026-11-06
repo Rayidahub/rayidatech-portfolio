@@ -165,9 +165,15 @@ describe('Project Status & Draft System', () => {
         { id: '2', case_study: { status: 'draft' } },
         { id: '3', published: true },
         { id: '4', case_study: { status: 'published' } },
+        { id: '5', case_study: { published: null } }, // safe fallback
       ]
       const result = filterPublishedProjects(items)
-      expect(result.map((i) => i.id)).toEqual(['3', '4'])
+      expect(result.map((i) => i.id)).toEqual(['3', '4', '5'])
+    })
+
+    it('handles mixed case status string values safely', () => {
+      expect(isProjectPublished({ status: 'DRAFT' as any })).toBe(false)
+      expect(isProjectPublished({ case_study: { status: 'Draft' } })).toBe(false)
     })
   })
 })
