@@ -141,3 +141,17 @@ export function isHeroLayout(layout?: BrandApplicationLayout | string | null): b
 export function isCenteredLayout(layout?: BrandApplicationLayout | string | null): boolean {
   return layout === 'centered'
 }
+
+/**
+ * Returns true if the layout mode is magazine editorial spread.
+ */
+export function isEditorialLayout(layout?: BrandApplicationLayout | string | null): boolean {
+  return layout === 'editorial'
+}
+
+/**
+ * Returns true if the layout mode is cinematic panoramic landscape.
+ */
+export function isWideLayout(layout?: BrandApplicationLayout | string | null): boolean {
+  return layout === 'wide'
+}
