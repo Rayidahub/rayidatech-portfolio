@@ -8,6 +8,7 @@ import {
   getLogoRoleBadgeColor,
   getLogoStageOptionLabel,
   getLogoAspectRecommendation,
+  getLogoFormatBadge,
   isStageActive,
   hasValidLogoUrl,
 } from '@/lib/brand-logo-showcase'
@@ -123,6 +124,19 @@ describe('Brand Logo Showcase Utilities', () => {
       expect(getLogoAspectRecommendation('horizontal')).toBe('3:1 Banner')
       expect(getLogoAspectRecommendation('monochrome')).toBe('1:1 Vector')
       expect(getLogoAspectRecommendation('primary')).toBe('16:9 Showcase')
+    })
+  })
+
+  describe('getLogoFormatBadge', () => {
+    it('accurately resolves extension formats from filenames or URLs', () => {
+      expect(getLogoFormatBadge('https://example.com/logo.svg')).toBe('SVG')
+      expect(getLogoFormatBadge('https://example.com/logo.svg?v=2')).toBe('SVG')
+      expect(getLogoFormatBadge('/assets/logo.png')).toBe('PNG')
+      expect(getLogoFormatBadge('/assets/logo.webp')).toBe('WEBP')
+      expect(getLogoFormatBadge('/assets/photo.jpeg')).toBe('JPEG')
+      expect(getLogoFormatBadge('/assets/photo.jpg')).toBe('JPEG')
+      expect(getLogoFormatBadge('/assets/unknown-format')).toBe('ASSET')
+      expect(getLogoFormatBadge(null)).toBe('ASSET')
     })
   })
 
