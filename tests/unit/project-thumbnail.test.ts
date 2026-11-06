@@ -160,4 +160,27 @@ describe('Project Cover Image & Thumbnail Utilities', () => {
       expect(sanitizeCoverImageUrl(null)).toBe(null)
     })
   })
+
+  describe('getCoverImagePlaceholderTitle', () => {
+    it('formats a descriptive placeholder title with project name', () => {
+      expect(getCoverImagePlaceholderTitle('Luxe by Sey')).toBe(
+        'No cover image set for "Luxe by Sey". Click to add one.'
+      )
+    })
+
+    it('falls back to "Project" when title is omitted', () => {
+      expect(getCoverImagePlaceholderTitle(null)).toBe(
+        'No cover image set for "Project". Click to add one.'
+      )
+    })
+  })
+
+  describe('getThumbnailAspectRatioClass', () => {
+    it('returns correct Tailwind aspect ratio classes', () => {
+      expect(getThumbnailAspectRatioClass('16/10')).toBe('aspect-[16/10]')
+      expect(getThumbnailAspectRatioClass('16/9')).toBe('aspect-video')
+      expect(getThumbnailAspectRatioClass('4/3')).toBe('aspect-[4/3]')
+      expect(getThumbnailAspectRatioClass('1/1')).toBe('aspect-square')
+    })
+  })
 })
