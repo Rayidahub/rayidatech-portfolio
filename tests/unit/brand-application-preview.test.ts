@@ -13,6 +13,7 @@ import {
   isEditorialLayout,
   isWideLayout,
   getLayoutIconIdentifier,
+  isValidApplicationDeliverable,
 } from '@/lib/brand-application-preview'
 
 describe('Brand Application Preview Utilities', () => {
@@ -166,6 +167,40 @@ describe('Brand Application Preview Utilities', () => {
     it('falls back to Columns for null or unknown layout', () => {
       expect(getLayoutIconIdentifier(null)).toBe('Columns')
       expect(getLayoutIconIdentifier('unknown' as any)).toBe('Columns')
+    })
+  })
+
+  describe('isValidApplicationDeliverable', () => {
+    it('returns true when both title and primary image are provided', () => {
+      expect(
+        isValidApplicationDeliverable({
+          title: 'Packaging Jar',
+          primary_image: 'https://cdn.example.com/jar.png',
+        })
+      ).toBe(true)
+    })
+
+    it('returns false when title is blank or whitespace', () => {
+      expect(
+        isValidApplicationDeliverable({
+          title: '   ',
+          primary_image: 'https://cdn.example.com/jar.png',
+        })
+      ).toBe(false)
+    })
+
+    it('returns false when image is missing', () => {
+      expect(
+        isValidApplicationDeliverable({
+          title: 'Packaging Jar',
+          primary_image: '',
+        })
+      ).toBe(false)
+    })
+
+    it('returns false for null or undefined input', () => {
+      expect(isValidApplicationDeliverable(null)).toBe(false)
+      expect(isValidApplicationDeliverable(undefined)).toBe(false)
     })
   })
 })
