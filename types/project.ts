@@ -120,4 +120,18 @@ export interface BrandApplication {
 }
 
 export type BrandGalleryLayout =
+  | 'Editorial Grid'
+  | 'Masonry'
+  | 'Full Width'
+  | 'Two Columns';
+
+export interface BrandGalleryItem {
+  id: string;
+  image_url: string;
+  caption?: string;
+  description?: string;
+  display_order: number;
+}
+
+export interface BrandIdentityCaseStudy {
 export interface CaseStudy { [key: string]: any; }
