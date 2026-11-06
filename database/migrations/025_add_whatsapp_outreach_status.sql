@@ -20,3 +20,4 @@ ALTER TABLE public.outreach_contacts ADD CONSTRAINT outreach_contacts_outreach_s
     'Missing Email'
   )
 );
+
