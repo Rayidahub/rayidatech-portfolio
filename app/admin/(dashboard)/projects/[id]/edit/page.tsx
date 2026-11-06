@@ -277,6 +277,18 @@ export default function EditProject() {
           <p className="text-sm text-red-400 bg-red-400/10 rounded-lg px-3 py-2">{error}</p>
         )}
 
+        {/* Top Control Action Bar */}
+        <ProjectActionBar
+          mode="edit"
+          status={form.status}
+          saving={saving}
+          onStatusToggle={handleStatusToggle}
+          onSaveDraft={() => saveProject('draft')}
+          onSavePublish={() => saveProject('published')}
+          cancelHref="/admin/projects"
+          position="top"
+        />
+
         {/* Core Classification Grid (Collapsible) */}
         <ProjectClassificationCard
           projectType={form.project_type}
