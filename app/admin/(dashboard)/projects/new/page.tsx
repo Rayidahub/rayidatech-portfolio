@@ -5,8 +5,7 @@ import { createClient } from '@/lib/supabase/browser'
 import { useRouter } from 'next/navigation'
 import { Save, ArrowLeft, Sparkles, FileText, Globe } from 'lucide-react'
 import Link from 'next/link'
-import ServiceCategorySelect from '@/components/admin/ServiceCategorySelect'
-import ProjectTypeSelect from '@/components/admin/ProjectTypeSelect'
+import ProjectClassificationCard from '@/components/admin/ProjectClassificationCard'
 import CaseStudyFields from '@/components/admin/CaseStudyFields'
 import BrandIdentityFields from '@/components/admin/BrandIdentityFields'
 import ImageUploadField from '@/components/admin/ImageUploadField'
@@ -200,46 +199,14 @@ export default function NewProject() {
           <p className="text-sm text-red-400 bg-red-400/10 rounded-lg px-3 py-2">{error}</p>
         )}
 
-        {/* Core Classification Grid */}
-        <div className="p-4 rounded-xl bg-white/[0.02] border border-(--line) space-y-4">
-          <div className="flex items-center justify-between border-b border-(--line) pb-2">
-            <span className="text-xs font-mono-tight uppercase tracking-wider text-mist-1">
-              Project Architecture & Classification
-            </span>
-            <span className="text-[11px] text-secondary font-mono-tight">
-              Determines Form & Public View
-            </span>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-paper mb-1.5">
-                Project Type *
-              </label>
-              <ProjectTypeSelect
-                value={form.project_type}
-                onChange={handleProjectTypeChange}
-              />
-              <p className="text-[11px] text-mist-2 mt-1">
-                Switches the case study form and public presentation layout.
-              </p>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-paper mb-1.5">
-                Service Category *
-              </label>
-              <ServiceCategorySelect
-                value={form.category}
-                onChange={handleCategoryChange}
-                required
-              />
-              <p className="text-[11px] text-mist-2 mt-1">
-                Controls portfolio filtering tags and public taxonomy.
-              </p>
-            </div>
-          </div>
-        </div>
+        {/* Core Classification Grid (Collapsible) */}
+        <ProjectClassificationCard
+          projectType={form.project_type}
+          onProjectTypeChange={handleProjectTypeChange}
+          category={form.category}
+          onCategoryChange={handleCategoryChange}
+          defaultOpen={true}
+        />
 
         {/* General Project Meta */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
