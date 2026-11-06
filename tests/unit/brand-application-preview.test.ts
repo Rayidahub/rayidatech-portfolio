@@ -7,6 +7,9 @@ import {
   getLayoutBadgeColor,
   formatApplicationPreviewData,
   getRecommendedLayoutForCategory,
+  isSplitLayout,
+  isHeroLayout,
+  isCenteredLayout,
 } from '@/lib/brand-application-preview'
 
 describe('Brand Application Preview Utilities', () => {
@@ -114,6 +117,25 @@ describe('Brand Application Preview Utilities', () => {
     it('defaults to split layout for standard product deliverables', () => {
       expect(getRecommendedLayoutForCategory('General Merchandise')).toBe('split')
       expect(getRecommendedLayoutForCategory(null)).toBe('split')
+    })
+  })
+
+  describe('layout mode boolean predicate helpers', () => {
+    it('isSplitLayout correctly identifies split mode', () => {
+      expect(isSplitLayout('split')).toBe(true)
+      expect(isSplitLayout('hero')).toBe(false)
+      expect(isSplitLayout(null)).toBe(false)
+    })
+
+    it('isHeroLayout correctly identifies hero mode', () => {
+      expect(isHeroLayout('hero')).toBe(true)
+      expect(isHeroLayout('split')).toBe(false)
+      expect(isHeroLayout(undefined)).toBe(false)
+    })
+
+    it('isCenteredLayout correctly identifies centered mode', () => {
+      expect(isCenteredLayout('centered')).toBe(true)
+      expect(isCenteredLayout('wide')).toBe(false)
     })
   })
 })
