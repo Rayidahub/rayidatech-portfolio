@@ -1,10 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 import { createClient } from '@/lib/supabase/server';
-import { ROOT_SUPER_ADMIN_EMAIL } from '@/types/admin-user';
+import { ROOT_SUPER_ADMIN_EMAIL, ROOT_SUPER_ADMIN_EMAILS, isRootSuperAdminEmail } from '@/types/admin-user';
 import type { AdminUser, AdminRole, AdminPermission } from '@/types/admin-user';
 
-export { ROOT_SUPER_ADMIN_EMAIL };
+export { ROOT_SUPER_ADMIN_EMAIL, ROOT_SUPER_ADMIN_EMAILS, isRootSuperAdminEmail };
 
 export const ALL_PERMISSION_KEYS: AdminPermission[] = [
   'dashboard',
@@ -189,9 +189,15 @@ export async function getAdminUserByEmail(email: string): Promise<AdminUser | nu
   }
 
   // If email is root super admin, auto-seed them
-  if (normalizedEmail === ROOT_SUPER_ADMIN_EMAIL.toLowerCase()) {
-    const rootUser = {
-      ...defaultRootSuperAdmin,
+  if (isRootSuperAdminEmail(normalizedEmail)) {
+    const rootUser: AdminUser = {
+      id: `root-super-admin-${normalizedEmail.replace(/[^a-z0-9]/g, '-')}`,
+      email: normalizedEmail,
+      name: normalizedEmail.includes('web') ? 'Raymond Gaius (Rayida Web)' : 'Raymond Gaius',
+      role: 'super_admin',
+      permissions: [...ALL_PERMISSION_KEYS],
+      is_active: true,
+      avatar_url: '',
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     };
@@ -269,7 +275,7 @@ export async function saveAdminUser(
   const existingIndex = localUsers.findIndex((u) => u.email.toLowerCase() === email || (userData.id && u.id === userData.id));
 
   // Safeguard: The root super admin cannot be demoted or deactivated
-  const isRootAdmin = email === ROOT_SUPER_ADMIN_EMAIL.toLowerCase();
+  const isRootAdmin = isRootSuperAdminEmail(email);
   const targetRole: AdminRole = isRootAdmin ? 'super_admin' : (userData.role || 'editor');
   const targetIsActive = isRootAdmin ? true : (userData.is_active ?? true);
   const targetPermissions = normalizePermissions(targetRole, userData.permissions);
@@ -343,7 +349,7 @@ export async function deleteAdminUser(id: string): Promise<{ success: boolean; e
     return { success: false, error: 'User not found' };
   }
 
-  if (user.email.toLowerCase() === ROOT_SUPER_ADMIN_EMAIL.toLowerCase()) {
+  if (isRootSuperAdminEmail(user.email)) {
     return { success: false, error: 'Cannot delete the primary Super Admin account' };
   }
 
