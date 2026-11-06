@@ -31,7 +31,12 @@ import Container from '@/components/ui/Container';
 import Section from '@/components/ui/Section';
 import GlassCard from '@/components/ui/GlassCard';
 import Reveal from '@/components/ui/Reveal';
-import { parsePillList, clampLightboxIndex, formatColorClassification } from '@/lib/brand-identity';
+import {
+  parsePillList,
+  clampLightboxIndex,
+  formatColorClassification,
+  filterVisibleBrandApplications,
+} from '@/lib/brand-identity';
 
 interface BrandIdentityCaseStudyPageProps {
   project: Project;
