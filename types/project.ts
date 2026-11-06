@@ -134,4 +134,90 @@ export interface BrandGalleryItem {
 }
 
 export interface BrandIdentityCaseStudy {
-export interface CaseStudy { [key: string]: any; }
+  case_study_type: 'Brand Identity';
+
+  // Section 1 — Brand Overview
+  brand_introduction?: string;
+  brand_positioning?: string;
+  industry?: string;
+  target_audience?: string;
+  brand_personality?: string;
+  brand_objectives?: string;
+  brand_story?: string;
+  overview_image?: string;
+
+  // Section 2 — Brand Strategy
+  brand_challenge?: string;
+  creative_objectives?: string;
+  creative_direction?: string;
+  visual_inspiration?: string;
+  brand_attributes?: string;
+  strategy_gallery?: string[];
+
+  // Section 3 — Logo Identity
+  primary_logo?: string;
+  logo_symbol?: string;
+  secondary_logo?: string;
+  horizontal_logo?: string;
+  monochrome_logo?: string;
+  logo_concept_description?: string;
+  logo_variations_gallery?: string[];
+
+  // Section 4 — Brand Color Palette
+  color_palette: BrandColor[];
+
+  // Section 5 — Typography System
+  typography_system: BrandTypography[];
+
+  // Section 6 — Graphic Elements
+  graphic_elements_description?: string;
+  brand_patterns?: string[];
+  decorative_elements?: string[];
+  gradient_treatments?: string[];
+  photography_direction?: string;
+  graphic_elements_gallery?: string[];
+
+  // Section 7 — Brand Applications (Dynamic & Repeatable)
+  brand_applications: BrandApplication[];
+
+  // Section 8 — Brand Gallery
+  brand_gallery: BrandGalleryItem[];
+  gallery_layout: BrandGalleryLayout;
+
+  // Section 9 — Outcome & Reflection
+  design_outcome?: string;
+  project_impact?: string;
+  key_learnings?: string;
+  personal_reflection?: string;
+  closing_image?: string;
+
+  // Shared meta fields
+  client?: string;
+  year?: string;
+  next_project_slug?: string;
+  [key: string]: any;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   PROJECT ENVELOPE
+   ───────────────────────────────────────────────────────────── */
+export interface Project {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  content: string;
+  cover_image: string;
+  featured: boolean;
+  created_at: string;
+  tags?: string[];
+  role?: string;
+  duration?: string;
+  link?: string;
+  project_type?: ProjectType;
+  service_category?: string;
+  client?: string;
+  year?: string;
+  published?: boolean;
+  case_study?: CaseStudy | BrandIdentityCaseStudy | any;
+}
