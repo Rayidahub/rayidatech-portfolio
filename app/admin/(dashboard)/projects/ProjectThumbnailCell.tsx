@@ -12,7 +12,11 @@ import {
   Check,
   AlertCircle,
 } from 'lucide-react';
-import { isValidImageUrl, formatCoverImageAlt } from '@/lib/project-thumbnail';
+import {
+  isValidImageUrl,
+  formatCoverImageAlt,
+  getImageFileName,
+} from '@/lib/project-thumbnail';
 import { ProjectStatus } from '@/types/project';
 
 interface ProjectThumbnailCellProps {
@@ -177,7 +181,10 @@ export default function ProjectThumbnailCell({
             {/* Modal Footer Bar */}
             <div className="flex flex-wrap items-center justify-between gap-3 px-5 py-3.5 border-t border-(--line) bg-white/[0.02]">
               <div className="flex items-center gap-2 text-xs text-mist-2 truncate max-w-md">
-                <span className="font-mono-tight text-[11px] truncate">
+                <span className="px-2 py-0.5 rounded bg-white/5 border border-(--line) text-[11px] font-mono-tight text-accent-soft shrink-0">
+                  {getImageFileName(coverImage)}
+                </span>
+                <span className="font-mono-tight text-[11px] truncate opacity-70">
                   {coverImage}
                 </span>
                 <button
