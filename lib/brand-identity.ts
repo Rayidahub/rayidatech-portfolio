@@ -71,3 +71,41 @@ export function formatColorClassification(classification?: string): string {
       return classification || 'Custom'
   }
 }
+
+/**
+ * Safely infers the ProjectType from any combination of top-level field,
+ * JSONB case study, or tags array.
+ */
+export function inferProjectType(project: Partial<Project>): ProjectType {
+  if (project.project_type && (PROJECT_TYPES as readonly string[]).includes(project.project_type)) {
+    return project.project_type
+  }
+  const cs = project.case_study as any
+  if (cs?.case_study_type && (PROJECT_TYPES as readonly string[]).includes(cs.case_study_type)) {
+    return cs.case_study_type
+  }
+  if (cs?.project_type && (PROJECT_TYPES as readonly string[]).includes(cs.project_type)) {
+    return cs.project_type
+  }
+  if (Array.isArray(project.tags)) {
+    if (project.tags.some((t) => t.toLowerCase() === 'brand identity')) {
+      return 'Brand Identity'
+    }
+    if (project.tags.some((t) => t.toLowerCase() === 'web development')) {
+      return 'Web Development'
+    }
+  }
+  return 'UI/UX Design'
+}
+
+/**
+ * Parses comma, bullet, or newline separated strings into an array of clean pill tokens.
+ */
+export function parsePillList(val?: string | string[]): string[] {
+  if (!val) return []
+  if (Array.isArray(val)) return val.map((s) => String(s).trim()).filter(Boolean)
+  return String(val)
+    .split(/[,•\n]/)
+    .map((s) => s.trim().replace(/^[•\-\*]\s*/, ''))
+    .filter(Boolean)
+}
