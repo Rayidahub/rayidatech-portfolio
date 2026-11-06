@@ -191,3 +191,16 @@ export function isValidApplicationDeliverable(app?: {
   const hasImg = Boolean((app.primary_image || app.image_url || '').trim().length > 0)
   return hasTitle && hasImg
 }
+
+/**
+ * Returns a clean, normalized badge label for deliverable category tags.
+ */
+export function formatApplicationCategoryBadge(
+  category?: string | null
+): string {
+  if (!category || !category.trim()) {
+    return 'Deliverable'
+  }
+  const clean = category.trim()
+  return clean
+}
