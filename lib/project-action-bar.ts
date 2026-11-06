@@ -52,3 +52,12 @@ export function getStatusToggleClasses(status: ProjectFormStatus): string {
     ? 'bg-amber-500/10 text-amber-300 border-amber-500/30 hover:bg-amber-500/20'
     : 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30 hover:bg-emerald-500/20';
 }
+
+/**
+ * Returns Tailwind class string for top status indicator pill.
+ */
+export function getStatusPillClasses(status: ProjectFormStatus): string {
+  return status === 'draft'
+    ? 'bg-amber-500/15 text-amber-300 border-amber-500/30'
+    : 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30';
+}
