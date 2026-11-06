@@ -78,3 +78,20 @@ export function getLogoVariationConfig(type: LogoVariationType): LogoVariationCo
       };
   }
 }
+
+/**
+ * Returns Tailwind CSS background classes for the logo stage surface.
+ */
+export function getLogoStageBackgroundClass(
+  stage: 'light' | 'dark' | 'checkerboard'
+): string {
+  switch (stage) {
+    case 'light':
+      return 'bg-white border-black/10 shadow-xs text-slate-900';
+    case 'checkerboard':
+      return 'bg-[#181828] [background-image:linear-gradient(45deg,#232338_25%,transparent_25%),linear-gradient(-45deg,#232338_25%,transparent_25%),linear-gradient(45deg,transparent_75%,#232338_75%),linear-gradient(-45deg,transparent_75%,#232338_75%)] [background-size:16px_16px] [background-position:0_0,0_8px,8px_-8px,-8px_0] border-white/10 shadow-inner text-white';
+    case 'dark':
+    default:
+      return 'bg-[#0e0e1a] border-white/10 shadow-inner text-white';
+  }
+}
