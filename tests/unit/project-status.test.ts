@@ -4,6 +4,7 @@ import {
   getProjectStatus,
   getProjectStatusBadge,
   buildStatusPayload,
+  filterPublishedProjects,
 } from '@/lib/project-status'
 import type { Project } from '@/types/project'
 
@@ -148,6 +149,25 @@ describe('Project Status & Draft System', () => {
         published: true,
         status: 'published',
       })
+    })
+  })
+
+  describe('filterPublishedProjects', () => {
+    it('returns an empty array when input is null, undefined, or empty', () => {
+      expect(filterPublishedProjects(null)).toEqual([])
+      expect(filterPublishedProjects(undefined)).toEqual([])
+      expect(filterPublishedProjects([])).toEqual([])
+    })
+
+    it('filters out draft projects while keeping legacy and published items', () => {
+      const items: Partial<Project>[] = [
+        { id: '1', published: false },
+        { id: '2', case_study: { status: 'draft' } },
+        { id: '3', published: true },
+        { id: '4', case_study: { status: 'published' } },
+      ]
+      const result = filterPublishedProjects(items)
+      expect(result.map((i) => i.id)).toEqual(['3', '4'])
     })
   })
 })
