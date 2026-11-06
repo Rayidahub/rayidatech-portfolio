@@ -120,3 +120,24 @@ export function getRecommendedLayoutForCategory(
   }
   return 'split'
 }
+
+/**
+ * Returns true if the layout mode is split columns.
+ */
+export function isSplitLayout(layout?: BrandApplicationLayout | string | null): boolean {
+  return layout === 'split'
+}
+
+/**
+ * Returns true if the layout mode is full-width hero banner.
+ */
+export function isHeroLayout(layout?: BrandApplicationLayout | string | null): boolean {
+  return layout === 'hero'
+}
+
+/**
+ * Returns true if the layout mode is focused center spotlight.
+ */
+export function isCenteredLayout(layout?: BrandApplicationLayout | string | null): boolean {
+  return layout === 'centered'
+}
