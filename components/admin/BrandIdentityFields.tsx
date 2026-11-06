@@ -1158,5 +1158,134 @@ export default function BrandIdentityFields({ value, onChange }: BrandIdentityFi
               <select
                 value={data.gallery_layout}
                 onChange={(e) => update('gallery_layout', e.target.value as BrandGalleryLayout)}
-</div></div>);
+                className="bg-[#16162a] border border-(--line) rounded-lg px-3 py-1.5 text-xs text-paper focus:outline-none focus:border-primary/50"
+              >
+                <option value="Editorial Grid">Editorial Grid</option>
+                <option value="Masonry">Masonry</option>
+                <option value="Two Columns">Two Columns</option>
+                <option value="Full Width">Full Width</option>
+              </select>
+            </div>
+
+            <button
+              type="button"
+              onClick={addGalleryItem}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-primary hover:bg-primary/90 text-white font-medium text-xs transition-colors cursor-pointer"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              <span>Add Gallery Image</span>
+            </button>
+          </div>
+
+          {data.brand_gallery.length === 0 ? (
+            <div className="p-8 rounded-2xl border border-dashed border-(--line) text-center space-y-2">
+              <ImageIcon className="w-8 h-8 text-mist-2 mx-auto" />
+              <p className="text-xs text-mist-1">No additional gallery images added.</p>
+              <button
+                type="button"
+                onClick={addGalleryItem}
+                className="text-xs text-secondary hover:underline cursor-pointer"
+              >
+                + Add first gallery image
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {data.brand_gallery.map((item, idx) => (
+                <div key={item.id} className="p-4 rounded-xl border border-(--line) bg-white/[0.02] space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-mono-tight text-secondary">
+                      Slide 0{idx + 1}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => removeGalleryItem(item.id)}
+                      className="text-xs text-red-400 hover:underline flex items-center gap-1 cursor-pointer"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+
+                  <ImageUploadField
+                    label="Gallery Image"
+                    value={item.image_url}
+                    onChange={(url) => updateGalleryItem(item.id, { image_url: url })}
+                    folder="projects"
+                    description="Upload photo or paste URL"
+                  />
+
+                  <TextInput
+                    label="Caption"
+                    value={item.caption || ''}
+                    onChange={(val) => updateGalleryItem(item.id, { caption: val })}
+                    placeholder="e.g. Unboxing presentation"
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </SectionCard>
+
+      {/* ── SECTION 9 — OUTCOME & REFLECTION ── */}
+      <SectionCard
+        title="Section 9 — Design Outcome & Reflection"
+        stepNumber="09 / Reflection"
+        icon={Award}
+        isOpen={openSections.outcome}
+        onToggle={() => toggleSection('outcome')}
+      >
+        <div className="space-y-4">
+          <TextArea
+            label="Design Outcome"
+            value={data.design_outcome || ''}
+            onChange={(val) => update('design_outcome', val)}
+            placeholder="Authentic outcome achieved (e.g. A cohesive, high-end visual language deployed across packaging, apparel, and digital advertising)..."
+            rows={4}
+          />
+
+          <TextArea
+            label="Project Impact & Brand Reception"
+            value={data.project_impact || ''}
+            onChange={(val) => update('project_impact', val)}
+            placeholder="Client feedback and brand recognition unlocked..."
+            rows={3}
+          />
+
+          <TextArea
+            label="Key Learnings & Creative Takeaways"
+            value={data.key_learnings || ''}
+            onChange={(val) => update('key_learnings', val)}
+            placeholder="Lessons learned in color separation, gold foil stamping, and packaging substrates..."
+            rows={3}
+          />
+
+          <TextArea
+            label="Personal Reflection"
+            value={data.personal_reflection || ''}
+            onChange={(val) => update('personal_reflection', val)}
+            placeholder="Designer's reflection on crafting an enduring luxury aesthetic..."
+            rows={3}
+          />
+
+          <ImageUploadField
+            label="Closing Visual / Signature Mockup"
+            value={data.closing_image || ''}
+            onChange={(url) => update('closing_image', url)}
+            folder="projects"
+            description="Final hero image closing the case study"
+          />
+
+          <TextInput
+            label="Next Project Slug Link"
+            value={data.next_project_slug || ''}
+            onChange={(val) => update('next_project_slug', val)}
+            placeholder="e.g. flavorease"
+            helperText="Slug of the next project to suggest at the bottom"
+          />
+        </div>
+      </SectionCard>
+    </div>
+  );
 }
+
