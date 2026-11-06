@@ -5,6 +5,7 @@ import DeleteButton from './DeleteButton'
 import ProjectImportModal from './ProjectImportModal'
 import { normalizeSlug } from '@/lib/slug'
 import { inferProjectType } from '@/lib/brand-identity'
+import { isProjectPublished, getProjectStatus, getProjectStatusBadge } from '@/lib/project-status'
 
 export default async function AdminProjects() {
   const supabase = await createClient()
@@ -41,6 +42,7 @@ export default async function AdminProjects() {
               <th className="text-left text-mist-2 font-medium px-4 py-3">Title</th>
               <th className="text-left text-mist-2 font-medium px-4 py-3 hidden sm:table-cell">Slug</th>
               <th className="text-left text-mist-2 font-medium px-4 py-3 hidden md:table-cell">Type</th>
+              <th className="text-center text-mist-2 font-medium px-4 py-3">Status</th>
               <th className="text-center text-mist-2 font-medium px-4 py-3 hidden md:table-cell">Featured</th>
               <th className="text-right text-mist-2 font-medium px-4 py-3">Actions</th>
             </tr>
@@ -48,7 +50,7 @@ export default async function AdminProjects() {
           <tbody>
             {(!projects || projects.length === 0) && (
               <tr>
-                <td colSpan={5} className="text-center text-mist-2 px-4 py-12">
+                <td colSpan={6} className="text-center text-mist-2 px-4 py-12">
                   No projects yet. Create your first one or import via CSV/XLSX.
                 </td>
               </tr>
@@ -56,6 +58,9 @@ export default async function AdminProjects() {
             {projects?.map((project) => {
               const displayType = inferProjectType(project)
               const isBrand = displayType === 'Brand Identity'
+              const isPublished = isProjectPublished(project)
+              const status = getProjectStatus(project)
+              const badge = getProjectStatusBadge(status)
 
               return (
                 <tr
@@ -77,6 +82,14 @@ export default async function AdminProjects() {
                       {displayType}
                     </span>
                   </td>
+                  <td className="px-4 py-3 text-center">
+                    <span
+                      className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono-tight border ${badge.badgeClass}`}
+                    >
+                      <span className={`w-1.5 h-1.5 rounded-full ${badge.dotClass}`} />
+                      <span>{badge.label}</span>
+                    </span>
+                  </td>
                   <td className="px-4 py-3 text-center hidden md:table-cell">
                     <span
                       className={`inline-block px-2 py-0.5 rounded text-xs font-medium ${
@@ -94,7 +107,7 @@ export default async function AdminProjects() {
                         href={`/projects/${normalizeSlug(project.slug)}`}
                         target="_blank"
                         className="p-1.5 text-mist-2 hover:text-paper transition-colors"
-                        title="View live case study"
+                        title={isPublished ? 'View live case study' : 'Preview draft case study'}
                       >
                         <ExternalLink className="w-4 h-4" />
                       </Link>
