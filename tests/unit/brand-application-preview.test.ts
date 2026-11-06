@@ -6,6 +6,7 @@ import {
   getLayoutAspectRatioClass,
   getLayoutBadgeColor,
   formatApplicationPreviewData,
+  getRecommendedLayoutForCategory,
 } from '@/lib/brand-application-preview'
 
 describe('Brand Application Preview Utilities', () => {
@@ -86,6 +87,33 @@ describe('Brand Application Preview Utilities', () => {
       expect(res.category).toBe('Product Packaging')
       expect(res.layout).toBe('split')
       expect(res.hasImage).toBe(false)
+    })
+  })
+
+  describe('getRecommendedLayoutForCategory', () => {
+    it('recommends wide for vehicle and transportation deliverables', () => {
+      expect(getRecommendedLayoutForCategory('Transportation & Vehicle Wrap')).toBe('wide')
+      expect(getRecommendedLayoutForCategory('Outdoor Billboard')).toBe('wide')
+    })
+
+    it('recommends editorial for stationery and print collateral', () => {
+      expect(getRecommendedLayoutForCategory('Stationery & Business Cards')).toBe('editorial')
+      expect(getRecommendedLayoutForCategory('Social Media Kit')).toBe('editorial')
+    })
+
+    it('recommends hero for flagship and storefront layouts', () => {
+      expect(getRecommendedLayoutForCategory('Storefront Signage')).toBe('hero')
+      expect(getRecommendedLayoutForCategory('Flagship Brand Assets')).toBe('hero')
+    })
+
+    it('recommends centered for bottles, jars, and cosmetic packaging', () => {
+      expect(getRecommendedLayoutForCategory('Cosmetic Jar Packaging')).toBe('centered')
+      expect(getRecommendedLayoutForCategory('Bottle Labeling')).toBe('centered')
+    })
+
+    it('defaults to split layout for standard product deliverables', () => {
+      expect(getRecommendedLayoutForCategory('General Merchandise')).toBe('split')
+      expect(getRecommendedLayoutForCategory(null)).toBe('split')
     })
   })
 })
