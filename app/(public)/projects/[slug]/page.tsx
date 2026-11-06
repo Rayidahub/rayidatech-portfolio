@@ -36,7 +36,9 @@ import Reveal from '@/components/ui/Reveal';
 import StatusPill from '@/components/ui/StatusPill';
 import CaseStudyImageViewer from '@/components/projects/CaseStudyImageViewer';
 import ColorSwatch from '@/components/projects/ColorSwatch';
+import BrandIdentityCaseStudyPage from '@/components/projects/BrandIdentityCaseStudyPage';
 import { SERVICE_CATEGORIES } from '@/lib/data/services';
+import { getCaseStudyConfig } from '@/lib/data/case-study-templates';
 import { normalizeSlug } from '@/lib/slug';
 
 export const revalidate = 3600;
@@ -363,6 +365,8 @@ function CaseStudyProjectPage({
 }) {
   const cs = project.case_study as CaseStudy;
   const projectType = getProjectType(project);
+  const config = getCaseStudyConfig(projectType);
+  const pv = config.publicView;
 
   const audience = parseAudience(cs.target_audience);
   const problemData = parseList(cs.problem);
@@ -534,11 +538,11 @@ function CaseStudyProjectPage({
         <div className="space-y-8">
           <div className="flex items-center gap-3">
             <span className="font-mono-tight text-xs uppercase tracking-[0.25em] text-secondary">
-              01 / Context & Audience
+              {pv.sections.overview.stepNumber}
             </span>
           </div>
           <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-semibold text-paper">
-            Project Overview & Target Audience
+            {pv.sections.overview.title}
           </h2>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -549,7 +553,19 @@ function CaseStudyProjectPage({
                   <div className="p-2.5 rounded-xl bg-primary/10 text-primary border border-primary/20">
                     <Compass className="w-5 h-5" />
                   </div>
-                  <h3 className="font-display text-xl font-semibold text-paper">The Objective</h3>
+                  <h3 className="font-display text-xl font-semibold text-paper">
+                    {config.category === 'Brand Identity'
+                      ? 'Brand Vision & Purpose'
+                      : config.category === 'Tech Education'
+                      ? 'Educational Mission'
+                      : config.category === 'Website Design'
+                      ? 'Website Mission & Purpose'
+                      : config.category === 'Graphic Design'
+                      ? 'Creative Objective & Brief'
+                      : config.category === 'Social Media Management'
+                      ? 'Campaign Mission & Growth'
+                      : 'The Objective'}
+                  </h3>
                 </div>
                 <div className="text-mist-1 leading-relaxed space-y-4 text-base sm:text-lg">
                   {cs.objective ? (
@@ -566,7 +582,17 @@ function CaseStudyProjectPage({
                   <div className="flex items-center gap-2">
                     <Sparkles className="w-4 h-4 text-secondary" />
                     <h3 className="font-display text-lg font-semibold text-paper">
-                      Who It&apos;s Designed For
+                      {config.category === 'Brand Identity'
+                        ? 'Brand Archetypes & Demographics'
+                        : config.category === 'Tech Education'
+                        ? 'Target Student Cohort & Learners'
+                        : config.category === 'Graphic Design'
+                        ? 'Target Audience & Demographic Appeal'
+                        : config.category === 'Social Media Management'
+                        ? 'Target Demographics & Follower Personas'
+                        : config.category === 'Website Design'
+                        ? 'Target Visitors & Customer Journeys'
+                        : "Who It's Designed For"}
                     </h3>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -616,11 +642,11 @@ function CaseStudyProjectPage({
         <div className="space-y-8">
           <div className="flex items-center gap-3">
             <span className="font-mono-tight text-xs uppercase tracking-[0.25em] text-primary">
-              02 / Problem Discovery
+              {pv.sections.problem.stepNumber}
             </span>
           </div>
           <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-semibold text-paper">
-            The Problem & Strategic Goals
+            {pv.sections.problem.title}
           </h2>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -632,8 +658,22 @@ function CaseStudyProjectPage({
                     <AlertCircle className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="font-display text-xl font-semibold text-paper">The Challenge</h3>
-                    <p className="font-mono-tight text-xs text-mist-2">User Pain Points Identified</p>
+                    <h3 className="font-display text-xl font-semibold text-paper">
+                      {config.category === 'Brand Identity'
+                        ? 'The Brand Challenge'
+                        : config.category === 'Tech Education'
+                        ? 'The Practical Skill Gap'
+                        : config.category === 'Website Design'
+                        ? 'Legacy Digital Bottlenecks'
+                        : config.category === 'Graphic Design'
+                        ? 'The Creative Challenge'
+                        : config.category === 'Social Media Management'
+                        ? 'Account Stagnation & Hurdles'
+                        : 'The Challenge'}
+                    </h3>
+                    <p className="font-mono-tight text-xs text-mist-2">
+                      {pv.sections.problem.subtitle}
+                    </p>
                   </div>
                 </div>
 
@@ -676,8 +716,32 @@ function CaseStudyProjectPage({
                     <Sparkles className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="font-display text-xl font-semibold text-paper">User Goals</h3>
-                    <p className="font-mono-tight text-xs text-mist-2">What Users Expect</p>
+                    <h3 className="font-display text-xl font-semibold text-paper">
+                      {config.category === 'Brand Identity'
+                        ? 'Customer Perception Goals'
+                        : config.category === 'Tech Education'
+                        ? 'Student Learning Goals'
+                        : config.category === 'Website Design'
+                        ? 'Visitor Experience Goals'
+                        : config.category === 'Graphic Design'
+                        ? 'Audience Visual Goals'
+                        : config.category === 'Social Media Management'
+                        ? 'Follower Value Goals'
+                        : 'User Goals'}
+                    </h3>
+                    <p className="font-mono-tight text-xs text-mist-2">
+                      {config.category === 'Brand Identity'
+                        ? 'Emotional Connection'
+                        : config.category === 'Tech Education'
+                        ? 'What Students Master'
+                        : config.category === 'Website Design'
+                        ? 'Friction Removed'
+                        : config.category === 'Graphic Design'
+                        ? 'Visual Resonance'
+                        : config.category === 'Social Media Management'
+                        ? 'Content Resonance'
+                        : 'What Users Expect'}
+                    </p>
                   </div>
                 </div>
 
@@ -701,8 +765,32 @@ function CaseStudyProjectPage({
                     <TrendingUp className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="font-display text-xl font-semibold text-paper">Business Goals</h3>
-                    <p className="font-mono-tight text-xs text-mist-2">Platform Objectives</p>
+                    <h3 className="font-display text-xl font-semibold text-paper">
+                      {config.category === 'Brand Identity'
+                        ? 'Brand Positioning Goals'
+                        : config.category === 'Tech Education'
+                        ? 'Program Success Metrics'
+                        : config.category === 'Website Design'
+                        ? 'Business Conversion Goals'
+                        : config.category === 'Graphic Design'
+                        ? 'Campaign Marketing Goals'
+                        : config.category === 'Social Media Management'
+                        ? 'Commercial Social KPIs'
+                        : 'Business Goals'}
+                    </h3>
+                    <p className="font-mono-tight text-xs text-mist-2">
+                      {config.category === 'Brand Identity'
+                        ? 'Market Distinction'
+                        : config.category === 'Tech Education'
+                        ? 'Completion & Placements'
+                        : config.category === 'Website Design'
+                        ? 'Conversion & Revenue'
+                        : config.category === 'Graphic Design'
+                        ? 'Turnout & Sales'
+                        : config.category === 'Social Media Management'
+                        ? 'Inbound Inquiries & Growth'
+                        : 'Platform Objectives'}
+                    </p>
                   </div>
                 </div>
 
@@ -728,11 +816,11 @@ function CaseStudyProjectPage({
         <div className="space-y-8">
           <div className="flex items-center gap-3">
             <span className="font-mono-tight text-xs uppercase tracking-[0.25em] text-secondary">
-              03 / Strategy & Flow
+              {pv.sections.research.stepNumber}
             </span>
           </div>
           <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-semibold text-paper">
-            Research Insights & User Journey
+            {pv.sections.research.title}
           </h2>
 
           {/* Research Findings Cards */}
@@ -743,7 +831,17 @@ function CaseStudyProjectPage({
                   key={idx}
                   className="p-4 md:p-5 border border-(--line) flex flex-col justify-between space-y-3 hover:border-primary/40"
                 >
-                  <span className="font-mono-tight text-xs text-secondary">Insight 0{idx + 1}</span>
+                  <span className="font-mono-tight text-xs text-secondary">
+                    {config.category === 'Brand Identity'
+                      ? `Strategy 0${idx + 1}`
+                      : config.category === 'Tech Education'
+                      ? `Pedagogy 0${idx + 1}`
+                      : config.category === 'Social Media Management'
+                      ? `Pillar 0${idx + 1}`
+                      : config.category === 'Website Design'
+                      ? `Architecture 0${idx + 1}`
+                      : `Insight 0${idx + 1}`}
+                  </span>
                   <p className="font-medium text-sm sm:text-base text-paper">{item}</p>
                 </GlassCard>
               ))}
@@ -755,13 +853,39 @@ function CaseStudyProjectPage({
             <GlassCard hover={false} className="p-6 md:p-8 space-y-6">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div>
-                  <h3 className="font-display text-xl font-semibold text-paper">User Journey Flow</h3>
+                  <h3 className="font-display text-xl font-semibold text-paper">
+                    {config.category === 'Brand Identity'
+                      ? 'Brand Identity Genesis Flow'
+                      : config.category === 'Tech Education'
+                      ? 'Cohort Learning Progression'
+                      : config.category === 'Website Design'
+                      ? 'Visitor Conversion Funnel'
+                      : config.category === 'Graphic Design'
+                      ? 'Creative Process & Production Stages'
+                      : config.category === 'Social Media Management'
+                      ? 'Content Production Cadence'
+                      : 'User Journey Flow'}
+                  </h3>
                   <p className="text-xs sm:text-sm text-mist-2">
-                    Core interaction flow from launch to meal preparation
+                    {config.category === 'Brand Identity'
+                      ? 'Sequential evolution from core symbology to multi-channel execution'
+                      : config.category === 'Tech Education'
+                      ? 'Step-by-step transition from foundational concepts to live deployment'
+                      : config.category === 'Website Design'
+                      ? 'Core interaction journey from initial landing to consultation booking'
+                      : config.category === 'Graphic Design'
+                      ? 'Creative workflow from moodboard exploration to final print output'
+                      : config.category === 'Social Media Management'
+                      ? 'Weekly production cycle from ideation to viral distribution'
+                      : 'Core interaction flow from launch to task completion'}
                   </p>
                 </div>
                 <span className="font-mono-tight text-xs text-primary px-3 py-1 rounded-full bg-primary/10 border border-primary/20 w-fit">
-                  Linear Navigation
+                  {config.category === 'Brand Identity'
+                    ? 'Brand Evolution'
+                    : config.category === 'Tech Education'
+                    ? 'Sprint Progression'
+                    : 'Linear Navigation'}
                 </span>
               </div>
 
@@ -799,11 +923,25 @@ function CaseStudyProjectPage({
                       <Layers className="w-5 h-5" />
                     </div>
                     <h3 className="font-display text-xl font-semibold text-paper">
-                      Wireframing & Architecture
+                      {config.category === 'Brand Identity'
+                        ? 'Symbolic Geometry & Construction'
+                        : config.category === 'Tech Education'
+                        ? 'Curriculum Architecture'
+                        : config.category === 'Website Design'
+                        ? 'Information Architecture & Wireframes'
+                        : config.category === 'Graphic Design'
+                        ? 'Layout Grid & Vector Drafting'
+                        : config.category === 'Social Media Management'
+                        ? 'Editorial Content System'
+                        : 'Wireframing & Architecture'}
                     </h3>
                   </div>
                   <p className="text-xs sm:text-sm text-mist-1">
-                    Low-fidelity wireframes established structural foundations before visual styling.
+                    {config.category === 'Brand Identity'
+                      ? 'Geometric precision and vector foundations established before styling.'
+                      : config.category === 'Tech Education'
+                      ? 'Curriculum framework structured to progress from core fundamentals to full projects.'
+                      : 'Low-fidelity foundations established structural hierarchy before visual styling.'}
                   </p>
                   <ul className="space-y-2.5 pt-2">
                     {designProcessData.wireframeItems.map((item, idx) => (
@@ -821,11 +959,25 @@ function CaseStudyProjectPage({
                       <Lightbulb className="w-5 h-5" />
                     </div>
                     <h3 className="font-display text-xl font-semibold text-paper">
-                      Design Iterations
+                      {config.category === 'Brand Identity'
+                        ? 'Identity Iterations & Refinements'
+                        : config.category === 'Tech Education'
+                        ? 'Mentorship & Code Reviews'
+                        : config.category === 'Website Design'
+                        ? 'Performance & Responsive Iterations'
+                        : config.category === 'Graphic Design'
+                        ? 'Visual Refinements & Typography'
+                        : config.category === 'Social Media Management'
+                        ? 'Format & Hook Testing'
+                        : 'Design Iterations'}
                     </h3>
                   </div>
                   <p className="text-xs sm:text-sm text-mist-1">
-                    Continuous testing and refinements conducted during the sprint.
+                    {config.category === 'Brand Identity'
+                      ? 'Iterative optical balance testing and clear space adjustments.'
+                      : config.category === 'Tech Education'
+                      ? 'Continuous feedback loops and code quality polish throughout the cohort.'
+                      : 'Continuous testing and refinements conducted during the project sprint.'}
                   </p>
                   <ul className="space-y-2.5 pt-2">
                     {designProcessData.iterationItems.map((item, idx) => (
@@ -858,11 +1010,11 @@ function CaseStudyProjectPage({
           <div className="space-y-8">
             <div className="flex items-center gap-3">
               <span className="font-mono-tight text-xs uppercase tracking-[0.25em] text-primary">
-                04 / Visual Architecture
+                {pv.sections.designSystem.stepNumber}
               </span>
             </div>
             <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-semibold text-paper">
-              Design System & Brand Identity
+              {pv.sections.designSystem.title}
             </h2>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -878,7 +1030,11 @@ function CaseStudyProjectPage({
                         </div>
                         <div>
                           <h3 className="font-display text-xl font-semibold text-paper">
-                            Color Palette
+                            {config.category === 'Brand Identity'
+                              ? 'Brand Color Psychology'
+                              : config.category === 'Graphic Design'
+                              ? 'Color Palette & Formulations'
+                              : 'Color Palette'}
                           </h3>
                           <p className="font-mono-tight text-xs text-mist-2">
                             Click to copy hex values
@@ -897,7 +1053,13 @@ function CaseStudyProjectPage({
 
                 {/* Typography Specimen */}
                 <GlassCard hover={false} className="p-6 md:p-8 space-y-5">
-                  <h3 className="font-display text-xl font-semibold text-paper">Typography Stack</h3>
+                  <h3 className="font-display text-xl font-semibold text-paper">
+                    {config.category === 'Brand Identity'
+                      ? 'Brand Typography Hierarchy'
+                      : config.category === 'Tech Education'
+                      ? 'Typography & Code Font Stack'
+                      : 'Typography Stack'}
+                  </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="p-4 rounded-xl bg-ink/60 border border-(--line) space-y-2">
                       <span className="font-mono-tight text-xs text-primary">Headings</span>
@@ -925,7 +1087,15 @@ function CaseStudyProjectPage({
                 {designSystemData.components.length > 0 && (
                   <GlassCard hover={false} className="p-6 md:p-8 space-y-4">
                     <h3 className="font-display text-lg font-semibold text-paper">
-                      Design System Components
+                      {config.category === 'Brand Identity'
+                        ? 'Identity Assets & Usage Rules'
+                        : config.category === 'Graphic Design'
+                        ? 'Vector Motifs & Print Finishes'
+                        : config.category === 'Tech Education'
+                        ? 'Core Technologies Mastered'
+                        : config.category === 'Website Design'
+                        ? 'Interactive Web Components'
+                        : 'Design System Components'}
                     </h3>
                     <div className="flex flex-wrap gap-2.5 pt-1">
                       {designSystemData.components.map((comp, idx) => (
@@ -962,11 +1132,11 @@ function CaseStudyProjectPage({
           <div className="space-y-8">
             <div className="flex items-center gap-3">
               <span className="font-mono-tight text-xs uppercase tracking-[0.25em] text-secondary">
-                05 / Product Features
+                {pv.sections.features.stepNumber}
               </span>
             </div>
             <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-semibold text-paper">
-              Key Product Capabilities
+              {pv.sections.features.title}
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -1009,11 +1179,11 @@ function CaseStudyProjectPage({
         <div className="space-y-8">
           <div className="flex items-center gap-3">
             <span className="font-mono-tight text-xs uppercase tracking-[0.25em] text-primary">
-              06 / Final Deliverable
+              {pv.sections.solution.stepNumber}
             </span>
           </div>
           <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-semibold text-paper">
-            Final Solution & Experience
+            {pv.sections.solution.title}
           </h2>
 
           {cs.final_solution && (
@@ -1029,14 +1199,14 @@ function CaseStudyProjectPage({
                 <div className="flex items-center gap-2 text-mist-2 px-1">
                   <Smartphone className="w-4 h-4 text-secondary" />
                   <span className="font-mono-tight text-xs uppercase tracking-wider">
-                    Mobile Experience
+                    {pv.mockupLabels.slot1.title}
                   </span>
                 </div>
                 <div className="p-2 md:p-3 rounded-3xl glass border border-(--line)">
                   <CaseStudyImageViewer
                     src={cs.final_mobile_image}
-                    alt={`${project.title} Mobile Screens`}
-                    caption="Mobile App UI & Flow"
+                    alt={`${project.title} ${pv.mockupLabels.slot1.title}`}
+                    caption={pv.mockupLabels.slot1.subtitle}
                     aspect="portrait"
                   />
                 </div>
@@ -1048,14 +1218,14 @@ function CaseStudyProjectPage({
                 <div className="flex items-center gap-2 text-mist-2 px-1">
                   <Laptop className="w-4 h-4 text-primary" />
                   <span className="font-mono-tight text-xs uppercase tracking-wider">
-                    Tablet / Responsive Layout
+                    {pv.mockupLabels.slot2.title}
                   </span>
                 </div>
                 <div className="p-2 md:p-3 rounded-3xl glass border border-(--line)">
                   <CaseStudyImageViewer
                     src={cs.final_desktop_image}
-                    alt={`${project.title} Desktop & Tablet Screens`}
-                    caption="Large Screen Adaptations & Layout"
+                    alt={`${project.title} ${pv.mockupLabels.slot2.title}`}
+                    caption={pv.mockupLabels.slot2.subtitle}
                     aspect="auto"
                   />
                 </div>
@@ -1070,11 +1240,11 @@ function CaseStudyProjectPage({
         <div className="space-y-8">
           <div className="flex items-center gap-3">
             <span className="font-mono-tight text-xs uppercase tracking-[0.25em] text-secondary">
-              07 / Impact & Metrics
+              {pv.sections.results.stepNumber}
             </span>
           </div>
           <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-semibold text-paper">
-            Results & Measurable Outcomes
+            {pv.sections.results.title}
           </h2>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -1087,9 +1257,11 @@ function CaseStudyProjectPage({
                   </div>
                   <div>
                     <h3 className="font-display text-xl font-semibold text-paper">
-                      Product Achievements
+                      {pv.resultsLabels.leftCardTitle}
                     </h3>
-                    <p className="font-mono-tight text-xs text-mist-2">Design Impact</p>
+                    <p className="font-mono-tight text-xs text-mist-2">
+                      {pv.resultsLabels.leftCardSubtitle}
+                    </p>
                   </div>
                 </div>
 
@@ -1114,9 +1286,11 @@ function CaseStudyProjectPage({
                   </div>
                   <div>
                     <h3 className="font-display text-xl font-semibold text-paper">
-                      User Experience Outcomes
+                      {pv.resultsLabels.rightCardTitle}
                     </h3>
-                    <p className="font-mono-tight text-xs text-mist-2">User Feedback</p>
+                    <p className="font-mono-tight text-xs text-mist-2">
+                      {pv.resultsLabels.rightCardSubtitle}
+                    </p>
                   </div>
                 </div>
 
@@ -1152,11 +1326,11 @@ function CaseStudyProjectPage({
         <div className="space-y-8">
           <div className="flex items-center gap-3">
             <span className="font-mono-tight text-xs uppercase tracking-[0.25em] text-primary">
-              08 / Reflection & Future
+              {pv.sections.reflection.stepNumber}
             </span>
           </div>
           <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-semibold text-paper">
-            Designer Takeaways & Roadmap
+            {pv.sections.reflection.title}
           </h2>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -1449,6 +1623,12 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   }
 
   const hasCaseStudy = !!project.case_study && Object.keys(project.case_study).length > 0;
+  const isBrandIdentity =
+    project.project_type === 'Brand Identity' ||
+    project.case_study?.case_study_type === 'Brand Identity' ||
+    (Array.isArray(project.tags) &&
+      project.tags.some((t: string) => t.toLowerCase() === 'brand identity'));
+
   const nextProject = await getNextProject(project.id, project.case_study?.next_project_slug);
 
   return (
@@ -1472,7 +1652,11 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       <Section spacing="tight" className="relative z-10">
         <Container size="wide">
           {hasCaseStudy ? (
-            <CaseStudyProjectPage project={project} nextProject={nextProject} />
+            isBrandIdentity ? (
+              <BrandIdentityCaseStudyPage project={project} nextProject={nextProject} />
+            ) : (
+              <CaseStudyProjectPage project={project} nextProject={nextProject} />
+            )
           ) : (
             <SimpleProjectPage project={project} />
           )}
