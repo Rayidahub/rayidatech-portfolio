@@ -10,6 +10,8 @@ import {
   isSplitLayout,
   isHeroLayout,
   isCenteredLayout,
+  isEditorialLayout,
+  isWideLayout,
 } from '@/lib/brand-application-preview'
 
 describe('Brand Application Preview Utilities', () => {
@@ -136,6 +138,18 @@ describe('Brand Application Preview Utilities', () => {
     it('isCenteredLayout correctly identifies centered mode', () => {
       expect(isCenteredLayout('centered')).toBe(true)
       expect(isCenteredLayout('wide')).toBe(false)
+    })
+
+    it('isEditorialLayout correctly identifies editorial mode', () => {
+      expect(isEditorialLayout('editorial')).toBe(true)
+      expect(isEditorialLayout('split')).toBe(false)
+      expect(isEditorialLayout(null)).toBe(false)
+    })
+
+    it('isWideLayout correctly identifies wide mode', () => {
+      expect(isWideLayout('wide')).toBe(true)
+      expect(isWideLayout('hero')).toBe(false)
+      expect(isWideLayout(undefined)).toBe(false)
     })
   })
 })
