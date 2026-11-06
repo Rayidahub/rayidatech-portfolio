@@ -101,4 +101,18 @@ describe('Project Classification Helpers', () => {
       )
     })
   })
+
+  describe('isBrandIdentityType', () => {
+    it('returns true for exact or case-insensitive Brand Identity match', () => {
+      expect(isBrandIdentityType('Brand Identity')).toBe(true)
+      expect(isBrandIdentityType('brand identity')).toBe(true)
+      expect(isBrandIdentityType('  Brand Identity  ')).toBe(true)
+    })
+
+    it('returns false for other types or null', () => {
+      expect(isBrandIdentityType('UI/UX Design')).toBe(false)
+      expect(isBrandIdentityType('Web Development')).toBe(false)
+      expect(isBrandIdentityType(null)).toBe(false)
+    })
+  })
 })
