@@ -68,3 +68,21 @@ export function getStatusPillClasses(status: ProjectFormStatus): string {
 export function isPublishedStatus(status?: string | null): boolean {
   return status === 'published';
 }
+
+/**
+ * Returns complete badge metadata for project status display.
+ */
+export function getProjectStatusBadge(status?: string | null): {
+  text: string;
+  dotClass: string;
+  containerClass: string;
+} {
+  const isPub = status === 'published';
+  return {
+    text: isPub ? 'Published' : 'Draft',
+    dotClass: isPub ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400',
+    containerClass: isPub
+      ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
+      : 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+  };
+}
