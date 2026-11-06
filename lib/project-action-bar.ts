@@ -86,3 +86,10 @@ export function getProjectStatusBadge(status?: string | null): {
       : 'bg-amber-500/15 text-amber-300 border-amber-500/30',
   };
 }
+
+/**
+ * Returns keyboard shortcut hint for quick saving drafts.
+ */
+export function getDraftShortcutHint(): string {
+  return 'Ctrl+S / ⌘S to save draft';
+}
