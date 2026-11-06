@@ -11,6 +11,7 @@ import {
   getLogoStageBorderClass,
   resolveEffectiveStageMode,
   getLogoRoleBadgeColor,
+  getLogoAspectRecommendation,
 } from '@/lib/brand-logo-showcase';
 
 interface BrandLogoVariationCardProps {
@@ -164,7 +165,7 @@ export default function BrandLogoVariationCard({
           {config.useCase}
         </p>
 
-        <div className="pt-2">
+        <div className="pt-2 flex items-center justify-between gap-1.5 flex-wrap">
           <span
             className={`inline-block text-[10px] font-mono-tight px-2 py-0.5 rounded-md ${
               globalMode === 'dark'
@@ -173,6 +174,13 @@ export default function BrandLogoVariationCard({
             }`}
           >
             {config.recommendedBg}
+          </span>
+          <span
+            className={`text-[10px] font-mono-tight shrink-0 ${
+              globalMode === 'dark' ? 'text-mist-2' : 'text-slate-400'
+            }`}
+          >
+            {getLogoAspectRecommendation(type)}
           </span>
         </div>
       </div>
