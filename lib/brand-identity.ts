@@ -62,13 +62,16 @@ export function getContrastTextColor(hex: string): 'light' | 'dark' {
  * Returns human-friendly label for brand color classification.
  */
 export function formatColorClassification(classification?: string): string {
-  switch (classification) {
+  const norm = classification?.toLowerCase()
+  switch (norm) {
     case 'primary':
       return 'Primary'
     case 'secondary':
       return 'Secondary'
     case 'accent':
       return 'Accent'
+    case 'neutral':
+      return 'Neutral'
     case 'neutral-dark':
       return 'Dark Neutral'
     case 'neutral-light':
