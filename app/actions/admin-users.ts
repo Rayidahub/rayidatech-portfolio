@@ -9,6 +9,7 @@ import {
   saveAdminUser,
   deleteAdminUser,
   ROOT_SUPER_ADMIN_EMAIL,
+  isRootSuperAdminEmail,
 } from '@/lib/data/admin-users';
 import type { AdminUser, AdminRole, AdminPermission } from '@/types/admin-user';
 
@@ -145,7 +146,7 @@ export async function updateAdminUserAction(payload: {
 
   // Prevent demoting or deactivating the primary Super Admin
   if (
-    target.email.toLowerCase() === ROOT_SUPER_ADMIN_EMAIL.toLowerCase() &&
+    isRootSuperAdminEmail(target.email) &&
     (payload.role !== 'super_admin' || payload.is_active === false)
   ) {
     return {
@@ -196,7 +197,7 @@ export async function toggleUserStatusAction(
     return { success: false, error: 'User not found.' };
   }
 
-  if (target.email.toLowerCase() === ROOT_SUPER_ADMIN_EMAIL.toLowerCase()) {
+  if (isRootSuperAdminEmail(target.email)) {
     return { success: false, error: 'The primary Super Admin account cannot be deactivated.' };
   }
 
@@ -233,7 +234,7 @@ export async function deleteAdminUserAction(id: string): Promise<{ success: bool
     return { success: false, error: 'Administrator not found.' };
   }
 
-  if (target.email.toLowerCase() === ROOT_SUPER_ADMIN_EMAIL.toLowerCase()) {
+  if (isRootSuperAdminEmail(target.email)) {
     return { success: false, error: 'The primary Super Admin account cannot be deleted.' };
   }
 
