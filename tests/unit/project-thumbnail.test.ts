@@ -123,4 +123,16 @@ describe('Project Cover Image & Thumbnail Utilities', () => {
       expect(isDataImageUrl(undefined)).toBe(false)
     })
   })
+
+  describe('isExternalImageUrl', () => {
+    it('identifies http and https URLs correctly', () => {
+      expect(isExternalImageUrl('https://images.unsplash.com/photo')).toBe(true)
+      expect(isExternalImageUrl('http://example.com/hero.jpg')).toBe(true)
+    })
+
+    it('rejects relative paths and null values', () => {
+      expect(isExternalImageUrl('/img/projects/cover.png')).toBe(false)
+      expect(isExternalImageUrl(null)).toBe(false)
+    })
+  })
 })
