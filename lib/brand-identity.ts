@@ -236,11 +236,14 @@ export function isBrandIdentityCaseStudy(
  * Filters brand applications to only those marked as visible and containing an image.
  */
 export function filterVisibleBrandApplications(
-  apps?: BrandApplication[]
+  apps?: (BrandApplication & { image_url?: string })[]
 ): BrandApplication[] {
   if (!Array.isArray(apps)) return []
   return apps.filter(
-    (app) => app && app.is_visible !== false && Boolean(app.image_url)
+    (app) =>
+      app &&
+      app.is_visible !== false &&
+      Boolean(app.primary_image || (app as any).image_url)
   )
 }
 
@@ -264,14 +267,21 @@ export function getBrandColorCssVariable(color: BrandColor): {
 /**
  * Returns a fallback CSS font stack for a brand typography configuration.
  */
-export function getTypographyFontFamily(font: BrandTypography): string {
-  const primaryName = font.font_family ? `"${font.font_family}"` : 'sans-serif'
-  switch (font.role) {
+export function getTypographyFontFamily(
+  font: BrandTypography & { font_family?: string; role?: string }
+): string {
+  const family = font.font_name || font.font_family
+  const primaryName = family ? `"${family}"` : 'sans-serif'
+  const role = (font.font_role || font.role || '').toLowerCase()
+  switch (role) {
     case 'display':
+    case 'heading':
     case 'headline':
       return `${primaryName}, system-ui, -apple-system, sans-serif`
     case 'accent':
       return `${primaryName}, Georgia, serif`
+    case 'monospace':
+      return `${primaryName}, "Geist Mono", monospace`
     case 'body':
     default:
       return `${primaryName}, Inter, system-ui, sans-serif`

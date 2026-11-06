@@ -258,7 +258,7 @@ export default function BrandIdentityFields({ value, onChange }: BrandIdentityFi
       if (c.id !== id) return c;
       const merged = { ...c, ...patch };
       if (patch.hex) {
-        merged.rgb = hexToRgb(patch.hex);
+        merged.rgb = hexToRgb(patch.hex) ?? undefined;
       }
       return merged;
     });

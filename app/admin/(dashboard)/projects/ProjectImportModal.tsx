@@ -427,8 +427,8 @@ export default function ProjectImportModal() {
         const statusRaw = (normalized['status'] || '').toLowerCase()
         const isDraft = ['draft', 'false', '0', 'no', 'unpublished'].includes(statusRaw)
         if (isDraft) {
-          (cs as any).published = false
-          (cs as any).status = 'draft'
+          cs.published = false;
+          cs.status = 'draft';
         }
 
         if (normalized['cs_client']) cs.client = normalized['cs_client']
