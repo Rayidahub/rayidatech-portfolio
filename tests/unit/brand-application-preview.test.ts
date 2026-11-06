@@ -15,6 +15,7 @@ import {
   getLayoutIconIdentifier,
   isValidApplicationDeliverable,
   formatApplicationCategoryBadge,
+  getLayoutColumnSpan,
 } from '@/lib/brand-application-preview'
 
 describe('Brand Application Preview Utilities', () => {
@@ -215,6 +216,26 @@ describe('Brand Application Preview Utilities', () => {
       expect(formatApplicationCategoryBadge('')).toBe('Deliverable')
       expect(formatApplicationCategoryBadge('   ')).toBe('Deliverable')
       expect(formatApplicationCategoryBadge(null)).toBe('Deliverable')
+    })
+  })
+
+  describe('getLayoutColumnSpan', () => {
+    it('returns 7/5 split for split mode', () => {
+      const res = getLayoutColumnSpan('split')
+      expect(res.imageSpan).toContain('md:col-span-7')
+      expect(res.textSpan).toContain('md:col-span-5')
+    })
+
+    it('returns 8/4 split for editorial mode', () => {
+      const res = getLayoutColumnSpan('editorial')
+      expect(res.imageSpan).toContain('md:col-span-8')
+      expect(res.textSpan).toContain('md:col-span-4')
+    })
+
+    it('returns full-width col-span-12 for hero, centered, and wide modes', () => {
+      expect(getLayoutColumnSpan('hero').imageSpan).toBe('col-span-12')
+      expect(getLayoutColumnSpan('centered').imageSpan).toBe('col-span-12')
+      expect(getLayoutColumnSpan('wide').imageSpan).toBe('col-span-12')
     })
   })
 })
