@@ -208,7 +208,7 @@ export default function NewProject() {
           <p className="text-sm text-red-400 bg-red-400/10 rounded-lg px-3 py-2">{error}</p>
         )}
 
-        {/* Top Control Action Bar */}
+        {/* Top Control Action Bar (Sticky at top of view) */}
         <ProjectActionBar
           mode="new"
           status={form.status}
@@ -218,6 +218,7 @@ export default function NewProject() {
           onSavePublish={() => saveProject('published')}
           cancelHref="/admin/projects"
           position="top"
+          isSticky={true}
         />
 
         {/* Core Classification Grid (Collapsible) */}
