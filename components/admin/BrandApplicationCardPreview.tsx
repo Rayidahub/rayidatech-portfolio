@@ -69,7 +69,13 @@ export default function BrandApplicationCardPreview({
   const recommendedLayout = getRecommendedLayoutForCategory(category);
 
   return (
-    <div className="mt-4 rounded-xl border border-(--line) bg-ink-deep/60 overflow-hidden transition-all duration-200">
+    <div
+      data-testid="brand-application-preview"
+      data-layout={layout}
+      data-has-image={String(hasValidImage)}
+      aria-live="polite"
+      className="mt-4 rounded-xl border border-(--line) bg-ink-deep/60 overflow-hidden transition-all duration-200"
+    >
       {/* Preview Header & Controls */}
       <div className="flex flex-wrap items-center justify-between gap-2.5 px-4 py-2.5 bg-white/[0.02] border-b border-(--line)">
         <div className="flex items-center gap-2 min-w-0">
