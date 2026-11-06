@@ -224,3 +224,13 @@ export interface Project {
   status?: ProjectStatus;
   case_study?: CaseStudy | BrandIdentityCaseStudy | any;
 }
+
+export interface ProjectCoverPreviewProps {
+  id: string;
+  title: string;
+  slug: string;
+  coverImage?: string | null;
+  projectType?: string;
+  status?: ProjectStatus;
+  isPublished?: boolean;
+}
