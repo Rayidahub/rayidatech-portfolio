@@ -1,0 +1,100 @@
+// lib/brand-application-preview.ts
+import { BrandApplication, BrandApplicationLayout, BrandApplicationPreviewData } from '@/types/project'
+
+/**
+ * Returns a human-friendly display name for a brand application layout.
+ */
+export function getLayoutDisplayName(layout?: string | null): string {
+  switch (layout) {
+    case 'hero':
+      return 'Hero Showcase'
+    case 'centered':
+      return 'Focused Spotlight'
+    case 'editorial':
+      return 'Magazine Editorial'
+    case 'wide':
+      return 'Cinematic Panoramic'
+    case 'split':
+    default:
+      return 'Split Columns'
+  }
+}
+
+/**
+ * Returns a short description of the layout presentation behavior on the public page.
+ */
+export function getLayoutDescription(layout?: string | null): string {
+  switch (layout) {
+    case 'hero':
+      return 'Full-width cinematic banner with bottom title and context metadata.'
+    case 'centered':
+      return 'Spotlight presentation with centered product image and focused typography.'
+    case 'editorial':
+      return 'Asymmetrical magazine spread pairing large image with elevated glass card.'
+    case 'wide':
+      return 'Ultra-wide panoramic format (21:9) designed for expansive physical mockups.'
+    case 'split':
+    default:
+      return 'Balanced 50/50 two-column layout alternating image and descriptive copy.'
+  }
+}
+
+/**
+ * Returns the Tailwind CSS aspect ratio class for the preview mockup container.
+ */
+export function getLayoutAspectRatioClass(layout?: string | null): string {
+  switch (layout) {
+    case 'hero':
+      return 'aspect-[16/9] sm:aspect-[21/9]'
+    case 'centered':
+      return 'aspect-[16/10]'
+    case 'editorial':
+      return 'aspect-[16/9]'
+    case 'wide':
+      return 'aspect-[21/9]'
+    case 'split':
+    default:
+      return 'aspect-[4/3] sm:aspect-[16/10]'
+  }
+}
+
+/**
+ * Returns Tailwind badge accent classes for the layout pill.
+ */
+export function getLayoutBadgeColor(layout?: string | null): string {
+  switch (layout) {
+    case 'hero':
+      return 'bg-purple-500/15 text-purple-300 border-purple-500/30'
+    case 'centered':
+      return 'bg-secondary/15 text-secondary border-secondary/30'
+    case 'editorial':
+      return 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
+    case 'wide':
+      return 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30'
+    case 'split':
+    default:
+      return 'bg-primary/15 text-accent-soft border-primary/30'
+  }
+}
+
+/**
+ * Normalizes a brand application into safe preview data with sensible defaults.
+ */
+export function formatApplicationPreviewData(
+  app?: Partial<BrandApplication> | null
+): BrandApplicationPreviewData {
+  const title = (app?.title || 'Deliverable Mockup').trim()
+  const category = (app?.category || 'Product Packaging').trim()
+  const layout = (app?.layout_preference || 'split') as BrandApplicationLayout
+  const description = (app?.description || 'Tactile luxury packaging and branded touchpoint.').trim()
+  const imageUrl = (app?.primary_image || (app as any)?.image_url || '').trim()
+
+  return {
+    title,
+    category,
+    layout,
+    description,
+    imageUrl,
+    hasImage: Boolean(imageUrl),
+  }
+}
