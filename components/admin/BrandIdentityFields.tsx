@@ -1048,5 +1048,115 @@ export default function BrandIdentityFields({ value, onChange }: BrandIdentityFi
                       >
                         <MoveUp className="w-3.5 h-3.5" />
                       </button>
+
+                      <button
+                        type="button"
+                        disabled={idx === data.brand_applications.length - 1}
+                        onClick={() => moveApplication(idx, 1)}
+                        className="p-1.5 rounded-lg border border-(--line) text-mist-2 hover:text-paper hover:bg-white/5 disabled:opacity-30 transition-colors cursor-pointer"
+                        title="Move Down"
+                      >
+                        <MoveDown className="w-3.5 h-3.5" />
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => removeApplication(app.id)}
+                        className="p-1.5 rounded-lg border border-red-500/20 text-red-400 hover:bg-red-500/10 transition-colors cursor-pointer"
+                        title="Delete Application"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Body */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <TextInput
+                      label="Application Title *"
+                      value={app.title}
+                      onChange={(val) => updateApplication(app.id, { title: val })}
+                      placeholder="e.g. Hair Care Cream Jar Luxury Mockup"
+                    />
+
+                    <div>
+                      <label className="block text-sm text-mist-1 mb-1.5">Deliverable Category</label>
+                      <select
+                        value={app.category}
+                        onChange={(e) =>
+                          updateApplication(app.id, {
+                            category: e.target.value as BrandApplicationCategory,
+                          })
+                        }
+                        className="w-full bg-[#16162a] border border-(--line) rounded-lg px-3 py-2.5 text-sm text-paper focus:outline-none focus:border-primary/50"
+                      >
+                        {BRAND_APPLICATION_CATEGORIES.map((cat) => (
+                          <option key={cat} value={cat}>
+                            {cat}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm text-mist-1 mb-1.5">Layout Style on Public Page</label>
+                      <select
+                        value={app.layout_preference}
+                        onChange={(e) =>
+                          updateApplication(app.id, {
+                            layout_preference: e.target.value as BrandApplicationLayout,
+                          })
+                        }
+                        className="w-full bg-[#16162a] border border-(--line) rounded-lg px-3 py-2.5 text-sm text-paper focus:outline-none focus:border-primary/50"
+                      >
+                        <option value="hero">Hero (Full-width showcase)</option>
+                        <option value="split">Split (Two columns with text)</option>
+                        <option value="centered">Centered (Large focused product)</option>
+                        <option value="editorial">Editorial (Magazine layout)</option>
+                        <option value="wide">Wide (Cinematic landscape)</option>
+                      </select>
+                    </div>
+
+                    <TextInput
+                      label="Short Context Note"
+                      value={app.description || ''}
+                      onChange={(val) => updateApplication(app.id, { description: val })}
+                      placeholder="e.g. Custom purple glass finish with gold foil logo crest"
+                    />
+
+                    <div className="sm:col-span-2">
+                      <ImageUploadField
+                        label="Primary Deliverable Mockup Image *"
+                        value={app.primary_image}
+                        onChange={(url) => updateApplication(app.id, { primary_image: url })}
+                        folder="projects"
+                        description="Upload high-res mockup render from device or paste direct URL"
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </SectionCard>
+
+      {/* ── SECTION 8 — BRAND GALLERY ── */}
+      <SectionCard
+        title={`Section 8 — Brand Curated Gallery (${data.brand_gallery.length} Images)`}
+        stepNumber="08 / Gallery"
+        icon={ImageIcon}
+        isOpen={openSections.gallery}
+        onToggle={() => toggleSection('gallery')}
+      >
+        <div className="space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <label className="block text-xs font-mono-tight text-mist-2 uppercase mb-1">
+                Gallery Layout
+              </label>
+              <select
+                value={data.gallery_layout}
+                onChange={(e) => update('gallery_layout', e.target.value as BrandGalleryLayout)}
 </div></div>);
 }
