@@ -47,4 +47,23 @@ describe('Brand Logo Showcase Utilities', () => {
       expect(cfg.indexLabel).toBe('00 / Master')
     })
   })
+
+  describe('getLogoStageBackgroundClass', () => {
+    it('returns crisp white classes for light stage', () => {
+      const cls = getLogoStageBackgroundClass('light')
+      expect(cls).toContain('bg-white')
+      expect(cls).toContain('text-slate-900')
+    })
+
+    it('returns deep ink classes for dark stage', () => {
+      const cls = getLogoStageBackgroundClass('dark')
+      expect(cls).toContain('bg-[#0e0e1a]')
+      expect(cls).toContain('text-white')
+    })
+
+    it('returns checkerboard transparency classes for grid stage', () => {
+      const cls = getLogoStageBackgroundClass('checkerboard')
+      expect(cls).toContain('background-image')
+    })
+  })
 })
