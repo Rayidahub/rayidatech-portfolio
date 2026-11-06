@@ -140,30 +140,34 @@ export default function EditProject() {
       ? [categoryTag, ...additionalTags.filter((t) => t !== categoryTag)]
       : additionalTags
 
-    let caseStudyPayload: any = null
-    if (Object.keys(form.case_study).length > 0) {
-      caseStudyPayload = {
-        ...form.case_study,
-        case_study_type: form.project_type,
-      }
+    // Prepare case study payload with explicit type indicator
+    const caseStudyPayload = {
+      ...(form.case_study || {}),
+      case_study_type: form.project_type,
+      project_type: form.project_type,
+    }
+
+    const finalTags = form.project_type
+      ? Array.from(new Set([...tags, form.project_type]))
+      : tags
+
+    const updatePayload: any = {
+      title: form.title,
+      slug: form.slug,
+      description: form.description,
+      content: form.content,
+      cover_image: form.cover_image || null,
+      role: form.role || null,
+      duration: form.duration || null,
+      link: form.link || null,
+      featured: form.featured,
+      tags: finalTags.length > 0 ? finalTags : null,
+      case_study: caseStudyPayload,
     }
 
     const { error: updateError } = await supabase
       .from('projects')
-      .update({
-        title: form.title,
-        slug: form.slug,
-        description: form.description,
-        content: form.content,
-        cover_image: form.cover_image || null,
-        role: form.role || null,
-        duration: form.duration || null,
-        link: form.link || null,
-        featured: form.featured,
-        project_type: form.project_type,
-        tags: tags.length > 0 ? tags : null,
-        case_study: caseStudyPayload,
-      })
+      .update(updatePayload)
       .eq('id', params.id)
 
     if (updateError) {
