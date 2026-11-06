@@ -1645,6 +1645,20 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
   return (
     <main className="relative min-h-screen bg-ink overflow-hidden py-12 md:py-20">
+      {!isProjectPublished(project) && (
+        <div className="bg-amber-500/15 border-b border-amber-500/30 text-amber-300 py-2.5 px-4 text-xs font-mono-tight flex flex-col sm:flex-row items-center justify-between gap-2 fixed top-0 left-0 right-0 z-50 backdrop-blur-md shadow-lg">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse shrink-0" />
+            <span>Draft Preview Mode — This project is currently unpublished and hidden from public visitors.</span>
+          </div>
+          <Link
+            href={`/admin/projects/${project.id}/edit`}
+            className="px-3 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-200 transition-colors shrink-0"
+          >
+            Edit & Publish →
+          </Link>
+        </div>
+      )}
       {/* Background Ambient Glows */}
       <div
         className="pointer-events-none absolute top-0 left-1/4 w-[45rem] h-[30rem] rounded-full opacity-15 blur-3xl"
