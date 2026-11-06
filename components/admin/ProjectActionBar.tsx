@@ -9,6 +9,7 @@ import {
   getPublishButtonLabel,
   getStatusToggleLabel,
   getStatusToggleClasses,
+  getDraftShortcutHint,
 } from '@/lib/project-action-bar';
 
 export interface ProjectActionBarProps {
@@ -87,6 +88,7 @@ export default function ProjectActionBar({
           type="button"
           disabled={saving}
           onClick={onSaveDraft}
+          title={getDraftShortcutHint()}
           className="inline-flex items-center gap-2 bg-white/5 hover:bg-white/10 text-paper border border-(--line) hover:border-amber-500/40 rounded-xl px-4 py-2 text-xs font-medium transition-all disabled:opacity-50 cursor-pointer"
         >
           <FileText className="w-3.5 h-3.5 text-amber-400" />
