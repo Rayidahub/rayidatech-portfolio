@@ -202,4 +202,18 @@ describe('Project Cover Image & Thumbnail Utilities', () => {
       expect(getImageFileName('')).toBe('image.jpg')
     })
   })
+
+  describe('formatImageResolutionLabel', () => {
+    it('formats valid positive dimensions cleanly', () => {
+      expect(formatImageResolutionLabel(1920, 1080)).toBe('1920×1080')
+      expect(formatImageResolutionLabel(800.4, 600.2)).toBe('800×600')
+    })
+
+    it('returns null for missing, zero, or negative dimensions', () => {
+      expect(formatImageResolutionLabel(0, 100)).toBe(null)
+      expect(formatImageResolutionLabel(100, 0)).toBe(null)
+      expect(formatImageResolutionLabel(-50, 100)).toBe(null)
+      expect(formatImageResolutionLabel(undefined, undefined)).toBe(null)
+    })
+  })
 })
