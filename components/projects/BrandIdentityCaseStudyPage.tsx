@@ -26,6 +26,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Maximize2,
+  ZoomIn,
 } from 'lucide-react';
 import Container from '@/components/ui/Container';
 import Section from '@/components/ui/Section';
