@@ -195,6 +195,19 @@ export function isStageActive(
 }
 
 /**
+ * Resolves the visual file format badge (e.g. SVG, PNG, WEBP, JPEG) from a URL.
+ */
+export function getLogoFormatBadge(imageUrl?: string | null): string {
+  if (!imageUrl) return 'ASSET';
+  const cleanUrl = imageUrl.split('?')[0].toLowerCase();
+  if (cleanUrl.endsWith('.svg')) return 'SVG';
+  if (cleanUrl.endsWith('.png')) return 'PNG';
+  if (cleanUrl.endsWith('.webp')) return 'WEBP';
+  if (cleanUrl.endsWith('.jpg') || cleanUrl.endsWith('.jpeg')) return 'JPEG';
+  return 'ASSET';
+}
+
+/**
  * Validates that a logo image URL string is non-empty and well-formed.
  */
 export function hasValidLogoUrl(url?: string | null): boolean {
