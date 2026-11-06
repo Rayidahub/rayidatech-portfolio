@@ -147,4 +147,17 @@ describe('Project Cover Image & Thumbnail Utilities', () => {
       expect(isLocalImageUrl('https://example.com/photo.jpg')).toBe(false)
     })
   })
+
+  describe('sanitizeCoverImageUrl', () => {
+    it('returns clean trimmed url for valid candidates', () => {
+      expect(sanitizeCoverImageUrl('  https://example.com/cover.png  ')).toBe('https://example.com/cover.png')
+      expect(sanitizeCoverImageUrl('  /img/luxe.jpg  ')).toBe('/img/luxe.jpg')
+    })
+
+    it('neutralizes invalid or harmful strings to null', () => {
+      expect(sanitizeCoverImageUrl('javascript:alert("pwned")')).toBe(null)
+      expect(sanitizeCoverImageUrl('')).toBe(null)
+      expect(sanitizeCoverImageUrl(null)).toBe(null)
+    })
+  })
 })
