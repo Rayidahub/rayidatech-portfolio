@@ -161,4 +161,32 @@ describe('Brand Logo Showcase Utilities', () => {
       expect(hasValidLogoUrl('javascript:alert(1)')).toBe(false)
     })
   })
+
+  describe('Luxe by Sey Logo Suite Presentation Resolution', () => {
+    it('properly resolves optimal contrast stages for all 4 variation assets', () => {
+      // 1. Symbol (dark purple icon mark -> light stage default eliminates darkness)
+      const symbolCfg = getLogoVariationConfig('symbol')
+      const symbolStage = resolveEffectiveStageMode(undefined, symbolCfg.defaultStage, 'dark')
+      expect(symbolStage).toBe('light')
+      expect(getLogoStageBackgroundClass(symbolStage)).toContain('bg-white')
+
+      // 2. Secondary Lockup (white background uploaded -> light stage blends seamless with no box outline)
+      const secCfg = getLogoVariationConfig('secondary')
+      const secStage = resolveEffectiveStageMode(undefined, secCfg.defaultStage, 'dark')
+      expect(secStage).toBe('light')
+      expect(getLogoStageBackgroundClass(secStage)).toContain('bg-white')
+
+      // 3. Horizontal Wordmark (purple banner glow -> dark stage preserves neon glow)
+      const horizCfg = getLogoVariationConfig('horizontal')
+      const horizStage = resolveEffectiveStageMode(undefined, horizCfg.defaultStage, 'dark')
+      expect(horizStage).toBe('dark')
+      expect(getLogoStageBackgroundClass(horizStage)).toContain('bg-[#0e0e1a]')
+
+      // 4. Monochrome Mark (black stamp artwork -> light stage makes it 100% visible)
+      const monoCfg = getLogoVariationConfig('monochrome')
+      const monoStage = resolveEffectiveStageMode(undefined, monoCfg.defaultStage, 'dark')
+      expect(monoStage).toBe('light')
+      expect(getLogoStageBackgroundClass(monoStage)).toContain('bg-white')
+    })
+  })
 })
