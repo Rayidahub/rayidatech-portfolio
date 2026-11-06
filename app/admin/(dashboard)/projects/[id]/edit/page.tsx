@@ -202,6 +202,18 @@ export default function EditProject() {
     await saveProject(form.status)
   }
 
+  // Keyboard shortcut: Ctrl+S / Cmd+S saves draft immediately
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault()
+        saveProject('draft')
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [form, saving])
+
   if (loading) {
     return <p className="text-mist-1">Loading...</p>
   }
