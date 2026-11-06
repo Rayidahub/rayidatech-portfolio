@@ -176,3 +176,18 @@ export function getLayoutIconIdentifier(
       return 'Columns'
   }
 }
+
+/**
+ * Checks if a brand application has the minimum required fields (title and primary image)
+ * to be considered ready for public presentation.
+ */
+export function isValidApplicationDeliverable(app?: {
+  title?: string | null
+  primary_image?: string | null
+  image_url?: string | null
+} | null): boolean {
+  if (!app) return false
+  const hasTitle = Boolean(app.title && app.title.trim().length > 0)
+  const hasImg = Boolean((app.primary_image || app.image_url || '').trim().length > 0)
+  return hasTitle && hasImg
+}
