@@ -77,6 +77,14 @@ export default function NewProject() {
     }));
   }
 
+  const handleStatusToggle = useCallback(() => {
+    setForm((p) => ({
+      ...p,
+      status: p.status === 'draft' ? 'published' : 'draft',
+      published: p.status !== 'draft',
+    }))
+  }, [])
+
   async function saveProject(statusToSave: ProjectStatus = form.status) {
     if (!form.title.trim()) {
       setError('Please provide a project title.')
