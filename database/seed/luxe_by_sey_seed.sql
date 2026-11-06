@@ -193,3 +193,4 @@ SET
   featured = EXCLUDED.featured,
   tags = EXCLUDED.tags,
   case_study = EXCLUDED.case_study;
+
