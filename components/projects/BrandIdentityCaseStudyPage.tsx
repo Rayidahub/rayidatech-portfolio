@@ -70,7 +70,7 @@ export default function BrandIdentityCaseStudyPage({
     title: string;
     role: string;
   } | null>(null);
-  const [modalStage, setModalStage] = useState<'dark' | 'light' | 'checkerboard' | 'black' | 'white'>('dark');
+  const [modalStage, setModalStage] = useState<'dark' | 'light' | 'checkerboard'>('dark');
   const [copiedLogoUrl, setCopiedLogoUrl] = useState(false);
 
   // Normalized color palette

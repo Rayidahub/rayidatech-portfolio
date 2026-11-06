@@ -83,7 +83,7 @@ export function getLogoVariationConfig(type: LogoVariationType): LogoVariationCo
  * Returns Tailwind CSS background classes for the logo stage surface.
  */
 export function getLogoStageBackgroundClass(
-  stage: 'light' | 'dark' | 'checkerboard'
+  stage: 'light' | 'dark' | 'checkerboard' | string
 ): string {
   switch (stage) {
     case 'light':
@@ -99,7 +99,7 @@ export function getLogoStageBackgroundClass(
 /**
  * Returns stage border styling class for high-DPI contrast.
  */
-export function getLogoStageBorderClass(stage: 'light' | 'dark' | 'checkerboard'): string {
+export function getLogoStageBorderClass(stage: 'light' | 'dark' | 'checkerboard' | string): string {
   switch (stage) {
     case 'light':
       return 'border-black/10';
