@@ -216,4 +216,24 @@ describe('Project Cover Image & Thumbnail Utilities', () => {
       expect(formatImageResolutionLabel(undefined, undefined)).toBe(null)
     })
   })
+
+  describe('getDominantColorPlaceholder', () => {
+    it('returns violet token for Brand Identity', () => {
+      expect(getDominantColorPlaceholder('Brand Identity')).toBe('#8000ff')
+      expect(getDominantColorPlaceholder('brand')).toBe('#8000ff')
+    })
+
+    it('returns cyan token for Web Development', () => {
+      expect(getDominantColorPlaceholder('Web Development')).toBe('#00d1ff')
+    })
+
+    it('returns soft accent token for UI/UX Design', () => {
+      expect(getDominantColorPlaceholder('UI/UX Design')).toBe('#ccccff')
+    })
+
+    it('returns ink background token for other categories', () => {
+      expect(getDominantColorPlaceholder('Other / General')).toBe('#1a1a2e')
+      expect(getDominantColorPlaceholder(null)).toBe('#1a1a2e')
+    })
+  })
 })
