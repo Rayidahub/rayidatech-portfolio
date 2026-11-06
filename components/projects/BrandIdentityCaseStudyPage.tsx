@@ -133,11 +133,14 @@ export default function BrandIdentityCaseStudyPage({
     setTimeout(() => setCopiedHex(null), 2000);
   }, []);
 
-  // Keyboard navigation for Lightbox
+  // Keyboard navigation for Lightbox and Logo Inspection
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape') {
+        setLightboxIndex(null);
+        setInspectingLogo(null);
+      }
       if (lightboxIndex === null) return;
-      if (e.key === 'Escape') setLightboxIndex(null);
       if (e.key === 'ArrowRight') {
         setLightboxIndex((prev) =>
           prev !== null && prev < allLightboxImages.length - 1 ? prev + 1 : 0
