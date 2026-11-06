@@ -7,6 +7,7 @@ import {
   resolveEffectiveStageMode,
   getLogoRoleBadgeColor,
   getLogoStageOptionLabel,
+  getLogoAspectRecommendation,
   isStageActive,
   hasValidLogoUrl,
 } from '@/lib/brand-logo-showcase'
@@ -112,6 +113,16 @@ describe('Brand Logo Showcase Utilities', () => {
       expect(getLogoStageOptionLabel('dark')).toBe('Dark')
       expect(getLogoStageOptionLabel('checkerboard')).toBe('Grid')
       expect(getLogoStageOptionLabel('auto')).toBe('Auto')
+    })
+  })
+
+  describe('getLogoAspectRecommendation', () => {
+    it('returns aspect ratio recommendations for each logo format', () => {
+      expect(getLogoAspectRecommendation('symbol')).toBe('1:1 Square')
+      expect(getLogoAspectRecommendation('secondary')).toBe('3:4 Vertical')
+      expect(getLogoAspectRecommendation('horizontal')).toBe('3:1 Banner')
+      expect(getLogoAspectRecommendation('monochrome')).toBe('1:1 Vector')
+      expect(getLogoAspectRecommendation('primary')).toBe('16:9 Showcase')
     })
   })
 
