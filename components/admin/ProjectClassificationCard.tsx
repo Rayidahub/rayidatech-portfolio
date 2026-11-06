@@ -1,7 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { ChevronDown, SlidersHorizontal, Sparkles } from 'lucide-react';
+import {
+  ChevronDown,
+  SlidersHorizontal,
+  Sparkles,
+  Palette,
+  Code2,
+  Layers,
+} from 'lucide-react';
 import ProjectTypeSelect from '@/components/admin/ProjectTypeSelect';
 import ServiceCategorySelect from '@/components/admin/ServiceCategorySelect';
 import { ProjectType } from '@/types/project';
@@ -9,6 +16,7 @@ import {
   getClassificationBadgeClass,
   getClassificationHelpText,
   getClassificationAriaLabel,
+  getClassificationToggleTooltip,
 } from '@/lib/project-classification';
 
 interface ProjectClassificationCardProps {
@@ -28,6 +36,15 @@ export default function ProjectClassificationCard({
 }: ProjectClassificationCardProps) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
+  const ActiveIcon =
+    projectType === 'Brand Identity'
+      ? Sparkles
+      : projectType === 'Web Development'
+      ? Code2
+      : projectType === 'UI/UX Design'
+      ? Palette
+      : SlidersHorizontal;
+
   return (
     <div className="rounded-xl bg-white/[0.02] border border-(--line) overflow-hidden transition-all duration-200">
       {/* Collapsible Header Button */}
@@ -37,11 +54,12 @@ export default function ProjectClassificationCard({
         aria-expanded={isOpen}
         aria-controls="classification-panel"
         aria-label={getClassificationAriaLabel(isOpen, projectType)}
+        title={getClassificationToggleTooltip(isOpen)}
         className="w-full flex items-center justify-between p-4 text-left hover:bg-white/[0.02] transition-colors focus:outline-none focus:bg-white/[0.03] cursor-pointer"
       >
         <div className="flex items-center gap-3 min-w-0">
-          <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shrink-0">
-            <SlidersHorizontal className="w-4 h-4" />
+          <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shrink-0 transition-transform group-hover:scale-105">
+            <ActiveIcon className="w-4 h-4" />
           </div>
 
           <div className="min-w-0">
