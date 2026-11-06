@@ -3,7 +3,7 @@
 import { useState, useCallback, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/browser'
 import { useRouter } from 'next/navigation'
-import { Save, ArrowLeft, Sparkles, FileText, Globe } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import ProjectClassificationCard from '@/components/admin/ProjectClassificationCard'
 import CaseStudyFields from '@/components/admin/CaseStudyFields'
