@@ -98,3 +98,25 @@ export function formatApplicationPreviewData(
     hasImage: Boolean(imageUrl),
   }
 }
+
+/**
+ * Suggests an optimal layout style based on deliverable category.
+ */
+export function getRecommendedLayoutForCategory(
+  category?: string | null
+): BrandApplicationLayout {
+  const norm = (category || '').toLowerCase()
+  if (norm.includes('vehicle') || norm.includes('transportation') || norm.includes('billboard') || norm.includes('outdoor')) {
+    return 'wide'
+  }
+  if (norm.includes('stationery') || norm.includes('business card') || norm.includes('social')) {
+    return 'editorial'
+  }
+  if (norm.includes('hero') || norm.includes('flagship') || norm.includes('storefront')) {
+    return 'hero'
+  }
+  if (norm.includes('bottle') || norm.includes('cosmetic') || norm.includes('jar')) {
+    return 'centered'
+  }
+  return 'split'
+}
