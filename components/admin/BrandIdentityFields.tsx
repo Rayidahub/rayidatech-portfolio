@@ -15,6 +15,7 @@ import type {
 } from '@/types/project';
 import { BRAND_APPLICATION_CATEGORIES } from '@/types/project';
 import ImageUploadField from '@/components/admin/ImageUploadField';
+import BrandApplicationCardPreview from '@/components/admin/BrandApplicationCardPreview';
 import {
   Sparkles,
   ChevronDown,
@@ -1115,6 +1116,20 @@ export default function BrandIdentityFields({ value, onChange }: BrandIdentityFi
                         onChange={(url) => updateApplication(app.id, { primary_image: url })}
                         folder="projects"
                         description="Upload high-res mockup render from device or paste direct URL"
+                      />
+                    </div>
+
+                    {/* Live Public Page Deliverable Preview */}
+                    <div className="sm:col-span-2">
+                      <BrandApplicationCardPreview
+                        title={app.title}
+                        category={app.category}
+                        layout={app.layout_preference || 'split'}
+                        description={app.description}
+                        imageUrl={app.primary_image}
+                        onLayoutChange={(newLayout) =>
+                          updateApplication(app.id, { layout_preference: newLayout })
+                        }
                       />
                     </div>
                   </div>
