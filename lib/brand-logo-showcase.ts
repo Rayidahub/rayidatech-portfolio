@@ -97,6 +97,21 @@ export function getLogoStageBackgroundClass(
 }
 
 /**
+ * Returns stage border styling class for high-DPI contrast.
+ */
+export function getLogoStageBorderClass(stage: 'light' | 'dark' | 'checkerboard'): string {
+  switch (stage) {
+    case 'light':
+      return 'border-black/10';
+    case 'checkerboard':
+      return 'border-white/10';
+    case 'dark':
+    default:
+      return 'border-white/10';
+  }
+}
+
+/**
  * Resolves the effective stage mode given an optional card-level override,
  * the card's default recommendation, and the global case-study theme toggle.
  */
