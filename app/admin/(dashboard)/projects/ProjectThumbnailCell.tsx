@@ -216,6 +216,16 @@ export default function ProjectThumbnailCell({
               </div>
 
               <div className="flex items-center gap-2 shrink-0">
+                <a
+                  href={coverImage}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-(--line) text-mist-1 hover:text-paper hover:bg-white/5 text-xs font-medium transition-colors"
+                  title="Open original image in new browser tab"
+                >
+                  <ExternalLink className="w-3.5 h-3.5" />
+                  <span>Full Asset</span>
+                </a>
                 <Link
                   href={`/projects/${slug}`}
                   target="_blank"
