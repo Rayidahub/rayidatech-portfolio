@@ -157,12 +157,21 @@ export default function BrandApplicationCardPreview({
       {/* Preview Body Canvas */}
       {isExpanded && (
         <div className="p-4 sm:p-6 bg-ink/40">
-          <p className="text-[11px] text-mist-2 font-mono-tight mb-4 flex items-center justify-between">
+          <div className="text-[11px] text-mist-2 font-mono-tight mb-4 flex flex-wrap items-center justify-between gap-2">
             <span>{getLayoutDescription(layout)}</span>
-            <span className="text-[10px] text-secondary/80 hidden md:inline">
-              Simulated public case study view
-            </span>
-          </p>
+            <div className="flex items-center gap-2">
+              <span className="px-1.5 py-0.5 rounded bg-white/5 border border-white/5 text-[10px] text-mist-1">
+                {layout === 'split' && '4:3 / 16:10'}
+                {layout === 'hero' && '16:9 / 21:9'}
+                {layout === 'centered' && '16:10 Focus'}
+                {layout === 'editorial' && '16:9 Asymmetric'}
+                {layout === 'wide' && '21:9 Panoramic'}
+              </span>
+              <span className="text-[10px] text-secondary/80 hidden md:inline">
+                Simulated public case study view
+              </span>
+            </div>
+          </div>
 
           {!hasValidImage ? (
             /* Empty State Wireframe Placeholder */
