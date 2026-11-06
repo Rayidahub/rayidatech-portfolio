@@ -73,3 +73,13 @@ export function buildStatusPayload(isDraft: boolean): {
     status: isDraft ? 'draft' : 'published',
   }
 }
+
+/**
+ * Filters a collection of projects returning only those published.
+ */
+export function filterPublishedProjects<T extends Partial<Project>>(
+  projects?: T[] | null
+): T[] {
+  if (!Array.isArray(projects)) return []
+  return projects.filter(isProjectPublished)
+}
