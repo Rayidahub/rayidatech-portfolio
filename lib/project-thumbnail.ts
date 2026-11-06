@@ -141,3 +141,14 @@ export function formatImageResolutionLabel(width?: number, height?: number): str
   if (!width || !height || width <= 0 || height <= 0) return null
   return `${Math.round(width)}×${Math.round(height)}`
 }
+
+/**
+ * Returns a fallback accent tint based on the project type or category.
+ */
+export function getDominantColorPlaceholder(typeOrCategory?: string | null): string {
+  const norm = (typeOrCategory || '').toLowerCase()
+  if (norm.includes('brand')) return '#8000ff'
+  if (norm.includes('web') || norm.includes('development')) return '#00d1ff'
+  if (norm.includes('ui') || norm.includes('ux') || norm.includes('design')) return '#ccccff'
+  return '#1a1a2e'
+}
