@@ -87,4 +87,35 @@ describe('Project Action Bar Utilities', () => {
       expect(getStatusPillClasses('published')).toContain('emerald')
     })
   })
+
+  describe('isPublishedStatus', () => {
+    it('returns true only for published', () => {
+      expect(isPublishedStatus('published')).toBe(true)
+      expect(isPublishedStatus('draft')).toBe(false)
+      expect(isPublishedStatus(null)).toBe(false)
+      expect(isPublishedStatus(undefined)).toBe(false)
+    })
+  })
+
+  describe('getProjectStatusBadge', () => {
+    it('returns published badge metadata', () => {
+      const badge = getProjectStatusBadge('published')
+      expect(badge.text).toBe('Published')
+      expect(badge.dotClass).toContain('animate-pulse')
+      expect(badge.containerClass).toContain('emerald')
+    })
+
+    it('returns draft badge metadata', () => {
+      const badge = getProjectStatusBadge('draft')
+      expect(badge.text).toBe('Draft')
+      expect(badge.dotClass).toContain('bg-amber-400')
+      expect(badge.containerClass).toContain('amber')
+    })
+  })
+
+  describe('getDraftShortcutHint', () => {
+    it('returns standard Ctrl+S keyboard shortcut', () => {
+      expect(getDraftShortcutHint()).toContain('Ctrl+S')
+    })
+  })
 })
