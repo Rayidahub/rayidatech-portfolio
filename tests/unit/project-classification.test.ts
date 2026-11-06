@@ -143,4 +143,18 @@ describe('Project Classification Helpers', () => {
       expect(isWebDevType(null)).toBe(false)
     })
   })
+
+  describe('getClassificationToggleTooltip', () => {
+    it('returns collapse tooltip when panel is currently open', () => {
+      expect(getClassificationToggleTooltip(true)).toBe(
+        'Click to collapse architecture settings'
+      )
+    })
+
+    it('returns expand tooltip when panel is currently closed', () => {
+      expect(getClassificationToggleTooltip(false)).toBe(
+        'Click to expand architecture settings'
+      )
+    })
+  })
 })
