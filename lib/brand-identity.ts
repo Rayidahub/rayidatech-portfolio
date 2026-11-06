@@ -157,3 +157,51 @@ export function getBrandApplicationLayoutClasses(mode: string): {
       }
   }
 }
+
+/**
+ * Normalizes a raw case_study object ensuring all brand identity arrays and sections exist.
+ */
+export function normalizeBrandCaseStudy(raw: any): Partial<BrandIdentityCaseStudy> {
+  if (!raw || typeof raw !== 'object') {
+    return {
+      case_study_type: 'Brand Identity',
+      color_palette: [],
+      typography_system: [],
+      brand_applications: [],
+      brand_gallery: [],
+    }
+  }
+
+  return {
+    ...raw,
+    case_study_type: 'Brand Identity',
+    color_palette: Array.isArray(raw.color_palette) ? raw.color_palette : [],
+    typography_system: Array.isArray(raw.typography_system) ? raw.typography_system : [],
+    brand_applications: Array.isArray(raw.brand_applications) ? raw.brand_applications : [],
+    brand_gallery: Array.isArray(raw.brand_gallery) ? raw.brand_gallery : [],
+    gallery_layout: raw.gallery_layout || 'masonry',
+  }
+}
+
+/**
+ * Validates a brand case study payload for essential fields.
+ */
+export function validateBrandCaseStudy(data: Partial<BrandIdentityCaseStudy>): {
+  isValid: boolean
+  errors: string[]
+} {
+  const errors: string[] = []
+
+  if (data.color_palette && Array.isArray(data.color_palette)) {
+    data.color_palette.forEach((color, idx) => {
+      if (color.hex && !isValidHex(color.hex)) {
+        errors.push(`Color #${idx + 1} (${color.name || 'Unnamed'}): invalid hex code '${color.hex}'`)
+      }
+    })
+  }
+
+  return {
+    isValid: errors.length === 0,
+    errors,
+  }
+}
