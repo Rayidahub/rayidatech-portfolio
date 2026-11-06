@@ -11,6 +11,7 @@ import {
   getBrandApplicationLayoutClasses,
   normalizeBrandCaseStudy,
   validateBrandCaseStudy,
+  isBrandIdentityCaseStudy,
 } from '@/lib/brand-identity'
 
 describe('Brand Identity Architecture & Types', () => {
@@ -170,6 +171,16 @@ describe('Brand Identity Architecture & Types', () => {
       const result = validateBrandCaseStudy(validCaseStudy)
       expect(result.isValid).toBe(true)
       expect(result.errors.length).toBe(0)
+    })
+
+    it('identifies BrandIdentityCaseStudy shapes using isBrandIdentityCaseStudy', () => {
+      expect(isBrandIdentityCaseStudy({ case_study_type: 'Brand Identity' })).toBe(true)
+      expect(isBrandIdentityCaseStudy({ color_palette: [] })).toBe(true)
+      expect(isBrandIdentityCaseStudy({ brand_applications: [] })).toBe(true)
+      expect(isBrandIdentityCaseStudy({ case_study_type: 'UI/UX Design', wireframes: [] })).toBe(false)
+      expect(isBrandIdentityCaseStudy(null)).toBe(false)
+      expect(isBrandIdentityCaseStudy(undefined)).toBe(false)
+      expect(isBrandIdentityCaseStudy('string')).toBe(false)
     })
   })
 })
