@@ -4,6 +4,7 @@ import { Plus, Edit, ExternalLink } from 'lucide-react'
 import DeleteButton from './DeleteButton'
 import ProjectImportModal from './ProjectImportModal'
 import { normalizeSlug } from '@/lib/slug'
+import { inferProjectType } from '@/lib/brand-identity'
 
 export default async function AdminProjects() {
   const supabase = await createClient()
@@ -53,15 +54,8 @@ export default async function AdminProjects() {
               </tr>
             )}
             {projects?.map((project) => {
-              const isBrand =
-                (project.case_study as any)?.case_study_type === 'Brand Identity' ||
-                (project.case_study as any)?.project_type === 'Brand Identity' ||
-                (Array.isArray(project.tags) && project.tags.includes('Brand Identity'))
-              const displayType =
-                (project.case_study as any)?.case_study_type ||
-                (project.case_study as any)?.project_type ||
-                (Array.isArray(project.tags) && project.tags[0]) ||
-                'UI/UX Design'
+              const displayType = inferProjectType(project)
+              const isBrand = displayType === 'Brand Identity'
 
               return (
                 <tr
