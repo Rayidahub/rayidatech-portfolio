@@ -82,6 +82,25 @@ describe('Project Status & Draft System', () => {
       expect(isProjectPublished(legacyProject)).toBe(true)
     })
 
+    it('prioritizes top-level published over JSONB case study if both exist', () => {
+      const project: Partial<Project> = {
+        published: false,
+        case_study: { published: true, status: 'published' },
+      }
+      expect(isProjectPublished(project)).toBe(false)
+    })
+
+    it('correctly filters an array of projects leaving only published items', () => {
+      const list: Partial<Project>[] = [
+        { id: '1', title: 'P1', published: true },
+        { id: '2', title: 'P2', published: false },
+        { id: '3', title: 'P3', case_study: { status: 'draft' } },
+        { id: '4', title: 'P4' }, // legacy default
+      ]
+      const visible = list.filter(isProjectPublished)
+      expect(visible.map((p) => p.id)).toEqual(['1', '4'])
+    })
+
     it('returns false when project is null or undefined', () => {
       expect(isProjectPublished(null)).toBe(false)
       expect(isProjectPublished(undefined)).toBe(false)
