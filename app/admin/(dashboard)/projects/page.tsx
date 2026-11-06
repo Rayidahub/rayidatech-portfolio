@@ -141,10 +141,13 @@ export default async function AdminProjects({ searchParams }: AdminProjectsProps
                   <td className="px-4 py-3 text-paper font-medium">
                     <Link
                       href={`/admin/projects/${project.id}/edit`}
-                      className="hover:text-secondary transition-colors"
+                      className="hover:text-secondary transition-colors block"
                     >
                       {project.title}
                     </Link>
+                    <span className="block sm:hidden text-[11px] text-mist-2 font-mono-tight mt-0.5">
+                      {project.slug}
+                    </span>
                   </td>
                   <td className="px-4 py-3 text-mist-1 hidden sm:table-cell font-mono-tight text-xs">
                     {project.slug}
