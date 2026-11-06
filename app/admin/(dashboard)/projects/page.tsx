@@ -9,7 +9,7 @@ export default async function AdminProjects() {
   const supabase = await createClient()
   const { data: projects } = await supabase
     .from('projects')
-    .select('id, title, slug, featured, created_at')
+    .select('id, title, slug, featured, tags, case_study, created_at')
     .order('created_at', { ascending: false })
 
   return (
@@ -39,6 +39,7 @@ export default async function AdminProjects() {
             <tr className="border-b border-(--line) bg-white/[0.02]">
               <th className="text-left text-mist-2 font-medium px-4 py-3">Title</th>
               <th className="text-left text-mist-2 font-medium px-4 py-3 hidden sm:table-cell">Slug</th>
+              <th className="text-left text-mist-2 font-medium px-4 py-3 hidden md:table-cell">Type</th>
               <th className="text-center text-mist-2 font-medium px-4 py-3 hidden md:table-cell">Featured</th>
               <th className="text-right text-mist-2 font-medium px-4 py-3">Actions</th>
             </tr>
@@ -46,53 +47,76 @@ export default async function AdminProjects() {
           <tbody>
             {(!projects || projects.length === 0) && (
               <tr>
-                <td colSpan={4} className="text-center text-mist-2 px-4 py-12">
+                <td colSpan={5} className="text-center text-mist-2 px-4 py-12">
                   No projects yet. Create your first one or import via CSV/XLSX.
                 </td>
               </tr>
             )}
-            {projects?.map((project) => (
-              <tr
-                key={project.id}
-                className="border-b border-(--line) last:border-0 hover:bg-white/[0.02] transition-colors"
-              >
-                <td className="px-4 py-3 text-paper font-medium">{project.title}</td>
-                <td className="px-4 py-3 text-mist-1 hidden sm:table-cell font-mono-tight text-xs">
-                  {project.slug}
-                </td>
-                <td className="px-4 py-3 text-center hidden md:table-cell">
-                  <span
-                    className={`inline-block px-2 py-0.5 rounded text-xs font-medium ${
-                      project.featured
-                        ? 'bg-secondary/20 text-secondary'
-                        : 'bg-white/5 text-mist-2'
-                    }`}
-                  >
-                    {project.featured ? 'Yes' : 'No'}
-                  </span>
-                </td>
-                <td className="px-4 py-3 text-right">
-                  <div className="inline-flex items-center gap-2">
-                    <Link
-                      href={`/projects/${normalizeSlug(project.slug)}`}
-                      target="_blank"
-                      className="p-1.5 text-mist-2 hover:text-paper transition-colors"
-                      title="View live case study"
+            {projects?.map((project) => {
+              const isBrand =
+                (project.case_study as any)?.case_study_type === 'Brand Identity' ||
+                (project.case_study as any)?.project_type === 'Brand Identity' ||
+                (Array.isArray(project.tags) && project.tags.includes('Brand Identity'))
+              const displayType =
+                (project.case_study as any)?.case_study_type ||
+                (project.case_study as any)?.project_type ||
+                (Array.isArray(project.tags) && project.tags[0]) ||
+                'UI/UX Design'
+
+              return (
+                <tr
+                  key={project.id}
+                  className="border-b border-(--line) last:border-0 hover:bg-white/[0.02] transition-colors"
+                >
+                  <td className="px-4 py-3 text-paper font-medium">{project.title}</td>
+                  <td className="px-4 py-3 text-mist-1 hidden sm:table-cell font-mono-tight text-xs">
+                    {project.slug}
+                  </td>
+                  <td className="px-4 py-3 hidden md:table-cell">
+                    <span
+                      className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-mono-tight border ${
+                        isBrand
+                          ? 'bg-primary/15 text-accent-soft border-primary/30'
+                          : 'bg-white/5 text-mist-1 border-(--line)'
+                      }`}
                     >
-                      <ExternalLink className="w-4 h-4" />
-                    </Link>
-                    <Link
-                      href={`/admin/projects/${project.id}/edit`}
-                      className="p-1.5 text-mist-2 hover:text-secondary transition-colors"
-                      title="Edit project"
+                      {displayType}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3 text-center hidden md:table-cell">
+                    <span
+                      className={`inline-block px-2 py-0.5 rounded text-xs font-medium ${
+                        project.featured
+                          ? 'bg-secondary/20 text-secondary'
+                          : 'bg-white/5 text-mist-2'
+                      }`}
                     >
-                      <Edit className="w-4 h-4" />
-                    </Link>
-                    <DeleteButton id={project.id} title={project.title} />
-                  </div>
-                </td>
-              </tr>
-            ))}
+                      {project.featured ? 'Yes' : 'No'}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3 text-right">
+                    <div className="inline-flex items-center gap-2">
+                      <Link
+                        href={`/projects/${normalizeSlug(project.slug)}`}
+                        target="_blank"
+                        className="p-1.5 text-mist-2 hover:text-paper transition-colors"
+                        title="View live case study"
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                      </Link>
+                      <Link
+                        href={`/admin/projects/${project.id}/edit`}
+                        className="p-1.5 text-mist-2 hover:text-secondary transition-colors"
+                        title="Edit project"
+                      >
+                        <Edit className="w-4 h-4" />
+                      </Link>
+                      <DeleteButton id={project.id} title={project.title} />
+                    </div>
+                  </td>
+                </tr>
+              )
+            })}
           </tbody>
         </table>
       </div>
