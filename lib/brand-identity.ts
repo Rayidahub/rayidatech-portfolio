@@ -5,6 +5,8 @@ import {
   type Project,
   type BrandIdentityCaseStudy,
   type BrandApplication,
+  type BrandColor,
+  type BrandTypography,
 } from '@/types/project'
 
 /**
@@ -237,4 +239,38 @@ export function filterVisibleBrandApplications(
   return apps.filter(
     (app) => app && app.is_visible !== false && Boolean(app.image_url)
   )
+}
+
+/**
+ * Derives a clean CSS variable name and value from a brand color item.
+ */
+export function getBrandColorCssVariable(color: BrandColor): {
+  variableName: string
+  cssValue: string
+} {
+  const safeName = (color.name || 'brand-color')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+  return {
+    variableName: `--brand-${safeName}`,
+    cssValue: color.hex || '#ffffff',
+  }
+}
+
+/**
+ * Returns a fallback CSS font stack for a brand typography configuration.
+ */
+export function getTypographyFontFamily(font: BrandTypography): string {
+  const primaryName = font.font_family ? `"${font.font_family}"` : 'sans-serif'
+  switch (font.role) {
+    case 'display':
+    case 'headline':
+      return `${primaryName}, system-ui, -apple-system, sans-serif`
+    case 'accent':
+      return `${primaryName}, Georgia, serif`
+    case 'body':
+    default:
+      return `${primaryName}, Inter, system-ui, sans-serif`
+  }
 }
