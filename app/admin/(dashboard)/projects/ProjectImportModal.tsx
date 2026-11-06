@@ -159,6 +159,12 @@ const HEADER_NORMALIZE: Record<string, string> = {
   'featured project': 'featured',
   featured: 'featured',
 
+  // Status & Publication
+  status: 'status',
+  'publication status': 'status',
+  published: 'status',
+  draft: 'status',
+
   // Case Study: Client
   'client / business': 'cs_client',
   client: 'cs_client',
@@ -418,6 +424,13 @@ export default function ProjectImportModal() {
 
         // Parse case study
         const cs: CaseStudy = {}
+        const statusRaw = (normalized['status'] || '').toLowerCase()
+        const isDraft = ['draft', 'false', '0', 'no', 'unpublished'].includes(statusRaw)
+        if (isDraft) {
+          (cs as any).published = false
+          (cs as any).status = 'draft'
+        }
+
         if (normalized['cs_client']) cs.client = normalized['cs_client']
         if (normalized['cs_objective']) cs.objective = normalized['cs_objective']
         if (normalized['cs_target_audience']) cs.target_audience = normalized['cs_target_audience']
