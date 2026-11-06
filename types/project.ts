@@ -86,4 +86,38 @@ export interface BrandTypography {
 }
 
 export const BRAND_APPLICATION_CATEGORIES = [
+  'Product Packaging',
+  'Shopping Bags',
+  'Merchandise',
+  'Stationery',
+  'Transportation',
+  'Outdoor Advertising',
+  'Digital Advertising',
+  'Social Media',
+  'Environmental Branding',
+  'Other',
+] as const;
+
+export type BrandApplicationCategory = (typeof BRAND_APPLICATION_CATEGORIES)[number];
+
+export type BrandApplicationLayout =
+  | 'hero'       // full-width prominent showcase
+  | 'split'      // two-column image and description
+  | 'centered'   // large centered product presentation
+  | 'editorial'  // alternating magazine spread
+  | 'wide';      // wide cinematic landscape banner
+
+export interface BrandApplication {
+  id: string;
+  title: string;
+  category: BrandApplicationCategory;
+  description?: string;
+  primary_image: string;
+  additional_images?: string[];
+  layout_preference: BrandApplicationLayout;
+  display_order: number;
+  is_visible: boolean;
+}
+
+export type BrandGalleryLayout =
 export interface CaseStudy { [key: string]: any; }
