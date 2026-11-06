@@ -57,3 +57,4 @@ describe('WhatsApp Message Personalization & URL Generator', () => {
     expect(url).toBe('https://wa.me/2348103905299?text=Hello%201420%20Events!');
   });
 });
+
