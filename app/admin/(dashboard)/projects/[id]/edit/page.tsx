@@ -11,6 +11,7 @@ import ProjectTypeSelect from '@/components/admin/ProjectTypeSelect'
 import CaseStudyFields from '@/components/admin/CaseStudyFields'
 import BrandIdentityFields from '@/components/admin/BrandIdentityFields'
 import ImageUploadField from '@/components/admin/ImageUploadField'
+import { inferProjectType } from '@/lib/brand-identity'
 import type { CaseStudy, BrandIdentityCaseStudy, ProjectType } from '@/types/project'
 
 export default function EditProject() {
@@ -95,16 +96,11 @@ export default function EditProject() {
           existingTags.find((t: string) => knownTitles.has(t)) || ''
         const otherTags = existingTags.filter((t: string) => t !== category)
 
-        // Safe backward-compatible project_type determination
-        let inferredType: ProjectType = (data.project_type as ProjectType) || 'UI/UX Design'
-        if (
-          !data.project_type &&
-          (category.toLowerCase() === 'brand identity' ||
-            data.case_study?.case_study_type === 'Brand Identity' ||
-            existingTags.some((t: string) => t.toLowerCase() === 'brand identity'))
-        ) {
-          inferredType = 'Brand Identity'
-        }
+        // Safe backward-compatible project_type determination via shared inference
+        const inferredType: ProjectType = inferProjectType({
+          ...data,
+          tags: existingTags,
+        })
 
         setForm({
           title: data.title,
