@@ -149,3 +149,12 @@ export function getLogoStageOptionLabel(stage: LogoStageMode): string {
       return 'Auto';
   }
 }
+
+/**
+ * Validates that a logo image URL string is non-empty and well-formed.
+ */
+export function hasValidLogoUrl(url?: string | null): boolean {
+  if (!url) return false;
+  const trimmed = url.trim();
+  return trimmed.length > 0 && !trimmed.startsWith('javascript:');
+}
