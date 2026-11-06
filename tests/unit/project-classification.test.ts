@@ -129,4 +129,18 @@ describe('Project Classification Helpers', () => {
       expect(isUIUXType(null)).toBe(false)
     })
   })
+
+  describe('isWebDevType', () => {
+    it('returns true for web development variants', () => {
+      expect(isWebDevType('Web Development')).toBe(true)
+      expect(isWebDevType('web dev')).toBe(true)
+      expect(isWebDevType('development')).toBe(true)
+    })
+
+    it('returns false for other types or null', () => {
+      expect(isWebDevType('Brand Identity')).toBe(false)
+      expect(isWebDevType('UI/UX Design')).toBe(false)
+      expect(isWebDevType(null)).toBe(false)
+    })
+  })
 })
