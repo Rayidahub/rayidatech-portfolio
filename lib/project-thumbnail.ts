@@ -122,3 +122,14 @@ export function getThumbnailAspectRatioClass(
       return 'aspect-[16/10]'
   }
 }
+
+/**
+ * Extracts a human-friendly filename from an image URL or path.
+ */
+export function getImageFileName(url?: string | null): string {
+  if (!url || typeof url !== 'string') return 'image.jpg'
+  const clean = url.split('?')[0].split('#')[0]
+  const segments = clean.split('/')
+  const filename = segments[segments.length - 1] || 'image.jpg'
+  return filename.length > 32 ? `${filename.slice(0, 29)}...` : filename
+}
