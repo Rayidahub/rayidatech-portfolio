@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import type { Project } from '@/types/project';
 import type { Service } from '@/types/service';
-import { isProjectPublished } from '@/lib/project-status';
+import { filterPublishedProjects } from '@/lib/project-status';
 import Container from '@/components/ui/Container';
 import Section from '@/components/ui/Section';
 import Reveal from '@/components/ui/Reveal';
@@ -34,7 +34,7 @@ async function getProjects(): Promise<Project[]> {
     return [];
   }
 
-  return (data || []).filter(isProjectPublished);
+  return filterPublishedProjects(data);
 }
 
 async function getServices(): Promise<Service[]> {
