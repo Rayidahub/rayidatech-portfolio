@@ -1,4 +1,14 @@
 export const ROOT_SUPER_ADMIN_EMAIL = 'rayidagaius@gmail.com';
+export const ROOT_SUPER_ADMIN_EMAILS = [
+  'rayidagaius@gmail.com',
+  'rayidaweb@gmail.com',
+] as const;
+
+export function isRootSuperAdminEmail(email?: string | null): boolean {
+  if (!email) return false;
+  const norm = email.toLowerCase().trim();
+  return ROOT_SUPER_ADMIN_EMAILS.some((e) => e.toLowerCase() === norm);
+}
 
 export type AdminRole = 'super_admin' | 'admin' | 'editor';
 
