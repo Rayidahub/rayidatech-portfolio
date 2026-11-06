@@ -478,5 +478,165 @@ export default function BrandIdentityFields({ value, onChange }: BrandIdentityFi
               onChange={(val) => update('brand_objectives', val)}
               placeholder="What core commercial, aesthetic, or market goals was this brand built to accomplish?"
               rows={3}
+            />
+          </div>
+
+          <div className="sm:col-span-2">
+            <TextArea
+              label="Brand Story"
+              value={data.brand_story || ''}
+              onChange={(val) => update('brand_story', val)}
+              placeholder="The founder's journey, heritage inspiration, or unique origin narrative..."
+              rows={3}
+            />
+          </div>
+
+          <div className="sm:col-span-2">
+            <ImageUploadField
+              label="Brand Overview Hero Visual"
+              value={data.overview_image || ''}
+              onChange={(url) => update('overview_image', url)}
+              folder="projects"
+              description="High-resolution visual banner introducing the brand atmosphere"
+            />
+          </div>
+        </div>
+      </SectionCard>
+
+      {/* ── SECTION 2 — BRAND STRATEGY ── */}
+      <SectionCard
+        title="Section 2 — Brand Strategy & Creative Direction"
+        stepNumber="02 / Strategy"
+        icon={Layers}
+        isOpen={openSections.strategy}
+        onToggle={() => toggleSection('strategy')}
+      >
+        <div className="space-y-4">
+          <TextArea
+            label="The Brand Challenge"
+            value={data.brand_challenge || ''}
+            onChange={(val) => update('brand_challenge', val)}
+            placeholder="What aesthetic clutter, market competition, or branding hurdle needed solving?"
+            rows={3}
+          />
+
+          <TextArea
+            label="Creative Objectives"
+            value={data.creative_objectives || ''}
+            onChange={(val) => update('creative_objectives', val)}
+            placeholder="Specific design milestones to elevate brand trust and consumer perception..."
+            rows={3}
+          />
+
+          <TextArea
+            label="Creative Direction & Art Direction"
+            value={data.creative_direction || ''}
+            onChange={(val) => update('creative_direction', val)}
+            placeholder="Art direction mood, compositional rules, lighting style, and architectural balance..."
+            rows={3}
+          />
+
+          <TextInput
+            label="Visual Inspiration & Moodboard Notes"
+            value={data.visual_inspiration || ''}
+            onChange={(val) => update('visual_inspiration', val)}
+            placeholder="e.g. Modernist French cosmetics packaging fused with sculptural African botanical textures"
+          />
+
+          <TextInput
+            label="Core Brand Attributes (comma-separated)"
+            value={data.brand_attributes || ''}
+            onChange={(val) => update('brand_attributes', val)}
+            placeholder="e.g. Regal, Minimalist, Radiant, Organic, Unapologetic"
+          />
+        </div>
+      </SectionCard>
+
+      {/* ── SECTION 3 — LOGO IDENTITY ── */}
+      <SectionCard
+        title="Section 3 — Logo Identity System"
+        stepNumber="03 / Mark"
+        icon={Sparkles}
+        badge="Core Identity"
+        isOpen={openSections.logo}
+        onToggle={() => toggleSection('logo')}
+      >
+        <div className="space-y-5">
+          <div className="p-4 rounded-xl bg-white/[0.03] border border-(--line) space-y-4">
+            <ImageUploadField
+              label="Primary Brand Logo *"
+              value={data.primary_logo || ''}
+              onChange={(url) => update('primary_logo', url)}
+              folder="projects"
+              description="Master logo lockup (SVG, PNG with transparent background, or high-res JPG)"
+            />
+
+            {data.primary_logo && (
+              <div className="p-4 rounded-xl border border-(--line) bg-ink/70 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    <Check className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold text-paper">Primary Logo Armed</p>
+                    <p className="text-[11px] text-mist-2">Original proportions preserved</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-black border border-white/10 flex items-center justify-center">
+                    <img src={data.primary_logo} alt="Dark preview" className="max-h-8 max-w-24 object-contain" />
+                  </div>
+                  <div className="p-2 rounded-lg bg-white border border-black/10 flex items-center justify-center">
+                    <img src={data.primary_logo} alt="Light preview" className="max-h-8 max-w-24 object-contain" />
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <ImageUploadField
+              label="Logo Symbol / Monogram"
+              value={data.logo_symbol || ''}
+              onChange={(url) => update('logo_symbol', url)}
+              folder="projects"
+              description="Standalone icon, crest, or monogram mark"
+            />
+
+            <ImageUploadField
+              label="Secondary / Stacked Logo"
+              value={data.secondary_logo || ''}
+              onChange={(url) => update('secondary_logo', url)}
+              folder="projects"
+              description="Alternative vertical or badge layout"
+            />
+
+            <ImageUploadField
+              label="Horizontal Logo"
+              value={data.horizontal_logo || ''}
+              onChange={(url) => update('horizontal_logo', url)}
+              folder="projects"
+              description="Wide horizontal lockup for website headers and signage"
+            />
+
+            <ImageUploadField
+              label="Monochrome / Watermark Logo"
+              value={data.monochrome_logo || ''}
+              onChange={(url) => update('monochrome_logo', url)}
+              folder="projects"
+              description="Single-color black/white version for stamping and embossing"
+            />
+          </div>
+
+          <TextArea
+            label="Logo Concept Description & Symbology"
+            value={data.logo_concept_description || ''}
+            onChange={(val) => update('logo_concept_description', val)}
+            placeholder="Describe the geometric construction, typography customization, and hidden brand symbology in the mark..."
+            rows={4}
+          />
+        </div>
+      </SectionCard>
 </div></div>);
 }
