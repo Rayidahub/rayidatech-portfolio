@@ -87,3 +87,11 @@ export function isLocalImageUrl(url?: string | null): boolean {
   const trimmed = url.trim()
   return (trimmed.startsWith('/') || trimmed.startsWith('./')) && !trimmed.startsWith('//')
 }
+
+/**
+ * Sanitizes and strips unsafe protocols (javascript:, data:text/html, etc.) from image URLs.
+ */
+export function sanitizeCoverImageUrl(url?: string | null): string | null {
+  if (!isValidImageUrl(url)) return null
+  return url ? url.trim() : null
+}
