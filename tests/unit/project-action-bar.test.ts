@@ -118,4 +118,32 @@ describe('Project Action Bar Utilities', () => {
       expect(getDraftShortcutHint()).toContain('Ctrl+S')
     })
   })
+
+  describe('Project Action Bar Form Integration Simulation', () => {
+    it('accurately drives Luxe by Sey draft edit bar state transitions', () => {
+      let currentStatus: 'draft' | 'published' = 'draft'
+      const mode = 'edit'
+
+      // 1. Initial Draft state (matching user screenshot)
+      expect(getStatusToggleLabel(currentStatus, mode)).toBe(
+        'Currently Draft (Click to Publish)'
+      )
+      expect(getStatusToggleClasses(currentStatus)).toContain('amber')
+      expect(getDraftButtonLabel(mode, currentStatus, false)).toBe('Update Draft')
+      expect(getPublishButtonLabel(mode, currentStatus, false)).toBe('Publish Project')
+
+      // 2. User toggles status to published
+      currentStatus = 'published'
+      expect(getStatusToggleLabel(currentStatus, mode)).toBe(
+        'Currently Published (Click to Unpublish)'
+      )
+      expect(getStatusToggleClasses(currentStatus)).toContain('emerald')
+      expect(getDraftButtonLabel(mode, currentStatus, false)).toBe('Switch to Draft')
+      expect(getPublishButtonLabel(mode, currentStatus, false)).toBe('Save Changes')
+
+      // 3. Saving state feedback
+      expect(getDraftButtonLabel(mode, currentStatus, true)).toBe('Saving...')
+      expect(getPublishButtonLabel(mode, currentStatus, true)).toBe('Publishing...')
+    })
+  })
 })
