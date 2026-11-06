@@ -4,6 +4,12 @@ import {
   isValidImageUrl,
   getProjectCoverImage,
   formatCoverImageAlt,
+  isDataImageUrl,
+  isExternalImageUrl,
+  isLocalImageUrl,
+  sanitizeCoverImageUrl,
+  getCoverImagePlaceholderTitle,
+  getThumbnailAspectRatioClass,
 } from '@/lib/project-thumbnail'
 
 describe('Project Cover Image & Thumbnail Utilities', () => {
