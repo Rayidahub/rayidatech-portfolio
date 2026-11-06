@@ -89,3 +89,12 @@ export function isWebDevType(projectType?: string | null): boolean {
   const norm = projectType.trim().toLowerCase()
   return norm === 'web development' || norm === 'web dev' || norm === 'development'
 }
+
+/**
+ * Returns a short tooltip string describing the toggle action.
+ */
+export function getClassificationToggleTooltip(isOpen: boolean): string {
+  return isOpen
+    ? 'Click to collapse architecture settings'
+    : 'Click to expand architecture settings'
+}
