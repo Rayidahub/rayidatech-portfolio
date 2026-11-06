@@ -25,6 +25,7 @@ interface ProjectClassificationCardProps {
   category: string;
   onCategoryChange: (category: string) => void;
   defaultOpen?: boolean;
+  className?: string;
 }
 
 export default function ProjectClassificationCard({
@@ -33,6 +34,7 @@ export default function ProjectClassificationCard({
   category,
   onCategoryChange,
   defaultOpen = true,
+  className = '',
 }: ProjectClassificationCardProps) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
@@ -46,7 +48,9 @@ export default function ProjectClassificationCard({
       : SlidersHorizontal;
 
   return (
-    <div className="rounded-xl bg-white/[0.02] border border-(--line) overflow-hidden transition-all duration-200">
+    <div
+      className={`rounded-xl bg-white/[0.02] border border-(--line) overflow-hidden transition-all duration-200 ${className}`}
+    >
       {/* Collapsible Header Button */}
       <button
         type="button"
