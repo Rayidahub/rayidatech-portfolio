@@ -63,3 +63,11 @@ export function getClassificationAriaLabel(isOpen: boolean, projectType?: string
     ? `Collapse Project Architecture & Classification settings for ${type}`
     : `Expand Project Architecture & Classification settings for ${type}`
 }
+
+/**
+ * Checks whether the given project type string corresponds to Brand Identity.
+ */
+export function isBrandIdentityType(projectType?: string | null): boolean {
+  if (!projectType) return false
+  return projectType.trim().toLowerCase() === 'brand identity'
+}
