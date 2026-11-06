@@ -540,138 +540,54 @@ export default function BrandIdentityCaseStudyPage({
               </div>
             )}
 
-            {/* Logo Variations Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Logo Variations Grid with Smart Stage Framing */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
               {brandData.logo_symbol && (
-                <div
-                  className={`rounded-2xl border p-6 flex flex-col items-center text-center transition-all ${
-                    logoMode === 'dark'
-                      ? 'bg-white/[0.02] border-(--line)'
-                      : 'bg-[#f4f4f6] border-slate-200'
-                  }`}
-                >
-                  <div className="relative w-full h-32 flex items-center justify-center mb-4">
-                    <Image
-                      src={brandData.logo_symbol}
-                      alt="Brand Symbol"
-                      fill
-                      className="object-contain"
-                    />
-                  </div>
-                  <span
-                    className={`text-xs font-mono-tight font-medium ${
-                      logoMode === 'dark' ? 'text-paper' : 'text-slate-900'
-                    }`}
-                  >
-                    Brand Symbol / Icon
-                  </span>
-                  <span
-                    className={`text-[11px] mt-0.5 ${
-                      logoMode === 'dark' ? 'text-mist-2' : 'text-slate-500'
-                    }`}
-                  >
-                    Favicon & App Icon
-                  </span>
-                </div>
+                <BrandLogoVariationCard
+                  type="symbol"
+                  imageUrl={brandData.logo_symbol}
+                  globalMode={logoMode}
+                  onInspect={(url, title, role) => {
+                    setInspectingLogo({ url, title, role });
+                    setModalStage('light');
+                  }}
+                />
               )}
 
               {brandData.secondary_logo && (
-                <div
-                  className={`rounded-2xl border p-6 flex flex-col items-center text-center transition-all ${
-                    logoMode === 'dark'
-                      ? 'bg-white/[0.02] border-(--line)'
-                      : 'bg-[#f4f4f6] border-slate-200'
-                  }`}
-                >
-                  <div className="relative w-full h-32 flex items-center justify-center mb-4">
-                    <Image
-                      src={brandData.secondary_logo}
-                      alt="Secondary Logo"
-                      fill
-                      className="object-contain"
-                    />
-                  </div>
-                  <span
-                    className={`text-xs font-mono-tight font-medium ${
-                      logoMode === 'dark' ? 'text-paper' : 'text-slate-900'
-                    }`}
-                  >
-                    Secondary Lockup
-                  </span>
-                  <span
-                    className={`text-[11px] mt-0.5 ${
-                      logoMode === 'dark' ? 'text-mist-2' : 'text-slate-500'
-                    }`}
-                  >
-                    Vertical / Compact
-                  </span>
-                </div>
+                <BrandLogoVariationCard
+                  type="secondary"
+                  imageUrl={brandData.secondary_logo}
+                  globalMode={logoMode}
+                  onInspect={(url, title, role) => {
+                    setInspectingLogo({ url, title, role });
+                    setModalStage('light');
+                  }}
+                />
               )}
 
               {brandData.horizontal_logo && (
-                <div
-                  className={`rounded-2xl border p-6 flex flex-col items-center text-center transition-all ${
-                    logoMode === 'dark'
-                      ? 'bg-white/[0.02] border-(--line)'
-                      : 'bg-[#f4f4f6] border-slate-200'
-                  }`}
-                >
-                  <div className="relative w-full h-32 flex items-center justify-center mb-4">
-                    <Image
-                      src={brandData.horizontal_logo}
-                      alt="Horizontal Logo"
-                      fill
-                      className="object-contain"
-                    />
-                  </div>
-                  <span
-                    className={`text-xs font-mono-tight font-medium ${
-                      logoMode === 'dark' ? 'text-paper' : 'text-slate-900'
-                    }`}
-                  >
-                    Horizontal Wordmark
-                  </span>
-                  <span
-                    className={`text-[11px] mt-0.5 ${
-                      logoMode === 'dark' ? 'text-mist-2' : 'text-slate-500'
-                    }`}
-                  >
-                    Navbars & Letterheads
-                  </span>
-                </div>
+                <BrandLogoVariationCard
+                  type="horizontal"
+                  imageUrl={brandData.horizontal_logo}
+                  globalMode={logoMode}
+                  onInspect={(url, title, role) => {
+                    setInspectingLogo({ url, title, role });
+                    setModalStage('dark');
+                  }}
+                />
               )}
 
               {brandData.monochrome_logo && (
-                <div
-                  className={`rounded-2xl border p-6 flex flex-col items-center text-center transition-all ${
-                    logoMode === 'dark'
-                      ? 'bg-white/[0.02] border-(--line)'
-                      : 'bg-[#f4f4f6] border-slate-200'
-                  }`}
-                >
-                  <div className="relative w-full h-32 flex items-center justify-center mb-4">
-                    <Image
-                      src={brandData.monochrome_logo}
-                      alt="Monochrome Logo"
-                      fill
-                      className="object-contain"
-                    />
-                  </div>
-                  <span
-                    className={`text-xs font-mono-tight font-medium ${
-                      logoMode === 'dark' ? 'text-paper' : 'text-slate-900'
-                    }`}
-                  >
-                    Monochrome / 1-Color
-                  </span>
-                  <span
-                    className={`text-[11px] mt-0.5 ${
-                      logoMode === 'dark' ? 'text-mist-2' : 'text-slate-500'
-                    }`}
-                  >
-                    Embroidery & Stamping
-                  </span>
-                </div>
+                <BrandLogoVariationCard
+                  type="monochrome"
+                  imageUrl={brandData.monochrome_logo}
+                  globalMode={logoMode}
+                  onInspect={(url, title, role) => {
+                    setInspectingLogo({ url, title, role });
+                    setModalStage('light');
+                  }}
+                />
               )}
             </div>
           </Reveal>
