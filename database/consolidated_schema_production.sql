@@ -21,6 +21,8 @@ CREATE TABLE IF NOT EXISTS public.projects (
   link TEXT,
   tags TEXT[],
   project_type TEXT DEFAULT 'UI/UX Design',
+  published BOOLEAN DEFAULT TRUE,
+  status TEXT DEFAULT 'published',
   case_study JSONB DEFAULT NULL,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
