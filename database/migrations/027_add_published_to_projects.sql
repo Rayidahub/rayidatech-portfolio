@@ -26,3 +26,4 @@ CREATE INDEX IF NOT EXISTS idx_projects_status ON public.projects (published, cr
 
 -- Notify PostgREST to reload OpenAPI schema cache
 NOTIFY pgrst, 'reload schema';
+
