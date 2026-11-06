@@ -197,4 +197,13 @@ describe('Project Classification Helpers', () => {
       expect(getClassificationAccentColor('UI/UX Design')).toBe('#ccccff')
     })
   })
+
+  describe('formatClassificationPillLabel', () => {
+    it('returns short labels for badges', () => {
+      expect(formatClassificationPillLabel('Brand Identity')).toBe('Brand')
+      expect(formatClassificationPillLabel('Web Development')).toBe('Web')
+      expect(formatClassificationPillLabel('UI/UX Design')).toBe('UI/UX')
+      expect(formatClassificationPillLabel('Other')).toBe('Other')
+    })
+  })
 })
