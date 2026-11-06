@@ -1,5 +1,11 @@
 // lib/brand-identity.ts
-import { PROJECT_TYPES, type ProjectType, type Project, type BrandIdentityCaseStudy } from '@/types/project'
+import {
+  PROJECT_TYPES,
+  type ProjectType,
+  type Project,
+  type BrandIdentityCaseStudy,
+  type BrandApplication,
+} from '@/types/project'
 
 /**
  * Validates whether a given string is a valid 3-digit or 6-digit hex color code.
@@ -218,5 +224,17 @@ export function isBrandIdentityCaseStudy(
     caseStudy.project_type === 'Brand Identity' ||
     Array.isArray(caseStudy.color_palette) ||
     Array.isArray(caseStudy.brand_applications)
+  )
+}
+
+/**
+ * Filters brand applications to only those marked as visible and containing an image.
+ */
+export function filterVisibleBrandApplications(
+  apps?: BrandApplication[]
+): BrandApplication[] {
+  if (!Array.isArray(apps)) return []
+  return apps.filter(
+    (app) => app && app.is_visible !== false && Boolean(app.image_url)
   )
 }
