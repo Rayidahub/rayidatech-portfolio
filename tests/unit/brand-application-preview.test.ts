@@ -14,6 +14,7 @@ import {
   isWideLayout,
   getLayoutIconIdentifier,
   isValidApplicationDeliverable,
+  formatApplicationCategoryBadge,
 } from '@/lib/brand-application-preview'
 
 describe('Brand Application Preview Utilities', () => {
@@ -201,6 +202,19 @@ describe('Brand Application Preview Utilities', () => {
     it('returns false for null or undefined input', () => {
       expect(isValidApplicationDeliverable(null)).toBe(false)
       expect(isValidApplicationDeliverable(undefined)).toBe(false)
+    })
+  })
+
+  describe('formatApplicationCategoryBadge', () => {
+    it('returns formatted category string', () => {
+      expect(formatApplicationCategoryBadge('Product Packaging')).toBe('Product Packaging')
+      expect(formatApplicationCategoryBadge('Shopping Bags')).toBe('Shopping Bags')
+    })
+
+    it('returns Deliverable when empty or null', () => {
+      expect(formatApplicationCategoryBadge('')).toBe('Deliverable')
+      expect(formatApplicationCategoryBadge('   ')).toBe('Deliverable')
+      expect(formatApplicationCategoryBadge(null)).toBe('Deliverable')
     })
   })
 })
