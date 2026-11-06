@@ -78,3 +78,12 @@ export function isExternalImageUrl(url?: string | null): boolean {
   const trimmed = url.trim()
   return trimmed.startsWith('http://') || trimmed.startsWith('https://')
 }
+
+/**
+ * Checks whether an image candidate is a local public asset path.
+ */
+export function isLocalImageUrl(url?: string | null): boolean {
+  if (!url || typeof url !== 'string') return false
+  const trimmed = url.trim()
+  return (trimmed.startsWith('/') || trimmed.startsWith('./')) && !trimmed.startsWith('//')
+}
