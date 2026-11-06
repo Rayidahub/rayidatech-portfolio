@@ -234,3 +234,10 @@ export interface ProjectCoverPreviewProps {
   status?: ProjectStatus;
   isPublished?: boolean;
 }
+
+export interface ProjectClassificationSummary {
+  projectType: ProjectType;
+  category: string;
+  isConfigured: boolean;
+  summaryText: string;
+}
