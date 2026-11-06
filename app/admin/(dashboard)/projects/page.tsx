@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { Plus, Edit, ExternalLink } from 'lucide-react'
 import DeleteButton from './DeleteButton'
 import ProjectImportModal from './ProjectImportModal'
+import ProjectStatusToggle from './ProjectStatusToggle'
 import { normalizeSlug } from '@/lib/slug'
 import { inferProjectType } from '@/lib/brand-identity'
 import { isProjectPublished, getProjectStatus, getProjectStatusBadge } from '@/lib/project-status'
@@ -138,12 +139,12 @@ export default async function AdminProjects({ searchParams }: AdminProjectsProps
                     </span>
                   </td>
                   <td className="px-4 py-3 text-center">
-                    <span
-                      className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono-tight border ${badge.badgeClass}`}
-                    >
-                      <span className={`w-1.5 h-1.5 rounded-full ${badge.dotClass}`} />
-                      <span>{badge.label}</span>
-                    </span>
+                    <ProjectStatusToggle
+                      id={project.id}
+                      title={project.title}
+                      currentStatus={status}
+                      currentCaseStudy={project.case_study}
+                    />
                   </td>
                   <td className="px-4 py-3 text-center hidden md:table-cell">
                     <span
