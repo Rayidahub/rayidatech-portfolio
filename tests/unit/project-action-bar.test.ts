@@ -65,4 +65,26 @@ describe('Project Action Bar Utilities', () => {
       expect(getStatusToggleLabel('published', 'new')).toBe('Click to toggle: Live / Published')
     })
   })
+
+  describe('getStatusToggleClasses', () => {
+    it('returns amber classes for draft status', () => {
+      const cls = getStatusToggleClasses('draft')
+      expect(cls).toContain('amber')
+    })
+
+    it('returns emerald classes for published status', () => {
+      const cls = getStatusToggleClasses('published')
+      expect(cls).toContain('emerald')
+    })
+  })
+
+  describe('getStatusPillClasses', () => {
+    it('returns amber classes for draft status pill', () => {
+      expect(getStatusPillClasses('draft')).toContain('amber')
+    })
+
+    it('returns emerald classes for published status pill', () => {
+      expect(getStatusPillClasses('published')).toContain('emerald')
+    })
+  })
 })
