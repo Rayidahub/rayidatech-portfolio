@@ -121,6 +121,15 @@ export interface BrandApplication {
   is_visible: boolean;
 }
 
+export interface BrandApplicationPreviewData {
+  title: string;
+  category: string;
+  layout: BrandApplicationLayout;
+  description: string;
+  imageUrl: string;
+  hasImage: boolean;
+}
+
 export type BrandGalleryLayout =
   | 'Editorial Grid'
   | 'Masonry'
