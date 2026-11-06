@@ -12,6 +12,7 @@ import {
   resolveEffectiveStageMode,
   getLogoRoleBadgeColor,
   getLogoAspectRecommendation,
+  getLogoFormatBadge,
   isStageActive,
 } from '@/lib/brand-logo-showcase';
 
@@ -62,6 +63,9 @@ export default function BrandLogoVariationCard({
             )}`}
           >
             {config.role}
+          </span>
+          <span className="px-1.5 py-0.5 rounded text-[9px] font-mono-tight bg-white/5 text-mist-2 border border-white/5 shrink-0 uppercase">
+            {getLogoFormatBadge(imageUrl)}
           </span>
         </div>
 

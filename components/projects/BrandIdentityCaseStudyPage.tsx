@@ -33,7 +33,10 @@ import Section from '@/components/ui/Section';
 import GlassCard from '@/components/ui/GlassCard';
 import Reveal from '@/components/ui/Reveal';
 import BrandLogoVariationCard from '@/components/projects/BrandLogoVariationCard';
-import { getLogoStageBackgroundClass } from '@/lib/brand-logo-showcase';
+import {
+  getLogoStageBackgroundClass,
+  getLogoFormatBadge,
+} from '@/lib/brand-logo-showcase';
 import {
   parsePillList,
   clampLightboxIndex,
@@ -1291,9 +1294,12 @@ export default function BrandIdentityCaseStudyPage({
             className="w-full max-w-5xl flex items-center justify-between gap-4 py-2 border-b border-white/10"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2.5 sm:gap-3 flex-wrap">
               <span className="px-2.5 py-1 rounded-full text-xs font-mono-tight bg-secondary/15 text-secondary border border-secondary/25">
                 {inspectingLogo.role}
+              </span>
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono-tight bg-white/10 text-mist-1 border border-white/10 uppercase">
+                {getLogoFormatBadge(inspectingLogo.url)}
               </span>
               <h3 className="font-display text-base sm:text-lg font-semibold text-white">
                 {inspectingLogo.title}
