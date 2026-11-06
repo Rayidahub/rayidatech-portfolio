@@ -50,4 +50,19 @@ describe('Project Action Bar Utilities', () => {
       expect(getPublishButtonLabel('edit', 'draft', false)).toBe('Publish Project')
     })
   })
+
+  describe('getStatusToggleLabel', () => {
+    it('returns exact Currently Draft (Click to Publish) label for edit mode', () => {
+      expect(getStatusToggleLabel('draft', 'edit')).toBe('Currently Draft (Click to Publish)')
+    })
+
+    it('returns Currently Published (Click to Unpublish) for published edit mode', () => {
+      expect(getStatusToggleLabel('published', 'edit')).toBe('Currently Published (Click to Unpublish)')
+    })
+
+    it('returns new project toggle labels', () => {
+      expect(getStatusToggleLabel('draft', 'new')).toBe('Click to toggle: Draft Mode')
+      expect(getStatusToggleLabel('published', 'new')).toBe('Click to toggle: Live / Published')
+    })
+  })
 })
