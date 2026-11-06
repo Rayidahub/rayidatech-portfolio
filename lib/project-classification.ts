@@ -80,3 +80,12 @@ export function isUIUXType(projectType?: string | null): boolean {
   const norm = projectType.trim().toLowerCase()
   return norm === 'ui/ux design' || norm === 'ui/ux' || norm === 'product design'
 }
+
+/**
+ * Checks whether the given project type string corresponds to Web Development.
+ */
+export function isWebDevType(projectType?: string | null): boolean {
+  if (!projectType) return false
+  const norm = projectType.trim().toLowerCase()
+  return norm === 'web development' || norm === 'web dev' || norm === 'development'
+}
