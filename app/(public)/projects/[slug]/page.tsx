@@ -38,6 +38,7 @@ import CaseStudyImageViewer from '@/components/projects/CaseStudyImageViewer';
 import ColorSwatch from '@/components/projects/ColorSwatch';
 import BrandIdentityCaseStudyPage from '@/components/projects/BrandIdentityCaseStudyPage';
 import { inferProjectType } from '@/lib/brand-identity';
+import { isProjectPublished } from '@/lib/project-status';
 import { SERVICE_CATEGORIES } from '@/lib/data/services';
 import { getCaseStudyConfig } from '@/lib/data/case-study-templates';
 import { normalizeSlug } from '@/lib/slug';
@@ -109,11 +110,12 @@ async function getNextProject(currentId: string, slug?: string): Promise<Project
 }
 
 export async function generateStaticParams() {
-  const { data } = await supabase.from('projects').select('slug');
+  const { data } = await supabase.from('projects').select('slug, case_study');
   if (!data) return [];
 
   const seen = new Set<string>();
-  return data
+  return (data || [])
+    .filter(isProjectPublished)
     .map((project) => ({
       slug: normalizeSlug(project.slug),
     }))
@@ -1615,6 +1617,18 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
   if (!project) {
     notFound();
+  }
+
+  // Draft protection: unauthenticated visitors receive 404 for draft projects
+  if (!isProjectPublished(project)) {
+    const serverSupabase = await createClient();
+    const {
+      data: { user },
+    } = await serverSupabase.auth.getUser();
+
+    if (!user) {
+      notFound();
+    }
   }
 
   // Redirect legacy/non-canonical URLs to the canonical slug, but only once
