@@ -158,3 +158,16 @@ export function formatClassificationPillLabel(projectType?: string | null): stri
   if (norm.includes('ui') || norm.includes('ux')) return 'UI/UX'
   return 'Other'
 }
+
+/**
+ * Validates that both project type and category are non-empty and well-formed.
+ */
+export function isClassificationValid(
+  projectType?: string | null,
+  category?: string | null
+): boolean {
+  if (!projectType || !category) return false
+  const t = projectType.trim()
+  const c = category.trim()
+  return t.length > 0 && c.length > 0
+}
