@@ -3,6 +3,7 @@ import { describe, it, expect } from 'vitest'
 import {
   getLogoVariationConfig,
   getLogoStageBackgroundClass,
+  getLogoStageBorderClass,
   resolveEffectiveStageMode,
   getLogoRoleBadgeColor,
   getLogoStageOptionLabel,
@@ -64,6 +65,17 @@ describe('Brand Logo Showcase Utilities', () => {
     it('returns checkerboard transparency classes for grid stage', () => {
       const cls = getLogoStageBackgroundClass('checkerboard')
       expect(cls).toContain('background-image')
+    })
+  })
+
+  describe('getLogoStageBorderClass', () => {
+    it('returns black/10 for light stage', () => {
+      expect(getLogoStageBorderClass('light')).toBe('border-black/10')
+    })
+
+    it('returns white/10 for dark and checkerboard stages', () => {
+      expect(getLogoStageBorderClass('dark')).toBe('border-white/10')
+      expect(getLogoStageBorderClass('checkerboard')).toBe('border-white/10')
     })
   })
 
