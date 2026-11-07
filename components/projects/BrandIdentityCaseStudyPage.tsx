@@ -1012,7 +1012,7 @@ export default function BrandIdentityCaseStudyPage({
                       </div>
                     </div>
                     <div className="lg:col-span-4 glass rounded-2xl p-6 sm:p-8 border border-(--line) space-y-3">
-                      <span className="text-xs font-mono-tight uppercase text-secondary">
+                      <span className="inline-flex px-3 py-1 rounded-full bg-secondary/15 text-secondary border border-secondary/25 text-xs font-mono-tight">
                         {app.category}
                       </span>
                       <h3 className="font-display text-xl sm:text-2xl font-semibold text-paper">
@@ -1044,16 +1044,17 @@ export default function BrandIdentityCaseStudyPage({
                         />
                       </div>
                     </div>
-                    <div className="flex items-center justify-between px-2">
-                      <h3 className="font-display text-xl font-semibold text-paper">
+                    <div className="flex items-center justify-between px-2 flex-wrap gap-2">
+                      <h3 className="font-display text-xl sm:text-2xl font-semibold text-paper">
                         {app.title}
                       </h3>
-                      <span className="text-xs font-mono-tight uppercase text-secondary">
+                      <span className="inline-flex px-3 py-1 rounded-full bg-secondary/15 text-secondary border border-secondary/25 text-xs font-mono-tight">
                         {app.category}
                       </span>
                     </div>
                   </div>
                 )}
+
 
                       <span className="text-xs font-mono-tight text-mist-2">
                         {app.category}
