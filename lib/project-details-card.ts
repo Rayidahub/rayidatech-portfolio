@@ -13,3 +13,23 @@ export interface ProjectCoreMetaCandidate {
   tags?: string | null
   featured?: boolean | null
 }
+
+/**
+ * Returns an accessible ARIA label describing the collapsible project details card state.
+ */
+export function getProjectDetailsAriaLabel(isOpen: boolean, title?: string | null): string {
+  const displayTitle = (title && title.trim()) ? title.trim() : 'Project Details'
+  return isOpen
+    ? `Collapse project details and media settings for "${displayTitle}"`
+    : `Expand project details and media settings for "${displayTitle}"`
+}
+
+/**
+ * Returns a short tooltip string describing the toggle button action.
+ */
+export function getProjectDetailsToggleTooltip(isOpen: boolean): string {
+  return isOpen
+    ? 'Click to collapse project details & media'
+    : 'Click to expand project details & media'
+}
+
