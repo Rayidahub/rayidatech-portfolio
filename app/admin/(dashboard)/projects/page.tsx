@@ -9,6 +9,7 @@ import { normalizeSlug } from '@/lib/slug'
 import { inferProjectType } from '@/lib/brand-identity'
 import { isProjectPublished, getProjectStatus, getProjectStatusBadge } from '@/lib/project-status'
 import { getProjectCoverImage } from '@/lib/project-thumbnail'
+import { getProjectCardImage } from '@/lib/project-card-image'
 
 interface AdminProjectsProps {
   searchParams: Promise<{ status?: string }>
@@ -121,6 +122,7 @@ export default async function AdminProjects({ searchParams }: AdminProjectsProps
               const status = getProjectStatus(project)
               const badge = getProjectStatusBadge(status)
               const coverImageUrl = getProjectCoverImage(project)
+              const cardImageUrl = getProjectCardImage(project)
 
               return (
                 <tr
@@ -133,6 +135,7 @@ export default async function AdminProjects({ searchParams }: AdminProjectsProps
                       title={project.title}
                       slug={project.slug}
                       coverImage={coverImageUrl}
+                      cardImage={cardImageUrl}
                       projectType={displayType}
                       status={status}
                       isPublished={isPublished}

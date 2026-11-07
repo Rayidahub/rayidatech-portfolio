@@ -24,6 +24,7 @@ interface ProjectThumbnailCellProps {
   title: string;
   slug: string;
   coverImage?: string | null;
+  cardImage?: string | null;
   projectType?: string;
   status?: ProjectStatus;
   isPublished?: boolean;
@@ -34,6 +35,7 @@ export default function ProjectThumbnailCell({
   title,
   slug,
   coverImage,
+  cardImage,
   projectType = 'UI/UX Design',
   status = 'published',
   isPublished = true,
@@ -41,8 +43,11 @@ export default function ProjectThumbnailCell({
   const [hasError, setHasError] = useState(false);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [previewMode, setPreviewMode] = useState<'card' | 'banner'>('card');
 
-  const valid = isValidImageUrl(coverImage) && !hasError;
+  const hasDedicatedCard = !!(cardImage && isValidImageUrl(cardImage) && cardImage !== coverImage);
+  const effectiveDisplayImage = previewMode === 'banner' && coverImage ? coverImage : (cardImage || coverImage);
+  const valid = isValidImageUrl(effectiveDisplayImage) && !hasError;
 
   // Handle ESC key to dismiss modal
   useEffect(() => {
@@ -55,9 +60,9 @@ export default function ProjectThumbnailCell({
   }, [isPreviewOpen]);
 
   const handleCopyUrl = async () => {
-    if (!coverImage) return;
+    if (!effectiveDisplayImage) return;
     try {
-      await navigator.clipboard.writeText(coverImage);
+      await navigator.clipboard.writeText(effectiveDisplayImage);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
@@ -68,17 +73,17 @@ export default function ProjectThumbnailCell({
   return (
     <>
       <div className="relative group shrink-0">
-        {valid && coverImage ? (
+        {valid && effectiveDisplayImage ? (
           <button
             type="button"
             onClick={() => setIsPreviewOpen(true)}
             className="group relative block w-14 h-10 sm:w-16 sm:h-11 rounded-lg overflow-hidden border border-(--line) bg-ink-deep hover:border-primary/60 focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all shadow-sm text-left cursor-pointer"
-            title={`Preview "${title}" cover image`}
-            aria-label={`Preview "${title}" cover image`}
+            title={`Preview "${title}" cover images`}
+            aria-label={`Preview "${title}" cover images`}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={coverImage}
+              src={effectiveDisplayImage}
               alt={formatCoverImageAlt(title)}
               onError={() => setHasError(true)}
               className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
@@ -96,6 +101,16 @@ export default function ProjectThumbnailCell({
               }`}
               title={status === 'draft' ? 'Draft cover' : 'Published cover'}
             />
+
+            {/* Dual cover indicator badge */}
+            {hasDedicatedCard && (
+              <span
+                className="absolute bottom-0.5 left-0.5 px-1 rounded text-[7px] font-mono-tight bg-secondary/90 text-slate-950 font-bold shadow-xs"
+                title="Dedicated Card Cover Active"
+              >
+                DUAL
+              </span>
+            )}
           </button>
         ) : (
           <Link
@@ -165,22 +180,50 @@ export default function ProjectThumbnailCell({
                 </div>
               </div>
 
-              <button
-                type="button"
-                onClick={() => setIsPreviewOpen(false)}
-                className="p-1.5 rounded-lg text-mist-2 hover:text-paper hover:bg-white/5 transition-colors"
-                title="Close preview (Esc)"
-                aria-label="Close preview"
-              >
-                <X className="w-5 h-5" />
-              </button>
+              <div className="flex items-center gap-2 shrink-0">
+                {hasDedicatedCard && (
+                  <div className="flex items-center gap-1 p-0.5 rounded-lg bg-black/40 border border-white/10 shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => setPreviewMode('card')}
+                      className={`px-2 py-1 rounded text-xs font-mono-tight transition-colors cursor-pointer ${
+                        previewMode === 'card'
+                          ? 'bg-secondary text-slate-950 font-semibold shadow-xs'
+                          : 'text-mist-2 hover:text-paper'
+                      }`}
+                    >
+                      Card (Portrait)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPreviewMode('banner')}
+                      className={`px-2 py-1 rounded text-xs font-mono-tight transition-colors cursor-pointer ${
+                        previewMode === 'banner'
+                          ? 'bg-primary text-white font-semibold shadow-xs'
+                          : 'text-mist-2 hover:text-paper'
+                      }`}
+                    >
+                      Banner (16:9)
+                    </button>
+                  </div>
+                )}
+                <button
+                  type="button"
+                  onClick={() => setIsPreviewOpen(false)}
+                  className="p-1.5 rounded-lg text-mist-2 hover:text-paper hover:bg-white/5 transition-colors"
+                  title="Close preview (Esc)"
+                  aria-label="Close preview"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
             </div>
 
             {/* Image Preview Canvas */}
             <div className="relative bg-ink-deep flex items-center justify-center overflow-auto p-4 sm:p-6 min-h-[260px] max-h-[60vh]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={coverImage}
+                src={effectiveDisplayImage}
                 alt={formatCoverImageAlt(title)}
                 className="max-w-full max-h-[55vh] object-contain rounded-lg border border-(--line) shadow-lg"
               />
@@ -190,10 +233,10 @@ export default function ProjectThumbnailCell({
             <div className="flex flex-wrap items-center justify-between gap-3 px-5 py-3.5 border-t border-(--line) bg-white/[0.02]">
               <div className="flex items-center gap-2 text-xs text-mist-2 truncate max-w-md">
                 <span className="px-2 py-0.5 rounded bg-white/5 border border-(--line) text-[11px] font-mono-tight text-accent-soft shrink-0">
-                  {getImageFileName(coverImage)}
+                  {getImageFileName(effectiveDisplayImage)}
                 </span>
                 <span className="font-mono-tight text-[11px] truncate opacity-70">
-                  {coverImage}
+                  {effectiveDisplayImage}
                 </span>
                 <button
                   type="button"
@@ -217,7 +260,7 @@ export default function ProjectThumbnailCell({
 
               <div className="flex items-center gap-2 shrink-0">
                 <a
-                  href={coverImage}
+                  href={effectiveDisplayImage}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-(--line) text-mist-1 hover:text-paper hover:bg-white/5 text-xs font-medium transition-colors"
