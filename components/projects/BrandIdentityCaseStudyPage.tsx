@@ -974,19 +974,20 @@ export default function BrandIdentityCaseStudyPage({
                         />
                       </div>
                     </div>
-                    <div>
-                      <span className="text-xs font-mono-tight uppercase text-secondary">
+                    <div className="space-y-2">
+                      <span className="inline-flex px-3 py-1 rounded-full bg-secondary/15 text-secondary border border-secondary/25 text-xs font-mono-tight">
                         {app.category}
                       </span>
-                      <h3 className="font-display text-2xl font-semibold text-paper mt-1">
+                      <h3 className="font-display text-2xl sm:text-3xl font-semibold text-paper">
                         {app.title}
                       </h3>
                       {app.description && (
-                        <p className="text-sm text-mist-1 max-w-xl mx-auto mt-2">
+                        <p className="text-sm sm:text-base text-mist-1 max-w-xl mx-auto leading-relaxed">
                           {app.description}
                         </p>
                       )}
                     </div>
+
                   </div>
                 )}
 
