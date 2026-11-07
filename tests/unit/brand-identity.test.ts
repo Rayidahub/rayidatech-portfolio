@@ -331,7 +331,42 @@ describe('Brand Identity Architecture & Types', () => {
       expect(getEffectiveApplicationLayout('random-layout')).toBe('split')
     })
   })
+
+  describe('isBrandApplicationsSectionVisible', () => {
+    it('returns true when at least one visible deliverable with an image is present', () => {
+      const caseStudy = {
+        brand_applications: [
+          {
+            title: 'Packaging Jar',
+            primary_image: '/img/jar.png',
+            is_visible: true,
+          },
+        ],
+      }
+      expect(isBrandApplicationsSectionVisible(caseStudy)).toBe(true)
+    })
+
+    it('returns false when no applications or only empty-image applications exist', () => {
+      expect(isBrandApplicationsSectionVisible({})).toBe(false)
+      expect(isBrandApplicationsSectionVisible(null)).toBe(false)
+      expect(
+        isBrandApplicationsSectionVisible({
+          brand_applications: [
+            { title: 'Packaging Jar', primary_image: '', is_visible: true },
+          ],
+        })
+      ).toBe(false)
+      expect(
+        isBrandApplicationsSectionVisible({
+          brand_applications: [
+            { title: 'Packaging Jar', primary_image: '/img/jar.png', is_visible: false },
+          ],
+        })
+      ).toBe(false)
+    })
+  })
 })
+
 
 
 
