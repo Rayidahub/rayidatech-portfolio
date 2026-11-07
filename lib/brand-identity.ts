@@ -426,6 +426,16 @@ export function normalizeBrandOutcomeDetails(caseStudy?: any): BrandOutcomeDetai
   }
 }
 
+/**
+ * Formats a clean category and layout summary for an application deliverable.
+ */
+export function formatApplicationDeliverableSummary(app: BrandApplication): string {
+  const cat = (app.category || 'Deliverable').trim()
+  const layout = (app.layout_preference || 'split').toUpperCase()
+  return `${cat} • ${layout} Mode`
+}
+
+
 
 
 
