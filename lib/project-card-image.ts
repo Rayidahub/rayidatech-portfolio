@@ -99,4 +99,16 @@ export function getProjectHeroBanner(
   return fallback;
 }
 
+/**
+ * Checks whether a project has a dedicated card image defined that is separate from cover_image.
+ */
+export function isDedicatedCardImageProvided(project?: Partial<Project> | null): boolean {
+  if (!project) return false;
+  const directCard = project.card_image?.trim();
+  const csCard = project.case_study?.card_image?.trim();
+  const activeCard = directCard || csCard;
 
+  if (!activeCard || !isValidCardImageUrl(activeCard)) return false;
+  const cover = project.cover_image?.trim();
+  return activeCard !== cover;
+}
