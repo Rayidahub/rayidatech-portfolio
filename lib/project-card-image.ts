@@ -112,3 +112,26 @@ export function isDedicatedCardImageProvided(project?: Partial<Project> | null):
   const cover = project.cover_image?.trim();
   return activeCard !== cover;
 }
+
+/**
+ * Returns a human-friendly aspect ratio description for card image vs cover image.
+ */
+export function getCardImageAspectHint(project?: Partial<Project> | null): string {
+  if (!project) return 'Default Placeholder';
+  if (isDedicatedCardImageProvided(project)) {
+    return '3:4 Portrait (Optimized for Cards)';
+  }
+  if (project.cover_image && isValidCardImageUrl(project.cover_image)) {
+    return 'Cover Fallback (16:9 Banner)';
+  }
+  return 'Default Placeholder';
+}
+
+/**
+ * Generates an accessible alt text for a project's card image.
+ */
+export function formatCardImageAlt(title?: string | null): string {
+  const safeTitle = (title || 'Project').trim();
+  return `${safeTitle} portfolio card cover`;
+}
+
