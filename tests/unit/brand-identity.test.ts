@@ -243,6 +243,37 @@ describe('Brand Identity Architecture & Types', () => {
       expect(apps[0].layout_preference).toBe('centered')
       expect(apps[0].primary_image).toContain('luxe-jar.png')
     })
+
+    it('falls back to legacy applications and deliverables keys seamlessly', () => {
+      const fromApps = normalizeBrandApplications({
+        applications: [
+          {
+            title: 'Shopping Bag',
+            primary_image: '/img/bag.png',
+            category: 'Shopping Bag',
+          },
+        ],
+      })
+      expect(fromApps.length).toBe(1)
+      expect(fromApps[0].title).toBe('Shopping Bag')
+
+      const fromDeliverables = normalizeBrandApplications({
+        deliverables: [
+          {
+            name: 'Polo Shirt',
+            image: '/img/polo.png',
+          },
+        ],
+      })
+      expect(fromDeliverables.length).toBe(1)
+      expect(fromDeliverables[0].title).toBe('Polo Shirt')
+      expect(fromDeliverables[0].primary_image).toBe('/img/polo.png')
+
+      expect(normalizeBrandApplications(null)).toEqual([])
+      expect(normalizeBrandApplications({})).toEqual([])
+      expect(normalizeBrandApplications({ brand_applications: [] })).toEqual([])
+    })
   })
 })
+
 
