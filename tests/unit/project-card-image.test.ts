@@ -273,8 +273,20 @@ describe('Project Dual Cover & Card Image Utilities', () => {
       expect(status.label).toBe('Using Placeholder');
       expect(status.badgeColor).toContain('amber');
     });
+
+    it('identifies dedicated card status even when project is a draft', () => {
+      const status = getProjectCardPreviewStatus({
+        status: 'draft',
+        published: false,
+        cover_image: 'https://example.com/banner.png',
+        card_image: 'https://example.com/draft-card.png',
+      });
+      expect(status.isDedicated).toBe(true);
+      expect(status.label).toBe('Dedicated Card Active');
+    });
   });
 });
+
 
 
 
