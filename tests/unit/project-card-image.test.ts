@@ -80,5 +80,30 @@ describe('Project Dual Cover & Card Image Utilities', () => {
       expect(getProjectCardImage({ cover_image: '' })).toBe(DEFAULT_CARD_COVER);
     });
   });
+
+  describe('getProjectHeroBanner', () => {
+    it('prioritizes direct cover_image for case study hero view', () => {
+      const project = {
+        cover_image: 'https://example.com/panoramic-banner.png',
+        card_image: 'https://example.com/portrait-card.png',
+      };
+      expect(getProjectHeroBanner(project)).toBe('https://example.com/panoramic-banner.png');
+    });
+
+    it('falls back to case_study embedded banner images', () => {
+      const project = {
+        case_study: {
+          cover_image: 'https://example.com/cs-banner.png',
+        },
+      };
+      expect(getProjectHeroBanner(project)).toBe('https://example.com/cs-banner.png');
+    });
+
+    it('returns provided fallback or null when no hero banner exists', () => {
+      expect(getProjectHeroBanner(null)).toBe(null);
+      expect(getProjectHeroBanner({}, '/fallback.png')).toBe('/fallback.png');
+    });
+  });
 });
+
 
