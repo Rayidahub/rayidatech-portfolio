@@ -8,6 +8,7 @@ import Section from '@/components/ui/Section';
 import PremiumCard from '@/components/ui/PremiumCard';
 import Reveal from '@/components/ui/Reveal';
 import { normalizeSlug } from '@/lib/slug';
+import { getProjectCardImage } from '@/lib/project-card-image';
 
 async function getFeaturedProjects(): Promise<Project[]> {
   const supabase = await createClient();
@@ -62,7 +63,7 @@ export default async function FeaturedProjects() {
               <Reveal key={project.id}>
                 <Link href={`/projects/${normalizeSlug(project.slug)}`}>
                   <PremiumCard
-                    imageSrc={project.cover_image?.trim() || '/img/card1.png'}
+                    imageSrc={getProjectCardImage(project)}
                     imageAlt={project.title}
                     badge={badgeLabel}
                     title={project.title}
