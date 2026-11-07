@@ -8,6 +8,7 @@ import {
   getCardImageAspectHint,
   formatCardImageAlt,
   resolveDualCoverPayload,
+  resolveActiveProjectMedia,
   DEFAULT_CARD_COVER,
 } from '@/lib/project-card-image';
 
@@ -220,7 +221,33 @@ describe('Project Dual Cover & Card Image Utilities', () => {
       expect(payload.case_study.card_image).toBe(portraitCardCover);
     });
   });
+
+  describe('resolveActiveProjectMedia', () => {
+    it('returns structured media breakdown for a project with dual covers', () => {
+      const project = {
+        cover_image: 'https://example.com/banner.png',
+        card_image: 'https://example.com/card.png',
+      };
+      const breakdown = resolveActiveProjectMedia(project);
+      expect(breakdown.cardImage).toBe('https://example.com/card.png');
+      expect(breakdown.heroBanner).toBe('https://example.com/banner.png');
+      expect(breakdown.hasDedicatedCard).toBe(true);
+      expect(breakdown.aspectHint).toBe('3:4 Portrait (Optimized for Cards)');
+    });
+
+    it('returns fallback breakdown for project without dedicated card', () => {
+      const project = {
+        cover_image: 'https://example.com/banner.png',
+      };
+      const breakdown = resolveActiveProjectMedia(project);
+      expect(breakdown.cardImage).toBe('https://example.com/banner.png');
+      expect(breakdown.heroBanner).toBe('https://example.com/banner.png');
+      expect(breakdown.hasDedicatedCard).toBe(false);
+      expect(breakdown.aspectHint).toBe('Cover Fallback (16:9 Banner)');
+    });
+  });
 });
+
 
 
 
