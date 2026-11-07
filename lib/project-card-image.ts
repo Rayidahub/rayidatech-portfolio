@@ -135,3 +135,31 @@ export function formatCardImageAlt(title?: string | null): string {
   return `${safeTitle} portfolio card cover`;
 }
 
+/**
+ * Prepares the dual cover payload for Supabase insertion or updating,
+ * embedding card_image into case_study JSONB for resilient schema compatibility.
+ */
+export function resolveDualCoverPayload(
+  coverImage: string,
+  cardImage: string,
+  existingCaseStudy?: Record<string, any> | null
+): {
+  cover_image: string;
+  card_image: string;
+  case_study: Record<string, any>;
+} {
+  const cleanCover = (coverImage || '').trim();
+  const cleanCard = (cardImage || '').trim();
+  const effectiveCard = cleanCard || cleanCover;
+
+  return {
+    cover_image: cleanCover,
+    card_image: effectiveCard,
+    case_study: {
+      ...(existingCaseStudy || {}),
+      card_image: effectiveCard,
+    },
+  };
+}
+
+
