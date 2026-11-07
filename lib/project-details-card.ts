@@ -212,6 +212,14 @@ export function getFeaturedStatusBadge(featured?: boolean | null): {
       }
 }
 
+/**
+ * Returns the data-state attribute string for DOM and testing inspection.
+ */
+export function getProjectDetailsCardState(isOpen: boolean): 'open' | 'collapsed' {
+  return isOpen ? 'open' : 'collapsed'
+}
+
+
 
 
 
