@@ -242,22 +242,30 @@ export default function BrandIdentityFields({ value, onChange }: BrandIdentityFi
     photography_direction: value.photography_direction || '',
     graphic_elements_gallery: value.graphic_elements_gallery || [],
 
-    brand_applications: value.brand_applications || [],
-    brand_gallery: value.brand_gallery || [],
+    brand_applications: value.brand_applications || value.applications || [],
+    brand_gallery: value.brand_gallery || value.gallery_items || [],
     gallery_layout: value.gallery_layout || 'Editorial Grid',
 
-    design_outcome: value.design_outcome || '',
-    project_impact: value.project_impact || '',
+    design_outcome: value.design_outcome || value.outcome || '',
+    project_impact: value.project_impact || value.impact || '',
     key_learnings: value.key_learnings || '',
-    personal_reflection: value.personal_reflection || '',
+    personal_reflection: value.personal_reflection || value.reflection || '',
     closing_image: value.closing_image || '',
 
     next_project_slug: value.next_project_slug || '',
   };
 
   const update = <K extends keyof BrandIdentityCaseStudy>(key: K, val: BrandIdentityCaseStudy[K]) => {
-    onChange({ ...data, [key]: val });
+    const nextData = { ...data, [key]: val };
+    if (key === 'brand_applications') {
+      nextData.applications = val as any;
+    }
+    if (key === 'brand_gallery') {
+      nextData.gallery_items = val as any;
+    }
+    onChange(nextData);
   };
+
 
   /* ─────────────────────────────────────────────────────────────
      COLOR PALETTE HELPERS
