@@ -219,6 +219,43 @@ export function getProjectDetailsCardState(isOpen: boolean): 'open' | 'collapsed
   return isOpen ? 'open' : 'collapsed'
 }
 
+/**
+ * Checks whether all sections in a state map are collapsed (all false).
+ */
+export function isAllSectionsCollapsed(states: Record<string, boolean>): boolean {
+  return Object.values(states).every((open) => !open)
+}
+
+/**
+ * Toggles all sections in a state map to the given state (or inverts if unspecified).
+ */
+export function toggleAllSectionStates(
+  states: Record<string, boolean>,
+  forceOpen?: boolean
+): Record<string, boolean> {
+  const target = typeof forceOpen === 'boolean' ? forceOpen : !Object.values(states).some(Boolean)
+  const result: Record<string, boolean> = {}
+  for (const key of Object.keys(states)) {
+    result[key] = target
+  }
+  return result
+}
+
+/**
+ * Returns a friendly tooltip for a collapsible section toggle button.
+ */
+export function getSectionCollapseTooltip(isOpen: boolean, sectionName: string): string {
+  return isOpen ? `Click to collapse ${sectionName}` : `Click to expand ${sectionName}`
+}
+
+/**
+ * Formats a two-digit step number string (e.g. 1 -> "01", 10 -> "10").
+ */
+export function formatSectionStepNumber(index: number): string {
+  return String(index).padStart(2, '0')
+}
+
+
 
 
 
