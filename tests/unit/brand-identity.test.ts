@@ -20,7 +20,9 @@ import {
   normalizeBrandOutcomeDetails,
   formatApplicationDeliverableSummary,
   formatDeliverableCategoryBadge,
+  getApplicationDeliverableAnchor,
   getBrandColorCssVariable,
+
 
   getTypographyFontFamily,
 } from '@/lib/brand-identity'
@@ -451,6 +453,37 @@ describe('Brand Identity Architecture & Types', () => {
       expect(formatDeliverableCategoryBadge('   ')).toBe('Brand Application')
     })
   })
+
+  describe('getApplicationDeliverableAnchor', () => {
+    it('generates slugified anchor ids from deliverable titles', () => {
+      const app = {
+        id: '1',
+        title: 'Product Packaging Mockup',
+        category: 'Product Packaging' as const,
+        primary_image: '/img/jar.png',
+        layout_preference: 'centered' as const,
+        display_order: 1,
+        is_visible: true,
+      }
+      expect(getApplicationDeliverableAnchor(app, 0)).toBe(
+        'deliverable-product-packaging-mockup'
+      )
+    })
+
+    it('falls back to index if title is empty', () => {
+      const app = {
+        id: '2',
+        title: '',
+        category: 'Polo / Apparel' as const,
+        primary_image: '/img/polo.png',
+        layout_preference: 'split' as const,
+        display_order: 2,
+        is_visible: true,
+      }
+      expect(getApplicationDeliverableAnchor(app, 1)).toBe('deliverable-2')
+    })
+  })
+
 
 
   describe('Luxe by Sey Deliverables Suite Real-World Integration (Section 7)', () => {
