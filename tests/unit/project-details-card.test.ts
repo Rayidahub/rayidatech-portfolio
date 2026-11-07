@@ -6,7 +6,11 @@ import {
   getProjectDetailsCompletionScore,
   formatProjectDetailsSubtitle,
   truncateDetailsPreview,
+  hasCoverImageSet,
+  isCoreMetaEmpty,
+  getFeaturedStatusBadge,
 } from '@/lib/project-details-card'
+
 
 
 
@@ -168,7 +172,60 @@ describe('Project Details Card - Accessibility & Tooltips', () => {
       expect(truncateDetailsPreview(undefined)).toBe('')
     })
   })
+
+  describe('hasCoverImageSet', () => {
+    it('returns true if card_image is set', () => {
+      expect(hasCoverImageSet('/path/to/card.png', '')).toBe(true)
+    })
+
+    it('returns true if cover_image is set', () => {
+      expect(hasCoverImageSet('', '/path/to/cover.png')).toBe(true)
+    })
+
+    it('returns false if both are empty or whitespace', () => {
+      expect(hasCoverImageSet('', '')).toBe(false)
+      expect(hasCoverImageSet('   ', null)).toBe(false)
+    })
+  })
+
+  describe('isCoreMetaEmpty', () => {
+    it('returns true for null or empty object', () => {
+      expect(isCoreMetaEmpty(null)).toBe(true)
+      expect(isCoreMetaEmpty({})).toBe(true)
+    })
+
+    it('returns false if title is provided', () => {
+      expect(isCoreMetaEmpty({ title: 'Luxe by Sey' })).toBe(false)
+    })
+
+    it('returns false if card_image is provided', () => {
+      expect(isCoreMetaEmpty({ card_image: '/card.png' })).toBe(false)
+    })
+
+    it('returns false if featured is true', () => {
+      expect(isCoreMetaEmpty({ featured: true })).toBe(false)
+    })
+  })
+
+  describe('getFeaturedStatusBadge', () => {
+    it('returns featured badge for truthy values', () => {
+      const badge = getFeaturedStatusBadge(true)
+      expect(badge.isFeatured).toBe(true)
+      expect(badge.label).toBe('Featured on Home')
+      expect(badge.badgeClass).toContain('text-accent-soft')
+    })
+
+    it('returns standard project badge for falsy or null values', () => {
+      const badge = getFeaturedStatusBadge(false)
+      expect(badge.isFeatured).toBe(false)
+      expect(badge.label).toBe('Standard Project')
+      expect(badge.badgeClass).toContain('text-mist-2')
+
+      expect(getFeaturedStatusBadge(null).isFeatured).toBe(false)
+    })
+  })
 })
+
 
 
 
