@@ -179,7 +179,49 @@ describe('Project Dual Cover & Card Image Utilities', () => {
       expect(result.case_study.card_image).toBe('https://example.com/banner.png');
     });
   });
+
+  describe('Luxe by Sey Dual Cover Live Scenario', () => {
+    it('properly resolves distinct portrait card cover and landscape hero banner', () => {
+      const horizontalBanner =
+        'https://grtvnrqzmbndbjljramm.supabase.co/storage/v1/object/public/hero-slides/projects/1794001704654-luxe-purple-bubble-beauty-logo.png';
+      const portraitCardCover = '/projects/luxe-by-sey-portrait-cover.png';
+
+      const luxeProject = {
+        id: 'luxe-by-sey-1',
+        title: 'Luxe by Sey',
+        slug: 'luxe-by-sey',
+        cover_image: horizontalBanner,
+        card_image: portraitCardCover,
+        case_study: {
+          client: 'Sey Hair Care Ltd',
+        },
+      };
+
+      // 1. Portfolio card uses portrait mockup (solving image 1 stretching/mismatch)
+      expect(getProjectCardImage(luxeProject)).toBe(portraitCardCover);
+
+      // 2. Case study hero banner retains wide horizontal banner (matching image 2)
+      expect(getProjectHeroBanner(luxeProject)).toBe(horizontalBanner);
+
+      // 3. Flags dedicated card as active
+      expect(isDedicatedCardImageProvided(luxeProject)).toBe(true);
+
+      // 4. Returns portrait aspect hint
+      expect(getCardImageAspectHint(luxeProject)).toBe('3:4 Portrait (Optimized for Cards)');
+
+      // 5. Dual cover payload persists both with JSONB fallback
+      const payload = resolveDualCoverPayload(
+        luxeProject.cover_image,
+        luxeProject.card_image,
+        luxeProject.case_study
+      );
+      expect(payload.cover_image).toBe(horizontalBanner);
+      expect(payload.card_image).toBe(portraitCardCover);
+      expect(payload.case_study.card_image).toBe(portraitCardCover);
+    });
+  });
 });
+
 
 
 
