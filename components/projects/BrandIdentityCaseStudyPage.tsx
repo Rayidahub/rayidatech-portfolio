@@ -42,7 +42,12 @@ import {
   clampLightboxIndex,
   formatColorClassification,
   filterVisibleBrandApplications,
+  normalizeBrandApplications,
+  normalizeBrandGalleryItems,
+  normalizeBrandOutcomeDetails,
+  getEffectiveApplicationLayout,
 } from '@/lib/brand-identity';
+
 
 interface BrandIdentityCaseStudyPageProps {
   project: Project;
@@ -91,11 +96,9 @@ export default function BrandIdentityCaseStudyPage({
     specimen_image: t.specimen_image || '',
   }));
 
-  // Normalized applications & gallery items
-  const applications: BrandApplication[] = (brandData.applications || []).filter(
-    (app: any) => app && app.is_visible !== false && app.primary_image
-  );
-  const galleryItems = brandData.gallery_items || brandData.curated_gallery || [];
+  // Normalized applications (Section 7) & gallery items (Section 8)
+  const applications: BrandApplication[] = normalizeBrandApplications(brandData);
+  const galleryItems = normalizeBrandGalleryItems(brandData);
 
   // Normalized strategy image
   const strategyImage =
@@ -109,11 +112,10 @@ export default function BrandIdentityCaseStudyPage({
   const personalityTraits = parsePillList(brandData.brand_personality);
   const attributePills = parsePillList(brandData.brand_attributes);
 
-  // Normalized conclusion
-  const outcomeDesc = brandData.outcome_description || brandData.outcome;
-  const impactDesc = brandData.impact_description || brandData.impact;
-  const reflectionDesc = brandData.personal_reflection || brandData.reflection;
+  // Normalized conclusion (Section 9)
+  const { outcomeDesc, impactDesc, reflectionDesc } = normalizeBrandOutcomeDetails(brandData);
   const closingImage = brandData.closing_image;
+
 
   const allLightboxImages = [
     ...(brandData.overview_image ? [{ url: brandData.overview_image, title: 'Brand Overview' }] : []),
