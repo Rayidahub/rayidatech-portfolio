@@ -5,9 +5,11 @@ import {
   type Project,
   type BrandIdentityCaseStudy,
   type BrandApplication,
+  type BrandApplicationLayout,
   type BrandColor,
   type BrandTypography,
 } from '@/types/project'
+
 
 /**
  * Validates whether a given string is a valid 3-digit or 6-digit hex color code.
@@ -246,6 +248,64 @@ export function filterVisibleBrandApplications(
       Boolean(app.primary_image || (app as any).image_url)
   )
 }
+
+/**
+ * Normalizes brand application deliverables from various schema shapes
+ * (brand_applications, applications, deliverables) into validated, sorted BrandApplication items.
+ */
+export function normalizeBrandApplications(caseStudy?: any): BrandApplication[] {
+  if (!caseStudy || typeof caseStudy !== 'object') return []
+
+  const raw =
+    caseStudy.brand_applications ||
+    caseStudy.applications ||
+    caseStudy.deliverables ||
+    []
+
+  if (!Array.isArray(raw)) return []
+
+  return raw
+    .map((app: any, idx: number): BrandApplication => {
+      const primaryImage = (
+        app.primary_image ||
+        app.image_url ||
+        app.image ||
+        ''
+      ).trim()
+
+      const rawLayout = (app.layout_preference || app.layout || 'split')
+        .toString()
+        .toLowerCase()
+        .trim()
+      const layoutPreference: BrandApplicationLayout = [
+        'hero',
+        'split',
+        'centered',
+        'editorial',
+        'wide',
+      ].includes(rawLayout)
+        ? (rawLayout as BrandApplicationLayout)
+        : 'split'
+
+      return {
+        id: app.id || `app-${idx + 1}`,
+        title: (app.title || app.name || 'Brand Deliverable').trim(),
+        category: app.category || 'Product Packaging',
+        description: (app.description || app.context_note || '').trim(),
+        primary_image: primaryImage,
+        additional_images: Array.isArray(app.additional_images)
+          ? app.additional_images
+          : [],
+        layout_preference: layoutPreference,
+        display_order:
+          typeof app.display_order === 'number' ? app.display_order : idx + 1,
+        is_visible: app.is_visible !== false,
+      }
+    })
+    .filter((app) => app.is_visible && Boolean(app.primary_image))
+    .sort((a, b) => a.display_order - b.display_order)
+}
+
 
 /**
  * Derives a clean CSS variable name and value from a brand color item.
