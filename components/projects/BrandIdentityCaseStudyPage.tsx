@@ -46,7 +46,9 @@ import {
   normalizeBrandGalleryItems,
   normalizeBrandOutcomeDetails,
   getEffectiveApplicationLayout,
+  getApplicationDeliverableAnchor,
 } from '@/lib/brand-identity';
+
 
 
 interface BrandIdentityCaseStudyPageProps {
@@ -883,10 +885,11 @@ export default function BrandIdentityCaseStudyPage({
 
           {applications.map((app, idx) => {
             const layout = getEffectiveApplicationLayout(app.layout_preference);
-
+            const anchorId = getApplicationDeliverableAnchor(app, idx);
 
             return (
-              <Reveal key={idx}>
+              <div key={idx} id={anchorId} className="scroll-mt-24">
+                <Reveal>
                 {layout === 'hero' && (
                   /* Hero Layout: Full-Width Cinematic */
                   <div className="space-y-4">
@@ -1054,15 +1057,8 @@ export default function BrandIdentityCaseStudyPage({
                     </div>
                   </div>
                 )}
-
-
-                      <span className="text-xs font-mono-tight text-mist-2">
-                        {app.category}
-                      </span>
-                    </div>
-                  </div>
-                )}
-              </Reveal>
+                </Reveal>
+              </div>
             );
           })}
         </section>

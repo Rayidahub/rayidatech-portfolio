@@ -450,11 +450,11 @@ export function getApplicationDeliverableAnchor(
   app: BrandApplication,
   index: number
 ): string {
-  const safeTitle = (app.title || `deliverable-${index + 1}`)
+  const safeTitle = (app.title || '')
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '')
-  return `deliverable-${safeTitle || index + 1}`
+  return safeTitle ? `deliverable-${safeTitle}` : `deliverable-${index + 1}`
 }
 
 
