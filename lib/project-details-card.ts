@@ -159,6 +159,60 @@ export function formatProjectDetailsSubtitle(
   return parts.join(' • ')
 }
 
+/**
+ * Checks whether at least one cover image (portrait card or landscape banner) is provided.
+ */
+export function hasCoverImageSet(
+  cardImage?: string | null,
+  coverImage?: string | null
+): boolean {
+  return Boolean((cardImage && cardImage.trim()) || (coverImage && coverImage.trim()))
+}
+
+/**
+ * Checks whether all core project metadata fields are completely blank.
+ */
+export function isCoreMetaEmpty(form?: ProjectCoreMetaCandidate | null): boolean {
+  if (!form) return true
+  const hasText = Boolean(
+    (form.title && form.title.trim()) ||
+    (form.slug && form.slug.trim()) ||
+    (form.description && form.description.trim()) ||
+    (form.content && form.content.trim()) ||
+    (form.role && form.role.trim()) ||
+    (form.duration && form.duration.trim()) ||
+    (form.link && form.link.trim()) ||
+    (form.tags && form.tags.trim())
+  )
+  const hasMedia = hasCoverImageSet(form.card_image, form.cover_image)
+  const hasFeatured = Boolean(form.featured)
+
+  return !hasText && !hasMedia && !hasFeatured
+}
+
+/**
+ * Returns badge styling and label for the featured homepage status.
+ */
+export function getFeaturedStatusBadge(featured?: boolean | null): {
+  isFeatured: boolean
+  label: string
+  badgeClass: string
+} {
+  const isFeatured = Boolean(featured)
+  return isFeatured
+    ? {
+        isFeatured: true,
+        label: 'Featured on Home',
+        badgeClass: 'bg-primary/20 text-accent-soft border-primary/35',
+      }
+    : {
+        isFeatured: false,
+        label: 'Standard Project',
+        badgeClass: 'bg-white/5 text-mist-2 border-(--line)',
+      }
+}
+
+
 
 
 
