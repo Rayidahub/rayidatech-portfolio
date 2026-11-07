@@ -19,7 +19,9 @@ import {
   normalizeBrandGalleryItems,
   normalizeBrandOutcomeDetails,
   formatApplicationDeliverableSummary,
+  formatDeliverableCategoryBadge,
   getBrandColorCssVariable,
+
   getTypographyFontFamily,
 } from '@/lib/brand-identity'
 
@@ -436,6 +438,20 @@ describe('Brand Identity Architecture & Types', () => {
       )
     })
   })
+
+  describe('formatDeliverableCategoryBadge', () => {
+    it('returns trimmed category name when provided', () => {
+      expect(formatDeliverableCategoryBadge('Product Packaging')).toBe('Product Packaging')
+      expect(formatDeliverableCategoryBadge('  Shopping Bag  ')).toBe('Shopping Bag')
+    })
+
+    it('falls back to "Brand Application" when missing or blank', () => {
+      expect(formatDeliverableCategoryBadge('')).toBe('Brand Application')
+      expect(formatDeliverableCategoryBadge(null)).toBe('Brand Application')
+      expect(formatDeliverableCategoryBadge('   ')).toBe('Brand Application')
+    })
+  })
+
 
   describe('Luxe by Sey Deliverables Suite Real-World Integration (Section 7)', () => {
     it('properly resolves all 5 brand application deliverables from case study JSONB', () => {
