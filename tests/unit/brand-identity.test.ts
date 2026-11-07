@@ -312,7 +312,27 @@ describe('Brand Identity Architecture & Types', () => {
       expect(apps[1].id).toBe('app-3')
     })
   })
+
+  describe('getEffectiveApplicationLayout', () => {
+    it('normalizes valid layouts case-insensitively', () => {
+      expect(getEffectiveApplicationLayout('hero')).toBe('hero')
+      expect(getEffectiveApplicationLayout('HERO')).toBe('hero')
+      expect(getEffectiveApplicationLayout('centered')).toBe('centered')
+      expect(getEffectiveApplicationLayout('Centered ')).toBe('centered')
+      expect(getEffectiveApplicationLayout('split')).toBe('split')
+      expect(getEffectiveApplicationLayout('editorial')).toBe('editorial')
+      expect(getEffectiveApplicationLayout('wide')).toBe('wide')
+    })
+
+    it('falls back to "split" for invalid or missing layout strings', () => {
+      expect(getEffectiveApplicationLayout(null)).toBe('split')
+      expect(getEffectiveApplicationLayout(undefined)).toBe('split')
+      expect(getEffectiveApplicationLayout('')).toBe('split')
+      expect(getEffectiveApplicationLayout('random-layout')).toBe('split')
+    })
+  })
 })
+
 
 
 
