@@ -419,7 +419,25 @@ describe('Brand Identity Architecture & Types', () => {
       expect(outcome.reflectionDesc).toBe('')
     })
   })
+
+  describe('formatApplicationDeliverableSummary', () => {
+    it('formats category and uppercase layout mode', () => {
+      const app = {
+        id: '1',
+        title: 'Packaging Jar',
+        category: 'Product Packaging' as const,
+        primary_image: '/img/jar.png',
+        layout_preference: 'centered' as const,
+        display_order: 1,
+        is_visible: true,
+      }
+      expect(formatApplicationDeliverableSummary(app)).toBe(
+        'Product Packaging • CENTERED Mode'
+      )
+    })
+  })
 })
+
 
 
 
