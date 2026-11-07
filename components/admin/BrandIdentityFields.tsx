@@ -187,6 +187,24 @@ export default function BrandIdentityFields({ value, onChange }: BrandIdentityFi
     setOpenSections((prev) => ({ ...prev, [sec]: !prev[sec] }));
   };
 
+  const areAnySectionsOpen = Object.values(openSections).some(Boolean);
+
+  const toggleAllSections = () => {
+    const nextState = !areAnySectionsOpen;
+    setOpenSections({
+      overview: nextState,
+      strategy: nextState,
+      logo: nextState,
+      colors: nextState,
+      typography: nextState,
+      graphic: nextState,
+      applications: nextState,
+      gallery: nextState,
+      outcome: nextState,
+    });
+  };
+
+
   // Safe normalized state
   const data: BrandIdentityCaseStudy = {
     case_study_type: 'Brand Identity',
@@ -408,7 +426,17 @@ export default function BrandIdentityFields({ value, onChange }: BrandIdentityFi
             Tailored specifically for branding, luxury product packaging, logo marks, tactile collateral, color psychology, and custom merchandising mockups.
           </p>
         </div>
+        <div className="shrink-0 self-start sm:self-center">
+          <button
+            type="button"
+            onClick={toggleAllSections}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-(--line) bg-white/5 hover:bg-white/10 text-mist-1 hover:text-paper text-xs font-mono-tight transition-colors cursor-pointer"
+          >
+            {areAnySectionsOpen ? 'Collapse All Sections' : 'Expand All Sections'}
+          </button>
+        </div>
       </div>
+
 
       {/* ── SECTION 1 — BRAND OVERVIEW ── */}
       <SectionCard
