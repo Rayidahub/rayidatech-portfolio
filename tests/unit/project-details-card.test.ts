@@ -10,7 +10,12 @@ import {
   isCoreMetaEmpty,
   getFeaturedStatusBadge,
   getProjectDetailsCardState,
+  isAllSectionsCollapsed,
+  toggleAllSectionStates,
+  getSectionCollapseTooltip,
+  formatSectionStepNumber,
 } from '@/lib/project-details-card'
+
 
 
 
@@ -236,7 +241,63 @@ describe('Project Details Card - Accessibility & Tooltips', () => {
       expect(getProjectDetailsCardState(false)).toBe('collapsed')
     })
   })
+
+  describe('Multi-Section Collapsed State Helpers', () => {
+    it('isAllSectionsCollapsed returns true when all sections are false', () => {
+      expect(
+        isAllSectionsCollapsed({
+          overview: false,
+          strategy: false,
+          logo: false,
+          colors: false,
+        })
+      ).toBe(true)
+    })
+
+    it('isAllSectionsCollapsed returns false if any section is true', () => {
+      expect(
+        isAllSectionsCollapsed({
+          overview: false,
+          strategy: true,
+          logo: false,
+        })
+      ).toBe(false)
+    })
+
+    it('toggleAllSectionStates expands all when all were collapsed', () => {
+      const initial = { secA: false, secB: false }
+      const toggled = toggleAllSectionStates(initial)
+      expect(toggled).toEqual({ secA: true, secB: true })
+    })
+
+    it('toggleAllSectionStates collapses all when at least one was expanded', () => {
+      const initial = { secA: true, secB: false }
+      const toggled = toggleAllSectionStates(initial)
+      expect(toggled).toEqual({ secA: false, secB: false })
+    })
+
+    it('toggleAllSectionStates respects explicit forceOpen parameter', () => {
+      const initial = { secA: true, secB: true }
+      expect(toggleAllSectionStates(initial, true)).toEqual({ secA: true, secB: true })
+      expect(toggleAllSectionStates(initial, false)).toEqual({ secA: false, secB: false })
+    })
+  })
+
+  describe('Section Formatting & Tooltip Helpers', () => {
+    it('getSectionCollapseTooltip returns appropriate instruction', () => {
+      expect(getSectionCollapseTooltip(true, 'Overview')).toBe('Click to collapse Overview')
+      expect(getSectionCollapseTooltip(false, 'Overview')).toBe('Click to expand Overview')
+    })
+
+    it('formatSectionStepNumber pads single digit numbers with leading zero', () => {
+      expect(formatSectionStepNumber(1)).toBe('01')
+      expect(formatSectionStepNumber(7)).toBe('07')
+      expect(formatSectionStepNumber(10)).toBe('10')
+      expect(formatSectionStepNumber(15)).toBe('15')
+    })
+  })
 })
+
 
 
 
