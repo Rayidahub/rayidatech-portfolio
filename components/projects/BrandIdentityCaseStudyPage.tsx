@@ -121,11 +121,19 @@ export default function BrandIdentityCaseStudyPage({
     ...(brandData.overview_image ? [{ url: brandData.overview_image, title: 'Brand Overview' }] : []),
     ...(strategyImage ? [{ url: strategyImage, title: 'Strategic Direction' }] : []),
     ...(brandData.primary_logo ? [{ url: brandData.primary_logo, title: 'Primary Brandmark' }] : []),
-    ...applications.map((app: BrandApplication) => ({
-      url: app.primary_image,
-      title: app.title,
-      desc: app.description,
-    })),
+    ...applications.flatMap((app: BrandApplication) => [
+      {
+        url: app.primary_image,
+        title: app.title,
+        desc: app.description,
+      },
+      ...(app.additional_images || []).map((extraUrl: string, eIdx: number) => ({
+        url: extraUrl,
+        title: `${app.title} (View ${eIdx + 2})`,
+        desc: app.description,
+      })),
+    ]),
+
     ...galleryItems.map((g: any) => ({
       url: g.image_url || g,
       title: g.caption || 'Brand Gallery Asset',
