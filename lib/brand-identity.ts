@@ -6,8 +6,10 @@ import {
   type BrandIdentityCaseStudy,
   type BrandApplication,
   type BrandApplicationLayout,
+  type BrandGalleryItem,
   type BrandColor,
   type BrandTypography,
+
 } from '@/types/project'
 
 
@@ -333,6 +335,47 @@ export function isBrandApplicationsSectionVisible(caseStudy?: any): boolean {
   const apps = normalizeBrandApplications(caseStudy)
   return apps.length > 0
 }
+
+/**
+ * Normalizes brand gallery items across schema keys (brand_gallery, gallery_items, curated_gallery).
+ */
+export function normalizeBrandGalleryItems(caseStudy?: any): BrandGalleryItem[] {
+  if (!caseStudy || typeof caseStudy !== 'object') return []
+
+  const raw =
+    caseStudy.brand_gallery ||
+    caseStudy.gallery_items ||
+    caseStudy.curated_gallery ||
+    []
+
+  if (!Array.isArray(raw)) return []
+
+  return raw
+    .map((item: any, idx: number): BrandGalleryItem => {
+      const imageUrl = (
+        typeof item === 'string' ? item : item.image_url || item.url || ''
+      ).trim()
+      const caption =
+        typeof item === 'object' && item ? item.caption || item.title : ''
+      const description =
+        typeof item === 'object' && item ? item.description : ''
+      const displayOrder =
+        typeof item === 'object' && item && typeof item.display_order === 'number'
+          ? item.display_order
+          : idx + 1
+
+      return {
+        id: (item && item.id) || `gallery-${idx + 1}`,
+        image_url: imageUrl,
+        caption,
+        description,
+        display_order: displayOrder,
+      }
+    })
+    .filter((g) => Boolean(g.image_url))
+    .sort((a, b) => a.display_order - b.display_order)
+}
+
 
 
 
