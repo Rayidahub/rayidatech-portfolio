@@ -510,6 +510,3 @@ export default function CaseStudyFields({
   );
 }
 
-    </div>
-  );
-}
