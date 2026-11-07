@@ -326,6 +326,15 @@ export function getEffectiveApplicationLayout(
   return 'split'
 }
 
+/**
+ * Checks whether the Brand Applications section has any visible deliverables with images.
+ */
+export function isBrandApplicationsSectionVisible(caseStudy?: any): boolean {
+  const apps = normalizeBrandApplications(caseStudy)
+  return apps.length > 0
+}
+
+
 
 
 /**
