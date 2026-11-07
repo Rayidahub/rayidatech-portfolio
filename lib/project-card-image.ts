@@ -162,4 +162,26 @@ export function resolveDualCoverPayload(
   };
 }
 
+export interface ProjectMediaBreakdown {
+  cardImage: string;
+  heroBanner: string | null;
+  hasDedicatedCard: boolean;
+  aspectHint: string;
+}
+
+/**
+ * Returns a comprehensive media resolution breakdown for a project.
+ */
+export function resolveActiveProjectMedia(
+  project?: Partial<Project> | null
+): ProjectMediaBreakdown {
+  return {
+    cardImage: getProjectCardImage(project),
+    heroBanner: getProjectHeroBanner(project),
+    hasDedicatedCard: isDedicatedCardImageProvided(project),
+    aspectHint: getCardImageAspectHint(project),
+  };
+}
+
+
 
