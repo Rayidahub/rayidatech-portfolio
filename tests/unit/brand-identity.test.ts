@@ -273,7 +273,46 @@ describe('Brand Identity Architecture & Types', () => {
       expect(normalizeBrandApplications({})).toEqual([])
       expect(normalizeBrandApplications({ brand_applications: [] })).toEqual([])
     })
+
+    it('sorts deliverables by display_order ascending and ignores invisible or empty-image items', () => {
+      const caseStudy = {
+        brand_applications: [
+          {
+            id: 'app-3',
+            title: 'Third Item',
+            primary_image: '/img/3.png',
+            display_order: 3,
+            is_visible: true,
+          },
+          {
+            id: 'app-1',
+            title: 'First Item',
+            primary_image: '/img/1.png',
+            display_order: 1,
+            is_visible: true,
+          },
+          {
+            id: 'app-hidden',
+            title: 'Hidden Item',
+            primary_image: '/img/hidden.png',
+            is_visible: false,
+          },
+          {
+            id: 'app-empty-img',
+            title: 'Empty Img',
+            primary_image: '   ',
+            is_visible: true,
+          },
+        ],
+      }
+
+      const apps = normalizeBrandApplications(caseStudy)
+      expect(apps.length).toBe(2)
+      expect(apps[0].id).toBe('app-1')
+      expect(apps[1].id).toBe('app-3')
+    })
   })
 })
+
 
 
