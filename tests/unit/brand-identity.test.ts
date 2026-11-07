@@ -365,7 +365,37 @@ describe('Brand Identity Architecture & Types', () => {
       ).toBe(false)
     })
   })
+
+  describe('normalizeBrandGalleryItems', () => {
+    it('normalizes gallery items across brand_gallery and gallery_items', () => {
+      const caseStudy = {
+        brand_gallery: [
+          {
+            id: 'g-1',
+            image_url: '/img/gallery-1.png',
+            caption: 'Luxury Storefront Mockup',
+            display_order: 1,
+          },
+        ],
+      }
+      const gallery = normalizeBrandGalleryItems(caseStudy)
+      expect(gallery.length).toBe(1)
+      expect(gallery[0].image_url).toBe('/img/gallery-1.png')
+      expect(gallery[0].caption).toBe('Luxury Storefront Mockup')
+    })
+
+    it('handles string array representations gracefully', () => {
+      const caseStudy = {
+        gallery_items: ['/img/a.png', '/img/b.png'],
+      }
+      const gallery = normalizeBrandGalleryItems(caseStudy)
+      expect(gallery.length).toBe(2)
+      expect(gallery[0].image_url).toBe('/img/a.png')
+      expect(gallery[1].image_url).toBe('/img/b.png')
+    })
+  })
 })
+
 
 
 
