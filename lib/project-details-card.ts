@@ -82,4 +82,50 @@ export function getCoverSummaryStatus(
   }
 }
 
+export interface DetailsCompletionResult {
+  score: number
+  total: number
+  percentage: number
+  isComplete: boolean
+  hasRequired: boolean
+  missingRequired: string[]
+}
+
+/**
+ * Calculates a completion score and checks required fields for project details.
+ */
+export function getProjectDetailsCompletionScore(
+  form: ProjectCoreMetaCandidate
+): DetailsCompletionResult {
+  const missingRequired: string[] = []
+
+  if (!form.title || !form.title.trim()) missingRequired.push('Title')
+  if (!form.slug || !form.slug.trim()) missingRequired.push('Slug')
+  if (!form.description || !form.description.trim()) missingRequired.push('Description')
+
+  const total = 7
+  let score = 0
+
+  if (form.title && form.title.trim()) score += 1
+  if (form.slug && form.slug.trim()) score += 1
+  if (form.description && form.description.trim()) score += 1
+  if (form.cover_image && form.cover_image.trim()) score += 1
+  if (form.card_image && form.card_image.trim()) score += 1
+  if (form.role && form.role.trim()) score += 1
+  if (form.duration && form.duration.trim()) score += 1
+
+  const hasRequired = missingRequired.length === 0
+  const percentage = Math.round((score / total) * 100)
+
+  return {
+    score,
+    total,
+    percentage,
+    isComplete: hasRequired && score >= 5,
+    hasRequired,
+    missingRequired,
+  }
+}
+
+
 
