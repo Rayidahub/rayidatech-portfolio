@@ -9,7 +9,9 @@ import {
   hasCoverImageSet,
   isCoreMetaEmpty,
   getFeaturedStatusBadge,
+  getProjectDetailsCardState,
 } from '@/lib/project-details-card'
+
 
 
 
@@ -224,7 +226,18 @@ describe('Project Details Card - Accessibility & Tooltips', () => {
       expect(getFeaturedStatusBadge(null).isFeatured).toBe(false)
     })
   })
+
+  describe('getProjectDetailsCardState', () => {
+    it('returns "open" when true', () => {
+      expect(getProjectDetailsCardState(true)).toBe('open')
+    })
+
+    it('returns "collapsed" when false', () => {
+      expect(getProjectDetailsCardState(false)).toBe('collapsed')
+    })
+  })
 })
+
 
 
 
