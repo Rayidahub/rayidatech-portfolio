@@ -3,7 +3,9 @@ import {
   getProjectDetailsAriaLabel,
   getProjectDetailsToggleTooltip,
   getCoverSummaryStatus,
+  getProjectDetailsCompletionScore,
 } from '@/lib/project-details-card'
+
 
 
 describe('Project Details Card - Accessibility & Tooltips', () => {
@@ -85,5 +87,46 @@ describe('Project Details Card - Accessibility & Tooltips', () => {
       expect(result.status).toBe('none')
     })
   })
+
+  describe('getProjectDetailsCompletionScore', () => {
+    it('identifies missing required fields in empty form', () => {
+      const result = getProjectDetailsCompletionScore({})
+      expect(result.hasRequired).toBe(false)
+      expect(result.isComplete).toBe(false)
+      expect(result.score).toBe(0)
+      expect(result.percentage).toBe(0)
+      expect(result.missingRequired).toEqual(['Title', 'Slug', 'Description'])
+    })
+
+    it('validates a fully populated form as complete with 100% score', () => {
+      const result = getProjectDetailsCompletionScore({
+        title: 'Luxe by Sey',
+        slug: 'luxe-by-sey',
+        description: 'Luxury beauty and cosmetic branding',
+        card_image: '/projects/luxe-card.png',
+        cover_image: '/projects/luxe-hero.png',
+        role: 'Brand Designer',
+        duration: '4 Days',
+      })
+      expect(result.hasRequired).toBe(true)
+      expect(result.isComplete).toBe(true)
+      expect(result.score).toBe(7)
+      expect(result.percentage).toBe(100)
+      expect(result.missingRequired).toEqual([])
+    })
+
+    it('calculates partial scores accurately when some fields are filled', () => {
+      const result = getProjectDetailsCompletionScore({
+        title: 'Luxe by Sey',
+        slug: 'luxe-by-sey',
+        description: 'Brand identity',
+      })
+      expect(result.hasRequired).toBe(true)
+      expect(result.score).toBe(3)
+      expect(result.percentage).toBe(43)
+      expect(result.missingRequired).toEqual([])
+    })
+  })
 })
+
 
