@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import type { CaseStudy } from '@/types/project';
 import ImageUploadField from '@/components/admin/ImageUploadField';
 import { getCaseStudyConfig } from '@/lib/data/case-study-templates';
@@ -12,8 +13,10 @@ import {
   GraduationCap,
   Share2,
   Info,
+  ChevronDown,
 } from 'lucide-react';
 import type { ServiceCategory } from '@/lib/data/services';
+
 
 interface CaseStudyFieldsProps {
   value: CaseStudy;
@@ -101,6 +104,52 @@ function ImageField({
     />
   );
 }
+
+function CaseStudySectionCard({
+  title,
+  stepNumber,
+  isOpen,
+  onToggle,
+  children,
+}: {
+  title: string;
+  stepNumber: string;
+  isOpen: boolean;
+  onToggle: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="rounded-xl border border-(--line) bg-white/[0.02] overflow-hidden transition-all duration-200">
+      <button
+        type="button"
+        onClick={onToggle}
+        className="w-full p-4 flex items-center justify-between text-left hover:bg-white/[0.03] transition-colors cursor-pointer"
+      >
+        <div className="flex items-center gap-3 min-w-0">
+          <span className="text-[10px] font-mono-tight px-2 py-0.5 rounded-full bg-secondary/15 text-secondary border border-secondary/25 shrink-0">
+            {stepNumber}
+          </span>
+          <h3 className="font-display text-base font-semibold text-paper truncate">
+            {title}
+          </h3>
+        </div>
+
+        <ChevronDown
+          className={`w-4 h-4 text-mist-2 transition-transform duration-200 shrink-0 ${
+            isOpen ? 'rotate-180 text-primary' : ''
+          }`}
+        />
+      </button>
+
+      {isOpen && (
+        <div className="p-4 sm:p-6 border-t border-(--line) space-y-4 animate-fade-in">
+          {children}
+        </div>
+      )}
+    </div>
+  );
+}
+
 
 export default function CaseStudyFields({
   value,
