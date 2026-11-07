@@ -226,6 +226,31 @@ export function getProjectCardPreviewStatus(
   };
 }
 
+export interface CoverAspectBadge {
+  label: string;
+  ratio: string;
+  color: string;
+}
+
+/**
+ * Returns aspect ratio guidance badges for the dual cover upload UI.
+ */
+export function getCoverAspectBadge(type: 'card' | 'banner'): CoverAspectBadge {
+  if (type === 'card') {
+    return {
+      label: 'Portfolio Card',
+      ratio: '3:4 Portrait',
+      color: 'text-secondary bg-secondary/10 border-secondary/20',
+    };
+  }
+  return {
+    label: 'Hero Banner',
+    ratio: '16:9 Landscape',
+    color: 'text-accent-soft bg-primary/15 border-primary/25',
+  };
+}
+
+
 
 
 
