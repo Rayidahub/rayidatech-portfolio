@@ -16,3 +16,4 @@ WHERE card_image IS NULL AND cover_image IS NOT NULL;
 
 -- Notify PostgREST to reload schema cache
 NOTIFY pgrst, 'reload schema';
+
