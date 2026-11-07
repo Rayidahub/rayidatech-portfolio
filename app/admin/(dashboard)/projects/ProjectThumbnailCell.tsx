@@ -17,6 +17,7 @@ import {
   formatCoverImageAlt,
   getImageFileName,
 } from '@/lib/project-thumbnail';
+import { getProjectCardPreviewStatus } from '@/lib/project-card-image';
 import { ProjectStatus } from '@/types/project';
 
 interface ProjectThumbnailCellProps {
@@ -48,6 +49,7 @@ export default function ProjectThumbnailCell({
   const hasDedicatedCard = !!(cardImage && isValidImageUrl(cardImage) && cardImage !== coverImage);
   const effectiveDisplayImage = previewMode === 'banner' && coverImage ? coverImage : (cardImage || coverImage);
   const valid = isValidImageUrl(effectiveDisplayImage) && !hasError;
+  const cardStatus = getProjectCardPreviewStatus({ card_image: cardImage, cover_image: coverImage });
 
   // Handle ESC key to dismiss modal
   useEffect(() => {
@@ -172,6 +174,11 @@ export default function ProjectThumbnailCell({
                         }`}
                       />
                       {status === 'draft' ? 'Draft' : 'Published'}
+                    </span>
+                    <span
+                      className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-mono-tight border ${cardStatus.badgeColor}`}
+                    >
+                      {cardStatus.label}
                     </span>
                   </div>
                   <p className="text-xs text-mist-2 font-mono-tight mt-0.5 truncate">
