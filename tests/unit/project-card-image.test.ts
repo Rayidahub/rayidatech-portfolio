@@ -104,6 +104,82 @@ describe('Project Dual Cover & Card Image Utilities', () => {
       expect(getProjectHeroBanner({}, '/fallback.png')).toBe('/fallback.png');
     });
   });
+
+  describe('isDedicatedCardImageProvided', () => {
+    it('returns true when card_image differs from cover_image', () => {
+      const project = {
+        cover_image: 'https://example.com/banner.png',
+        card_image: 'https://example.com/card.png',
+      };
+      expect(isDedicatedCardImageProvided(project)).toBe(true);
+    });
+
+    it('returns false when card_image equals cover_image', () => {
+      const project = {
+        cover_image: 'https://example.com/same.png',
+        card_image: 'https://example.com/same.png',
+      };
+      expect(isDedicatedCardImageProvided(project)).toBe(false);
+    });
+
+    it('returns false when card_image is not provided', () => {
+      const project = {
+        cover_image: 'https://example.com/banner.png',
+      };
+      expect(isDedicatedCardImageProvided(project)).toBe(false);
+    });
+  });
+
+  describe('getCardImageAspectHint', () => {
+    it('returns portrait hint when dedicated card image is present', () => {
+      const project = {
+        cover_image: 'https://example.com/banner.png',
+        card_image: 'https://example.com/portrait.png',
+      };
+      expect(getCardImageAspectHint(project)).toBe('3:4 Portrait (Optimized for Cards)');
+    });
+
+    it('returns cover fallback hint when only cover_image is present', () => {
+      const project = {
+        cover_image: 'https://example.com/banner.png',
+      };
+      expect(getCardImageAspectHint(project)).toBe('Cover Fallback (16:9 Banner)');
+    });
+
+    it('returns default placeholder when empty', () => {
+      expect(getCardImageAspectHint(null)).toBe('Default Placeholder');
+    });
+  });
+
+  describe('formatCardImageAlt', () => {
+    it('formats accessible alt text with project title', () => {
+      expect(formatCardImageAlt('Luxe by Sey')).toBe('Luxe by Sey portfolio card cover');
+      expect(formatCardImageAlt('')).toBe('Project portfolio card cover');
+      expect(formatCardImageAlt(null)).toBe('Project portfolio card cover');
+    });
+  });
+
+  describe('resolveDualCoverPayload', () => {
+    it('prepares dual cover payload with JSONB fallback embedding', () => {
+      const result = resolveDualCoverPayload(
+        'https://example.com/banner.png',
+        'https://example.com/card.png',
+        { overview: 'Test' }
+      );
+
+      expect(result.cover_image).toBe('https://example.com/banner.png');
+      expect(result.card_image).toBe('https://example.com/card.png');
+      expect(result.case_study.card_image).toBe('https://example.com/card.png');
+      expect(result.case_study.overview).toBe('Test');
+    });
+
+    it('defaults card_image to cover_image if card_image is blank', () => {
+      const result = resolveDualCoverPayload('https://example.com/banner.png', '');
+      expect(result.card_image).toBe('https://example.com/banner.png');
+      expect(result.case_study.card_image).toBe('https://example.com/banner.png');
+    });
+  });
 });
+
 
 
