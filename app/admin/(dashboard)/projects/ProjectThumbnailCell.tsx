@@ -88,7 +88,7 @@ export default function ProjectThumbnailCell({
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={effectiveDisplayImage}
+              src={effectiveDisplayImage || ''}
               alt={formatCoverImageAlt(title)}
               onError={() => setHasError(true)}
               className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
@@ -233,7 +233,7 @@ export default function ProjectThumbnailCell({
             <div className="relative bg-ink-deep flex items-center justify-center overflow-auto p-4 sm:p-6 min-h-[260px] max-h-[60vh]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={effectiveDisplayImage}
+                src={effectiveDisplayImage || ''}
                 alt={formatCoverImageAlt(title)}
                 className="max-w-full max-h-[55vh] object-contain rounded-lg border border-(--line) shadow-lg"
               />
@@ -270,7 +270,7 @@ export default function ProjectThumbnailCell({
 
               <div className="flex items-center gap-2 shrink-0">
                 <a
-                  href={effectiveDisplayImage}
+                  href={effectiveDisplayImage || '#'}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-(--line) text-mist-1 hover:text-paper hover:bg-white/5 text-xs font-medium transition-colors"
