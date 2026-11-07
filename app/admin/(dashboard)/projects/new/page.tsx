@@ -12,6 +12,7 @@ import ImageUploadField from '@/components/admin/ImageUploadField'
 import ProjectActionBar from '@/components/admin/ProjectActionBar'
 import type { CaseStudy, BrandIdentityCaseStudy, ProjectType, ProjectStatus } from '@/types/project'
 import { buildStatusPayload, getProjectStatusBadge } from '@/lib/project-status'
+import { getCoverAspectBadge } from '@/lib/project-card-image'
 
 export default function NewProject() {
   const router = useRouter()
@@ -293,8 +294,8 @@ export default function NewProject() {
                 <span className="text-xs font-mono-tight text-secondary uppercase tracking-wider font-semibold">
                   ✦ Portfolio Card Cover (Portrait)
                 </span>
-                <span className="text-[10px] font-mono-tight px-2 py-0.5 rounded-full bg-secondary/10 text-secondary border border-secondary/20">
-                  3:4 / 9:16 Ratio
+                <span className={`text-[10px] font-mono-tight px-2 py-0.5 rounded-full border ${getCoverAspectBadge('card').color}`}>
+                  {getCoverAspectBadge('card').ratio}
                 </span>
               </div>
               <ImageUploadField
@@ -311,8 +312,8 @@ export default function NewProject() {
                 <span className="text-xs font-mono-tight text-accent-soft uppercase tracking-wider font-semibold">
                   ✦ Case Study Hero Banner (Landscape)
                 </span>
-                <span className="text-[10px] font-mono-tight px-2 py-0.5 rounded-full bg-primary/15 text-accent-soft border border-primary/25">
-                  16:9 / 21:9 Ratio
+                <span className={`text-[10px] font-mono-tight px-2 py-0.5 rounded-full border ${getCoverAspectBadge('banner').color}`}>
+                  {getCoverAspectBadge('banner').ratio}
                 </span>
               </div>
               <ImageUploadField
