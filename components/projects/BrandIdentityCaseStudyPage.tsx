@@ -139,6 +139,18 @@ export default function BrandIdentityCaseStudyPage({
     setTimeout(() => setCopiedHex(null), 2000);
   }, []);
 
+  const openDeliverableLightbox = useCallback(
+    (imgUrl: string) => {
+      if (!imgUrl) return;
+      const index = allLightboxImages.findIndex((item) => item.url === imgUrl);
+      if (index !== -1) {
+        setLightboxIndex(index);
+      }
+    },
+    [allLightboxImages]
+  );
+
+
   // Keyboard navigation for Lightbox and Logo Inspection
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
@@ -870,7 +882,11 @@ export default function BrandIdentityCaseStudyPage({
                 {layout === 'hero' && (
                   /* Hero Layout: Full-Width Cinematic */
                   <div className="space-y-4">
-                    <div className="rounded-3xl overflow-hidden glass border border-(--line) p-2 shadow-2xl group">
+                    <div
+                      onClick={() => openDeliverableLightbox(app.primary_image)}
+                      title="Click to view deliverable in fullscreen"
+                      className="rounded-3xl overflow-hidden glass border border-(--line) p-2 shadow-2xl group cursor-zoom-in"
+                    >
                       <div className="relative aspect-[16/9] sm:aspect-[21/9] w-full rounded-2xl overflow-hidden bg-black/40">
                         <Image
                           src={app.primary_image}
@@ -902,7 +918,11 @@ export default function BrandIdentityCaseStudyPage({
                   /* Split Layout: 50/50 Editorial */
                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                     <div className={`lg:col-span-7 ${idx % 2 === 1 ? 'lg:order-2' : ''}`}>
-                      <div className="rounded-3xl overflow-hidden glass border border-(--line) p-2 shadow-xl group">
+                      <div
+                        onClick={() => openDeliverableLightbox(app.primary_image)}
+                        title="Click to view deliverable in fullscreen"
+                        className="rounded-3xl overflow-hidden glass border border-(--line) p-2 shadow-xl group cursor-zoom-in"
+                      >
                         <div className="relative aspect-[4/3] sm:aspect-[16/10] w-full rounded-2xl overflow-hidden bg-black/40">
                           <Image
                             src={app.primary_image}
@@ -932,13 +952,17 @@ export default function BrandIdentityCaseStudyPage({
                 {layout === 'centered' && (
                   /* Centered Layout: Focused Spotlight */
                   <div className="max-w-4xl mx-auto space-y-6 text-center">
-                    <div className="rounded-3xl overflow-hidden glass border border-(--line) p-2 shadow-2xl">
+                    <div
+                      onClick={() => openDeliverableLightbox(app.primary_image)}
+                      title="Click to view deliverable in fullscreen"
+                      className="rounded-3xl overflow-hidden glass border border-(--line) p-2 shadow-2xl group cursor-zoom-in"
+                    >
                       <div className="relative aspect-[16/10] w-full rounded-2xl overflow-hidden bg-black/40">
                         <Image
                           src={app.primary_image}
                           alt={app.title}
                           fill
-                          className="object-cover"
+                          className="object-cover transition-transform duration-700 group-hover:scale-[1.02]"
                         />
                       </div>
                     </div>
@@ -962,13 +986,17 @@ export default function BrandIdentityCaseStudyPage({
                   /* Editorial Layout: Asymmetric */
                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
                     <div className="lg:col-span-8">
-                      <div className="rounded-3xl overflow-hidden glass border border-(--line) p-2 shadow-xl">
+                      <div
+                        onClick={() => openDeliverableLightbox(app.primary_image)}
+                        title="Click to view deliverable in fullscreen"
+                        className="rounded-3xl overflow-hidden glass border border-(--line) p-2 shadow-xl group cursor-zoom-in"
+                      >
                         <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden bg-black/40">
                           <Image
                             src={app.primary_image}
                             alt={app.title}
                             fill
-                            className="object-cover"
+                            className="object-cover transition-transform duration-700 group-hover:scale-[1.02]"
                           />
                         </div>
                       </div>
@@ -992,13 +1020,17 @@ export default function BrandIdentityCaseStudyPage({
                 {layout === 'wide' && (
                   /* Wide Layout: Expansive */
                   <div className="space-y-4">
-                    <div className="rounded-3xl overflow-hidden glass border border-(--line) p-2 shadow-2xl">
+                    <div
+                      onClick={() => openDeliverableLightbox(app.primary_image)}
+                      title="Click to view deliverable in fullscreen"
+                      className="rounded-3xl overflow-hidden glass border border-(--line) p-2 shadow-2xl group cursor-zoom-in"
+                    >
                       <div className="relative aspect-[21/9] w-full rounded-2xl overflow-hidden bg-black/40">
                         <Image
                           src={app.primary_image}
                           alt={app.title}
                           fill
-                          className="object-cover"
+                          className="object-cover transition-transform duration-700 group-hover:scale-[1.02]"
                         />
                       </div>
                     </div>
@@ -1006,6 +1038,13 @@ export default function BrandIdentityCaseStudyPage({
                       <h3 className="font-display text-xl font-semibold text-paper">
                         {app.title}
                       </h3>
+                      <span className="text-xs font-mono-tight uppercase text-secondary">
+                        {app.category}
+                      </span>
+                    </div>
+                  </div>
+                )}
+
                       <span className="text-xs font-mono-tight text-mist-2">
                         {app.category}
                       </span>
