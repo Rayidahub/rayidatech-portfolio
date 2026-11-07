@@ -23,6 +23,7 @@ export default function NewProject() {
     description: '',
     content: '',
     cover_image: '',
+    card_image: '',
     role: '',
     duration: '',
     link: '',
@@ -110,14 +111,16 @@ export default function NewProject() {
 
     const isDraft = statusToSave === 'draft'
     const statusPayload = buildStatusPayload(isDraft)
+    const effectiveCardImage = form.card_image.trim() || form.cover_image.trim() || null
 
-    // Prepare case study payload with explicit type and status indicators
+    // Prepare case study payload with explicit type, status, and card_image indicators
     const caseStudyPayload = {
       ...(form.case_study || {}),
       case_study_type: form.project_type,
       project_type: form.project_type,
       published: statusPayload.published,
       status: statusPayload.status,
+      card_image: effectiveCardImage,
     }
 
     // Include project_type in tags as an additional safety guarantee
@@ -131,6 +134,7 @@ export default function NewProject() {
       description: form.description || (isDraft ? 'Draft project description' : ''),
       content: form.content,
       cover_image: form.cover_image || null,
+      card_image: effectiveCardImage,
       role: form.role || null,
       duration: form.duration || null,
       link: form.link || null,
@@ -139,7 +143,14 @@ export default function NewProject() {
       case_study: caseStudyPayload,
     }
 
-    const { error: insertError } = await supabase.from('projects').insert(insertPayload)
+    let { error: insertError } = await supabase.from('projects').insert(insertPayload)
+
+    // Resilient fallback if direct card_image column is not yet present on remote DB
+    if (insertError && insertError.message?.toLowerCase().includes('card_image')) {
+      delete insertPayload.card_image
+      const retryResult = await supabase.from('projects').insert(insertPayload)
+      insertError = retryResult.error
+    }
 
     if (insertError) {
       setError(insertError.message)
@@ -275,14 +286,43 @@ export default function NewProject() {
               className="w-full bg-white/5 border border-(--line) rounded-lg px-3 py-2.5 text-sm text-paper placeholder:text-mist-2 focus:outline-none focus:border-primary/50 transition-colors font-mono-tight"
             />
           </div>
-          <div className="sm:col-span-2">
-            <ImageUploadField
-              label="Project Cover Image *"
-              value={form.cover_image}
-              onChange={(url) => setForm((p) => ({ ...p, cover_image: url }))}
-              folder="projects"
-              description="High-resolution primary cover banner for portfolio cards and hero view"
-            />
+          {/* Dual Cover Media Architecture: Card Cover (Portrait) vs Case Study Hero (Landscape) */}
+          <div className="sm:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 p-4 rounded-xl bg-white/[0.02] border border-(--line)">
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-xs font-mono-tight text-secondary uppercase tracking-wider font-semibold">
+                  ✦ Portfolio Card Cover (Portrait)
+                </span>
+                <span className="text-[10px] font-mono-tight px-2 py-0.5 rounded-full bg-secondary/10 text-secondary border border-secondary/20">
+                  3:4 / 9:16 Ratio
+                </span>
+              </div>
+              <ImageUploadField
+                label="Card Cover Image (Used on Portfolio Grids)"
+                value={form.card_image}
+                onChange={(url) => setForm((p) => ({ ...p, card_image: url }))}
+                folder="projects"
+                description="Vertical orientation image displayed on public portfolio cards & home page teaser. If empty, falls back to hero banner."
+              />
+            </div>
+
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-xs font-mono-tight text-accent-soft uppercase tracking-wider font-semibold">
+                  ✦ Case Study Hero Banner (Landscape)
+                </span>
+                <span className="text-[10px] font-mono-tight px-2 py-0.5 rounded-full bg-primary/15 text-accent-soft border border-primary/25">
+                  16:9 / 21:9 Ratio
+                </span>
+              </div>
+              <ImageUploadField
+                label="Case Study Hero Banner *"
+                value={form.cover_image}
+                onChange={(url) => setForm((p) => ({ ...p, cover_image: url }))}
+                folder="projects"
+                description="Wide panoramic header banner displayed at the top of the project detail case study view."
+              />
+            </div>
           </div>
           <div>
             <label className="block text-sm text-mist-1 mb-1.5">My Role</label>
