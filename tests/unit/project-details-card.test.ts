@@ -4,7 +4,10 @@ import {
   getProjectDetailsToggleTooltip,
   getCoverSummaryStatus,
   getProjectDetailsCompletionScore,
+  formatProjectDetailsSubtitle,
+  truncateDetailsPreview,
 } from '@/lib/project-details-card'
+
 
 
 
@@ -127,6 +130,45 @@ describe('Project Details Card - Accessibility & Tooltips', () => {
       expect(result.missingRequired).toEqual([])
     })
   })
+
+  describe('formatProjectDetailsSubtitle', () => {
+    it('combines title, role, and duration with bullet dividers', () => {
+      const formatted = formatProjectDetailsSubtitle('Luxe by Sey', 'Brand Designer', '4 Days')
+      expect(formatted).toBe('Luxe by Sey • Brand Designer • 4 Days')
+    })
+
+    it('falls back to "Untitled Project" when title is absent', () => {
+      expect(formatProjectDetailsSubtitle('', 'Brand Designer')).toBe('Untitled Project • Brand Designer')
+      expect(formatProjectDetailsSubtitle(null, null, null)).toBe('Untitled Project')
+    })
+
+    it('trims extra whitespace from inputs', () => {
+      const formatted = formatProjectDetailsSubtitle('  Luxe by Sey  ', ' Lead Designer ', ' 1 Week ')
+      expect(formatted).toBe('Luxe by Sey • Lead Designer • 1 Week')
+    })
+  })
+
+  describe('truncateDetailsPreview', () => {
+    it('returns short text unchanged', () => {
+      expect(truncateDetailsPreview('Short note', 20)).toBe('Short note')
+    })
+
+    it('truncates long text and appends ellipsis', () => {
+      const truncated = truncateDetailsPreview(
+        'A luxury hair and beauty brand identity designed to communicate elegance',
+        30
+      )
+      expect(truncated).toBe('A luxury hair and beauty brand…')
+      expect(truncated.length).toBeLessThanOrEqual(31)
+    })
+
+    it('handles null, undefined, and empty string gracefully', () => {
+      expect(truncateDetailsPreview('')).toBe('')
+      expect(truncateDetailsPreview(null)).toBe('')
+      expect(truncateDetailsPreview(undefined)).toBe('')
+    })
+  })
 })
+
 
 
