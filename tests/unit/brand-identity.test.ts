@@ -13,9 +13,16 @@ import {
   validateBrandCaseStudy,
   isBrandIdentityCaseStudy,
   filterVisibleBrandApplications,
+  normalizeBrandApplications,
+  getEffectiveApplicationLayout,
+  isBrandApplicationsSectionVisible,
+  normalizeBrandGalleryItems,
+  normalizeBrandOutcomeDetails,
+  formatApplicationDeliverableSummary,
   getBrandColorCssVariable,
   getTypographyFontFamily,
 } from '@/lib/brand-identity'
+
 
 describe('Brand Identity Architecture & Types', () => {
   it('defines the standard project types supported by the system', () => {
@@ -211,4 +218,31 @@ describe('Brand Identity Architecture & Types', () => {
       expect(getTypographyFontFamily({ role: 'body', font_family: 'Inter' } as any)).toContain('Inter')
     })
   })
+
+  describe('Brand Applications Normalization & Visibility (Section 7)', () => {
+    it('normalizes applications from brand_applications key (Section 7)', () => {
+      const caseStudy = {
+        brand_applications: [
+          {
+            id: 'app-1',
+            title: 'Product Packaging Mockup',
+            category: 'Product Packaging',
+            primary_image: 'https://supabase.co/storage/v1/object/public/hero-slides/projects/luxe-jar.png',
+            layout_preference: 'centered',
+            description: 'High-resolution tactile application mockup showcase',
+            is_visible: true,
+            display_order: 1,
+          },
+        ],
+      }
+
+      const apps = normalizeBrandApplications(caseStudy)
+      expect(apps.length).toBe(1)
+      expect(apps[0].title).toBe('Product Packaging Mockup')
+      expect(apps[0].category).toBe('Product Packaging')
+      expect(apps[0].layout_preference).toBe('centered')
+      expect(apps[0].primary_image).toContain('luxe-jar.png')
+    })
+  })
 })
+
