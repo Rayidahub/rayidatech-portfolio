@@ -435,6 +435,15 @@ export function formatApplicationDeliverableSummary(app: BrandApplication): stri
   return `${cat} • ${layout} Mode`
 }
 
+/**
+ * Normalizes deliverable category labels with a default fallback.
+ */
+export function formatDeliverableCategoryBadge(category?: string | null): string {
+  if (!category || !category.trim()) return 'Brand Application'
+  return category.trim()
+}
+
+
 
 
 
