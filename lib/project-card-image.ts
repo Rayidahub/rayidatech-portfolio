@@ -183,5 +183,49 @@ export function resolveActiveProjectMedia(
   };
 }
 
+export interface ProjectCardPreviewStatus {
+  label: string;
+  badgeColor: string;
+  isDedicated: boolean;
+}
+
+/**
+ * Returns UI badge styling and status label for project card preview indicators.
+ */
+export function getProjectCardPreviewStatus(
+  project?: Partial<Project> | null
+): ProjectCardPreviewStatus {
+  if (!project) {
+    return {
+      label: 'Using Placeholder',
+      badgeColor: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+      isDedicated: false,
+    };
+  }
+
+  if (isDedicatedCardImageProvided(project)) {
+    return {
+      label: 'Dedicated Card Active',
+      badgeColor: 'bg-secondary/15 text-secondary border-secondary/30',
+      isDedicated: true,
+    };
+  }
+
+  if (project.cover_image && isValidCardImageUrl(project.cover_image)) {
+    return {
+      label: 'Synced with Hero Banner',
+      badgeColor: 'bg-white/5 text-mist-2 border-white/10',
+      isDedicated: false,
+    };
+  }
+
+  return {
+    label: 'Using Placeholder',
+    badgeColor: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+    isDedicated: false,
+  };
+}
+
+
 
 
