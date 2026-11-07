@@ -10,6 +10,7 @@ import {
   resolveDualCoverPayload,
   resolveActiveProjectMedia,
   getProjectCardPreviewStatus,
+  getCoverAspectBadge,
   DEFAULT_CARD_COVER,
 } from '@/lib/project-card-image';
 
@@ -285,7 +286,24 @@ describe('Project Dual Cover & Card Image Utilities', () => {
       expect(status.label).toBe('Dedicated Card Active');
     });
   });
+
+  describe('getCoverAspectBadge', () => {
+    it('returns portrait configuration for card aspect', () => {
+      const badge = getCoverAspectBadge('card');
+      expect(badge.label).toBe('Portfolio Card');
+      expect(badge.ratio).toBe('3:4 Portrait');
+      expect(badge.color).toContain('secondary');
+    });
+
+    it('returns landscape configuration for banner aspect', () => {
+      const badge = getCoverAspectBadge('banner');
+      expect(badge.label).toBe('Hero Banner');
+      expect(badge.ratio).toBe('16:9 Landscape');
+      expect(badge.color).toContain('primary');
+    });
+  });
 });
+
 
 
 
