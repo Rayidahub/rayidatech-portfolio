@@ -394,7 +394,33 @@ describe('Brand Identity Architecture & Types', () => {
       expect(gallery[1].image_url).toBe('/img/b.png')
     })
   })
+
+  describe('normalizeBrandOutcomeDetails', () => {
+    it('normalizes outcome, impact, and reflection across direct and description keys', () => {
+      const caseStudy = {
+        design_outcome: 'Established luxury market presence.',
+        project_impact: '+180% premium perceived value in Q3.',
+        personal_reflection: 'Deep exploration of tactile foil and dark amethyst finishes.',
+      }
+      const outcome = normalizeBrandOutcomeDetails(caseStudy)
+      expect(outcome.hasConclusion).toBe(true)
+      expect(outcome.outcomeDesc).toBe('Established luxury market presence.')
+      expect(outcome.impactDesc).toBe('+180% premium perceived value in Q3.')
+      expect(outcome.reflectionDesc).toBe(
+        'Deep exploration of tactile foil and dark amethyst finishes.'
+      )
+    })
+
+    it('returns empty conclusion when no outcome fields are populated', () => {
+      const outcome = normalizeBrandOutcomeDetails({})
+      expect(outcome.hasConclusion).toBe(false)
+      expect(outcome.outcomeDesc).toBe('')
+      expect(outcome.impactDesc).toBe('')
+      expect(outcome.reflectionDesc).toBe('')
+    })
+  })
 })
+
 
 
 
