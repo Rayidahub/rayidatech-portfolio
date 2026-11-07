@@ -833,10 +833,10 @@ export default function BrandIdentityCaseStudyPage({
       )}
 
       {/* ─────────────────────────────────────────────────────────────
-          SECTION 8 — BRAND APPLICATIONS & REAL-WORLD DELIVERABLES
+          SECTION 7 — BRAND APPLICATIONS & REAL-WORLD DELIVERABLES
           ───────────────────────────────────────────────────────────── */}
       {applications.length > 0 && (
-        <section className="relative space-y-16">
+        <section id="brand-applications" className="relative space-y-16">
           <Reveal>
             <div className="flex items-center gap-3 mb-4">
               <span className="w-8 h-[1px] bg-secondary" />
@@ -846,9 +846,14 @@ export default function BrandIdentityCaseStudyPage({
             </div>
             <div className="flex items-center justify-between mb-10">
               <div>
-                <h2 className="font-display text-3xl sm:text-4xl font-semibold text-paper">
-                  Brand Applications & Collateral
-                </h2>
+                <div className="flex items-center gap-2.5 flex-wrap">
+                  <h2 className="font-display text-3xl sm:text-4xl font-semibold text-paper">
+                    Brand Applications & Collateral
+                  </h2>
+                  <span className="text-[11px] font-mono-tight px-2.5 py-0.5 rounded-full bg-secondary/15 text-secondary border border-secondary/25">
+                    {applications.length} Deliverables
+                  </span>
+                </div>
                 <p className="text-xs sm:text-sm text-mist-2 mt-1">
                   Packaging, merchandise, vehicle livery, outdoor signage & digital assets
                 </p>
@@ -857,7 +862,8 @@ export default function BrandIdentityCaseStudyPage({
           </Reveal>
 
           {applications.map((app, idx) => {
-            const layout = app.layout_preference || 'split';
+            const layout = getEffectiveApplicationLayout(app.layout_preference);
+
 
             return (
               <Reveal key={idx}>
