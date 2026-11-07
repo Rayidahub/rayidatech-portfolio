@@ -9,6 +9,7 @@ import {
   formatCardImageAlt,
   resolveDualCoverPayload,
   resolveActiveProjectMedia,
+  getProjectCardPreviewStatus,
   DEFAULT_CARD_COVER,
 } from '@/lib/project-card-image';
 
@@ -246,7 +247,35 @@ describe('Project Dual Cover & Card Image Utilities', () => {
       expect(breakdown.aspectHint).toBe('Cover Fallback (16:9 Banner)');
     });
   });
+
+  describe('getProjectCardPreviewStatus', () => {
+    it('returns dedicated active status when dedicated card is provided', () => {
+      const status = getProjectCardPreviewStatus({
+        cover_image: 'https://example.com/banner.png',
+        card_image: 'https://example.com/card.png',
+      });
+      expect(status.isDedicated).toBe(true);
+      expect(status.label).toBe('Dedicated Card Active');
+      expect(status.badgeColor).toContain('secondary');
+    });
+
+    it('returns synced status when falling back to cover_image', () => {
+      const status = getProjectCardPreviewStatus({
+        cover_image: 'https://example.com/banner.png',
+      });
+      expect(status.isDedicated).toBe(false);
+      expect(status.label).toBe('Synced with Hero Banner');
+    });
+
+    it('returns placeholder status when neither is provided', () => {
+      const status = getProjectCardPreviewStatus(null);
+      expect(status.isDedicated).toBe(false);
+      expect(status.label).toBe('Using Placeholder');
+      expect(status.badgeColor).toContain('amber');
+    });
+  });
 });
+
 
 
 
