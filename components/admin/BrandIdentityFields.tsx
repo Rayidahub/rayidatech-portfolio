@@ -169,18 +169,19 @@ function TextArea({
 }
 
 export default function BrandIdentityFields({ value, onChange }: BrandIdentityFieldsProps) {
-  // Collapsible section states
+  // Collapsible section states - All collapsed by default
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
-    overview: true,
+    overview: false,
     strategy: false,
-    logo: true,
-    colors: true,
+    logo: false,
+    colors: false,
     typography: false,
     graphic: false,
-    applications: true,
+    applications: false,
     gallery: false,
     outcome: false,
   });
+
 
   const toggleSection = (sec: string) => {
     setOpenSections((prev) => ({ ...prev, [sec]: !prev[sec] }));
