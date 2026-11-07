@@ -218,4 +218,23 @@ describe('Project Classification Helpers', () => {
       expect(isClassificationValid(null, null)).toBe(false)
     })
   })
+
+  describe('Default Collapsed State Consistency', () => {
+    it('generates expand ARIA label and tooltip when default collapsed (isOpen = false)', () => {
+      const ariaLabel = getClassificationAriaLabel(false, 'Brand Identity')
+      expect(ariaLabel).toBe('Expand Project Architecture & Classification settings for Brand Identity')
+
+      const tooltip = getClassificationToggleTooltip(false)
+      expect(tooltip).toBe('Click to expand architecture settings')
+    })
+
+    it('generates collapse ARIA label and tooltip when toggled open (isOpen = true)', () => {
+      const ariaLabel = getClassificationAriaLabel(true, 'Brand Identity')
+      expect(ariaLabel).toBe('Collapse Project Architecture & Classification settings for Brand Identity')
+
+      const tooltip = getClassificationToggleTooltip(true)
+      expect(tooltip).toBe('Click to collapse architecture settings')
+    })
+  })
 })
+
