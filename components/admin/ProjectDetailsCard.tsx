@@ -15,9 +15,11 @@ import {
   getProjectDetailsToggleTooltip,
   getCoverSummaryStatus,
   getFeaturedStatusBadge,
+  getProjectDetailsCompletionScore,
   truncateDetailsPreview,
   ProjectCoreMetaCandidate,
 } from '@/lib/project-details-card';
+
 
 export interface ProjectDetailsCardFormValues {
   title: string;
@@ -70,6 +72,8 @@ export default function ProjectDetailsCard({
 
   const coverStatus = getCoverSummaryStatus(form.card_image, form.cover_image);
   const featuredStatus = getFeaturedStatusBadge(form.featured);
+  const completion = getProjectDetailsCompletionScore(form);
+
 
   const handleTitleInput = (value: string) => {
     if (onTitleChange) {
@@ -124,6 +128,17 @@ export default function ProjectDetailsCard({
                 >
                   {coverStatus.label}
                 </span>
+
+                {completion.hasRequired ? (
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-mono-tight bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    ✓ Core Ready
+                  </span>
+                ) : (
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-mono-tight bg-amber-500/10 text-amber-300 border border-amber-500/20">
+                    Needs {completion.missingRequired.join(', ')}
+                  </span>
+                )}
+
 
                 {featuredStatus.isFeatured && (
                   <span
