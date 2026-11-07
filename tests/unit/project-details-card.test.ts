@@ -296,7 +296,52 @@ describe('Project Details Card - Accessibility & Tooltips', () => {
       expect(formatSectionStepNumber(15)).toBe('15')
     })
   })
+
+  describe('Form Default Collapsed Architecture Integration', () => {
+    it('verifies all 3 major project editing cards are designed to start collapsed', () => {
+      const defaultStates = {
+        classificationCard: false,
+        detailsAndMediaCard: false,
+        caseStudyCard: false,
+      }
+      expect(isAllSectionsCollapsed(defaultStates)).toBe(true)
+    })
+
+    it('verifies Brand Identity case study default states initialize with all 9 sections collapsed', () => {
+      const defaultBrandSections = {
+        overview: false,
+        strategy: false,
+        logo: false,
+        colors: false,
+        typography: false,
+        graphic: false,
+        applications: false,
+        gallery: false,
+        outcome: false,
+      }
+      expect(isAllSectionsCollapsed(defaultBrandSections)).toBe(true)
+      expect(Object.keys(defaultBrandSections).length).toBe(9)
+    })
+
+    it('verifies UI/UX case study default states initialize with all 10 sections collapsed', () => {
+      const defaultUIUXSections = {
+        overview: false,
+        problem: false,
+        research: false,
+        process: false,
+        designSystem: false,
+        solution: false,
+        features: false,
+        results: false,
+        reflection: false,
+        cta: false,
+      }
+      expect(isAllSectionsCollapsed(defaultUIUXSections)).toBe(true)
+      expect(Object.keys(defaultUIUXSections).length).toBe(10)
+    })
+  })
 })
+
 
 
 
