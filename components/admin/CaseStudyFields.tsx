@@ -160,38 +160,85 @@ export default function CaseStudyFields({
   const Icon = CATEGORY_ICONS[config.category] || Palette;
   const f = config.fields;
 
+  // Collapsible section states - All collapsed by default
+  const [openSections, setOpenSections] = useState<Record<string, boolean>>({
+    overview: false,
+    problem: false,
+    research: false,
+    process: false,
+    designSystem: false,
+    solution: false,
+    features: false,
+    results: false,
+    reflection: false,
+    cta: false,
+  });
+
+  const toggleSection = (key: string) => {
+    setOpenSections((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const areAnyOpen = Object.values(openSections).some(Boolean);
+  const toggleAll = () => {
+    const next = !areAnyOpen;
+    setOpenSections({
+      overview: next,
+      problem: next,
+      research: next,
+      process: next,
+      designSystem: next,
+      solution: next,
+      features: next,
+      results: next,
+      reflection: next,
+      cta: next,
+    });
+  };
+
   const update = <K extends keyof CaseStudy>(key: K, newValue: CaseStudy[K]) => {
     onChange({ ...value, [key]: newValue });
   };
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-6">
       {/* Category Indicator Banner */}
-      <div className="p-4 rounded-xl glass border border-primary/30 bg-primary/5 flex items-start gap-3.5">
-        <div className="p-2 rounded-lg bg-primary/20 text-secondary shrink-0 mt-0.5">
-          <Icon className="w-5 h-5" />
-        </div>
-        <div className="min-w-0">
-          <div className="flex items-center gap-2">
-            <h4 className="text-sm font-semibold text-paper">
-              Customized Form for {config.displayName}
-            </h4>
-            <span className="text-[10px] font-mono-tight px-2 py-0.5 rounded-full bg-secondary/15 text-secondary border border-secondary/25">
-              Category Mode
-            </span>
+      <div className="p-4 rounded-xl glass border border-primary/30 bg-primary/5 flex items-start justify-between gap-3.5 flex-wrap">
+        <div className="flex items-start gap-3.5 min-w-0">
+          <div className="p-2 rounded-lg bg-primary/20 text-secondary shrink-0 mt-0.5">
+            <Icon className="w-5 h-5" />
           </div>
-          <p className="text-xs text-mist-2 mt-1 leading-relaxed">
-            {config.description} All section titles, helper placeholders, and showcase image slots below are customized to highlight{' '}
-            <strong className="text-paper">{config.displayName}</strong> deliverables.
-          </p>
+          <div className="min-w-0">
+            <div className="flex items-center gap-2">
+              <h4 className="text-sm font-semibold text-paper">
+                Customized Form for {config.displayName}
+              </h4>
+              <span className="text-[10px] font-mono-tight px-2 py-0.5 rounded-full bg-secondary/15 text-secondary border border-secondary/25">
+                Category Mode
+              </span>
+            </div>
+            <p className="text-xs text-mist-2 mt-1 leading-relaxed">
+              {config.description} All section titles, helper placeholders, and showcase image slots below are customized to highlight{' '}
+              <strong className="text-paper">{config.displayName}</strong> deliverables.
+            </p>
+          </div>
         </div>
+
+        <button
+          type="button"
+          onClick={toggleAll}
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-(--line) bg-white/5 hover:bg-white/10 text-mist-1 hover:text-paper text-xs font-mono-tight transition-colors cursor-pointer shrink-0 self-start sm:self-center"
+        >
+          {areAnyOpen ? 'Collapse All Sections' : 'Expand All Sections'}
+        </button>
       </div>
 
       {/* ── 1. OVERVIEW & AUDIENCE ── */}
-      <div className="space-y-4">
-        <h3 className="font-display text-lg font-semibold text-paper flex items-center gap-2">
-          <span>{f.overview.sectionTitle}</span>
-        </h3>
+      <CaseStudySectionCard
+        title={f.overview.sectionTitle}
+        stepNumber="01"
+        isOpen={openSections.overview}
+        onToggle={() => toggleSection('overview')}
+      >
         <Field
           label={f.overview.clientLabel}
           value={value.client || ''}
@@ -221,13 +268,15 @@ export default function CaseStudyFields({
           onChange={(v) => update('overview_image', v)}
           description={f.overview.overviewImageDesc}
         />
-      </div>
+      </CaseStudySectionCard>
 
       {/* ── 2. PROBLEM & GOALS ── */}
-      <div className="space-y-4">
-        <h3 className="font-display text-lg font-semibold text-paper">
-          {f.problem.sectionTitle}
-        </h3>
+      <CaseStudySectionCard
+        title={f.problem.sectionTitle}
+        stepNumber="02"
+        isOpen={openSections.problem}
+        onToggle={() => toggleSection('problem')}
+      >
         <Field
           label={f.problem.problemLabel}
           value={value.problem || ''}
@@ -261,13 +310,15 @@ export default function CaseStudyFields({
           onChange={(v) => update('problem_image', v)}
           description={f.problem.problemImageDesc}
         />
-      </div>
+      </CaseStudySectionCard>
 
       {/* ── 3. RESEARCH & STRATEGY ── */}
-      <div className="space-y-4">
-        <h3 className="font-display text-lg font-semibold text-paper">
-          {f.research.sectionTitle}
-        </h3>
+      <CaseStudySectionCard
+        title={f.research.sectionTitle}
+        stepNumber="03"
+        isOpen={openSections.research}
+        onToggle={() => toggleSection('research')}
+      >
         <Field
           label={f.research.researchLabel}
           value={value.research || ''}
@@ -283,13 +334,15 @@ export default function CaseStudyFields({
           onChange={(v) => update('research_image', v)}
           description={f.research.researchImageDesc}
         />
-      </div>
+      </CaseStudySectionCard>
 
       {/* ── 4. PROCESS & CONSTRUCTION ── */}
-      <div className="space-y-4">
-        <h3 className="font-display text-lg font-semibold text-paper">
-          {f.process.sectionTitle}
-        </h3>
+      <CaseStudySectionCard
+        title={f.process.sectionTitle}
+        stepNumber="04"
+        isOpen={openSections.process}
+        onToggle={() => toggleSection('process')}
+      >
         <Field
           label={f.process.processLabel}
           value={value.design_process || ''}
@@ -305,13 +358,15 @@ export default function CaseStudyFields({
           onChange={(v) => update('design_process_image', v)}
           description={f.process.processImageDesc}
         />
-      </div>
+      </CaseStudySectionCard>
 
       {/* ── 5. DESIGN SYSTEM & IDENTITY ── */}
-      <div className="space-y-4">
-        <h3 className="font-display text-lg font-semibold text-paper">
-          {f.designSystem.sectionTitle}
-        </h3>
+      <CaseStudySectionCard
+        title={f.designSystem.sectionTitle}
+        stepNumber="05"
+        isOpen={openSections.designSystem}
+        onToggle={() => toggleSection('designSystem')}
+      >
         <Field
           label={f.designSystem.systemLabel}
           value={value.design_system || ''}
@@ -327,13 +382,15 @@ export default function CaseStudyFields({
           onChange={(v) => update('design_system_image', v)}
           description={f.designSystem.systemImageDesc}
         />
-      </div>
+      </CaseStudySectionCard>
 
       {/* ── 6. FINAL SOLUTION & DELIVERABLES ── */}
-      <div className="space-y-4">
-        <h3 className="font-display text-lg font-semibold text-paper">
-          {f.solution.sectionTitle}
-        </h3>
+      <CaseStudySectionCard
+        title={f.solution.sectionTitle}
+        stepNumber="06"
+        isOpen={openSections.solution}
+        onToggle={() => toggleSection('solution')}
+      >
         <Field
           label={f.solution.solutionLabel}
           value={value.final_solution || ''}
@@ -356,13 +413,15 @@ export default function CaseStudyFields({
             description={f.solution.desktopImageDesc}
           />
         </div>
-      </div>
+      </CaseStudySectionCard>
 
       {/* ── 7. KEY FEATURES & DELIVERABLES KIT ── */}
-      <div className="space-y-4">
-        <h3 className="font-display text-lg font-semibold text-paper">
-          {f.features.sectionTitle}
-        </h3>
+      <CaseStudySectionCard
+        title={f.features.sectionTitle}
+        stepNumber="07"
+        isOpen={openSections.features}
+        onToggle={() => toggleSection('features')}
+      >
         <Field
           label={f.features.featuresLabel}
           value={(value.key_features || []).join('\n')}
@@ -383,13 +442,15 @@ export default function CaseStudyFields({
           onChange={(v) => update('key_features_image', v)}
           description={f.features.featuresImageDesc}
         />
-      </div>
+      </CaseStudySectionCard>
 
       {/* ── 8. RESULTS & IMPACT ── */}
-      <div className="space-y-4">
-        <h3 className="font-display text-lg font-semibold text-paper">
-          {f.results.sectionTitle}
-        </h3>
+      <CaseStudySectionCard
+        title={f.results.sectionTitle}
+        stepNumber="08"
+        isOpen={openSections.results}
+        onToggle={() => toggleSection('results')}
+      >
         <Field
           label={f.results.resultsLabel}
           value={value.results || ''}
@@ -405,13 +466,15 @@ export default function CaseStudyFields({
           onChange={(v) => update('results_image', v)}
           description={f.results.resultsImageDesc}
         />
-      </div>
+      </CaseStudySectionCard>
 
       {/* ── 9. REFLECTION & RETROSPECTIVE ── */}
-      <div className="space-y-4">
-        <h3 className="font-display text-lg font-semibold text-paper">
-          {f.reflection.sectionTitle}
-        </h3>
+      <CaseStudySectionCard
+        title={f.reflection.sectionTitle}
+        stepNumber="09"
+        isOpen={openSections.reflection}
+        onToggle={() => toggleSection('reflection')}
+      >
         <Field
           label={f.reflection.reflectionLabel}
           value={value.reflection || ''}
@@ -426,13 +489,15 @@ export default function CaseStudyFields({
           onChange={(v) => update('reflection_image', v)}
           description={f.reflection.reflectionImageDesc}
         />
-      </div>
+      </CaseStudySectionCard>
 
       {/* ── 10. NEXT PROJECT CTA ── */}
-      <div className="space-y-4">
-        <h3 className="font-display text-lg font-semibold text-paper">
-          Next Project CTA Link
-        </h3>
+      <CaseStudySectionCard
+        title="Next Project CTA Link"
+        stepNumber="10"
+        isOpen={openSections.cta}
+        onToggle={() => toggleSection('cta')}
+      >
         <Field
           label="Next Project Slug"
           value={value.next_project_slug || ''}
@@ -440,7 +505,11 @@ export default function CaseStudyFields({
           placeholder="e.g. abuja-health-hub"
           helperText="Slug of the project to suggest at the bottom of the case study"
         />
-      </div>
+      </CaseStudySectionCard>
+    </div>
+  );
+}
+
     </div>
   );
 }
