@@ -99,10 +99,19 @@ export function getProjectHeroBanner(
   return fallback;
 }
 
+export type ProjectMediaCandidate = {
+  card_image?: string | null;
+  cover_image?: string | null;
+  case_study?: any;
+  [key: string]: any;
+};
+
 /**
  * Checks whether a project has a dedicated card image defined that is separate from cover_image.
  */
-export function isDedicatedCardImageProvided(project?: Partial<Project> | null): boolean {
+export function isDedicatedCardImageProvided(
+  project?: ProjectMediaCandidate | Partial<Project> | null
+): boolean {
   if (!project) return false;
   const directCard = project.card_image?.trim();
   const csCard = project.case_study?.card_image?.trim();
@@ -193,7 +202,7 @@ export interface ProjectCardPreviewStatus {
  * Returns UI badge styling and status label for project card preview indicators.
  */
 export function getProjectCardPreviewStatus(
-  project?: Partial<Project> | null
+  project?: ProjectMediaCandidate | Partial<Project> | null
 ): ProjectCardPreviewStatus {
   if (!project) {
     return {

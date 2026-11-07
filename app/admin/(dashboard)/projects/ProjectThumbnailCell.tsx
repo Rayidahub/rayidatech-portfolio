@@ -49,7 +49,10 @@ export default function ProjectThumbnailCell({
   const hasDedicatedCard = !!(cardImage && isValidImageUrl(cardImage) && cardImage !== coverImage);
   const effectiveDisplayImage = previewMode === 'banner' && coverImage ? coverImage : (cardImage || coverImage);
   const valid = isValidImageUrl(effectiveDisplayImage) && !hasError;
-  const cardStatus = getProjectCardPreviewStatus({ card_image: cardImage, cover_image: coverImage });
+  const cardStatus = getProjectCardPreviewStatus({
+    card_image: cardImage,
+    cover_image: coverImage || '',
+  });
 
   // Handle ESC key to dismiss modal
   useEffect(() => {

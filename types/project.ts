@@ -19,7 +19,7 @@ export interface CaseStudy {
   objective?: string;
   target_audience?: string;
   overview_image?: string;
-  card_image?: string;
+  card_image?: string | null;
 
   problem?: string;
   business_goals?: string;
@@ -157,7 +157,7 @@ export interface BrandIdentityCaseStudy {
   brand_objectives?: string;
   brand_story?: string;
   overview_image?: string;
-  card_image?: string;
+  card_image?: string | null;
 
   // Section 2 — Brand Strategy
   brand_challenge?: string;
@@ -221,7 +221,7 @@ export interface Project {
   description: string;
   content: string;
   cover_image: string;
-  card_image?: string;
+  card_image?: string | null;
   featured: boolean;
   created_at: string;
   tags?: string[];
