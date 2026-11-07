@@ -68,3 +68,35 @@ export function getProjectCardImage(
   return fallback;
 }
 
+/**
+ * Resolves the wide landscape hero banner image for project detail case study views.
+ */
+export function getProjectHeroBanner(
+  project?: Partial<Project> | null,
+  fallback: string | null = null
+): string | null {
+  if (!project) return fallback;
+
+  // 1. Direct cover_image column
+  if (typeof project.cover_image === 'string' && isValidCardImageUrl(project.cover_image)) {
+    return project.cover_image.trim();
+  }
+
+  // 2. Case study embedded cover fallbacks
+  const cs = project.case_study;
+  if (cs && typeof cs === 'object') {
+    if (typeof cs.cover_image === 'string' && isValidCardImageUrl(cs.cover_image)) {
+      return cs.cover_image.trim();
+    }
+    if (typeof cs.overview_image === 'string' && isValidCardImageUrl(cs.overview_image)) {
+      return cs.overview_image.trim();
+    }
+    if (typeof (cs as any).hero_image === 'string' && isValidCardImageUrl((cs as any).hero_image)) {
+      return (cs as any).hero_image.trim();
+    }
+  }
+
+  return fallback;
+}
+
+
