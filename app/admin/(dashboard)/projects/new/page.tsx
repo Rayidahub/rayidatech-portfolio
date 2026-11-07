@@ -6,7 +6,9 @@ import { useRouter } from 'next/navigation'
 import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import ProjectClassificationCard from '@/components/admin/ProjectClassificationCard'
+import ProjectDetailsCard from '@/components/admin/ProjectDetailsCard'
 import CaseStudyFields from '@/components/admin/CaseStudyFields'
+
 import BrandIdentityFields from '@/components/admin/BrandIdentityFields'
 import ImageUploadField from '@/components/admin/ImageUploadField'
 import ProjectActionBar from '@/components/admin/ProjectActionBar'
@@ -233,150 +235,23 @@ export default function NewProject() {
           isSticky={true}
         />
 
-        {/* Core Classification Grid (Collapsible) */}
+        {/* Core Classification Grid (Collapsible, default collapsed) */}
         <ProjectClassificationCard
           projectType={form.project_type}
           onProjectTypeChange={handleProjectTypeChange}
           category={form.category}
           onCategoryChange={handleCategoryChange}
-          defaultOpen={true}
+          defaultOpen={false}
         />
 
-        {/* General Project Meta */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="sm:col-span-2">
-            <label className="block text-sm text-mist-1 mb-1.5">Title *</label>
-            <input
-              type="text"
-              value={form.title}
-              onChange={(e) => handleTitleChange(e.target.value)}
-              required
-              placeholder="e.g. LUXE BY SEY — Brand Identity & Visual Design"
-              className="w-full bg-white/5 border border-(--line) rounded-lg px-3 py-2.5 text-sm text-paper placeholder:text-mist-2 focus:outline-none focus:border-primary/50 transition-colors"
-            />
-          </div>
-          <div className="sm:col-span-2">
-            <label className="block text-sm text-mist-1 mb-1.5">Slug *</label>
-            <input
-              type="text"
-              value={form.slug}
-              onChange={(e) => setForm((p) => ({ ...p, slug: e.target.value }))}
-              required
-              placeholder="e.g. luxe-by-sey"
-              className="w-full bg-white/5 border border-(--line) rounded-lg px-3 py-2.5 text-sm text-paper placeholder:text-mist-2 focus:outline-none focus:border-primary/50 transition-colors font-mono-tight"
-            />
-          </div>
-          <div className="sm:col-span-2">
-            <label className="block text-sm text-mist-1 mb-1.5">Short Description *</label>
-            <textarea
-              value={form.description}
-              onChange={(e) => setForm((p) => ({ ...p, description: e.target.value }))}
-              required
-              rows={2}
-              placeholder="A concise summary of the brand or digital product..."
-              className="w-full bg-white/5 border border-(--line) rounded-lg px-3 py-2.5 text-sm text-paper placeholder:text-mist-2 focus:outline-none focus:border-primary/50 transition-colors resize-none"
-            />
-          </div>
-          <div className="sm:col-span-2">
-            <label className="block text-sm text-mist-1 mb-1.5">Content (Markdown / Overview)</label>
-            <textarea
-              value={form.content}
-              onChange={(e) => setForm((p) => ({ ...p, content: e.target.value }))}
-              rows={6}
-              placeholder="Optional markdown notes or narrative description..."
-              className="w-full bg-white/5 border border-(--line) rounded-lg px-3 py-2.5 text-sm text-paper placeholder:text-mist-2 focus:outline-none focus:border-primary/50 transition-colors font-mono-tight"
-            />
-          </div>
-          {/* Dual Cover Media Architecture: Card Cover (Portrait) vs Case Study Hero (Landscape) */}
-          <div className="sm:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 p-4 rounded-xl bg-white/[0.02] border border-(--line)">
-            <div>
-              <div className="flex items-center justify-between mb-1.5">
-                <span className="text-xs font-mono-tight text-secondary uppercase tracking-wider font-semibold">
-                  ✦ Portfolio Card Cover (Portrait)
-                </span>
-                <span className={`text-[10px] font-mono-tight px-2 py-0.5 rounded-full border ${getCoverAspectBadge('card').color}`}>
-                  {getCoverAspectBadge('card').ratio}
-                </span>
-              </div>
-              <ImageUploadField
-                label="Card Cover Image (Used on Portfolio Grids)"
-                value={form.card_image}
-                onChange={(url) => setForm((p) => ({ ...p, card_image: url }))}
-                folder="projects"
-                description="Vertical orientation image displayed on public portfolio cards & home page teaser. If empty, falls back to hero banner."
-              />
-            </div>
+        {/* General Project Details & Media (Collapsible, default collapsed) */}
+        <ProjectDetailsCard
+          form={form}
+          onChange={(field, val) => setForm((p) => ({ ...p, [field]: val }))}
+          onTitleChange={handleTitleChange}
+          defaultOpen={false}
+        />
 
-            <div>
-              <div className="flex items-center justify-between mb-1.5">
-                <span className="text-xs font-mono-tight text-accent-soft uppercase tracking-wider font-semibold">
-                  ✦ Case Study Hero Banner (Landscape)
-                </span>
-                <span className={`text-[10px] font-mono-tight px-2 py-0.5 rounded-full border ${getCoverAspectBadge('banner').color}`}>
-                  {getCoverAspectBadge('banner').ratio}
-                </span>
-              </div>
-              <ImageUploadField
-                label="Case Study Hero Banner *"
-                value={form.cover_image}
-                onChange={(url) => setForm((p) => ({ ...p, cover_image: url }))}
-                folder="projects"
-                description="Wide panoramic header banner displayed at the top of the project detail case study view."
-              />
-            </div>
-          </div>
-          <div>
-            <label className="block text-sm text-mist-1 mb-1.5">My Role</label>
-            <input
-              type="text"
-              value={form.role}
-              onChange={(e) => setForm((p) => ({ ...p, role: e.target.value }))}
-              className="w-full bg-white/5 border border-(--line) rounded-lg px-3 py-2.5 text-sm text-paper placeholder:text-mist-2 focus:outline-none focus:border-primary/50 transition-colors"
-              placeholder="e.g. Brand Designer & Visual Strategist"
-            />
-          </div>
-          <div>
-            <label className="block text-sm text-mist-1 mb-1.5">Project Duration</label>
-            <input
-              type="text"
-              value={form.duration}
-              onChange={(e) => setForm((p) => ({ ...p, duration: e.target.value }))}
-              className="w-full bg-white/5 border border-(--line) rounded-lg px-3 py-2.5 text-sm text-paper placeholder:text-mist-2 focus:outline-none focus:border-primary/50 transition-colors"
-              placeholder="e.g. 4 weeks"
-            />
-          </div>
-          <div className="sm:col-span-2">
-            <label className="block text-sm text-mist-1 mb-1.5">Live Project Link</label>
-            <input
-              type="url"
-              value={form.link}
-              onChange={(e) => setForm((p) => ({ ...p, link: e.target.value }))}
-              className="w-full bg-white/5 border border-(--line) rounded-lg px-3 py-2.5 text-sm text-paper placeholder:text-mist-2 focus:outline-none focus:border-primary/50 transition-colors"
-              placeholder="https://..."
-            />
-          </div>
-          <div className="sm:col-span-2">
-            <label className="block text-sm text-mist-1 mb-1.5">Additional Tags (comma-separated)</label>
-            <input
-              type="text"
-              value={form.tags}
-              onChange={(e) => setForm((p) => ({ ...p, tags: e.target.value }))}
-              className="w-full bg-white/5 border border-(--line) rounded-lg px-3 py-2.5 text-sm text-paper placeholder:text-mist-2 focus:outline-none focus:border-primary/50 transition-colors"
-              placeholder="Luxury, Beauty, Visual Identity, Packaging"
-            />
-          </div>
-          <div className="sm:col-span-2">
-            <label className="flex items-center gap-3 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={form.featured}
-                onChange={(e) => setForm((p) => ({ ...p, featured: e.target.checked }))}
-                className="w-4 h-4 rounded border-(--line) bg-white/5 text-primary focus:ring-primary/30"
-              />
-              <span className="text-sm text-mist-1">Featured project on homepage</span>
-            </label>
-          </div>
-        </div>
 
         {/* Dynamic Case Study Section */}
         <div className="border-t border-(--line) pt-8">
