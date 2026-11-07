@@ -98,8 +98,9 @@ export default function ProjectDetailsCard({
         aria-controls="project-details-panel"
         aria-label={getProjectDetailsAriaLabel(isOpen, form.title)}
         title={getProjectDetailsToggleTooltip(isOpen)}
-        className="w-full flex items-center justify-between p-4 text-left hover:bg-white/[0.02] transition-colors focus:outline-none focus:bg-white/[0.03] cursor-pointer"
+        className="w-full group flex items-center justify-between p-4 text-left hover:bg-white/[0.02] transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-primary/50 focus:bg-white/[0.03] cursor-pointer"
       >
+
         <div className="flex items-center gap-3 min-w-0">
           <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shrink-0 transition-transform group-hover:scale-105">
             <FileText className="w-4 h-4" />
