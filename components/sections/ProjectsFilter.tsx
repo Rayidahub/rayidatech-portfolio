@@ -10,6 +10,7 @@ import PremiumCard from '@/components/ui/PremiumCard';
 import Reveal from '@/components/ui/Reveal';
 import GlassCard from '@/components/ui/GlassCard';
 import { normalizeSlug } from '@/lib/slug';
+import { getProjectCardImage } from '@/lib/project-card-image';
 
 const FALLBACK_CATEGORIES = [...SERVICE_CATEGORIES];
 
@@ -173,7 +174,7 @@ export default function ProjectsFilter({
               ? 'Featured'
               : firstTag || 'Project';
 
-            const cleanCover = cleanImageUrl(project.cover_image);
+            const cardImageSrc = getProjectCardImage(project);
 
             return (
               <Reveal key={project.id} index={index}>
@@ -182,7 +183,7 @@ export default function ProjectsFilter({
                   className="group block h-full"
                 >
                   <PremiumCard
-                    imageSrc={cleanCover || '/img/card1.png'}
+                    imageSrc={cardImageSrc}
                     imageAlt={project.title}
                     badge={badgeLabel}
                     title={project.title}
