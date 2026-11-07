@@ -192,6 +192,9 @@ export interface BrandIdentityCaseStudy {
 
   // Section 7 — Brand Applications (Dynamic & Repeatable)
   brand_applications: BrandApplication[];
+  applications?: BrandApplication[];
+  deliverables?: BrandApplication[];
+
 
   // Section 8 — Brand Gallery
   brand_gallery: BrandGalleryItem[];
