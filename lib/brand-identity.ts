@@ -310,6 +310,7 @@ export function normalizeBrandApplications(caseStudy?: any): BrandApplication[] 
 
 /**
  * Safely resolves and validates a layout preference for brand applications.
+
  */
 export function getEffectiveApplicationLayout(
   layout?: string | null
@@ -375,6 +376,56 @@ export function normalizeBrandGalleryItems(caseStudy?: any): BrandGalleryItem[] 
     .filter((g) => Boolean(g.image_url))
     .sort((a, b) => a.display_order - b.display_order)
 }
+
+export interface BrandOutcomeDetails {
+  outcomeDesc: string
+  impactDesc: string
+  reflectionDesc: string
+  hasConclusion: boolean
+}
+
+/**
+ * Normalizes outcome, impact, and reflection notes across various naming conventions.
+ */
+export function normalizeBrandOutcomeDetails(caseStudy?: any): BrandOutcomeDetails {
+  if (!caseStudy || typeof caseStudy !== 'object') {
+    return {
+      outcomeDesc: '',
+      impactDesc: '',
+      reflectionDesc: '',
+      hasConclusion: false,
+    }
+  }
+
+  const outcomeDesc = (
+    caseStudy.design_outcome ||
+    caseStudy.outcome_description ||
+    caseStudy.outcome ||
+    ''
+  ).trim()
+
+  const impactDesc = (
+    caseStudy.project_impact ||
+    caseStudy.impact_description ||
+    caseStudy.impact ||
+    ''
+  ).trim()
+
+  const reflectionDesc = (
+    caseStudy.personal_reflection ||
+    caseStudy.key_learnings ||
+    caseStudy.reflection ||
+    ''
+  ).trim()
+
+  return {
+    outcomeDesc,
+    impactDesc,
+    reflectionDesc,
+    hasConclusion: Boolean(outcomeDesc || impactDesc || reflectionDesc),
+  }
+}
+
 
 
 
