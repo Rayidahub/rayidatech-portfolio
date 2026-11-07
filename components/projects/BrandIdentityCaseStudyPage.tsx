@@ -905,20 +905,21 @@ export default function BrandIdentityCaseStudyPage({
                       </div>
                     </div>
                     <div className="flex flex-wrap items-center justify-between gap-4 px-2">
-                      <div>
-                        <span className="text-xs font-mono-tight uppercase text-secondary">
+                      <div className="space-y-1">
+                        <span className="inline-flex px-3 py-1 rounded-full bg-secondary/15 text-secondary border border-secondary/25 text-xs font-mono-tight">
                           {app.category}
                         </span>
-                        <h3 className="font-display text-xl sm:text-2xl font-semibold text-paper mt-0.5">
+                        <h3 className="font-display text-2xl sm:text-3xl font-semibold text-paper mt-1">
                           {app.title}
                         </h3>
                       </div>
                       {app.description && (
-                        <p className="text-sm text-mist-1 max-w-xl">
+                        <p className="text-sm sm:text-base text-mist-1 max-w-xl leading-relaxed">
                           {app.description}
                         </p>
                       )}
                     </div>
+
                   </div>
                 )}
 
