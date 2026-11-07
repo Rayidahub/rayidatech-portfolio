@@ -3,7 +3,8 @@
 import { useState, useEffect, useCallback } from 'react'
 import { createClient } from '@/lib/supabase/browser'
 import { useRouter, useParams } from 'next/navigation'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, ChevronDown, Sparkles } from 'lucide-react'
+
 import Link from 'next/link'
 import { SERVICE_CATEGORIES } from '@/lib/data/services'
 import ProjectClassificationCard from '@/components/admin/ProjectClassificationCard'
@@ -25,7 +26,9 @@ export default function EditProject() {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
   const [notFound, setNotFound] = useState(false)
+  const [caseStudyOpen, setCaseStudyOpen] = useState(false)
   const [form, setForm] = useState({
+
     title: '',
     slug: '',
     description: '',
@@ -326,41 +329,75 @@ export default function EditProject() {
         />
 
 
-        {/* Dynamic Case Study Section */}
-        <div className="border-t border-(--line) pt-8">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <div className="flex items-center gap-2">
-                <h2 className="font-display text-xl font-semibold text-paper">
-                  {isBrandIdentity
-                    ? 'Brand Identity Case Study Form'
-                    : 'Case Study Form'}
-                </h2>
-                <span className="text-[11px] font-mono-tight px-2 py-0.5 rounded-full bg-secondary/15 text-secondary border border-secondary/25">
-                  {form.project_type}
-                </span>
+        {/* Dynamic Case Study Section (Collapsible, default collapsed) */}
+        <div
+          data-testid="case-study-section-card"
+          data-state={caseStudyOpen ? 'open' : 'collapsed'}
+          className="rounded-xl bg-white/[0.02] border border-(--line) overflow-hidden transition-all duration-200"
+        >
+          <button
+            type="button"
+            onClick={() => setCaseStudyOpen((prev) => !prev)}
+            aria-expanded={caseStudyOpen}
+            className="w-full flex items-center justify-between p-4 text-left hover:bg-white/[0.02] transition-colors focus:outline-none focus:bg-white/[0.03] cursor-pointer"
+          >
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="w-8 h-8 rounded-lg bg-secondary/10 border border-secondary/20 flex items-center justify-center text-secondary shrink-0">
+                <Sparkles className="w-4 h-4" />
               </div>
-              <p className="text-xs text-mist-2 mt-1">
-                {isBrandIdentity
-                  ? 'Tailored specifically for logos, color palettes, typography, merchandise, vehicle livery, packaging & visual systems.'
-                  : 'Tailored for user pain points, flows, wireframes, component design systems and app mockups.'}
-              </p>
-            </div>
-          </div>
 
-          {isBrandIdentity ? (
-            <BrandIdentityFields
-              value={form.case_study as BrandIdentityCaseStudy}
-              onChange={(case_study) => setForm((p) => ({ ...p, case_study }))}
-            />
-          ) : (
-            <CaseStudyFields
-              category={form.category}
-              value={form.case_study as CaseStudy}
-              onChange={(case_study) => setForm((p) => ({ ...p, case_study }))}
-            />
+              <div className="min-w-0">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-xs font-mono-tight uppercase tracking-wider text-mist-1 font-medium">
+                    {isBrandIdentity
+                      ? 'Brand Identity Case Study Architecture'
+                      : 'Case Study Architecture & Deliverables'}
+                  </span>
+                  <span className="text-[10px] font-mono-tight px-2 py-0.5 rounded-full bg-secondary/15 text-secondary border border-secondary/25">
+                    {form.project_type}
+                  </span>
+                  <span className="text-[10px] font-mono-tight px-2 py-0.5 rounded-full bg-white/5 border border-(--line) text-mist-1">
+                    {isBrandIdentity ? '9 Modular Sections' : '10 Modular Sections'}
+                  </span>
+                </div>
+                <p className="text-[11px] text-mist-2 mt-0.5 truncate">
+                  {isBrandIdentity
+                    ? 'Logos, color palettes, typography, merchandise, product packaging & visual systems.'
+                    : 'Problem framing, research, design process, interactive systems, and final deliverables.'}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 shrink-0 ml-3">
+              <span className="text-[10px] font-mono-tight text-mist-2 hidden sm:inline-block">
+                {caseStudyOpen ? 'Click to collapse' : 'Click to expand'}
+              </span>
+              <ChevronDown
+                className={`w-4 h-4 text-mist-2 transition-transform duration-200 ${
+                  caseStudyOpen ? 'rotate-180 text-primary' : ''
+                }`}
+              />
+            </div>
+          </button>
+
+          {caseStudyOpen && (
+            <div className="p-4 sm:p-6 border-t border-(--line) space-y-6 animate-fade-in">
+              {isBrandIdentity ? (
+                <BrandIdentityFields
+                  value={form.case_study as BrandIdentityCaseStudy}
+                  onChange={(case_study) => setForm((p) => ({ ...p, case_study }))}
+                />
+              ) : (
+                <CaseStudyFields
+                  category={form.category}
+                  value={form.case_study as CaseStudy}
+                  onChange={(case_study) => setForm((p) => ({ ...p, case_study }))}
+                />
+              )}
+            </div>
           )}
         </div>
+
 
         {/* Bottom Control Action Bar */}
         <ProjectActionBar
