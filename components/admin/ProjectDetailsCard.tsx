@@ -41,6 +41,8 @@ export interface ProjectDetailsCardProps {
   ) => void;
   onTitleChange?: (title: string) => void;
   defaultOpen?: boolean;
+  isOpen?: boolean;
+  onToggle?: () => void;
   className?: string;
 }
 
@@ -49,9 +51,22 @@ export default function ProjectDetailsCard({
   onChange,
   onTitleChange,
   defaultOpen = false,
+  isOpen: controlledIsOpen,
+  onToggle: controlledOnToggle,
   className = '',
 }: ProjectDetailsCardProps) {
-  const [isOpen, setIsOpen] = useState(defaultOpen);
+  const [internalIsOpen, setInternalIsOpen] = useState(defaultOpen);
+
+  const isControlled = typeof controlledIsOpen === 'boolean';
+  const isOpen = isControlled ? controlledIsOpen : internalIsOpen;
+
+  const handleToggle = () => {
+    if (isControlled && controlledOnToggle) {
+      controlledOnToggle();
+    } else {
+      setInternalIsOpen((prev) => !prev);
+    }
+  };
 
   const coverStatus = getCoverSummaryStatus(form.card_image, form.cover_image);
   const featuredStatus = getFeaturedStatusBadge(form.featured);
@@ -73,8 +88,9 @@ export default function ProjectDetailsCard({
       {/* Collapsible Header Button */}
       <button
         type="button"
-        onClick={() => setIsOpen((prev) => !prev)}
+        onClick={handleToggle}
         aria-expanded={isOpen}
+
         aria-controls="project-details-panel"
         aria-label={getProjectDetailsAriaLabel(isOpen, form.title)}
         title={getProjectDetailsToggleTooltip(isOpen)}
