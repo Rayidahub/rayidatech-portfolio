@@ -33,9 +33,10 @@ export default function ProjectClassificationCard({
   onProjectTypeChange,
   category,
   onCategoryChange,
-  defaultOpen = true,
+  defaultOpen = false,
   className = '',
 }: ProjectClassificationCardProps) {
+
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
   const ActiveIcon =
