@@ -127,5 +127,38 @@ export function getProjectDetailsCompletionScore(
   }
 }
 
+/**
+ * Truncates a preview text string to a given maximum length with an ellipsis.
+ */
+export function truncateDetailsPreview(text?: string | null, maxLength = 45): string {
+  if (!text) return ''
+  const trimmed = text.trim()
+  if (trimmed.length <= maxLength) return trimmed
+  return `${trimmed.slice(0, maxLength).trimEnd()}…`
+}
+
+/**
+ * Formats a clean, readable one-line summary for the collapsed project details header.
+ */
+export function formatProjectDetailsSubtitle(
+  title?: string | null,
+  role?: string | null,
+  duration?: string | null
+): string {
+  const parts: string[] = []
+  const displayTitle = (title && title.trim()) ? title.trim() : 'Untitled Project'
+  parts.push(displayTitle)
+
+  if (role && role.trim()) {
+    parts.push(role.trim())
+  }
+  if (duration && duration.trim()) {
+    parts.push(duration.trim())
+  }
+
+  return parts.join(' • ')
+}
+
+
 
 
