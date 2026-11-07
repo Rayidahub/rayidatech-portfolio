@@ -306,6 +306,27 @@ export function normalizeBrandApplications(caseStudy?: any): BrandApplication[] 
     .sort((a, b) => a.display_order - b.display_order)
 }
 
+/**
+ * Safely resolves and validates a layout preference for brand applications.
+ */
+export function getEffectiveApplicationLayout(
+  layout?: string | null
+): BrandApplicationLayout {
+  if (!layout) return 'split'
+  const norm = layout.toLowerCase().trim()
+  if (
+    norm === 'hero' ||
+    norm === 'split' ||
+    norm === 'centered' ||
+    norm === 'editorial' ||
+    norm === 'wide'
+  ) {
+    return norm as BrandApplicationLayout
+  }
+  return 'split'
+}
+
+
 
 /**
  * Derives a clean CSS variable name and value from a brand color item.
