@@ -443,6 +443,21 @@ export function formatDeliverableCategoryBadge(category?: string | null): string
   return category.trim()
 }
 
+/**
+ * Generates a URL-safe DOM element id for deep linking to a specific deliverable.
+ */
+export function getApplicationDeliverableAnchor(
+  app: BrandApplication,
+  index: number
+): string {
+  const safeTitle = (app.title || `deliverable-${index + 1}`)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+  return `deliverable-${safeTitle || index + 1}`
+}
+
+
 
 
 
