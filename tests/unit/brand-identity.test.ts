@@ -436,7 +436,95 @@ describe('Brand Identity Architecture & Types', () => {
       )
     })
   })
+
+  describe('Luxe by Sey Deliverables Suite Real-World Integration (Section 7)', () => {
+    it('properly resolves all 5 brand application deliverables from case study JSONB', () => {
+      const luxeCaseStudy = {
+        case_study_type: 'Brand Identity',
+        brand_applications: [
+          {
+            id: 'app-packaging',
+            title: 'Product Packaging Mockup',
+            category: 'Product Packaging',
+            primary_image:
+              'https://grtvnrqzmbndbjljramm.supabase.co/storage/v1/object/public/hero-slides/projects/1793980693018-luxurious-purple-skincare-jar.png',
+            layout_preference: 'centered',
+            description: 'High-resolution tactile application mockup showcase',
+            display_order: 1,
+            is_visible: true,
+          },
+          {
+            id: 'app-bag',
+            title: 'Luxury Shopping Bag',
+            category: 'Shopping Bag',
+            primary_image:
+              'https://grtvnrqzmbndbjljramm.supabase.co/storage/v1/object/public/hero-slides/projects/shopping-bag.png',
+            layout_preference: 'split',
+            description: 'Matte black shopping tote with embossed gold monogram',
+            display_order: 2,
+            is_visible: true,
+          },
+          {
+            id: 'app-apparel',
+            title: 'Staff Polo & Uniforms',
+            category: 'Polo / Apparel',
+            primary_image:
+              'https://grtvnrqzmbndbjljramm.supabase.co/storage/v1/object/public/hero-slides/projects/polo.png',
+            layout_preference: 'editorial',
+            description: 'Embroidered salon team uniform',
+            display_order: 3,
+            is_visible: true,
+          },
+          {
+            id: 'app-transport',
+            title: 'Delivery Van Livery',
+            category: 'Transport & Fleet',
+            primary_image:
+              'https://grtvnrqzmbndbjljramm.supabase.co/storage/v1/object/public/hero-slides/projects/van.png',
+            layout_preference: 'wide',
+            description: 'Full vehicle wrap for product dispatch',
+            display_order: 4,
+            is_visible: true,
+          },
+          {
+            id: 'app-billboard',
+            title: 'City Center Billboard',
+            category: 'Billboard & OOH',
+            primary_image:
+              'https://grtvnrqzmbndbjljramm.supabase.co/storage/v1/object/public/hero-slides/projects/billboard.png',
+            layout_preference: 'hero',
+            description: 'Airport arrival corridor digital billboard',
+            display_order: 5,
+            is_visible: true,
+          },
+        ],
+      }
+
+      const visible = isBrandApplicationsSectionVisible(luxeCaseStudy)
+      expect(visible).toBe(true)
+
+      const apps = normalizeBrandApplications(luxeCaseStudy)
+      expect(apps.length).toBe(5)
+
+      // Verifying item 1 (matching user screenshot)
+      expect(apps[0].id).toBe('app-packaging')
+      expect(apps[0].title).toBe('Product Packaging Mockup')
+      expect(apps[0].category).toBe('Product Packaging')
+      expect(apps[0].layout_preference).toBe('centered')
+      expect(apps[0].primary_image).toContain('1793980693018')
+
+      // Verifying layout preferences are preserved
+      expect(apps.map((a) => a.layout_preference)).toEqual([
+        'centered',
+        'split',
+        'editorial',
+        'wide',
+        'hero',
+      ])
+    })
+  })
 })
+
 
 
 
