@@ -7,7 +7,7 @@ import Section from '@/components/ui/Section';
 import Reveal from '@/components/ui/Reveal';
 import GlassCard from '@/components/ui/GlassCard';
 import ProductsCatalogClient from '@/components/products/ProductsCatalogClient';
-import { normalizeProduct } from '@/lib/products';
+import { normalizeProduct, generateProductsJsonLd } from '@/lib/products';
 import { defaultEcosystemProducts } from '@/lib/data/products';
 import type { EcosystemProduct } from '@/types/ecosystem-product';
 
@@ -47,9 +47,15 @@ async function getProducts(): Promise<EcosystemProduct[]> {
 
 export default async function ProductsPage() {
   const products = await getProducts();
+  const jsonLd = generateProductsJsonLd(products);
 
   return (
     <div className="relative overflow-hidden pt-24 pb-20">
+      {/* Schema.org SoftwareApplication & ItemList JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Background Ambient Glows */}
       <div
         className="pointer-events-none absolute top-1/4 -left-48 w-96 h-96 rounded-full bg-primary/15 blur-3xl opacity-50"
