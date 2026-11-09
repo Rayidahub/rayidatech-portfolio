@@ -242,3 +242,38 @@ export function calculateProductStats(products: EcosystemProduct[]): {
     active,
   };
 }
+
+/**
+ * Generates Schema.org ItemList and SoftwareApplication structured data
+ * for search engine indexing of Rayida Tech products.
+ */
+export function generateProductsJsonLd(products: EcosystemProduct[]): Record<string, any> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Rayida Tech Products & Ecosystem',
+    description:
+      'Proprietary digital products, software tools, and AI-native applications built by Rayida Tech.',
+    itemListElement: products.map((product, idx) => ({
+      '@type': 'ListItem',
+      position: idx + 1,
+      item: {
+        '@type': 'SoftwareApplication',
+        name: product.name,
+        description: product.description,
+        applicationCategory: product.category || 'BusinessApplication',
+        operatingSystem: 'Web, Cloud',
+        ...(product.website_url ? { url: product.website_url } : {}),
+        offers: {
+          '@type': 'Offer',
+          price: '0',
+          priceCurrency: 'USD',
+          availability:
+            product.status === 'live'
+              ? 'https://schema.org/InStock'
+              : 'https://schema.org/PreOrder',
+        },
+      },
+    })),
+  };
+}
