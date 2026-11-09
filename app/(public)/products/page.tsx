@@ -39,8 +39,7 @@ async function getProducts(): Promise<EcosystemProduct[]> {
     }
 
     return data.map(normalizeProduct);
-  } catch (err) {
-    console.error('Error fetching products:', err);
+  } catch {
     return defaultEcosystemProducts.map(normalizeProduct);
   }
 }
