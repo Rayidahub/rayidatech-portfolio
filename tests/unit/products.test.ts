@@ -170,6 +170,17 @@ describe('Products Architecture & Helpers', () => {
       expect(matched.length).toBe(1);
       expect(matched[0].name).toBe('Raydemy');
     });
+
+    it('filters by search query matching features or tagline', () => {
+      const matched = filterProducts(products, { query: 'orchestration' });
+      expect(matched.length).toBe(1);
+      expect(matched[0].name).toBe('Rayce');
+    });
+
+    it('handles empty results gracefully when query has no matches', () => {
+      const matched = filterProducts(products, { query: 'NonExistentProductXYZ' });
+      expect(matched.length).toBe(0);
+    });
   });
 
   describe('calculateProductStats', () => {
@@ -179,6 +190,28 @@ describe('Products Architecture & Helpers', () => {
       expect(stats.comingSoon).toBe(5);
       expect(stats.active).toBe(5);
       expect(stats.live).toBe(0);
+    });
+  });
+
+  describe('defaultEcosystemProducts Catalog Integrity', () => {
+    it('contains all 5 canonical Rayida Tech ecosystem products', () => {
+      const names = defaultEcosystemProducts.map((p) => p.name);
+      expect(names).toContain('Rayce');
+      expect(names).toContain('Raydemy');
+      expect(names).toContain('Ranect');
+      expect(names).toContain('Payida');
+      expect(names).toContain('RayTexta');
+    });
+
+    it('ensures each canonical product has valid slug, category, emoji, and features', () => {
+      for (const p of defaultEcosystemProducts) {
+        expect(p.slug).toBeTruthy();
+        expect(p.category).toBeTruthy();
+        expect(p.emoji).toBeTruthy();
+        expect(Array.isArray(p.features)).toBe(true);
+        expect(p.features!.length).toBeGreaterThan(0);
+        expect(p.description.length).toBeGreaterThan(20);
+      }
     });
   });
 });
