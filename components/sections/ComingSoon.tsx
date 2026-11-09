@@ -83,13 +83,21 @@ export default async function ComingSoon() {
             <p className="font-display text-xl md:text-2xl font-medium text-paper mb-8">
               Stay tuned. Something big is coming. 🚀
             </p>
-            <Link
-              href="/contact"
-              className="btn-glow inline-flex items-center gap-2 rounded-lg bg-primary px-8 py-3.5 text-sm font-semibold text-paper transition-all hover:bg-primary/80"
-            >
-              Subscribe for Updates
-              <ArrowRight className="h-4 w-4" />
-            </Link>
+            <div className="flex flex-wrap items-center justify-center gap-4">
+              <Link
+                href="/products"
+                className="btn-glow inline-flex items-center gap-2 rounded-xl bg-primary px-8 py-3.5 text-sm font-semibold text-paper transition-all hover:bg-primary/80 shadow-lg shadow-primary/20"
+              >
+                <span>Explore All Products</span>
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                href="/contact"
+                className="inline-flex items-center gap-2 rounded-xl bg-white/5 border border-(--line) px-6 py-3.5 text-sm font-semibold text-paper hover:bg-white/10 hover:text-white transition-all"
+              >
+                <span>Subscribe for Updates</span>
+              </Link>
+            </div>
           </div>
         </Reveal>
       </Container>
