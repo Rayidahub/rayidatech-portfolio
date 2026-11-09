@@ -73,9 +73,9 @@ export const CONTENT_PERMISSIONS: PermissionDefinition[] = [
   },
   {
     id: 'coming_soon',
-    label: 'Coming Soon / Ecosystem',
-    description: 'Manage launch countdowns, ecosystem products, and badges',
-    path: '/admin/coming-soon',
+    label: 'Products & Ecosystem',
+    description: 'Manage proprietary software, ecosystem products, status, and links',
+    path: '/admin/products',
   },
   {
     id: 'testimonials',
