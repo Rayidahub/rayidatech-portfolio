@@ -7,6 +7,7 @@ import {
   getProductBadge,
   filterProducts,
   calculateProductStats,
+  generateProductsJsonLd,
 } from '@/lib/products';
 import { defaultEcosystemProducts } from '@/lib/data/products';
 import type { EcosystemProduct } from '@/types/ecosystem-product';
@@ -212,6 +213,28 @@ describe('Products Architecture & Helpers', () => {
         expect(p.features!.length).toBeGreaterThan(0);
         expect(p.description.length).toBeGreaterThan(20);
       }
+    });
+  });
+
+  describe('generateProductsJsonLd', () => {
+    it('generates valid Schema.org ItemList with SoftwareApplication elements', () => {
+      const jsonLd = generateProductsJsonLd(defaultEcosystemProducts);
+      expect(jsonLd['@context']).toBe('https://schema.org');
+      expect(jsonLd['@type']).toBe('ItemList');
+      expect(Array.isArray(jsonLd.itemListElement)).toBe(true);
+      expect(jsonLd.itemListElement.length).toBe(defaultEcosystemProducts.length);
+
+      const firstItem = jsonLd.itemListElement[0].item;
+      expect(firstItem['@type']).toBe('SoftwareApplication');
+      expect(firstItem.name).toBe(defaultEcosystemProducts[0].name);
+      expect(firstItem.applicationCategory).toBe(defaultEcosystemProducts[0].category);
+      expect(firstItem.offers.availability).toBe('https://schema.org/PreOrder');
+    });
+
+    it('sets InStock offer availability for live products', () => {
+      const liveProduct = { ...defaultEcosystemProducts[0], status: 'live' as const };
+      const jsonLd = generateProductsJsonLd([liveProduct]);
+      expect(jsonLd.itemListElement[0].item.offers.availability).toBe('https://schema.org/InStock');
     });
   });
 });
