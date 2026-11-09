@@ -47,7 +47,7 @@ const navItems: NavItem[] = [
   { href: '/admin/blog', label: 'Blog', icon: FileText, permission: 'blog' },
   { href: '/admin/hero', label: 'Hero Slides', icon: Image, permission: 'hero' },
   { href: '/admin/hero/settings', label: 'Hero Gradient & Settings', icon: Sliders, permission: 'hero' },
-  { href: '/admin/coming-soon', label: 'Coming Soon', icon: Rocket, permission: 'coming_soon' },
+  { href: '/admin/products', label: 'Products', icon: Rocket, permission: 'coming_soon' },
   { href: '/admin/testimonials', label: 'Testimonials', icon: MessageSquareQuote, permission: 'testimonials' },
   { href: '/admin/team', label: 'Team', icon: Users, permission: 'team' },
   { href: '/admin/contacts', label: 'Contacts', icon: Mail, permission: 'contacts' },
