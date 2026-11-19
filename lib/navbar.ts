@@ -43,3 +43,11 @@ export function getNavbarContainerClasses({
   }
   return `${base} border-b border-transparent`;
 }
+
+/**
+ * Returns the CSS class string for the mobile menu dropdown drawer,
+ * using a 100% opaque background to prevent underlying hero/page content from bleeding through.
+ */
+export function getMobileMenuDrawerClasses(): string {
+  return 'bg-[var(--ink-deep)] border-t border-b border-(--line) px-4 sm:px-6 py-5 md:hidden max-h-[calc(100vh-4.5rem)] overflow-y-auto shadow-2xl shadow-black/80 animate-in fade-in slide-in-from-top-2 duration-200';
+}
