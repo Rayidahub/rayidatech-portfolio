@@ -51,3 +51,10 @@ export function getNavbarContainerClasses({
 export function getMobileMenuDrawerClasses(): string {
   return 'bg-[var(--ink-deep)] border-t border-b border-(--line) px-4 sm:px-6 py-5 md:hidden max-h-[calc(100vh-4.5rem)] overflow-y-auto shadow-2xl shadow-black/80 animate-in fade-in slide-in-from-top-2 duration-200';
 }
+
+/**
+ * Returns the CSS class string for the mobile menu backdrop overlay.
+ */
+export function getMobileBackdropClasses(): string {
+  return 'fixed inset-0 top-[60px] sm:top-[68px] bg-black/75 backdrop-blur-sm z-[-1] md:hidden animate-fade-in';
+}
