@@ -76,7 +76,7 @@ export default function AdminHeader({
         {/* Notifications Circular Button with Active Dot */}
         <button
           type="button"
-          className="w-10 h-10 rounded-full bg-white border border-slate-200/80 shadow-xs flex items-center justify-center text-slate-500 hover:text-slate-800 hover:bg-slate-50 relative transition-all cursor-pointer"
+          className="w-10 h-10 rounded-full bg-white border border-slate-200/80 shadow-xs flex items-center justify-center text-slate-500 hover:text-slate-800 hover:bg-slate-50 relative transition-all cursor-pointer active:scale-95"
           title="Notifications & System Alerts"
           aria-label="Notifications"
         >
