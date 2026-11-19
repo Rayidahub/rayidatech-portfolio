@@ -45,7 +45,7 @@ export default function AdminHeader({
           </button>
         )}
         <span className="text-xs text-mist-2 hidden sm:inline">Signed in as</span>
-        <span className="text-sm font-medium text-paper truncate max-w-[150px] sm:max-w-none">
+        <span className="text-xl sm:text-2xl font-bold font-display text-slate-900 tracking-tight leading-none">
           {name || email}
         </span>
       </div>
