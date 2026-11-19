@@ -11,3 +11,13 @@ export const MAIN_NAV_LINKS: NavLink[] = [
   { href: '/blog', label: 'Blog' },
   { href: '/contact', label: 'Contact' },
 ];
+
+/**
+ * Determines whether a nav link is currently active given the current pathname.
+ */
+export function isNavActive(pathname: string, href: string): boolean {
+  if (href === '/') {
+    return pathname === '/';
+  }
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
