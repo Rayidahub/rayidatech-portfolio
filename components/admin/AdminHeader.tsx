@@ -52,7 +52,7 @@ export default function AdminHeader({
           </button>
         )}
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold font-display text-slate-900 tracking-tight leading-none">
+          <h1 className="text-xl sm:text-2xl font-bold font-display text-slate-900 tracking-tight leading-tight">
             Dashboard Overview
           </h1>
           <p className="text-xs text-slate-400 font-normal mt-1 flex items-center gap-1.5">
