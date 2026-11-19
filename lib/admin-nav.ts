@@ -102,4 +102,29 @@ export const ADMIN_NAV_CATEGORIES: AdminNavCategory[] = [
       },
     ],
   },
+  {
+    id: 'appearance',
+    title: 'Appearance & Hero',
+    shortLabel: 'Design',
+    items: [
+      {
+        href: '/admin/hero',
+        label: 'Hero Slides',
+        icon: Image,
+        permission: 'hero',
+      },
+      {
+        href: '/admin/hero/settings',
+        label: 'Hero Gradient & Settings',
+        icon: Sliders,
+        permission: 'hero',
+      },
+      {
+        href: '/admin/settings',
+        label: 'Theme & Appearance',
+        icon: Palette,
+        permission: 'dashboard',
+      },
+    ],
+  },
 ];
