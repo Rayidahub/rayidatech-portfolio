@@ -98,6 +98,34 @@ describe('DealDeck Modern White Admin Dashboard Architecture', () => {
     });
   });
 
+
+  describe('Minimalist Admin Category Titles (DealDeck Style)', () => {
+    it('maps overview to Menu', () => {
+      expect(getMinimalistAdminCategoryTitle('overview')).toBe('Menu');
+    });
+
+    it('maps content to Content', () => {
+      expect(getMinimalistAdminCategoryTitle('content')).toBe('Content');
+    });
+
+    it('maps appearance to Design', () => {
+      expect(getMinimalistAdminCategoryTitle('appearance')).toBe('Design');
+    });
+
+    it('maps communication to Audience', () => {
+      expect(getMinimalistAdminCategoryTitle('communication')).toBe('Audience');
+    });
+
+    it('maps system to Tools', () => {
+      expect(getMinimalistAdminCategoryTitle('system')).toBe('Tools');
+    });
+
+    it('falls back to custom title or category id for unknown categories', () => {
+      expect(getMinimalistAdminCategoryTitle('custom', 'Custom Title')).toBe('Custom Title');
+      expect(getMinimalistAdminCategoryTitle('unknown')).toBe('unknown');
+    });
+  });
+
   describe('Default Datasets Structure', () => {
     it('provides exactly 7 months in DEFAULT_MONTHLY_HABITS', () => {
       expect(DEFAULT_MONTHLY_HABITS).toHaveLength(7);
