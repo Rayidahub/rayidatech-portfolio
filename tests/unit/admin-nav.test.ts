@@ -43,5 +43,15 @@ describe('Admin Navigation & Categorized Menu Architecture', () => {
         '/admin/team',
       ]);
     });
+
+    it('organizes appearance & hero category with visual design controls', () => {
+      const appearanceCategory = ADMIN_NAV_CATEGORIES.find((c) => c.id === 'appearance');
+      expect(appearanceCategory?.title).toBe('Appearance & Hero');
+      expect(appearanceCategory?.items.map((i) => i.href)).toEqual([
+        '/admin/hero',
+        '/admin/hero/settings',
+        '/admin/settings',
+      ]);
+    });
   });
 });
