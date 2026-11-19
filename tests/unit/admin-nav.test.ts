@@ -17,5 +17,12 @@ describe('Admin Navigation & Categorized Menu Architecture', () => {
       const ids = ADMIN_NAV_CATEGORIES.map((c) => c.id);
       expect(ids).toEqual(['overview', 'content', 'appearance', 'communication', 'system']);
     });
+
+    it('contains all 15 canonical admin routes across all categories without duplicates', () => {
+      const allHrefs = ADMIN_NAV_CATEGORIES.flatMap((c) => c.items.map((i) => i.href));
+      expect(allHrefs).toHaveLength(15);
+      const uniqueHrefs = new Set(allHrefs);
+      expect(uniqueHrefs.size).toBe(15);
+    });
   });
 });
