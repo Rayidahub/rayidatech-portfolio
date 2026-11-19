@@ -151,5 +151,11 @@ describe('Admin Navigation & Categorized Menu Architecture', () => {
       expect(isAdminRouteActive('/admin/projects/new', '/admin/projects')).toBe(true);
       expect(isAdminRouteActive('/admin/projects/123/edit', '/admin/projects')).toBe(true);
     });
+
+    it('does not falsely activate unrelated sibling routes', () => {
+      expect(isAdminRouteActive('/admin/products', '/admin/projects')).toBe(false);
+      expect(isAdminRouteActive('/admin/hero/settings', '/admin/hero')).toBe(true);
+      expect(isAdminRouteActive('/admin/hero', '/admin/hero/settings')).toBe(false);
+    });
   });
 });
