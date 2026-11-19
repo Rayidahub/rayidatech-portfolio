@@ -110,6 +110,14 @@ describe('Admin Navigation & Categorized Menu Architecture', () => {
   describe('getVisibleAdminNavCategories', () => {
     it('returns all 5 categories and 15 items for super_admin', () => {
       const visible = getVisibleAdminNavCategories({ role: 'super_admin' });
+
+    it('omits System & Access category for admin role since Users & Roles is excluded', () => {
+      const visible = getVisibleAdminNavCategories({ role: 'admin' });
+      expect(visible).toHaveLength(4);
+      expect(visible.some((c) => c.id === 'system')).toBe(false);
+      const totalItems = visible.reduce((acc, cat) => acc + cat.items.length, 0);
+      expect(totalItems).toBe(14);
+    });
       expect(visible).toHaveLength(5);
       const totalItems = visible.reduce((acc, cat) => acc + cat.items.length, 0);
       expect(totalItems).toBe(15);
