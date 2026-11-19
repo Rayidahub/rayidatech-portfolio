@@ -53,5 +53,15 @@ describe('Admin Navigation & Categorized Menu Architecture', () => {
         '/admin/settings',
       ]);
     });
+
+    it('organizes communication category with inbound pipeline and email outreach', () => {
+      const communicationCategory = ADMIN_NAV_CATEGORIES.find((c) => c.id === 'communication');
+      expect(communicationCategory?.title).toBe('Communication & Leads');
+      expect(communicationCategory?.items.map((i) => i.href)).toEqual([
+        '/admin/contacts',
+        '/admin/subscribers',
+        '/admin/outreach',
+      ]);
+    });
   });
 });
