@@ -184,3 +184,20 @@ export function isItemPermitted(
   if (item.permission === 'dashboard') return true;
   return permissions.includes(item.permission);
 }
+
+/**
+ * Returns filtered categories containing only permitted items for the current admin user.
+ * Categories with zero visible items are automatically omitted.
+ */
+export function getVisibleAdminNavCategories({
+  role = 'super_admin',
+  permissions = [],
+}: {
+  role?: AdminRole;
+  permissions?: AdminPermission[];
+}): AdminNavCategory[] {
+  return ADMIN_NAV_CATEGORIES.map((category) => ({
+    ...category,
+    items: category.items.filter((item) => isItemPermitted(item, role, permissions)),
+  })).filter((category) => category.items.length > 0);
+}
