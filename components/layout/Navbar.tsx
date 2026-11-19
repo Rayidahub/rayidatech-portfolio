@@ -8,7 +8,6 @@ import { Menu, X } from 'lucide-react';
 import StatusPill from '@/components/ui/StatusPill';
 import ThemeToggle from '@/components/ui/ThemeToggle';
 import BrandLogo from '@/components/ui/BrandLogo';
-
 import {
   MAIN_NAV_LINKS,
   isNavActive,
@@ -103,31 +102,49 @@ export default function Navbar() {
       </div>
 
       {isOpen && (
-        <div className="glass-strong border-t border-(--line) px-4 sm:px-6 py-5 md:hidden max-h-[calc(100vh-5rem)] overflow-y-auto">
-          <div className="flex flex-col gap-2.5">
-            {navLinks.map((link) => (
+        <>
+          {/* Backdrop overlay covering the screen below the menu */}
+          <div
+            onClick={() => setIsOpen(false)}
+            className={getMobileBackdropClasses()}
+            aria-hidden="true"
+          />
+
+          {/* Solid, non-transparent mobile menu container */}
+          <div className={getMobileMenuDrawerClasses()}>
+            <div className="flex flex-col gap-2">
+              {MAIN_NAV_LINKS.map((link) => {
+                const active = isNavActive(pathname, link.href);
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setIsOpen(false)}
+                    className={getMobileNavLinkClasses(active)}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
+
+              <div className="flex items-center justify-between gap-3 pt-4 mt-2 border-t border-(--line) px-1">
+                <div className="flex items-center gap-2.5">
+                  <ThemeToggle />
+                  <span className="text-xs font-mono-tight text-mist-2">Theme</span>
+                </div>
+                <StatusPill />
+              </div>
+
               <Link
-                key={link.href}
-                href={link.href}
-                className={`py-2 px-3 rounded-xl text-base font-medium transition-colors ${
-                  pathname === link.href ? 'text-paper bg-primary/10' : 'text-mist-1 hover:text-paper hover:bg-paper/5'
-                }`}
+                href="/contact"
+                onClick={() => setIsOpen(false)}
+                className="btn-glow mt-3 rounded-xl bg-primary px-5 py-3 text-center text-sm font-semibold text-paper transition-all hover:bg-primary/80 shadow-lg shadow-primary/25"
               >
-                {link.label}
+                Start a Project
               </Link>
-            ))}
-            <div className="flex items-center gap-3 pt-3 mt-1 border-t border-(--line) px-1">
-              <ThemeToggle />
-              <StatusPill />
             </div>
-            <Link
-              href="/contact"
-              className="btn-glow mt-2 rounded-full bg-primary px-5 py-3 text-center text-sm font-semibold text-paper transition-colors hover:bg-primary/80"
-            >
-              Start a Project
-            </Link>
           </div>
-        </div>
+        </>
       )}
     </nav>
   );
