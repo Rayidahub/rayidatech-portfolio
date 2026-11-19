@@ -93,5 +93,11 @@ describe('Admin Navigation & Categorized Menu Architecture', () => {
       expect(isItemPermitted(usersItem, 'super_admin', [])).toBe(true);
       expect(isItemPermitted(projectsItem, 'super_admin', [])).toBe(true);
     });
+
+    it('permits everything except users for admin role', () => {
+      expect(isItemPermitted(dashboardItem, 'admin', [])).toBe(true);
+      expect(isItemPermitted(projectsItem, 'admin', [])).toBe(true);
+      expect(isItemPermitted(usersItem, 'admin', [])).toBe(false);
+    });
   });
 });
