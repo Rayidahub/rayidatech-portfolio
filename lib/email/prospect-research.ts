@@ -487,3 +487,43 @@ export function searchAndEnrichProspects(
  * Builds and downloads a client-side Excel spreadsheet formatted exactly to user specifications:
  * "Abuja Prospects With Public Emails.xlsx"
  */
+export function exportProspectsToExcel(
+  prospects: ProspectResearchItem[],
+  customFilename?: string
+): void {
+  const exportRows = prospects.map((p) => ({
+    'Business Name': p.business_name,
+    'Business Category': p.business_category,
+    'Area in Abuja': p.area,
+    'Public Email Address': p.email || 'None Listed',
+    'Phone Number': p.phone || 'None Listed',
+    'Website Status / Verification Note': `[${p.website_status}] ${p.verification_note}`,
+    'Source and Source Link': p.source_link ? `${p.source} (${p.source_link})` : p.source,
+    'Opportunity Score': p.opportunity_score,
+    'Recommended Outreach Pitch': p.recommended_pitch,
+  }));
+
+  const worksheet = XLSX.utils.json_to_sheet(exportRows);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Abuja Prospects');
+
+  // Set column widths for readability
+  worksheet['!cols'] = [
+    { wch: 30 }, // Business Name
+    { wch: 26 }, // Business Category
+    { wch: 18 }, // Area
+    { wch: 32 }, // Email
+    { wch: 20 }, // Phone
+    { wch: 45 }, // Website Status / Note
+    { wch: 35 }, // Source
+    { wch: 18 }, // Opportunity Score
+    { wch: 50 }, // Pitch
+  ];
+
+  const filename = customFilename || 'Abuja Prospects With Public Emails.xlsx';
+  XLSX.writeFile(workbook, filename);
+}
+
+/**
+ * Builds and triggers download of CSV formatted data.
+ */
