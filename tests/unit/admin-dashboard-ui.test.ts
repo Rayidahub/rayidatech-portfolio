@@ -30,5 +30,22 @@ describe('DealDeck Modern White Admin Dashboard Architecture', () => {
     });
   });
 
+  describe('Number Formatting (DealDeck Style)', () => {
+    it('formats numbers with dots as thousands separators', () => {
+      expect(formatDealDeckNumber(34760)).toBe('34.760');
+      expect(formatDealDeckNumber(14987)).toBe('14.987');
+      expect(formatDealDeckNumber(12987)).toBe('12.987');
+      expect(formatDealDeckNumber(9829)).toBe('9.829');
+      expect(formatDealDeckNumber(2487)).toBe('2.487');
+      expect(formatDealDeckNumber(612917)).toBe('612.917');
+    });
+
+    it('handles small numbers and zero gracefully', () => {
+      expect(formatDealDeckNumber(0)).toBe('0');
+      expect(formatDealDeckNumber(42)).toBe('42');
+      expect(formatDealDeckNumber(812)).toBe('812');
+    });
+  });
+
   });
 });
