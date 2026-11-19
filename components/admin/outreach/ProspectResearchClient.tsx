@@ -450,7 +450,31 @@ export default function ProspectResearchClient({
         </div>
       </GlassCard>
 
-      <div className="text-mist-2 text-xs font-mono-tight">Filters loading...</div>
+      {/* Filter and Search Controls */}
+      <div className="space-y-3">
+        {/* Category Pills */}
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+          {RESEARCH_CATEGORIES.map((cat) => {
+            const isSelected = selectedCategory === cat;
+            return (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => setSelectedCategory(cat)}
+                className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all cursor-pointer ${
+                  isSelected
+                    ? 'bg-primary text-paper shadow-sm shadow-primary/25 border border-primary/40'
+                    : 'bg-white/[0.03] text-mist-1 hover:text-paper hover:bg-white/[0.06] border border-(--line)'
+                }`}
+              >
+                {cat}
+              </button>
+            );
+          })}
+        </div>
+
+      </div>
+      <div className="text-mist-2 text-xs font-mono-tight">Secondary filters loading...</div>
     </div>
   );
 }
