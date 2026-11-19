@@ -97,3 +97,16 @@ export function calculateRingOffset(radius: number, percent: number): number {
 /**
  * Default monthly habit activity dataset matching DealDeck visual bars (Jan - Jul)
  */
+export const DEFAULT_MONTHLY_HABITS: MonthlyHabitBar[] = [
+  { month: 'Jan', seenProducts: 24000, sales: 18000 },
+  { month: 'Feb', seenProducts: 48000, sales: 38000 },
+  { month: 'Mar', seenProducts: 36000, sales: 26000 },
+  { month: 'Apr', seenProducts: 43787, sales: 39784 }, // Feature tooltip point
+  { month: 'May', seenProducts: 32000, sales: 22000 },
+  { month: 'Jun', seenProducts: 40000, sales: 31000 },
+  { month: 'Jul', seenProducts: 46000, sales: 37000 },
+];
+
+/**
+ * Default geographic visitor distribution dataset matching DealDeck bubbles
+ */
