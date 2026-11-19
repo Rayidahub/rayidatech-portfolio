@@ -230,3 +230,19 @@ export function getAdminNavLinkClasses(isActive: boolean): string {
   }
   return `${base} text-mist-1 hover:text-paper hover:bg-white/5`;
 }
+
+/**
+ * Returns badge styling based on badgeVariant.
+ */
+export function getAdminBadgeClasses(badgeVariant?: AdminBadgeVariant): string {
+  switch (badgeVariant) {
+    case 'live':
+      return 'text-[10px] font-mono-tight px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
+    case 'campaigns':
+      return 'text-[10px] font-mono-tight px-1.5 py-0.5 rounded bg-primary/30 text-secondary border border-primary/40';
+    case 'super':
+      return 'text-[10px] font-mono-tight px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-400 border border-cyan-500/30';
+    default:
+      return 'text-[10px] font-mono-tight px-1.5 py-0.5 rounded bg-white/10 text-mist-1 border border-white/15';
+  }
+}
