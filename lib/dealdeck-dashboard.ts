@@ -84,3 +84,16 @@ export function getDealDeckPillClass(isPositive: boolean): string {
 /**
  * Computes SVG stroke-dasharray for concentric circular progress rings
  */
+export function calculateRingCircumference(radius: number): number {
+  return 2 * Math.PI * radius;
+}
+
+export function calculateRingOffset(radius: number, percent: number): number {
+  const c = calculateRingCircumference(radius);
+  const clamped = Math.min(100, Math.max(0, percent));
+  return c - (clamped / 100) * c;
+}
+
+/**
+ * Default monthly habit activity dataset matching DealDeck visual bars (Jan - Jul)
+ */
