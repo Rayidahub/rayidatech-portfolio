@@ -32,7 +32,7 @@ export default function AdminHeader({
   const RoleIcon = role === 'super_admin' ? ShieldCheck : role === 'admin' ? Shield : UserCheck
 
   return (
-    <header className="h-16 border-b border-(--line) flex items-center justify-between px-4 sm:px-6 gap-3 bg-[var(--ink)]">
+    <header className="h-16 border-b border-(--line) flex items-center justify-between px-4 sm:px-6 gap-3 bg-[#f4f5f9] border-slate-200/60">
       <div className="flex items-center gap-2.5">
         {onOpenMobileMenu && (
           <button
