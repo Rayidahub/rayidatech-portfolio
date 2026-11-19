@@ -82,4 +82,16 @@ describe('Admin Navigation & Categorized Menu Architecture', () => {
       }
     });
   });
+
+  describe('isItemPermitted role & permission checking', () => {
+    const dashboardItem = ADMIN_NAV_CATEGORIES[0].items[0]; // /admin
+    const usersItem = ADMIN_NAV_CATEGORIES[4].items[0]; // /admin/users
+    const projectsItem = ADMIN_NAV_CATEGORIES[1].items[0]; // /admin/projects
+
+    it('permits all items for super_admin', () => {
+      expect(isItemPermitted(dashboardItem, 'super_admin', [])).toBe(true);
+      expect(isItemPermitted(usersItem, 'super_admin', [])).toBe(true);
+      expect(isItemPermitted(projectsItem, 'super_admin', [])).toBe(true);
+    });
+  });
 });
