@@ -158,7 +158,7 @@ export default function AdminSidebar({
           <Link
             href="/admin/users"
             onClick={handleLinkClick}
-            className="flex items-center gap-2 text-xs text-indigo-600 hover:text-indigo-800 transition-colors px-1 font-medium"
+            className="flex items-center gap-2 text-xs text-indigo-600 hover:text-indigo-800 transition-colors px-1 font-medium select-none"
           >
             <ShieldCheck className="w-3.5 h-3.5" />
             <span>Manage Access &amp; Roles</span>
