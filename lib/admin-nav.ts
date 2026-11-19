@@ -246,3 +246,23 @@ export function getAdminBadgeClasses(badgeVariant?: AdminBadgeVariant): string {
       return 'text-[10px] font-mono-tight px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-mist-1 border border-slate-200 font-medium';
   }
 }
+
+/**
+ * Returns clean minimalist category title matching DealDeck (Menu, Content, Design, Audience, Tools).
+ */
+export function getMinimalistAdminCategoryTitle(catId: string, fallbackTitle?: string): string {
+  switch (catId) {
+    case 'overview':
+      return 'Menu';
+    case 'content':
+      return 'Content';
+    case 'appearance':
+      return 'Design';
+    case 'communication':
+      return 'Audience';
+    case 'system':
+      return 'Tools';
+    default:
+      return fallbackTitle || catId;
+  }
+}
