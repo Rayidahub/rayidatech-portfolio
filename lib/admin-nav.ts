@@ -218,3 +218,15 @@ export function isAdminRouteActive(pathname: string, href: string): boolean {
 export function getAdminCategoryHeaderClasses(): string {
   return 'text-[10px] uppercase font-mono-tight font-semibold tracking-wider text-mist-2/70 px-3 pt-3 pb-1 flex items-center justify-between select-none';
 }
+
+/**
+ * Returns class string for admin nav item links.
+ */
+export function getAdminNavLinkClasses(isActive: boolean): string {
+  const base =
+    'group flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-all duration-200';
+  if (isActive) {
+    return `${base} bg-primary/20 text-secondary font-medium shadow-sm border border-primary/30`;
+  }
+  return `${base} text-mist-1 hover:text-paper hover:bg-white/5`;
+}
