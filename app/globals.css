@@ -106,6 +106,7 @@ html[data-theme="dark"] {
   --glow-2: 0.22;
   --glow-3: 0.18;
 }
+
 /* ── DealDeck Modern White Admin Theme Tokens ── */
 .admin-light-theme {
   color-scheme: light;
@@ -131,6 +132,13 @@ html[data-theme="dark"] {
   border-radius: 1.5rem;
   border: 1px solid rgba(226, 232, 240, 0.8);
   box-shadow: 0 4px 24px -2px rgba(15, 23, 42, 0.03), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
+}
+
+.dealdeck-hero-card {
+  background: linear-gradient(135deg, #3b5bfa 0%, #2f49d1 100%);
+  border-radius: 1.5rem;
+  color: #ffffff;
+  box-shadow: 0 12px 30px -4px rgba(59, 91, 250, 0.28);
 }
 
 
