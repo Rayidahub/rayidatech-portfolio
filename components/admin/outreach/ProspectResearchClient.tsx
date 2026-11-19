@@ -743,6 +743,157 @@ export default function ProspectResearchClient({
         </div>
       </GlassCard>
 
+      {/* Manual Add Custom Lead Modal */}
+      {showAddModal && (
+        <div
+          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in"
+          onClick={() => setShowAddModal(false)}
+        >
+          <div
+            className="w-full max-w-lg bg-[var(--ink-deep)] border border-(--line) rounded-2xl p-6 shadow-2xl space-y-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between border-b border-(--line) pb-3">
+              <div className="flex items-center gap-2">
+                <Plus className="w-4 h-4 text-secondary" />
+                <h3 className="font-semibold text-paper text-sm">Add Discovered Lead</h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowAddModal(false)}
+                className="text-mist-2 hover:text-paper cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="space-y-3 text-xs">
+              <div>
+                <label className="block text-mist-1 mb-1 font-medium">Business Name *</label>
+                <input
+                  type="text"
+                  value={newLead.business_name}
+                  onChange={(e) => setNewLead({ ...newLead, business_name: e.target.value })}
+                  placeholder="e.g. 1420 Events"
+                  className="w-full bg-white/5 border border-(--line) rounded-lg px-3 py-2 text-paper focus:outline-none focus:border-secondary"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-mist-1 mb-1 font-medium">Category</label>
+                  <select
+                    value={newLead.business_category}
+                    onChange={(e) => setNewLead({ ...newLead, business_category: e.target.value })}
+                    className="w-full bg-[var(--ink-deep)] border border-(--line) rounded-lg px-2.5 py-2 text-paper focus:outline-none focus:border-secondary"
+                  >
+                    {RESEARCH_CATEGORIES.filter((c) => c !== 'All').map((cat) => (
+                      <option key={cat} value={cat}>
+                        {cat}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-mist-1 mb-1 font-medium">Area in Abuja</label>
+                  <select
+                    value={newLead.area}
+                    onChange={(e) => setNewLead({ ...newLead, area: e.target.value })}
+                    className="w-full bg-[var(--ink-deep)] border border-(--line) rounded-lg px-2.5 py-2 text-paper focus:outline-none focus:border-secondary"
+                  >
+                    {ABUJA_AREAS.filter((a) => a !== 'All Areas').map((a) => (
+                      <option key={a} value={a}>
+                        {a}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-mist-1 mb-1 font-medium">Public Email Address</label>
+                  <input
+                    type="email"
+                    value={newLead.email || ''}
+                    onChange={(e) => setNewLead({ ...newLead, email: e.target.value })}
+                    placeholder="e.g. hello@business.com"
+                    className="w-full bg-white/5 border border-(--line) rounded-lg px-3 py-2 text-paper focus:outline-none focus:border-secondary font-mono-tight"
+                  />
+                </div>
+                <div>
+                  <label className="block text-mist-1 mb-1 font-medium">Phone Number</label>
+                  <input
+                    type="text"
+                    value={newLead.phone || ''}
+                    onChange={(e) => setNewLead({ ...newLead, phone: e.target.value })}
+                    placeholder="+234 810 000 0000"
+                    className="w-full bg-white/5 border border-(--line) rounded-lg px-3 py-2 text-paper focus:outline-none focus:border-secondary font-mono-tight"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-mist-1 mb-1 font-medium">Website Opportunity Status</label>
+                <select
+                  value={newLead.website_status}
+                  onChange={(e) =>
+                    setNewLead({
+                      ...newLead,
+                      website_status: e.target.value as WebsiteOpportunityStatus,
+                    })
+                  }
+                  className="w-full bg-[var(--ink-deep)] border border-(--line) rounded-lg px-2.5 py-2 text-paper focus:outline-none focus:border-secondary"
+                >
+                  <option value="No Website Found">No Website Found (High Opportunity)</option>
+                  <option value="Socials Only">Socials Only (Instagram / Facebook)</option>
+                  <option value="Outdated / Needs Redesign">Outdated / Needs Redesign</option>
+                  <option value="Active Website">Active Website</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-mist-1 mb-1 font-medium">Verification Note / Source</label>
+                <input
+                  type="text"
+                  value={newLead.verification_note || ''}
+                  onChange={(e) => setNewLead({ ...newLead, verification_note: e.target.value })}
+                  placeholder="e.g. Listed on occasionally.ng; verified active contact."
+                  className="w-full bg-white/5 border border-(--line) rounded-lg px-3 py-2 text-paper focus:outline-none focus:border-secondary"
+                />
+              </div>
+
+              <div>
+                <label className="block text-mist-1 mb-1 font-medium">Recommended Pitch</label>
+                <input
+                  type="text"
+                  value={newLead.recommended_pitch || ''}
+                  onChange={(e) => setNewLead({ ...newLead, recommended_pitch: e.target.value })}
+                  placeholder="e.g. Pitch modern online ordering & portfolio showcase."
+                  className="w-full bg-white/5 border border-(--line) rounded-lg px-3 py-2 text-paper focus:outline-none focus:border-secondary"
+                />
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-(--line)">
+              <button
+                type="button"
+                onClick={() => setShowAddModal(false)}
+                className="px-3 py-2 rounded-lg text-xs text-mist-2 hover:text-paper"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleSaveCustomLead}
+                className="px-4 py-2 rounded-lg bg-primary hover:bg-primary/90 text-white font-semibold text-xs transition-all shadow-md"
+              >
+                Save Prospect
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
