@@ -237,12 +237,12 @@ export function getAdminNavLinkClasses(isActive: boolean): string {
 export function getAdminBadgeClasses(badgeVariant?: AdminBadgeVariant): string {
   switch (badgeVariant) {
     case 'live':
-      return 'text-[10px] font-mono-tight px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
+      return 'text-[10px] font-mono-tight px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600 text-emerald-400 border border-emerald-100 font-semibold';
     case 'campaigns':
-      return 'text-[10px] font-mono-tight px-1.5 py-0.5 rounded bg-primary/30 text-secondary border border-primary/40';
+      return 'text-[10px] font-mono-tight px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 text-secondary border border-blue-100 font-semibold';
     case 'super':
-      return 'text-[10px] font-mono-tight px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-400 border border-cyan-500/30';
+      return 'text-[10px] font-mono-tight px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-600 text-cyan-400 border border-indigo-100 font-semibold';
     default:
-      return 'text-[10px] font-mono-tight px-1.5 py-0.5 rounded bg-white/10 text-mist-1 border border-white/15';
+      return 'text-[10px] font-mono-tight px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-mist-1 border border-slate-200 font-medium';
   }
 }
