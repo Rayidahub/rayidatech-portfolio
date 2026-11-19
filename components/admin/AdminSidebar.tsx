@@ -1,27 +1,15 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import BrandLogo from '@/components/ui/BrandLogo'
+import { ShieldCheck, X } from 'lucide-react';
+import type { AdminRole, AdminPermission } from '@/types/admin-user';
 import {
-  LayoutDashboard,
-  Briefcase,
-  Package,
-  FileText,
-  Mail,
-  Image,
-  Rocket,
-  MessageSquareQuote,
-  Users,
-  ShieldCheck,
-  Sliders,
-  Palette,
-  Activity,
-  MailCheck,
-  SendHorizontal,
-  X,
-} from 'lucide-react'
-import type { AdminRole, AdminPermission } from '@/types/admin-user'
+  getVisibleAdminNavCategories,
+  isAdminRouteActive,
+  getAdminCategoryHeaderClasses,
+  getAdminNavLinkClasses,
+  getAdminBadgeClasses,
+} from '@/lib/admin-nav';
 
 interface AdminSidebarProps {
   role?: AdminRole
