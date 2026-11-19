@@ -57,3 +57,11 @@ export const DEALDECK_THEME_TOKENS = {
 /**
  * Formats numbers into DealDeck European/Dot format (e.g., 34760 -> "34.760")
  */
+export function formatDealDeckNumber(num: number): string {
+  if (isNaN(num)) return '0';
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+}
+
+/**
+ * Calculates percentage height for bar charts based on max scale
+ */
