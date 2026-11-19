@@ -259,9 +259,70 @@ export default function ProspectResearchClient({
 
   return (
     <div className="space-y-6">
-      <div className="text-paper text-sm font-mono-tight p-6 rounded-xl border border-(--line) bg-white/[0.02]">
-        Loading Prospect Research...
+      {/* Main Header & Actions */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-secondary/10 border border-secondary/25 flex items-center justify-center text-secondary">
+              <Compass className="w-4 h-4" />
+            </div>
+            <h2 className="text-xl font-display font-semibold text-paper">
+              Abuja Lead Research &amp; Prospect Finder
+            </h2>
+          </div>
+          <p className="text-xs text-mist-2 mt-1">
+            Curated and verifiable prospect directory with public emails, phone numbers, website audit scores, and 1-click outreach import.
+          </p>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2.5">
+          <button
+            type="button"
+            onClick={() => setShowAddModal(true)}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-(--line) bg-white/[0.03] hover:bg-white/[0.06] text-xs font-medium text-paper transition-all cursor-pointer"
+          >
+            <Plus className="w-3.5 h-3.5 text-secondary" />
+            <span>Add Custom Lead</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => exportProspectsToCsv(filteredProspects)}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-(--line) bg-white/[0.03] hover:bg-white/[0.06] text-xs font-medium text-paper transition-all cursor-pointer"
+            title="Download formatted CSV"
+          >
+            <Download className="w-3.5 h-3.5 text-mist-1" />
+            <span>Export CSV</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => exportProspectsToExcel(filteredProspects)}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/30 text-xs font-medium transition-all shadow-sm cursor-pointer"
+            title="Download formatted Excel spreadsheet"
+          >
+            <FileSpreadsheet className="w-4 h-4" />
+            <span>Download Excel (.xlsx)</span>
+          </button>
+
+          {selectedIds.size > 0 && (
+            <button
+              type="button"
+              disabled={isPending}
+              onClick={() => {
+                const toImport = filteredProspects.filter((p) => selectedIds.has(p.id));
+                handleBatchImport(toImport);
+              }}
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary hover:bg-primary/90 text-white text-xs font-semibold shadow-md shadow-primary/25 transition-all cursor-pointer"
+            >
+              <UploadCloud className="w-4 h-4" />
+              <span>Import Selected ({selectedIds.size})</span>
+            </button>
+          )}
+        </div>
       </div>
+
+      <div className="text-mist-2 text-xs font-mono-tight">Stats bar loading...</div>
     </div>
   );
 }
