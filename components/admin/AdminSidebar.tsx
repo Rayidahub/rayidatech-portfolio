@@ -140,7 +140,7 @@ export default function AdminSidebar({
           <div className="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center text-blue-400 mb-2.5">
             <Sparkles className="w-4 h-4" />
           </div>
-          <h4 className="font-bold text-sm text-white leading-tight">Rayida Engine</h4>
+          <h4 className="font-bold text-sm text-white leading-tight tracking-tight">Rayida Engine</h4>
           <p className="text-[11px] text-slate-400 mt-0.5 leading-relaxed">
             v2.4 Active &amp; Synchronized with Supabase
           </p>
