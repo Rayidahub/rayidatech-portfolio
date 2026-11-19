@@ -25,5 +25,12 @@ describe('Navbar System & Mobile Menu Opaque Architecture', () => {
         'Contact',
       ]);
     });
+
+    it('ensures all links have valid absolute path hrefs starting with /', () => {
+      for (const link of MAIN_NAV_LINKS) {
+        expect(link.href.startsWith('/')).toBe(true);
+        expect(link.href).not.toBe('');
+      }
+    });
   });
 });
