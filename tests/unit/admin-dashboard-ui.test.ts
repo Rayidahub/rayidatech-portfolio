@@ -82,5 +82,20 @@ describe('DealDeck Modern White Admin Dashboard Architecture', () => {
     });
   });
 
+  describe('Concentric Circular Progress Rings', () => {
+    it('calculates circumference correctly based on radius', () => {
+      const c50 = calculateRingCircumference(50);
+      expect(Math.round(c50)).toBe(314); // 2 * PI * 50 = 314.159...
+    });
+
+    it('calculates ring stroke dashoffset based on completion percentage', () => {
+      const radius = 50;
+      const c = 2 * Math.PI * radius;
+      expect(calculateRingOffset(radius, 100)).toBe(0);
+      expect(calculateRingOffset(radius, 0)).toBe(c);
+      expect(calculateRingOffset(radius, 50)).toBeCloseTo(c / 2, 1);
+    });
+  });
+
   });
 });
