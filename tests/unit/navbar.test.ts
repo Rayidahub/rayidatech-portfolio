@@ -128,5 +128,11 @@ describe('Navbar System & Mobile Menu Opaque Architecture', () => {
       const classes = getMobileMenuDrawerClasses();
       expect(classes).toContain('md:hidden');
     });
+
+    it('provides scrollability and shadow for deep visual separation', () => {
+      const classes = getMobileMenuDrawerClasses();
+      expect(classes).toContain('overflow-y-auto');
+      expect(classes).toContain('shadow-2xl');
+    });
   });
 });
