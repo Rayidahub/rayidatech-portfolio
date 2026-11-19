@@ -158,4 +158,13 @@ describe('Admin Navigation & Categorized Menu Architecture', () => {
       expect(isAdminRouteActive('/admin/hero', '/admin/hero/settings')).toBe(false);
     });
   });
+
+  describe('Styling & Class Generators', () => {
+    it('provides clean uppercase section header classes', () => {
+      const classes = getAdminCategoryHeaderClasses();
+      expect(classes).toContain('uppercase');
+      expect(classes).toContain('font-mono-tight');
+      expect(classes).toContain('text-mist-2/70');
+    });
+  });
 });
