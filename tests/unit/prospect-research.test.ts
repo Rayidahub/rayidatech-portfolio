@@ -133,5 +133,23 @@ describe('Prospect Research & Lead Discovery Engine', () => {
     });
   });
 
+  describe('searchAndEnrichProspects dynamic discovery engine', () => {
+    it('returns empty array if query is whitespace', () => {
+      const results = searchAndEnrichProspects('   ');
+      expect(results).toEqual([]);
+    });
+
+    it('generates structured high-opportunity leads for a custom query', () => {
+      const results = searchAndEnrichProspects('Lekki Luxury Spa', 'Hair, Beauty & Wellness', 'Maitama');
+      expect(results).toHaveLength(3);
+      expect(results[0].business_name).toBe('Lekki Luxury Spa');
+      expect(results[0].business_category).toBe('Hair, Beauty & Wellness');
+      expect(results[0].area).toBe('Maitama');
+      expect(results[0].email).toBeTruthy();
+      expect(results[0].email).toContain('@');
+      expect(results[0].opportunity_score).toBe('High');
+      expect(results[0].recommended_pitch).toBeTruthy();
+    });
+
   });
 });
