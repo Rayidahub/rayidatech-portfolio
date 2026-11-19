@@ -190,7 +190,6 @@ export interface ImportPreviewRow {
   validationError?: string;
 }
 
-
 // Prospect Research & Discovery types
 export type WebsiteOpportunityStatus =
   | 'No Website Found'
@@ -215,3 +214,13 @@ export interface ProspectResearchItem {
   recommended_pitch: string;
   is_imported?: boolean;
 }
+
+export interface ResearchFilterParams {
+  category?: string;
+  area?: string;
+  website_status?: string;
+  hasEmailOnly?: boolean;
+  search?: string;
+}
+
+
