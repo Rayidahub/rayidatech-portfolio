@@ -86,7 +86,7 @@ export default function AdminHeader({
 
         {/* User Profile Pill */}
         <div className="flex items-center gap-3 pl-2 sm:border-l sm:border-slate-200/80">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#3b5bfa] to-indigo-600 text-white font-bold text-sm flex items-center justify-center shadow-xs uppercase ring-2 ring-white">
+          <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#3b5bfa] to-indigo-600 text-white font-bold text-sm flex items-center justify-center shadow-xs uppercase ring-2 ring-white select-none">
             {displayName.slice(0, 2)}
           </div>
           <div className="hidden sm:block text-left">
