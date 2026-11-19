@@ -47,5 +47,24 @@ describe('DealDeck Modern White Admin Dashboard Architecture', () => {
     });
   });
 
+  describe('Bar Chart Scaler (Customer Habits)', () => {
+    it('calculates correct percentage height based on default max (60,000)', () => {
+      expect(calculateBarHeight(30000, 60000)).toBe(50);
+      expect(calculateBarHeight(60000, 60000)).toBe(100);
+      expect(calculateBarHeight(0, 60000)).toBe(8); // minimum aesthetic bar height
+    });
+
+    it('clamps values above max to 100%', () => {
+      expect(calculateBarHeight(75000, 60000)).toBe(100);
+    });
+
+    it('calculates heights for the April reference points', () => {
+      const hSeen = calculateBarHeight(43787, 60000);
+      const hSales = calculateBarHeight(39784, 60000);
+      expect(hSeen).toBe(73);
+      expect(hSales).toBe(66);
+    });
+  });
+
   });
 });
