@@ -543,7 +543,206 @@ export default function ProspectResearchClient({
         </div>
       </div>
 
-      <div className="text-mist-2 text-xs font-mono-tight">Table loading...</div>
+      {/* Prospects Data Table */}
+      <GlassCard className="overflow-hidden border border-(--line)">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr className="border-b border-(--line) bg-white/[0.02] text-mist-2 font-mono-tight uppercase text-[10px] tracking-wider">
+                <th className="py-3 px-4 w-10 text-center">
+                  <input
+                    type="checkbox"
+                    checked={
+                      filteredProspects.length > 0 &&
+                      selectedIds.size === filteredProspects.length
+                    }
+                    onChange={handleSelectAllFiltered}
+                    className="rounded border-(--line) text-primary focus:ring-primary/40 cursor-pointer"
+                  />
+                </th>
+                <th className="py-3 px-4">Business &amp; Category</th>
+                <th className="py-3 px-4">Area</th>
+                <th className="py-3 px-4">Public Email</th>
+                <th className="py-3 px-4">Phone / WhatsApp</th>
+                <th className="py-3 px-4">Website Opportunity</th>
+                <th className="py-3 px-4">Source</th>
+                <th className="py-3 px-4 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-(--line)">
+              {filteredProspects.length === 0 ? (
+                <tr>
+                  <td colSpan={8} className="py-12 text-center text-mist-2">
+                    <Compass className="w-8 h-8 text-mist-2/40 mx-auto mb-2" />
+                    <p className="text-sm font-medium text-paper">No prospects match your criteria</p>
+                    <p className="text-xs text-mist-2 mt-1">
+                      Try adjusting your search terms or use the Discovery Engine above to research custom niches.
+                    </p>
+                  </td>
+                </tr>
+              ) : (
+                filteredProspects.map((item) => {
+                  const isSelected = selectedIds.has(item.id);
+                  const isCopied = copiedEmail === item.email;
+
+                  // Website status badge style
+                  let statusBadge = 'bg-slate-500/10 text-slate-400 border-slate-500/20';
+                  if (item.website_status === 'No Website Found') {
+                    statusBadge = 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30';
+                  } else if (item.website_status === 'Socials Only') {
+                    statusBadge = 'bg-cyan-500/15 text-cyan-400 border-cyan-500/30';
+                  } else if (item.website_status === 'Outdated / Needs Redesign') {
+                    statusBadge = 'bg-amber-500/15 text-amber-400 border-amber-500/30';
+                  }
+
+                  const cleanPhone = item.phone ? item.phone.replace(/[^0-9]/g, '') : '';
+                  const waLink = cleanPhone ? `https://wa.me/${cleanPhone}` : null;
+
+                  return (
+                    <tr
+                      key={item.id}
+                      className={`hover:bg-white/[0.02] transition-colors ${
+                        isSelected ? 'bg-primary/[0.05]' : ''
+                      }`}
+                    >
+                      {/* Checkbox */}
+                      <td className="py-3.5 px-4 text-center">
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={() => handleToggleSelect(item.id)}
+                          className="rounded border-(--line) text-primary focus:ring-primary/40 cursor-pointer"
+                        />
+                      </td>
+
+                      {/* Business & Category */}
+                      <td className="py-3.5 px-4">
+                        <div className="font-semibold text-paper text-sm">
+                          {item.business_name}
+                        </div>
+                        <div className="flex items-center gap-1.5 mt-0.5">
+                          <span className="text-[10px] font-mono-tight px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-mist-1">
+                            {item.business_category}
+                          </span>
+                          {item.is_imported && (
+                            <span className="text-[9px] font-mono-tight px-1.5 py-0.5 rounded bg-secondary/10 text-secondary border border-secondary/20">
+                              ✓ In Outreach
+                            </span>
+                          )}
+                        </div>
+                      </td>
+
+                      {/* Area */}
+                      <td className="py-3.5 px-4">
+                        <span className="font-mono-tight text-xs text-mist-1">
+                          {item.area}
+                        </span>
+                      </td>
+
+                      {/* Email */}
+                      <td className="py-3.5 px-4">
+                        {item.email ? (
+                          <div className="flex items-center gap-1.5">
+                            <span className="font-mono-tight text-xs text-paper select-all">
+                              {item.email}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => handleCopyEmail(item.email!)}
+                              className="p-1 rounded hover:bg-white/10 text-mist-2 hover:text-paper transition-colors"
+                              title="Copy email"
+                            >
+                              {isCopied ? (
+                                <Check className="w-3.5 h-3.5 text-emerald-400" />
+                              ) : (
+                                <Copy className="w-3.5 h-3.5" />
+                              )}
+                            </button>
+                          </div>
+                        ) : (
+                          <span className="text-xs text-mist-2 italic">Missing Email</span>
+                        )}
+                      </td>
+
+                      {/* Phone */}
+                      <td className="py-3.5 px-4">
+                        {item.phone ? (
+                          <div className="flex items-center gap-1.5 font-mono-tight text-xs text-mist-1">
+                            <span>{item.phone}</span>
+                            {waLink && (
+                              <a
+                                href={waLink}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="text-emerald-400 hover:text-emerald-300 transition-colors"
+                                title="Open WhatsApp Chat"
+                              >
+                                <MessageCircle className="w-3.5 h-3.5" />
+                              </a>
+                            )}
+                          </div>
+                        ) : (
+                          <span className="text-xs text-mist-2 italic">—</span>
+                        )}
+                      </td>
+
+                      {/* Website Opportunity */}
+                      <td className="py-3.5 px-4">
+                        <span
+                          className={`inline-block text-[10px] font-mono-tight font-medium px-2 py-0.5 rounded-full border ${statusBadge}`}
+                        >
+                          {item.website_status}
+                        </span>
+                        <p className="text-[11px] text-mist-2 mt-1 line-clamp-1 max-w-xs" title={item.verification_note}>
+                          {item.verification_note}
+                        </p>
+                      </td>
+
+                      {/* Source */}
+                      <td className="py-3.5 px-4">
+                        {item.source_link ? (
+                          <a
+                            href={item.source_link}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-1 text-[11px] text-secondary/80 hover:text-secondary hover:underline"
+                          >
+                            <span>{item.source}</span>
+                            <ExternalLink className="w-3 h-3" />
+                          </a>
+                        ) : (
+                          <span className="text-[11px] text-mist-2">{item.source}</span>
+                        )}
+                      </td>
+
+                      {/* Actions */}
+                      <td className="py-3.5 px-4 text-right">
+                        {item.is_imported ? (
+                          <span className="inline-flex items-center gap-1 text-xs text-emerald-400 font-medium">
+                            <Check className="w-3.5 h-3.5" />
+                            <span>Imported</span>
+                          </span>
+                        ) : (
+                          <button
+                            type="button"
+                            disabled={isPending}
+                            onClick={() => handleImportSingle(item)}
+                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-primary/20 hover:bg-primary/30 text-secondary border border-primary/30 text-xs font-medium transition-colors cursor-pointer"
+                          >
+                            <UploadCloud className="w-3 h-3" />
+                            <span>Import</span>
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
+        </div>
+      </GlassCard>
+
     </div>
   );
 }
