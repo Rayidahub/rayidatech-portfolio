@@ -17,6 +17,7 @@ import {
 const tabs = [
   { href: '/admin/outreach', label: 'Overview', icon: BarChart3, exact: true },
   { href: '/admin/outreach/contacts', label: 'Prospects', icon: Users },
+  { href: '/admin/outreach/research', label: 'Lead Research & Finder', icon: Compass, badge: 'New' },
   { href: '/admin/outreach/import', label: 'Import (.xlsx / .csv)', icon: UploadCloud },
   { href: '/admin/outreach/campaigns', label: 'Campaigns', icon: SendHorizontal },
   { href: '/admin/outreach/templates', label: 'Templates', icon: FileText },
@@ -48,6 +49,11 @@ export default function OutreachNav() {
             >
               <Icon className="w-3.5 h-3.5" />
               <span>{tab.label}</span>
+              {'badge' in tab && tab.badge && (
+                <span className="text-[9px] font-mono-tight px-1.5 py-0.5 rounded-full bg-secondary/20 text-secondary border border-secondary/30 uppercase tracking-wider font-semibold">
+                  {tab.badge}
+                </span>
+              )}
             </Link>
           );
         })}
