@@ -50,7 +50,7 @@ export default function AdminSidebar({
       className={`${
         isMobile
           ? 'w-full h-full flex flex-col bg-[var(--ink-deep)]'
-          : 'w-64 min-h-screen bg-[var(--ink-deep)] border-r border-(--line) flex flex-col shrink-0'
+          : 'w-64 min-h-screen bg-white border-r border-slate-200/80 flex flex-col shrink-0'
       }`}
     >
       <div className="p-6 border-b border-(--line) flex items-center justify-between">
