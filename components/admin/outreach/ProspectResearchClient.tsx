@@ -473,8 +473,77 @@ export default function ProspectResearchClient({
           })}
         </div>
 
+        {/* Secondary Filters Bar */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-xl bg-white/[0.02] border border-(--line)">
+          <div className="flex flex-wrap items-center gap-2.5">
+            {/* Search Input */}
+            <div className="relative min-w-[200px] sm:min-w-[260px]">
+              <Search className="w-3.5 h-3.5 text-mist-2 absolute left-3 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search by name, email, note..."
+                className="w-full bg-white/5 border border-(--line) rounded-lg pl-8 pr-3 py-1.5 text-xs text-paper placeholder:text-mist-2 focus:outline-none focus:border-secondary transition-colors"
+              />
+            </div>
+
+            {/* Area Filter */}
+            <select
+              value={selectedArea}
+              onChange={(e) => setSelectedArea(e.target.value)}
+              className="bg-[var(--ink-deep)] border border-(--line) rounded-lg px-2.5 py-1.5 text-xs text-paper focus:outline-none focus:border-secondary transition-colors"
+            >
+              {ABUJA_AREAS.map((area) => (
+                <option key={area} value={area}>
+                  {area}
+                </option>
+              ))}
+            </select>
+
+            {/* Website Status Filter */}
+            <select
+              value={selectedWebsiteStatus}
+              onChange={(e) => setSelectedWebsiteStatus(e.target.value)}
+              className="bg-[var(--ink-deep)] border border-(--line) rounded-lg px-2.5 py-1.5 text-xs text-paper focus:outline-none focus:border-secondary transition-colors"
+            >
+              <option value="All">All Website Statuses</option>
+              <option value="No Website Found">No Website (High Opportunity)</option>
+              <option value="Socials Only">Socials Only</option>
+              <option value="Outdated / Needs Redesign">Needs Redesign</option>
+              <option value="Active Website">Active Website</option>
+            </select>
+
+            {/* Email Only Toggle */}
+            <label className="flex items-center gap-1.5 text-xs text-mist-1 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={hasEmailOnly}
+                onChange={(e) => setHasEmailOnly(e.target.checked)}
+                className="rounded border-(--line) text-primary focus:ring-primary/40 cursor-pointer"
+              />
+              <span>Public Email Only</span>
+            </label>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-mist-2 font-mono-tight">
+              Showing {filteredProspects.length} of {totalCount}
+            </span>
+            <button
+              type="button"
+              onClick={handleSelectAllFiltered}
+              className="text-xs text-secondary hover:underline cursor-pointer font-medium ml-1"
+            >
+              {selectedIds.size === filteredProspects.length && filteredProspects.length > 0
+                ? 'Deselect All'
+                : 'Select All'}
+            </button>
+          </div>
+        </div>
       </div>
-      <div className="text-mist-2 text-xs font-mono-tight">Secondary filters loading...</div>
+
+      <div className="text-mist-2 text-xs font-mono-tight">Table loading...</div>
     </div>
   );
 }
