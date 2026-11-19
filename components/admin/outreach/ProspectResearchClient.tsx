@@ -373,7 +373,84 @@ export default function ProspectResearchClient({
         </GlassCard>
       </div>
 
-      <div className="text-mist-2 text-xs font-mono-tight">Discovery bar loading...</div>
+      {/* Interactive Niche Lead Discovery Bar */}
+      <GlassCard className="p-4 sm:p-5 border border-(--line) bg-gradient-to-r from-primary/[0.08] via-transparent to-secondary/[0.08]">
+        <div className="flex items-center gap-2 mb-3">
+          <Sparkles className="w-4 h-4 text-secondary" />
+          <h3 className="text-sm font-semibold text-paper">
+            Dynamic Niche Lead Discovery Engine
+          </h3>
+          <span className="text-[10px] font-mono-tight text-secondary bg-secondary/10 border border-secondary/20 px-2 py-0.5 rounded-full">
+            Autonomous Lead Research
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
+          <div className="sm:col-span-5">
+            <input
+              type="text"
+              value={nicheQuery}
+              onChange={(e) => setNicheQuery(e.target.value)}
+              placeholder="Enter custom business name, niche or keyword (e.g. Abuja Luxury Caterers)..."
+              className="w-full bg-white/5 border border-(--line) rounded-lg px-3.5 py-2.5 text-xs text-paper placeholder:text-mist-2 focus:outline-none focus:border-secondary transition-colors"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') handleDiscoverNiche();
+              }}
+            />
+          </div>
+
+          <div className="sm:col-span-3">
+            <select
+              value={nicheCategory}
+              onChange={(e) => setNicheCategory(e.target.value)}
+              className="w-full bg-[var(--ink-deep)] border border-(--line) rounded-lg px-3 py-2.5 text-xs text-paper focus:outline-none focus:border-secondary transition-colors"
+            >
+              {RESEARCH_CATEGORIES.filter((c) => c !== 'All').map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="sm:col-span-2">
+            <select
+              value={nicheArea}
+              onChange={(e) => setNicheArea(e.target.value)}
+              className="w-full bg-[var(--ink-deep)] border border-(--line) rounded-lg px-3 py-2.5 text-xs text-paper focus:outline-none focus:border-secondary transition-colors"
+            >
+              {ABUJA_AREAS.filter((a) => a !== 'All Areas').map((area) => (
+                <option key={area} value={area}>
+                  {area}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="sm:col-span-2">
+            <button
+              type="button"
+              disabled={isDiscovering}
+              onClick={handleDiscoverNiche}
+              className="w-full h-full min-h-[38px] bg-secondary hover:bg-secondary/90 text-ink font-semibold rounded-lg text-xs flex items-center justify-center gap-1.5 transition-all shadow-md cursor-pointer disabled:opacity-50"
+            >
+              {isDiscovering ? (
+                <>
+                  <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                  <span>Researching...</span>
+                </>
+              ) : (
+                <>
+                  <Search className="w-3.5 h-3.5" />
+                  <span>Discover Leads</span>
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+      </GlassCard>
+
+      <div className="text-mist-2 text-xs font-mono-tight">Filters loading...</div>
     </div>
   );
 }
