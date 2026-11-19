@@ -110,3 +110,37 @@ export const DEFAULT_MONTHLY_HABITS: MonthlyHabitBar[] = [
 /**
  * Default geographic visitor distribution dataset matching DealDeck bubbles
  */
+export const DEFAULT_GEOGRAPHIC_GROWTH: GeographicGrowthItem[] = [
+  {
+    id: 'geo-1',
+    country: 'United States',
+    flag: '🇺🇸',
+    visitors: '2.417',
+    numericVisitors: 2417,
+    bubbleColor: '#3b5bfa',
+  },
+  {
+    id: 'geo-2',
+    country: 'Germany',
+    flag: '🇩🇪',
+    visitors: '2.281',
+    numericVisitors: 2281,
+    bubbleColor: '#4f6ef7',
+  },
+  {
+    id: 'geo-3',
+    country: 'Australia',
+    flag: '🇦🇺',
+    visitors: '812',
+    numericVisitors: 812,
+    bubbleColor: '#758ef8',
+  },
+  {
+    id: 'geo-4',
+    country: 'France',
+    flag: '🇫🇷',
+    visitors: '287',
+    numericVisitors: 287,
+    bubbleColor: '#9bb0fa',
+  },
+];
