@@ -151,5 +151,10 @@ describe('Prospect Research & Lead Discovery Engine', () => {
       expect(results[0].recommended_pitch).toBeTruthy();
     });
 
+    it('handles "All" category and "All Areas" gracefully with sensible defaults', () => {
+      const results = searchAndEnrichProspects('Apex Architecture', 'All', 'All Areas');
+      expect(results[0].business_category).toBe('General Services');
+      expect(results[0].area).toBe('Abuja');
+    });
   });
 });
