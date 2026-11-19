@@ -159,6 +159,29 @@ export default async function AdminDashboard() {
                 </h3>
                 <span className="text-[11px] text-slate-400 font-normal">
                   Products vs last month
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Right 1 Column: DealDeck "Product Statistic" Concentric Rings */}
+        <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-[0_4px_24px_rgba(15,23,42,0.025)] flex flex-col justify-between min-h-[370px]">
+          <div>
+            <div className="flex items-center justify-between mb-1">
+              <div>
+                <h3 className="font-display font-bold text-base text-slate-900">Product Statistic</h3>
+                <p className="text-xs text-slate-400">Track your product sales</p>
+              </div>
+              <button
+                type="button"
+                className="inline-flex items-center gap-1 px-3 py-1 rounded-full border border-slate-200 text-xs text-slate-600 hover:bg-slate-50 transition-colors font-medium cursor-pointer"
+              >
+                <span>Today</span>
+                <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+              </button>
+            </div>
+
 </div>
 </div>
 </div>
