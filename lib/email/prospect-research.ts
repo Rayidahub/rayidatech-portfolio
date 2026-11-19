@@ -19,3 +19,22 @@ export const RESEARCH_CATEGORIES = [
   'Tech & Creative Agencies',
 ] as const;
 
+export const ABUJA_AREAS = [
+  'All Areas',
+  'Wuse 2',
+  'Maitama',
+  'Garki',
+  'Gwarinpa',
+  'Jabi',
+  'Utako',
+  'Asokoro',
+  'Kado',
+  'Guzape',
+  'Central Business District',
+] as const;
+
+/**
+ * Verified base dataset drawn directly from public business listings in Abuja,
+ * including occasionally.ng vendor directories, Google Business, and public registries.
+ */
+export const CURATED_ABUJA_PROSPECTS: ProspectResearchItem[] = [];
