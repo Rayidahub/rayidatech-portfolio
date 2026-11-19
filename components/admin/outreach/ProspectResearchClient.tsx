@@ -322,7 +322,58 @@ export default function ProspectResearchClient({
         </div>
       </div>
 
-      <div className="text-mist-2 text-xs font-mono-tight">Stats bar loading...</div>
+      {/* Telemetry Stats Bar */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <GlassCard className="p-4 border border-(--line)">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-mono-tight uppercase text-mist-2">Total Pool</span>
+            <span className="text-[10px] font-mono-tight px-1.5 py-0.5 rounded bg-primary/20 text-secondary">
+              Abuja
+            </span>
+          </div>
+          <div className="text-2xl font-display font-semibold text-paper mt-1">
+            {totalCount}
+          </div>
+          <p className="text-[11px] text-mist-2 mt-0.5">Across 10+ core industries</p>
+        </GlassCard>
+
+        <GlassCard className="p-4 border border-(--line)">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-mono-tight uppercase text-mist-2">With Public Email</span>
+            <Mail className="w-4 h-4 text-emerald-400" />
+          </div>
+          <div className="text-2xl font-display font-semibold text-emerald-400 mt-1">
+            {withEmailCount}
+          </div>
+          <p className="text-[11px] text-mist-2 mt-0.5">
+            {totalCount > 0 ? Math.round((withEmailCount / totalCount) * 100) : 0}% email coverage
+          </p>
+        </GlassCard>
+
+        <GlassCard className="p-4 border border-(--line)">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-mono-tight uppercase text-mist-2">No Website Found</span>
+            <Globe className="w-4 h-4 text-cyan-400" />
+          </div>
+          <div className="text-2xl font-display font-semibold text-cyan-400 mt-1">
+            {noWebsiteCount}
+          </div>
+          <p className="text-[11px] text-mist-2 mt-0.5">Prime high-conversion web clients</p>
+        </GlassCard>
+
+        <GlassCard className="p-4 border border-(--line)">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-mono-tight uppercase text-mist-2">Already In Outreach</span>
+            <CheckCircle2 className="w-4 h-4 text-secondary" />
+          </div>
+          <div className="text-2xl font-display font-semibold text-paper mt-1">
+            {alreadyImportedCount}
+          </div>
+          <p className="text-[11px] text-mist-2 mt-0.5">Active in contact database</p>
+        </GlassCard>
+      </div>
+
+      <div className="text-mist-2 text-xs font-mono-tight">Discovery bar loading...</div>
     </div>
   );
 }
