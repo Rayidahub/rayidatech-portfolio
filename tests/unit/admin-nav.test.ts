@@ -30,5 +30,18 @@ describe('Admin Navigation & Categorized Menu Architecture', () => {
       expect(overviewCategory?.title).toBe('Overview');
       expect(overviewCategory?.items.map((i) => i.href)).toEqual(['/admin', '/admin/logs']);
     });
+
+    it('organizes content management category with 6 core CMS items', () => {
+      const contentCategory = ADMIN_NAV_CATEGORIES.find((c) => c.id === 'content');
+      expect(contentCategory?.title).toBe('Content Management');
+      expect(contentCategory?.items.map((i) => i.href)).toEqual([
+        '/admin/projects',
+        '/admin/services',
+        '/admin/products',
+        '/admin/blog',
+        '/admin/testimonials',
+        '/admin/team',
+      ]);
+    });
   });
 });
