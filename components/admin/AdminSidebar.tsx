@@ -86,7 +86,7 @@ export default function AdminSidebar({
       <nav className="flex-1 p-3 space-y-4 overflow-y-auto">
         {visibleCategories.map((category) => (
           <div key={category.id} className="space-y-1">
-            <div className={getAdminCategoryHeaderClasses()}>
+            <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400 px-3.5 pt-1 pb-1 flex items-center justify-between select-none">
               <span>{category.title}</span>
               {category.shortLabel && (
                 <span className="text-[9px] opacity-60 font-mono-tight tracking-normal">
