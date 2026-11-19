@@ -162,5 +162,13 @@ describe('Navbar System & Mobile Menu Opaque Architecture', () => {
       expect(activeClasses).toContain('border border-primary/25');
       expect(activeClasses).toContain('font-semibold');
     });
+
+    it('formats inactive navigation links with muted colors and subtle hover styling', () => {
+      const inactiveClasses = getMobileNavLinkClasses(false);
+      expect(inactiveClasses).toContain('text-mist-1');
+      expect(inactiveClasses).toContain('hover:text-paper');
+      expect(inactiveClasses).toContain('hover:bg-white/5');
+      expect(inactiveClasses).not.toContain('bg-primary/15');
+    });
   });
 });
