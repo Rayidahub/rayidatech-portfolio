@@ -438,6 +438,61 @@ export default async function AdminDashboard() {
           </div>
         </div>
 
+        {/* Right 1 Column: DealDeck "Customer Growth" Location Bubbles */}
+        <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-[0_4px_24px_rgba(15,23,42,0.025)] flex flex-col justify-between min-h-[380px]">
+          <div>
+            <div className="flex items-center justify-between mb-1">
+              <div>
+                <h3 className="font-display font-bold text-base text-slate-900">Customer Growth</h3>
+                <p className="text-xs text-slate-400">Track customer by locations</p>
+              </div>
+              <button
+                type="button"
+                className="inline-flex items-center gap-1 px-3 py-1 rounded-full border border-slate-200 text-xs text-slate-600 hover:bg-slate-50 transition-colors font-medium cursor-pointer"
+              >
+                <span>Today</span>
+                <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+              </button>
+            </div>
+
+            {/* Overlapping Blue Distribution Bubbles matching DealDeck */}
+            <div className="relative h-44 my-5 flex items-center justify-center">
+              {/* Bubble 1: Main Dark Royal Blue (2.417) */}
+              <div className="absolute top-2 right-12 w-24 h-24 rounded-full bg-[#3b5bfa] text-white flex items-center justify-center font-bold text-sm shadow-lg shadow-blue-500/20 z-10">
+                2.417
+              </div>
+
+              {/* Bubble 2: Medium Indigo Blue (2.281) */}
+              <div className="absolute bottom-2 left-10 w-22 h-22 rounded-full bg-[#4f6ef7] text-white flex items-center justify-center font-bold text-sm shadow-md z-10">
+                2.281
+              </div>
+
+              {/* Bubble 3: Light Blue (812) */}
+              <div className="absolute bottom-4 right-14 w-16 h-16 rounded-full bg-[#758ef8] text-white flex items-center justify-center font-semibold text-xs shadow-xs z-10">
+                812
+              </div>
+
+              {/* Bubble 4: Pale Lavender Blue (287) */}
+              <div className="absolute top-6 left-12 w-14 h-14 rounded-full bg-[#9bb0fa] text-white flex items-center justify-center font-semibold text-xs shadow-xs z-10">
+                287
+              </div>
+            </div>
+          </div>
+
+          {/* Location Breakdown with Flags matching DealDeck */}
+          <div className="space-y-3 pt-3 border-t border-slate-100">
+            {DEFAULT_GEOGRAPHIC_GROWTH.map((geo) => (
+              <div key={geo.id} className="flex items-center justify-between text-xs">
+                <div className="flex items-center gap-2.5">
+                  <span className="text-base leading-none">{geo.flag}</span>
+                  <span className="font-medium text-slate-700">{geo.country}</span>
+                </div>
+                <span className="font-bold text-slate-900 font-display">{geo.visitors}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
