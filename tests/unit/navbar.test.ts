@@ -68,4 +68,17 @@ describe('Navbar System & Mobile Menu Opaque Architecture', () => {
       expect(isNavActive('/contact', '/about')).toBe(false);
     });
   });
+
+  describe('getNavbarContainerClasses', () => {
+    it('always includes fixed positioning and z-50', () => {
+      const closedNormal = getNavbarContainerClasses({ isOpen: false, scrolled: false });
+      const closedScrolled = getNavbarContainerClasses({ isOpen: false, scrolled: true });
+      const openNormal = getNavbarContainerClasses({ isOpen: true, scrolled: false });
+      const openScrolled = getNavbarContainerClasses({ isOpen: true, scrolled: true });
+
+      for (const cls of [closedNormal, closedScrolled, openNormal, openScrolled]) {
+        expect(cls).toContain('fixed top-0 left-0 right-0 z-50');
+      }
+    });
+  });
 });
