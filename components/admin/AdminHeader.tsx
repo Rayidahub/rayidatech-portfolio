@@ -38,7 +38,7 @@ export default function AdminHeader({
   const displayName = name || email.split('@')[0];
 
   return (
-    <header className="h-20 bg-[#f4f5f9] border-b border-slate-200/60 flex items-center justify-between px-4 sm:px-8 gap-4 sticky top-0 z-30">
+    <header className="h-20 bg-[#f4f5f9] border-b border-slate-200/60 flex items-center justify-between px-4 sm:px-8 gap-4 sticky top-0 z-30 select-none">
       {/* Left: DealDeck Page Title & Live Calendar Date */}
       <div className="flex items-center gap-3">
         {onOpenMobileMenu && (
