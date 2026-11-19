@@ -13,3 +13,9 @@ export interface DealDeckStatMetric {
   iconType: 'document' | 'package' | 'users' | 'truck' | 'sparkles' | 'activity';
 }
 
+export interface MonthlyHabitBar {
+  month: string;
+  seenProducts: number;
+  sales: number;
+}
+
