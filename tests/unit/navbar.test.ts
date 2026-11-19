@@ -80,5 +80,17 @@ describe('Navbar System & Mobile Menu Opaque Architecture', () => {
         expect(cls).toContain('fixed top-0 left-0 right-0 z-50');
       }
     });
+
+    it('applies completely solid bg-[var(--ink-deep)] when mobile menu is open, regardless of scroll', () => {
+      const openClasses = getNavbarContainerClasses({ isOpen: true, scrolled: false });
+      expect(openClasses).toContain('bg-[var(--ink-deep)]');
+      expect(openClasses).toContain('border-b border-(--line)');
+      expect(openClasses).toContain('shadow-2xl');
+      expect(openClasses).not.toContain('glass');
+
+      const openScrolledClasses = getNavbarContainerClasses({ isOpen: true, scrolled: true });
+      expect(openScrolledClasses).toContain('bg-[var(--ink-deep)]');
+      expect(openScrolledClasses).not.toContain('glass');
+    });
   });
 });
