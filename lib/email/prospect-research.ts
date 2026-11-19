@@ -527,3 +527,31 @@ export function exportProspectsToExcel(
 /**
  * Builds and triggers download of CSV formatted data.
  */
+export function exportProspectsToCsv(
+  prospects: ProspectResearchItem[],
+  customFilename?: string
+): void {
+  const exportRows = prospects.map((p) => ({
+    'Business Name': p.business_name,
+    'Business Category': p.business_category,
+    'Area in Abuja': p.area,
+    'Public Email Address': p.email || '',
+    'Phone Number': p.phone || '',
+    'Website Status / Verification Note': `[${p.website_status}] ${p.verification_note}`,
+    'Source and Source Link': p.source_link ? `${p.source} (${p.source_link})` : p.source,
+    'Opportunity Score': p.opportunity_score,
+    'Recommended Outreach Pitch': p.recommended_pitch,
+  }));
+
+  const worksheet = XLSX.utils.json_to_sheet(exportRows);
+  const csvContent = XLSX.utils.sheet_to_csv(worksheet);
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = customFilename || 'Abuja Prospects With Public Emails.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
