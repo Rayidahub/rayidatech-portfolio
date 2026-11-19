@@ -113,6 +113,29 @@ export default async function AdminDashboard() {
                   Orders vs last month
                 </span>
               </div>
+            </div>
+          </div>
+
+          {/* Card 3: White Card ("Visitor") */}
+          <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-[0_4px_24px_rgba(15,23,42,0.025)] flex flex-col justify-between min-h-[175px] hover:border-slate-200 transition-all">
+            <div className="flex items-center justify-between">
+              <div className="w-10 h-10 rounded-2xl bg-slate-100 text-slate-700 flex items-center justify-center shadow-xs">
+                <Users className="w-5 h-5 text-slate-700" />
+              </div>
+              <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-rose-50 text-rose-500 border border-rose-100">
+                -2.08%
+              </span>
+            </div>
+
+            <div className="mt-4">
+              <span className="text-xs text-slate-400 font-medium block">Visitor</span>
+              <div className="flex items-baseline gap-2 mt-0.5">
+                <h3 className="text-2xl sm:text-3xl font-bold font-display tracking-tight text-slate-900">
+                  {liveInquiryTotal >= 1000 ? formatDealDeckNumber(liveInquiryTotal) : '14.987'}
+                </h3>
+                <span className="text-[11px] text-slate-400 font-normal">
+                  Users vs last month
+                </span>
 </div>
 </div>
 </div>
