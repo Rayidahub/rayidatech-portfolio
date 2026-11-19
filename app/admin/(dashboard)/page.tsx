@@ -287,6 +287,100 @@ export default async function AdminDashboard() {
         </div>
       </div>
 
+      {/* ── Middle Layout Grid: Left (Customer Habits Bar Chart) & Right (Customer Growth Bubbles) ── */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+        {/* Left 2 Columns: DealDeck "Customer Habits" Monthly Bar Chart */}
+        <div className="lg:col-span-2 space-y-6">
+          <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-[0_4px_24px_rgba(15,23,42,0.025)]">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+              <div>
+                <h3 className="font-display font-bold text-base text-slate-900">Customer Habbits</h3>
+                <p className="text-xs text-slate-400">Track your customer habbits</p>
+              </div>
+
+              <div className="flex items-center gap-4">
+                {/* Legend matching DealDeck */}
+                <div className="flex items-center gap-3 text-xs text-slate-500">
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-slate-300 inline-block" />
+                    <span>Seen product</span>
+                  </span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#3b5bfa] inline-block" />
+                    <span>Sales</span>
+                  </span>
+                </div>
+
+                <button
+                  type="button"
+                  className="inline-flex items-center gap-1 px-3 py-1 rounded-full border border-slate-200 text-xs text-slate-600 hover:bg-slate-50 transition-colors font-medium cursor-pointer"
+                >
+                  <span>This year</span>
+                  <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+                </button>
+              </div>
+            </div>
+
+            {/* Vertical Bar Chart with Interactive April Tooltip */}
+            <div className="relative pt-12 pb-2">
+              <div className="flex items-end justify-between gap-3 sm:gap-6 h-56 border-b border-slate-100 px-2 sm:px-6">
+                {DEFAULT_MONTHLY_HABITS.map((bar) => {
+                  const seenH = calculateBarHeight(bar.seenProducts, 60000);
+                  const salesH = calculateBarHeight(bar.sales, 60000);
+                  const isApril = bar.month === 'Apr';
+
+                  return (
+                    <div key={bar.month} className="flex-1 flex flex-col items-center h-full justify-end relative">
+                      {/* DealDeck Floating Tooltip on April */}
+                      {isApril && (
+                        <div className="absolute -top-10 left-1/2 -translate-x-1/2 z-20 bg-slate-950 text-white text-[11px] font-medium py-1.5 px-3 rounded-2xl shadow-xl flex flex-col gap-0.5 whitespace-nowrap animate-bounce-subtle">
+                          <div className="flex items-center gap-1.5">
+                            <span className="w-1.5 h-1.5 rounded-full bg-white" />
+                            <span>43.787 Products</span>
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#3b5bfa]" />
+                            <span>39.784 Products</span>
+                          </div>
+                          {/* Triangle Pointer */}
+                          <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-slate-950 rotate-45" />
+                        </div>
+                      )}
+
+                      {/* Dual Rounded Bars */}
+                      <div className="flex items-end gap-1.5 sm:gap-2.5 w-full justify-center h-full">
+                        {/* Seen Product Bar (Grey) */}
+                        <div
+                          style={{ height: `${seenH}%` }}
+                          className="w-3 sm:w-4.5 bg-slate-200 hover:bg-slate-300 rounded-full transition-all duration-300"
+                          title={`${bar.month} Seen Products: ${bar.seenProducts}`}
+                        />
+                        {/* Sales Bar (Royal Blue) */}
+                        <div
+                          style={{ height: `${salesH}%` }}
+                          className="w-3 sm:w-4.5 bg-[#3b5bfa] hover:bg-blue-600 rounded-full transition-all duration-300 shadow-xs"
+                          title={`${bar.month} Sales: ${bar.sales}`}
+                        />
+                      </div>
+
+                      {/* Month Label */}
+                      <span className="text-[11px] font-medium text-slate-400 mt-3">{bar.month}</span>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Y-Axis Reference Scale Marks */}
+              <div className="absolute left-0 top-0 bottom-8 flex flex-col justify-between text-[10px] text-slate-300 font-mono pointer-events-none select-none">
+                <span>60K</span>
+                <span>40K</span>
+                <span>20K</span>
+                <span>10K</span>
+                <span>0K</span>
+              </div>
+            </div>
+          </div>
+
     </div>
   );
 }
