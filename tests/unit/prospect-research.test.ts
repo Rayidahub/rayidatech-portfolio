@@ -75,5 +75,63 @@ describe('Prospect Research & Lead Discovery Engine', () => {
     });
   });
 
+  describe('filterProspects logic', () => {
+    it('returns all prospects when default filters are passed', () => {
+      const filtered = filterProspects(CURATED_ABUJA_PROSPECTS, {
+        category: 'All',
+        area: 'All Areas',
+        website_status: 'All',
+      });
+      expect(filtered.length).toBe(CURATED_ABUJA_PROSPECTS.length);
+    });
+
+    it('filters accurately by category', () => {
+      const filtered = filterProspects(CURATED_ABUJA_PROSPECTS, {
+        category: 'Event Planning & Decor',
+      });
+      expect(filtered.length).toBeGreaterThan(0);
+      for (const p of filtered) {
+        expect(p.business_category).toBe('Event Planning & Decor');
+      }
+    });
+
+    it('filters accurately by area in Abuja', () => {
+      const filtered = filterProspects(CURATED_ABUJA_PROSPECTS, {
+        area: 'Wuse 2',
+      });
+      expect(filtered.length).toBeGreaterThan(0);
+      for (const p of filtered) {
+        expect(p.area).toBe('Wuse 2');
+      }
+    });
+
+    it('filters accurately by website opportunity status (No Website Found)', () => {
+      const filtered = filterProspects(CURATED_ABUJA_PROSPECTS, {
+        website_status: 'No Website Found',
+      });
+      expect(filtered.length).toBeGreaterThan(0);
+      for (const p of filtered) {
+        expect(p.website_status).toBe('No Website Found');
+      }
+    });
+
+    it('filters accurately by hasEmailOnly', () => {
+      const filtered = filterProspects(CURATED_ABUJA_PROSPECTS, {
+        hasEmailOnly: true,
+      });
+      for (const p of filtered) {
+        expect(p.email).toBeTruthy();
+      }
+    });
+
+    it('filters accurately by text search query', () => {
+      const filtered = filterProspects(CURATED_ABUJA_PROSPECTS, {
+        search: 'Gemelos',
+      });
+      expect(filtered).toHaveLength(1);
+      expect(filtered[0].business_name).toBe('Gemelos Treats');
+    });
+  });
+
   });
 });
