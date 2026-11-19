@@ -113,6 +113,21 @@ describe('Admin Navigation & Categorized Menu Architecture', () => {
 
     it('omits System & Access category for admin role since Users & Roles is excluded', () => {
       const visible = getVisibleAdminNavCategories({ role: 'admin' });
+
+    it('filters categories and excludes empty categories for restricted editor role', () => {
+      const visible = getVisibleAdminNavCategories({
+        role: 'editor',
+        permissions: ['projects', 'blog'] as AdminPermission[],
+      });
+      const ids = visible.map((c) => c.id);
+      expect(ids).toContain('overview');
+      expect(ids).toContain('content');
+      expect(ids).not.toContain('communication');
+      expect(ids).not.toContain('system');
+
+      const content = visible.find((c) => c.id === 'content');
+      expect(content?.items.map((i) => i.href)).toEqual(['/admin/projects', '/admin/blog']);
+    });
       expect(visible).toHaveLength(4);
       expect(visible.some((c) => c.id === 'system')).toBe(false);
       const totalItems = visible.reduce((acc, cat) => acc + cat.items.length, 0);
