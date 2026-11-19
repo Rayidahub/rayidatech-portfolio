@@ -90,7 +90,11 @@ export default function Navbar() {
 
         <button
           onClick={() => setIsOpen((v) => !v)}
-          className="p-2 -mr-1.5 rounded-xl text-mist-1 transition-colors hover:text-paper hover:bg-paper/5 md:hidden min-h-[44px] min-w-[44px] flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary/40 cursor-pointer"
+          className={`p-2 -mr-1.5 rounded-xl transition-colors md:hidden min-h-[44px] min-w-[44px] flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary/40 cursor-pointer ${
+            isOpen
+              ? 'text-paper bg-white/10 hover:bg-white/15'
+              : 'text-mist-1 hover:text-paper hover:bg-white/5'
+          }`}
           aria-label={isOpen ? 'Close menu' : 'Open menu'}
           aria-expanded={isOpen}
         >
