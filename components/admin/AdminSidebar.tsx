@@ -57,6 +57,9 @@ export default function AdminSidebar({
         <div>
           <Link href="/" onClick={handleLinkClick} className="inline-flex items-center">
             <BrandLogo className="h-7 w-auto" />
+            <span className="font-display font-bold text-lg text-slate-900 tracking-tight">
+              Rayida Tech
+            </span>
           </Link>
           <div className="flex items-center gap-2 mt-2">
             <p className="text-mist-2 text-xs">Admin Workspace</p>
