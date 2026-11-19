@@ -69,5 +69,17 @@ describe('Admin Navigation & Categorized Menu Architecture', () => {
       expect(systemCategory?.title).toBe('System & Access');
       expect(systemCategory?.items.map((i) => i.href)).toEqual(['/admin/users']);
     });
+
+    it('ensures every item has valid label, defined icon, and permission', () => {
+      for (const category of ADMIN_NAV_CATEGORIES) {
+        expect(category.title).toBeTruthy();
+        for (const item of category.items) {
+          expect(item.label).toBeTruthy();
+          expect(item.icon).toBeDefined();
+          expect(item.permission).toBeTruthy();
+          expect(item.href.startsWith('/admin')).toBe(true);
+        }
+      }
+    });
   });
 });
