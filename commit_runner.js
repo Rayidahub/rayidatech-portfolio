@@ -10,100 +10,8 @@ function commit(msg) {
   console.log(`[COMMITTED] ${msg}`);
 }
 
-// ==========================================
-// 1. lib/navbar.ts (6 atomic commits)
-// ==========================================
-
-const nav1 = `export interface NavLink {
-  href: string;
-  label: string;
-}
-
-export const MAIN_NAV_LINKS: NavLink[] = [
-  { href: '/about', label: 'About' },
-  { href: '/projects', label: 'Projects' },
-  { href: '/services', label: 'Services' },
-  { href: '/products', label: 'Products' },
-  { href: '/blog', label: 'Blog' },
-  { href: '/contact', label: 'Contact' },
-];
-`;
-fs.writeFileSync('lib/navbar.ts', nav1);
-commit('feat(navbar): define NavLink interface and canonical MAIN_NAV_LINKS in lib/navbar.ts');
-
-const nav2 = nav1 + `
-/**
- * Determines whether a nav link is currently active given the current pathname.
- */
-export function isNavActive(pathname: string, href: string): boolean {
-  if (href === '/') {
-    return pathname === '/';
-  }
-  return pathname === href || pathname.startsWith(\`\${href}/\`);
-}
-`;
-fs.writeFileSync('lib/navbar.ts', nav2);
-commit('feat(navbar): add isNavActive route comparison helper in lib/navbar.ts');
-
-const nav3 = nav2 + `
-/**
- * Returns the CSS class string for the top navigation bar container,
- * ensuring a solid, non-transparent background when the mobile menu is open.
- */
-export function getNavbarContainerClasses({
-  isOpen,
-  scrolled,
-}: {
-  isOpen: boolean;
-  scrolled: boolean;
-}): string {
-  const base = 'fixed top-0 left-0 right-0 z-50 transition-colors duration-300';
-  if (isOpen) {
-    // Completely solid, opaque background to eliminate transparency when open
-    return \`\${base} bg-[var(--ink-deep)] border-b border-(--line) shadow-2xl\`;
-  }
-  if (scrolled) {
-    return \`\${base} glass\`;
-  }
-  return \`\${base} border-b border-transparent\`;
-}
-`;
-fs.writeFileSync('lib/navbar.ts', nav3);
-commit('feat(navbar): add getNavbarContainerClasses helper with opaque open state');
-
-const nav4 = nav3 + `
-/**
- * Returns the CSS class string for the mobile menu dropdown drawer,
- * using a 100% opaque background to prevent underlying hero/page content from bleeding through.
- */
-export function getMobileMenuDrawerClasses(): string {
-  return 'bg-[var(--ink-deep)] border-t border-b border-(--line) px-4 sm:px-6 py-5 md:hidden max-h-[calc(100vh-4.5rem)] overflow-y-auto shadow-2xl shadow-black/80 animate-in fade-in slide-in-from-top-2 duration-200';
-}
-`;
-fs.writeFileSync('lib/navbar.ts', nav4);
-commit('feat(navbar): add getMobileMenuDrawerClasses helper for solid ink background');
-
-const nav5 = nav4 + `
-/**
- * Returns the CSS class string for the mobile menu backdrop overlay.
- */
-export function getMobileBackdropClasses(): string {
-  return 'fixed inset-0 top-[60px] sm:top-[68px] bg-black/75 backdrop-blur-sm z-[-1] md:hidden animate-fade-in';
-}
-`;
-fs.writeFileSync('lib/navbar.ts', nav5);
-commit('feat(navbar): add getMobileBackdropClasses helper for dimmed overlay');
-
-const nav6 = fs.readFileSync(path.join(scratchDir, 'navbar.ts.bak'), 'utf8');
-fs.writeFileSync('lib/navbar.ts', nav6);
-commit('feat(navbar): add getMobileNavLinkClasses helper for active pill styling');
-
-
-// ==========================================
 // 2. components/layout/Navbar.tsx (7 atomic commits)
-// ==========================================
-
-const origNav = fs.readFileSync('components/layout/Navbar.tsx', 'utf8');
+let origNav = fs.readFileSync('components/layout/Navbar.tsx', 'utf8').replace(/\r\n/g, '\n');
 
 // Commit 7: replace navLinks definition with imports
 const targetImports = `const navLinks = [
@@ -183,7 +91,7 @@ const targetNavTag = `<nav
         scrolled ? 'glass' : 'border-b border-transparent'
       }\`}
     >`;
-const replaceNavTag = `<nav className={getNavbarContainerClasses({ isOpen, scrolled })} >`;
+const replaceNavTag = `<nav className={getNavbarContainerClasses({ isOpen, scrolled })}>`;
 let navStep4 = navStep3.replace(targetNavTag, replaceNavTag);
 fs.writeFileSync('components/layout/Navbar.tsx', navStep4);
 commit('feat(navbar): bind getNavbarContainerClasses to nav element for opaque open state');
@@ -241,7 +149,7 @@ commit('feat(navbar): deploy solid opaque mobile drawer and backdrop overlay sys
 // 3. AGENTS.md (2 atomic commits)
 // ==========================================
 
-const agentsOriginal = fs.readFileSync('AGENTS.md', 'utf8');
+const agentsOriginal = fs.readFileSync('AGENTS.md', 'utf8').replace(/\r\n/g, '\n');
 const targetPrimitives = `- \`lib/slug.ts\` — \`normalizeSlug(title)\`, URL-safe slug generator.
 - \`lib/reading-time.ts\` — \`getReadingTime(content)\`, used on blog pages.
 - \`lib/email/index.ts\` — Transactional email service (Resend REST API).`;
@@ -261,28 +169,6 @@ commit('docs(agents): document mobile hamburger menu opaque architecture in AGEN
 // 4. tests/unit/navbar.test.ts (20 atomic commits)
 // ==========================================
 
-// Commit 16: Setup and length test
-fs.writeFileSync('tests/unit/navbar.test.ts', `import { describe, it, expect } from 'vitest';
-import {
-  MAIN_NAV_LINKS,
-  isNavActive,
-  getNavbarContainerClasses,
-  getMobileMenuDrawerClasses,
-  getMobileBackdropClasses,
-  getMobileNavLinkClasses,
-} from '@/lib/navbar';
-
-describe('Navbar System & Mobile Menu Opaque Architecture', () => {
-  describe('MAIN_NAV_LINKS', () => {
-    it('defines the complete standard set of 6 main navigation links', () => {
-      expect(MAIN_NAV_LINKS).toHaveLength(6);
-    });
-  });
-});
-`);
-commit('test(navbar): setup unit test suite and verify MAIN_NAV_LINKS link count');
-
-// Commit 17: Canonical routes
 function buildTestContent(sections) {
   return `import { describe, it, expect } from 'vitest';
 import {
@@ -448,6 +334,12 @@ const sGetMobileNavLinkClasses = [
       expect(inactiveClasses).not.toContain('bg-primary/15');
     });`,
 ];
+
+// Commit 16: Setup and length test
+fs.writeFileSync('tests/unit/navbar.test.ts', buildTestContent([
+  `  describe('MAIN_NAV_LINKS', () => {\n${sMainNavLinks.slice(0, 1).join('\n\n')}\n  });`
+]));
+commit('test(navbar): setup unit test suite and verify MAIN_NAV_LINKS link count');
 
 // Commit 17
 fs.writeFileSync('tests/unit/navbar.test.ts', buildTestContent([

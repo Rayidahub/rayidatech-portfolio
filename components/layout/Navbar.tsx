@@ -9,14 +9,14 @@ import StatusPill from '@/components/ui/StatusPill';
 import ThemeToggle from '@/components/ui/ThemeToggle';
 import BrandLogo from '@/components/ui/BrandLogo';
 
-const navLinks = [
-  { href: '/about', label: 'About' },
-  { href: '/projects', label: 'Projects' },
-  { href: '/services', label: 'Services' },
-  { href: '/products', label: 'Products' },
-  { href: '/blog', label: 'Blog' },
-  { href: '/contact', label: 'Contact' },
-];
+import {
+  MAIN_NAV_LINKS,
+  isNavActive,
+  getNavbarContainerClasses,
+  getMobileMenuDrawerClasses,
+  getMobileBackdropClasses,
+  getMobileNavLinkClasses,
+} from '@/lib/navbar';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
