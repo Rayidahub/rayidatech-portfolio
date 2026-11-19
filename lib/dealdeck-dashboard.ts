@@ -19,3 +19,13 @@ export interface MonthlyHabitBar {
   sales: number;
 }
 
+export interface ProductStatisticItem {
+  id: string;
+  name: string;
+  count: string;
+  numericCount: number;
+  changePercent: string;
+  isPositive: boolean;
+  iconName: string;
+}
+
