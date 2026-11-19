@@ -166,5 +166,16 @@ describe('Admin Navigation & Categorized Menu Architecture', () => {
       expect(classes).toContain('font-mono-tight');
       expect(classes).toContain('text-mist-2/70');
     });
+
+    it('provides active styling with primary background and secondary text', () => {
+      const activeCls = getAdminNavLinkClasses(true);
+      expect(activeCls).toContain('bg-primary/20');
+      expect(activeCls).toContain('text-secondary');
+      expect(activeCls).toContain('font-medium');
+
+      const inactiveCls = getAdminNavLinkClasses(false);
+      expect(inactiveCls).toContain('text-mist-1');
+      expect(inactiveCls).toContain('hover:text-paper');
+    });
   });
 });
