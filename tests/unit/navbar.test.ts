@@ -153,4 +153,14 @@ describe('Navbar System & Mobile Menu Opaque Architecture', () => {
       expect(classes).toContain('backdrop-blur-sm');
     });
   });
+
+  describe('getMobileNavLinkClasses', () => {
+    it('formats active navigation links with primary tint and bold emphasis', () => {
+      const activeClasses = getMobileNavLinkClasses(true);
+      expect(activeClasses).toContain('text-paper');
+      expect(activeClasses).toContain('bg-primary/15');
+      expect(activeClasses).toContain('border border-primary/25');
+      expect(activeClasses).toContain('font-semibold');
+    });
+  });
 });
