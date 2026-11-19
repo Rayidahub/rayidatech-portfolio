@@ -58,3 +58,14 @@ export function getMobileMenuDrawerClasses(): string {
 export function getMobileBackdropClasses(): string {
   return 'fixed inset-0 top-[60px] sm:top-[68px] bg-black/75 backdrop-blur-sm z-[-1] md:hidden animate-fade-in';
 }
+
+/**
+ * Returns the CSS classes for an individual mobile navigation link.
+ */
+export function getMobileNavLinkClasses(isActive: boolean): string {
+  const base = 'py-2.5 px-3.5 rounded-xl text-base font-medium transition-all block';
+  if (isActive) {
+    return `${base} text-paper bg-primary/15 border border-primary/25 font-semibold shadow-sm`;
+  }
+  return `${base} text-mist-1 hover:text-paper hover:bg-white/5`;
+}
