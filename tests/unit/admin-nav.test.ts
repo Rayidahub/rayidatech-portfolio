@@ -25,13 +25,11 @@ describe('Admin Navigation & Categorized Menu Architecture', () => {
       expect(uniqueHrefs.size).toBe(15);
     });
 
-    it('organizes overview category with Dashboard and Activity Logs', () => {
+    it('organizes items in the expected functional categories', () => {
       const overviewCategory = ADMIN_NAV_CATEGORIES.find((c) => c.id === 'overview');
       expect(overviewCategory?.title).toBe('Overview');
       expect(overviewCategory?.items.map((i) => i.href)).toEqual(['/admin', '/admin/logs']);
-    });
 
-    it('organizes content management category with 6 core CMS items', () => {
       const contentCategory = ADMIN_NAV_CATEGORIES.find((c) => c.id === 'content');
       expect(contentCategory?.title).toBe('Content Management');
       expect(contentCategory?.items.map((i) => i.href)).toEqual([
@@ -42,9 +40,7 @@ describe('Admin Navigation & Categorized Menu Architecture', () => {
         '/admin/testimonials',
         '/admin/team',
       ]);
-    });
 
-    it('organizes appearance & hero category with visual design controls', () => {
       const appearanceCategory = ADMIN_NAV_CATEGORIES.find((c) => c.id === 'appearance');
       expect(appearanceCategory?.title).toBe('Appearance & Hero');
       expect(appearanceCategory?.items.map((i) => i.href)).toEqual([
@@ -52,9 +48,7 @@ describe('Admin Navigation & Categorized Menu Architecture', () => {
         '/admin/hero/settings',
         '/admin/settings',
       ]);
-    });
 
-    it('organizes communication category with inbound pipeline and email outreach', () => {
       const communicationCategory = ADMIN_NAV_CATEGORIES.find((c) => c.id === 'communication');
       expect(communicationCategory?.title).toBe('Communication & Leads');
       expect(communicationCategory?.items.map((i) => i.href)).toEqual([
@@ -62,9 +56,7 @@ describe('Admin Navigation & Categorized Menu Architecture', () => {
         '/admin/subscribers',
         '/admin/outreach',
       ]);
-    });
 
-    it('organizes system & access category with RBAC user controls', () => {
       const systemCategory = ADMIN_NAV_CATEGORIES.find((c) => c.id === 'system');
       expect(systemCategory?.title).toBe('System & Access');
       expect(systemCategory?.items.map((i) => i.href)).toEqual(['/admin/users']);
@@ -100,6 +92,10 @@ describe('Admin Navigation & Categorized Menu Architecture', () => {
       expect(isItemPermitted(usersItem, 'admin', [])).toBe(false);
     });
 
+    it('permits dashboard items for editor by default', () => {
+      expect(isItemPermitted(dashboardItem, 'editor', [])).toBe(true);
+    });
+
     it('permits content items for editor only if permission is granted', () => {
       expect(isItemPermitted(projectsItem, 'editor', [])).toBe(false);
       expect(isItemPermitted(projectsItem, 'editor', ['projects'])).toBe(true);
@@ -110,15 +106,25 @@ describe('Admin Navigation & Categorized Menu Architecture', () => {
   describe('getVisibleAdminNavCategories', () => {
     it('returns all 5 categories and 15 items for super_admin', () => {
       const visible = getVisibleAdminNavCategories({ role: 'super_admin' });
+      expect(visible).toHaveLength(5);
+      const totalItems = visible.reduce((acc, cat) => acc + cat.items.length, 0);
+      expect(totalItems).toBe(15);
+    });
 
     it('omits System & Access category for admin role since Users & Roles is excluded', () => {
       const visible = getVisibleAdminNavCategories({ role: 'admin' });
+      expect(visible).toHaveLength(4);
+      expect(visible.some((c) => c.id === 'system')).toBe(false);
+      const totalItems = visible.reduce((acc, cat) => acc + cat.items.length, 0);
+      expect(totalItems).toBe(14);
+    });
 
     it('filters categories and excludes empty categories for restricted editor role', () => {
       const visible = getVisibleAdminNavCategories({
         role: 'editor',
         permissions: ['projects', 'blog'] as AdminPermission[],
       });
+      // Overview (dashboard permitted) + Content (projects and blog permitted)
       const ids = visible.map((c) => c.id);
       expect(ids).toContain('overview');
       expect(ids).toContain('content');
@@ -127,15 +133,6 @@ describe('Admin Navigation & Categorized Menu Architecture', () => {
 
       const content = visible.find((c) => c.id === 'content');
       expect(content?.items.map((i) => i.href)).toEqual(['/admin/projects', '/admin/blog']);
-    });
-      expect(visible).toHaveLength(4);
-      expect(visible.some((c) => c.id === 'system')).toBe(false);
-      const totalItems = visible.reduce((acc, cat) => acc + cat.items.length, 0);
-      expect(totalItems).toBe(14);
-    });
-      expect(visible).toHaveLength(5);
-      const totalItems = visible.reduce((acc, cat) => acc + cat.items.length, 0);
-      expect(totalItems).toBe(15);
     });
   });
 
@@ -176,6 +173,13 @@ describe('Admin Navigation & Categorized Menu Architecture', () => {
       const inactiveCls = getAdminNavLinkClasses(false);
       expect(inactiveCls).toContain('text-mist-1');
       expect(inactiveCls).toContain('hover:text-paper');
+    });
+
+    it('returns appropriate badge variant classes', () => {
+      expect(getAdminBadgeClasses('live')).toContain('text-emerald-400');
+      expect(getAdminBadgeClasses('campaigns')).toContain('text-secondary');
+      expect(getAdminBadgeClasses('super')).toContain('text-cyan-400');
+      expect(getAdminBadgeClasses('default')).toContain('text-mist-1');
     });
   });
 });
