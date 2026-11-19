@@ -65,3 +65,12 @@ export function formatDealDeckNumber(num: number): string {
 /**
  * Calculates percentage height for bar charts based on max scale
  */
+export function calculateBarHeight(value: number, maxValue = 60000): number {
+  if (maxValue <= 0) return 0;
+  const ratio = (value / maxValue) * 100;
+  return Math.min(100, Math.max(8, Math.round(ratio)));
+}
+
+/**
+ * Returns Tailwind class string for DealDeck percentage change pills
+ */
