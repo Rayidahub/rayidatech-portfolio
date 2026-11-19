@@ -106,4 +106,11 @@ describe('Navbar System & Mobile Menu Opaque Architecture', () => {
       expect(classes).not.toContain('bg-[var(--ink-deep)]');
     });
   });
+
+  describe('getMobileMenuDrawerClasses', () => {
+    it('provides a completely solid 100% opaque background matching the Rayida ink theme', () => {
+      const classes = getMobileMenuDrawerClasses();
+      expect(classes).toContain('bg-[var(--ink-deep)]');
+    });
+  });
 });
