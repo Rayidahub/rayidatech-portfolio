@@ -190,3 +190,10 @@ export interface ImportPreviewRow {
   validationError?: string;
 }
 
+
+// Prospect Research & Discovery types
+export type WebsiteOpportunityStatus =
+  | 'No Website Found'
+  | 'Socials Only'
+  | 'Outdated / Needs Redesign'
+  | 'Active Website';
