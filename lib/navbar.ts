@@ -21,3 +21,25 @@ export function isNavActive(pathname: string, href: string): boolean {
   }
   return pathname === href || pathname.startsWith(`${href}/`);
 }
+
+/**
+ * Returns the CSS class string for the top navigation bar container,
+ * ensuring a solid, non-transparent background when the mobile menu is open.
+ */
+export function getNavbarContainerClasses({
+  isOpen,
+  scrolled,
+}: {
+  isOpen: boolean;
+  scrolled: boolean;
+}): string {
+  const base = 'fixed top-0 left-0 right-0 z-50 transition-colors duration-300';
+  if (isOpen) {
+    // Completely solid, opaque background to eliminate transparency when open
+    return `${base} bg-[var(--ink-deep)] border-b border-(--line) shadow-2xl`;
+  }
+  if (scrolled) {
+    return `${base} glass`;
+  }
+  return `${base} border-b border-transparent`;
+}
