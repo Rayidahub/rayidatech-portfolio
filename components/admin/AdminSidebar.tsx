@@ -63,7 +63,7 @@ export default function AdminSidebar({
             </span>
           </Link>
           <div className="flex items-center gap-2 mt-2">
-            <span className="text-slate-400 text-xs font-normal">Admin Workspace</span>
+            <span className="text-slate-400 text-xs font-normal tracking-normal">Admin Workspace</span>
             <span
               className={`text-[10px] uppercase font-mono-tight font-semibold px-2 py-0.5 rounded-full border ${roleInfo.style}`}
             >
