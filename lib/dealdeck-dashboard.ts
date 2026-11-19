@@ -29,3 +29,12 @@ export interface ProductStatisticItem {
   iconName: string;
 }
 
+export interface GeographicGrowthItem {
+  id: string;
+  country: string;
+  flag: string;
+  visitors: string;
+  numericVisitors: number;
+  bubbleColor: string;
+}
+
