@@ -51,5 +51,11 @@ describe('Navbar System & Mobile Menu Opaque Architecture', () => {
       expect(isNavActive('/projects', '/projects')).toBe(true);
       expect(isNavActive('/contact', '/contact')).toBe(true);
     });
+
+    it('identifies nested subpath routes as active for parent link', () => {
+      expect(isNavActive('/projects/luxe-by-sey', '/projects')).toBe(true);
+      expect(isNavActive('/blog/understanding-design-systems', '/blog')).toBe(true);
+      expect(isNavActive('/services/brand-identity', '/services')).toBe(true);
+    });
   });
 });
