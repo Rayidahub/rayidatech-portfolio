@@ -98,6 +98,21 @@ export default async function AdminDashboard() {
               <div className="w-10 h-10 rounded-2xl bg-slate-100 text-slate-700 flex items-center justify-center shadow-xs">
                 <ShoppingBag className="w-5 h-5 text-slate-700" />
               </div>
+              <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100">
+                +12,4%
+              </span>
+            </div>
+
+            <div className="mt-4">
+              <span className="text-xs text-slate-400 font-medium block">Total Orders</span>
+              <div className="flex items-baseline gap-2 mt-0.5">
+                <h3 className="text-2xl sm:text-3xl font-bold font-display tracking-tight text-slate-900">
+                  {liveProjectTotal >= 1000 ? formatDealDeckNumber(liveProjectTotal) : '34.760'}
+                </h3>
+                <span className="text-[11px] text-slate-400 font-normal">
+                  Orders vs last month
+                </span>
+              </div>
 </div>
 </div>
 </div>
