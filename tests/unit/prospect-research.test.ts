@@ -54,5 +54,26 @@ describe('Prospect Research & Lead Discovery Engine', () => {
     });
   });
 
+  describe('Categories & Areas Constants', () => {
+    it('defines standard research categories including event, bakery, catering, interiors', () => {
+      expect(RESEARCH_CATEGORIES).toContain('All');
+      expect(RESEARCH_CATEGORIES).toContain('Event Planning & Decor');
+      expect(RESEARCH_CATEGORIES).toContain('Bakery & Confectionery');
+      expect(RESEARCH_CATEGORIES).toContain('Catering & Food Services');
+      expect(RESEARCH_CATEGORIES).toContain('Interior Design & Furnishing');
+      expect(RESEARCH_CATEGORIES).toContain('Hair, Beauty & Wellness');
+    });
+
+    it('defines primary Abuja business districts', () => {
+      expect(ABUJA_AREAS).toContain('All Areas');
+      expect(ABUJA_AREAS).toContain('Wuse 2');
+      expect(ABUJA_AREAS).toContain('Maitama');
+      expect(ABUJA_AREAS).toContain('Garki');
+      expect(ABUJA_AREAS).toContain('Gwarinpa');
+      expect(ABUJA_AREAS).toContain('Jabi');
+      expect(ABUJA_AREAS).toContain('Utako');
+    });
+  });
+
   });
 });
