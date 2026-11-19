@@ -197,3 +197,21 @@ export type WebsiteOpportunityStatus =
   | 'Socials Only'
   | 'Outdated / Needs Redesign'
   | 'Active Website';
+
+export interface ProspectResearchItem {
+  id: string;
+  business_name: string;
+  business_category: string;
+  location: string;
+  area: string;
+  email: string | null;
+  phone: string | null;
+  website: string | null;
+  website_status: WebsiteOpportunityStatus;
+  verification_note: string;
+  source: string;
+  source_link?: string;
+  opportunity_score: 'High' | 'Medium' | 'Low';
+  recommended_pitch: string;
+  is_imported?: boolean;
+}
