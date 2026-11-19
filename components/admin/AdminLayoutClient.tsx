@@ -30,7 +30,7 @@ export default function AdminLayoutClient({
   }, [pathname]);
 
   return (
-    <div data-theme="light" className="admin-light-theme flex min-h-screen bg-ink">
+    <div data-theme="light" className="admin-light-theme flex min-h-screen bg-[#f4f5f9] text-slate-800 font-sans antialiased selection:bg-blue-100 selection:text-blue-900">
       {/* Desktop Sidebar (hidden on mobile) */}
       <div className="hidden md:flex shrink-0">
         <AdminSidebar role={role} permissions={permissions} />
