@@ -32,5 +32,11 @@ describe('Navbar System & Mobile Menu Opaque Architecture', () => {
         expect(link.href).not.toBe('');
       }
     });
+
+    it('includes /products in the main navigation list', () => {
+      const productLink = MAIN_NAV_LINKS.find((l) => l.href === '/products');
+      expect(productLink).toBeDefined();
+      expect(productLink?.label).toBe('Products');
+    });
   });
 });
