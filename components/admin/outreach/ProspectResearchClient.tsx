@@ -259,6 +259,34 @@ export default function ProspectResearchClient({
 
   return (
     <div className="space-y-6">
+      {/* Toast alert banner */}
+      {feedbackToast && (
+        <div
+          className={`p-3.5 rounded-xl border text-xs font-medium flex items-center justify-between shadow-lg animate-fade-in ${
+            feedbackToast.type === 'success'
+              ? 'bg-emerald-500/15 border-emerald-500/30 text-emerald-400'
+              : feedbackToast.type === 'error'
+              ? 'bg-red-500/15 border-red-500/30 text-red-400'
+              : 'bg-secondary/15 border-secondary/30 text-secondary'
+          }`}
+        >
+          <div className="flex items-center gap-2">
+            {feedbackToast.type === 'success' ? (
+              <CheckCircle2 className="w-4 h-4 shrink-0" />
+            ) : (
+              <AlertCircle className="w-4 h-4 shrink-0" />
+            )}
+            <span>{feedbackToast.message}</span>
+          </div>
+          <button
+            onClick={() => setFeedbackToast(null)}
+            className="text-mist-2 hover:text-paper ml-2"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+
       {/* Main Header & Actions */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
