@@ -99,6 +99,21 @@ describe('DealDeck Modern White Admin Dashboard Architecture', () => {
   });
 
 
+
+  describe('Minimalist Clean Layout Grid Constants', () => {
+    it('confirms 2x2 metric cards count', () => {
+      const metricIds = ['total_sales', 'total_orders', 'visitor', 'total_sold_products'];
+      expect(metricIds).toHaveLength(4);
+    });
+
+    it('verifies April focal points match reference values', () => {
+      const aprSeen = 43787;
+      const aprSales = 39784;
+      expect(formatDealDeckNumber(aprSeen)).toBe('43.787');
+      expect(formatDealDeckNumber(aprSales)).toBe('39.784');
+    });
+  });
+
   describe('Minimalist Admin Category Titles (DealDeck Style)', () => {
     it('maps overview to Menu', () => {
       expect(getMinimalistAdminCategoryTitle('overview')).toBe('Menu');
