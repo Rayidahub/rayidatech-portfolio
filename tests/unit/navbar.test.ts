@@ -57,5 +57,10 @@ describe('Navbar System & Mobile Menu Opaque Architecture', () => {
       expect(isNavActive('/blog/understanding-design-systems', '/blog')).toBe(true);
       expect(isNavActive('/services/brand-identity', '/services')).toBe(true);
     });
+
+    it('does not falsely activate on partial slug substrings', () => {
+      expect(isNavActive('/products-and-services', '/products')).toBe(false);
+      expect(isNavActive('/about-us', '/about')).toBe(false);
+    });
   });
 });
