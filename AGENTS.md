@@ -63,6 +63,7 @@ route is a Promise), verify against the real installed version in
 - `lib/reading-time.ts` — `getReadingTime(content)`, used on blog pages.
 - `lib/slug.ts` — `normalizeSlug(title)`, URL-safe slug generator.
 - `lib/navbar.ts` — `MAIN_NAV_LINKS`, `isNavActive`, `getNavbarContainerClasses`, `getMobileMenuDrawerClasses`, `getMobileBackdropClasses`, `getMobileNavLinkClasses`.
+- `lib/admin-nav.ts` — `ADMIN_NAV_CATEGORIES`, `getVisibleAdminNavCategories`, `isAdminRouteActive`, `getAdminCategoryHeaderClasses`, `getAdminNavLinkClasses`, `getAdminBadgeClasses`.
 - `lib/email/index.ts` — Transactional email service (Resend REST API).
 
 ## Data fetching pattern
