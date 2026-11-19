@@ -38,3 +38,22 @@ export interface GeographicGrowthItem {
   bubbleColor: string;
 }
 
+export const DEALDECK_THEME_TOKENS = {
+  canvasBackground: '#f4f5f9',
+  cardBackground: '#ffffff',
+  primaryBlue: '#3b5bfa',
+  primaryBlueHover: '#2f49d1',
+  darkContainer: '#0f172a',
+  textPrimary: '#0f172a',
+  textSecondary: '#475569',
+  textMuted: '#94a3b8',
+  borderLight: '#e2e8f0',
+  pillGreenBg: '#ecfdf5',
+  pillGreenText: '#059669',
+  pillRedBg: '#fef2f2',
+  pillRedText: '#dc2626',
+} as const;
+
+/**
+ * Formats numbers into DealDeck European/Dot format (e.g., 34760 -> "34.760")
+ */
