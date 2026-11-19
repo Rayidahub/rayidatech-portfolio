@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import {
   BarChart3,
   Users,
+  Compass,
   UploadCloud,
   SendHorizontal,
   FileText,
