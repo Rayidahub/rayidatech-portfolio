@@ -1,6 +1,8 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import BrandLogo from '@/components/ui/BrandLogo';
 import { ShieldCheck, X } from 'lucide-react';
 import type { AdminRole, AdminPermission } from '@/types/admin-user';
 import {
@@ -12,37 +14,11 @@ import {
 } from '@/lib/admin-nav';
 
 interface AdminSidebarProps {
-  role?: AdminRole
-  permissions?: AdminPermission[]
-  isMobile?: boolean
-  onClose?: () => void
+  role?: AdminRole;
+  permissions?: AdminPermission[];
+  isMobile?: boolean;
+  onClose?: () => void;
 }
-
-interface NavItem {
-  href: string
-  label: string
-  icon: any
-  permission: AdminPermission
-  badge?: string
-}
-
-const navItems: NavItem[] = [
-  { href: '/admin', label: 'Dashboard', icon: LayoutDashboard, permission: 'dashboard' },
-  { href: '/admin/logs', label: 'User Activity Logs', icon: Activity, permission: 'dashboard', badge: 'Live' },
-  { href: '/admin/settings', label: 'Theme & Appearance', icon: Palette, permission: 'dashboard' },
-  { href: '/admin/projects', label: 'Projects', icon: Briefcase, permission: 'projects' },
-  { href: '/admin/services', label: 'Services', icon: Package, permission: 'services' },
-  { href: '/admin/blog', label: 'Blog', icon: FileText, permission: 'blog' },
-  { href: '/admin/hero', label: 'Hero Slides', icon: Image, permission: 'hero' },
-  { href: '/admin/hero/settings', label: 'Hero Gradient & Settings', icon: Sliders, permission: 'hero' },
-  { href: '/admin/products', label: 'Products', icon: Rocket, permission: 'coming_soon' },
-  { href: '/admin/testimonials', label: 'Testimonials', icon: MessageSquareQuote, permission: 'testimonials' },
-  { href: '/admin/team', label: 'Team', icon: Users, permission: 'team' },
-  { href: '/admin/contacts', label: 'Contacts', icon: Mail, permission: 'contacts' },
-  { href: '/admin/subscribers', label: 'Subscribers', icon: MailCheck, permission: 'contacts' },
-  { href: '/admin/outreach', label: 'Email Outreach', icon: SendHorizontal, permission: 'outreach', badge: 'Campaigns' },
-  { href: '/admin/users', label: 'Users & Roles', icon: ShieldCheck, permission: 'users', badge: 'Super' },
-]
 
 export default function AdminSidebar({
   role = 'super_admin',
@@ -50,7 +26,7 @@ export default function AdminSidebar({
   isMobile = false,
   onClose,
 }: AdminSidebarProps) {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   // Filter categories and their items based on role & permissions
   const visibleCategories = getVisibleAdminNavCategories({ role, permissions });
@@ -59,15 +35,15 @@ export default function AdminSidebar({
     super_admin: { label: 'Super Admin', style: 'text-secondary border-secondary/30 bg-secondary/10' },
     admin: { label: 'Admin', style: 'text-secondary/90 border-secondary/20 bg-secondary/5' },
     editor: { label: 'Editor', style: 'text-mist-1 border-white/10 bg-white/5' },
-  }
+  };
 
-  const roleInfo = roleLabels[role] || roleLabels.editor
+  const roleInfo = roleLabels[role] || roleLabels.editor;
 
   const handleLinkClick = () => {
     if (isMobile && onClose) {
-      onClose()
+      onClose();
     }
-  }
+  };
 
   return (
     <aside
@@ -96,7 +72,7 @@ export default function AdminSidebar({
           <button
             type="button"
             onClick={onClose}
-            className="p-2 rounded-lg text-mist-2 hover:text-paper hover:bg-white/5 transition-colors -mr-2"
+            className="p-2 rounded-lg text-mist-2 hover:text-paper hover:bg-white/5 transition-colors -mr-2 cursor-pointer"
             aria-label="Close sidebar"
           >
             <X className="w-5 h-5" />
@@ -169,5 +145,5 @@ export default function AdminSidebar({
         </Link>
       </div>
     </aside>
-  )
+  );
 }
