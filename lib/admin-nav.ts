@@ -170,3 +170,17 @@ export const ADMIN_NAV_CATEGORIES: AdminNavCategory[] = [
     ],
   },
 ];
+
+/**
+ * Checks if a specific admin nav item is permitted for the given role and permissions.
+ */
+export function isItemPermitted(
+  item: AdminNavItem,
+  role: AdminRole = 'super_admin',
+  permissions: AdminPermission[] = []
+): boolean {
+  if (role === 'super_admin') return true;
+  if (role === 'admin') return item.permission !== 'users';
+  if (item.permission === 'dashboard') return true;
+  return permissions.includes(item.permission);
+}
