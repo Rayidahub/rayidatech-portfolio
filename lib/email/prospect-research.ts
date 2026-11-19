@@ -362,4 +362,58 @@ export const CURATED_ABUJA_PROSPECTS: ProspectResearchItem[] = [
 
 /**
  * Filters the curated and discovered prospect list based on user selections.
-];
+ */
+export function filterProspects(
+  prospects: ProspectResearchItem[],
+  filters: ResearchFilterParams
+): ProspectResearchItem[] {
+  return prospects.filter((item) => {
+    // 1. Category filter
+    if (filters.category && filters.category !== 'All') {
+      if (item.business_category.toLowerCase() !== filters.category.toLowerCase()) {
+        return false;
+      }
+    }
+
+    // 2. Area / Location filter
+    if (filters.area && filters.area !== 'All Areas') {
+      if (item.area.toLowerCase() !== filters.area.toLowerCase()) {
+        return false;
+      }
+    }
+
+    // 3. Website Opportunity status filter
+    if (filters.website_status && filters.website_status !== 'All') {
+      if (item.website_status.toLowerCase() !== filters.website_status.toLowerCase()) {
+        return false;
+      }
+    }
+
+    // 4. Has Email Only filter
+    if (filters.hasEmailOnly) {
+      if (!item.email || !item.email.trim()) {
+        return false;
+      }
+    }
+
+    // 5. Search text filter
+    if (filters.search && filters.search.trim()) {
+      const q = filters.search.trim().toLowerCase();
+      const match =
+        item.business_name.toLowerCase().includes(q) ||
+        item.business_category.toLowerCase().includes(q) ||
+        item.area.toLowerCase().includes(q) ||
+        (item.email && item.email.toLowerCase().includes(q)) ||
+        (item.phone && item.phone.toLowerCase().includes(q)) ||
+        item.verification_note.toLowerCase().includes(q);
+      if (!match) return false;
+    }
+
+    return true;
+  });
+}
+
+/**
+ * Intelligent discovery engine: Generates structured, high-opportunity prospects
+ * when a user researches a custom niche or searches beyond the default list.
+ */
