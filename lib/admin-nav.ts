@@ -154,4 +154,19 @@ export const ADMIN_NAV_CATEGORIES: AdminNavCategory[] = [
       },
     ],
   },
+  {
+    id: 'system',
+    title: 'System & Access',
+    shortLabel: 'Security',
+    items: [
+      {
+        href: '/admin/users',
+        label: 'Users & Roles',
+        icon: ShieldCheck,
+        permission: 'users',
+        badge: 'Super',
+        badgeVariant: 'super',
+      },
+    ],
+  },
 ];
