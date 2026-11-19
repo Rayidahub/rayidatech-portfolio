@@ -145,5 +145,11 @@ describe('Admin Navigation & Categorized Menu Architecture', () => {
       expect(isAdminRouteActive('/admin/projects', '/admin')).toBe(false);
       expect(isAdminRouteActive('/admin/logs', '/admin')).toBe(false);
     });
+
+    it('matches detail and nested subpaths for section routes', () => {
+      expect(isAdminRouteActive('/admin/projects', '/admin/projects')).toBe(true);
+      expect(isAdminRouteActive('/admin/projects/new', '/admin/projects')).toBe(true);
+      expect(isAdminRouteActive('/admin/projects/123/edit', '/admin/projects')).toBe(true);
+    });
   });
 });
