@@ -97,5 +97,33 @@ describe('DealDeck Modern White Admin Dashboard Architecture', () => {
     });
   });
 
+  describe('Default Datasets Structure', () => {
+    it('provides exactly 7 months in DEFAULT_MONTHLY_HABITS', () => {
+      expect(DEFAULT_MONTHLY_HABITS).toHaveLength(7);
+      expect(DEFAULT_MONTHLY_HABITS.map((m) => m.month)).toEqual([
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+      ]);
+    });
+
+    it('includes specific April data matching the reference image tooltip', () => {
+      const apr = DEFAULT_MONTHLY_HABITS.find((m) => m.month === 'Apr');
+      expect(apr?.seenProducts).toBe(43787);
+      expect(apr?.sales).toBe(39784);
+    });
+
+    it('provides 4 geographic locations matching DealDeck bubbles', () => {
+      expect(DEFAULT_GEOGRAPHIC_GROWTH).toHaveLength(4);
+      const countries = DEFAULT_GEOGRAPHIC_GROWTH.map((g) => g.country);
+      expect(countries).toContain('United States');
+      expect(countries).toContain('Germany');
+      expect(countries).toContain('Australia');
+      expect(countries).toContain('France');
+    });
   });
 });
