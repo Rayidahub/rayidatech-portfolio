@@ -9,6 +9,7 @@ import {
   DEFAULT_MONTHLY_HABITS,
   DEFAULT_GEOGRAPHIC_GROWTH,
 } from '@/lib/dealdeck-dashboard';
+import { getMinimalistAdminCategoryTitle } from '@/lib/admin-nav';
 
 describe('DealDeck Modern White Admin Dashboard Architecture', () => {
   describe('Design Tokens & Palette Constants', () => {
