@@ -37,4 +37,26 @@ export interface AdminNavCategory {
   items: AdminNavItem[];
 }
 
-export const ADMIN_NAV_CATEGORIES: AdminNavCategory[] = [];
+export const ADMIN_NAV_CATEGORIES: AdminNavCategory[] = [
+  {
+    id: 'overview',
+    title: 'Overview',
+    shortLabel: 'Pulse',
+    items: [
+      {
+        href: '/admin',
+        label: 'Dashboard',
+        icon: LayoutDashboard,
+        permission: 'dashboard',
+      },
+      {
+        href: '/admin/logs',
+        label: 'User Activity Logs',
+        icon: Activity,
+        permission: 'dashboard',
+        badge: 'Live',
+        badgeVariant: 'live',
+      },
+    ],
+  },
+];
