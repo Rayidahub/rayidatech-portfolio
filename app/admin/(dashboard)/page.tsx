@@ -182,8 +182,111 @@ export default async function AdminDashboard() {
               </button>
             </div>
 
-</div>
-</div>
-</div>
+            {/* Concentric Circular Progress Graphic */}
+            <div className="relative flex items-center justify-center my-6">
+              <svg className="w-48 h-48 -rotate-90" viewBox="0 0 160 160">
+                {/* Background tracks */}
+                <circle cx="80" cy="80" r="64" fill="none" stroke="#f1f5f9" strokeWidth="8" />
+                <circle cx="80" cy="80" r="50" fill="none" stroke="#f1f5f9" strokeWidth="8" />
+                <circle cx="80" cy="80" r="36" fill="none" stroke="#f1f5f9" strokeWidth="8" />
+
+                {/* Outer Ring: Blue (75%) */}
+                <circle
+                  cx="80"
+                  cy="80"
+                  r="64"
+                  fill="none"
+                  stroke="#3b5bfa"
+                  strokeWidth="8"
+                  strokeLinecap="round"
+                  strokeDasharray="402"
+                  strokeDashoffset="100"
+                />
+
+                {/* Middle Ring: Coral Red (55%) */}
+                <circle
+                  cx="80"
+                  cy="80"
+                  r="50"
+                  fill="none"
+                  stroke="#ef4444"
+                  strokeWidth="8"
+                  strokeLinecap="round"
+                  strokeDasharray="314"
+                  strokeDashoffset="140"
+                />
+
+                {/* Inner Ring: Light Slate (40%) */}
+                <circle
+                  cx="80"
+                  cy="80"
+                  r="36"
+                  fill="none"
+                  stroke="#cbd5e1"
+                  strokeWidth="8"
+                  strokeLinecap="round"
+                  strokeDasharray="226"
+                  strokeDashoffset="135"
+                />
+              </svg>
+
+              {/* Center Counter */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+                <span className="text-2xl font-bold font-display text-slate-900 tracking-tight leading-none">
+                  9.829
+                </span>
+                <span className="text-[11px] text-slate-400 font-medium mt-1">Products Sales</span>
+                <span className="text-[10px] font-semibold text-emerald-600 bg-emerald-50 border border-emerald-100 rounded-full px-2 py-0.5 mt-1.5">
+                  +5,34%
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Category Breakdown List */}
+          <div className="space-y-3 pt-3 border-t border-slate-100">
+            <div className="flex items-center justify-between text-xs">
+              <div className="flex items-center gap-2">
+                <Monitor className="w-4 h-4 text-slate-500" />
+                <span className="font-medium text-slate-700">Electronic</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="font-bold text-slate-900 font-display">2.487</span>
+                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100">
+                  +1,8%
+                </span>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between text-xs">
+              <div className="flex items-center gap-2">
+                <Gamepad2 className="w-4 h-4 text-slate-500" />
+                <span className="font-medium text-slate-700">Games</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="font-bold text-slate-900 font-display">1.828</span>
+                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100">
+                  +2,3%
+                </span>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between text-xs">
+              <div className="flex items-center gap-2">
+                <Armchair className="w-4 h-4 text-slate-500" />
+                <span className="font-medium text-slate-700">Furniture</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="font-bold text-slate-900 font-display">1.463</span>
+                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-rose-50 text-rose-500 border border-rose-100">
+                  -1,04%
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
   );
 }
