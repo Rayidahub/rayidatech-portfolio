@@ -24,5 +24,11 @@ describe('Admin Navigation & Categorized Menu Architecture', () => {
       const uniqueHrefs = new Set(allHrefs);
       expect(uniqueHrefs.size).toBe(15);
     });
+
+    it('organizes overview category with Dashboard and Activity Logs', () => {
+      const overviewCategory = ADMIN_NAV_CATEGORIES.find((c) => c.id === 'overview');
+      expect(overviewCategory?.title).toBe('Overview');
+      expect(overviewCategory?.items.map((i) => i.href)).toEqual(['/admin', '/admin/logs']);
+    });
   });
 });
