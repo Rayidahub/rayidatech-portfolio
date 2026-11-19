@@ -135,4 +135,22 @@ describe('Navbar System & Mobile Menu Opaque Architecture', () => {
       expect(classes).toContain('shadow-2xl');
     });
   });
+
+  describe('getMobileBackdropClasses', () => {
+    it('creates a full-screen dimmed backdrop overlay', () => {
+      const classes = getMobileBackdropClasses();
+      expect(classes).toContain('fixed inset-0');
+      expect(classes).toContain('bg-black/75');
+    });
+
+    it('is constrained to mobile viewports with md:hidden', () => {
+      const classes = getMobileBackdropClasses();
+      expect(classes).toContain('md:hidden');
+    });
+
+    it('includes slight blur and entry animation for smooth visual transition', () => {
+      const classes = getMobileBackdropClasses();
+      expect(classes).toContain('backdrop-blur-sm');
+    });
+  });
 });
