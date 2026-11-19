@@ -52,13 +52,8 @@ export default function AdminSidebar({
 }: AdminSidebarProps) {
   const pathname = usePathname()
 
-  // Filter items based on role & permissions
-  const visibleItems = navItems.filter((item) => {
-    if (role === 'super_admin') return true
-    if (role === 'admin') return item.permission !== 'users'
-    if (item.permission === 'dashboard') return true
-    return permissions.includes(item.permission)
-  })
+  // Filter categories and their items based on role & permissions
+  const visibleCategories = getVisibleAdminNavCategories({ role, permissions });
 
   const roleLabels: Record<AdminRole, { label: string; style: string }> = {
     super_admin: { label: 'Super Admin', style: 'text-secondary border-secondary/30 bg-secondary/10' },
