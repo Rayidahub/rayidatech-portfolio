@@ -127,4 +127,31 @@ export const ADMIN_NAV_CATEGORIES: AdminNavCategory[] = [
       },
     ],
   },
+  {
+    id: 'communication',
+    title: 'Communication & Leads',
+    shortLabel: 'Audience',
+    items: [
+      {
+        href: '/admin/contacts',
+        label: 'Contacts',
+        icon: Mail,
+        permission: 'contacts',
+      },
+      {
+        href: '/admin/subscribers',
+        label: 'Subscribers',
+        icon: MailCheck,
+        permission: 'contacts',
+      },
+      {
+        href: '/admin/outreach',
+        label: 'Email Outreach',
+        icon: SendHorizontal,
+        permission: 'outreach',
+        badge: 'Campaigns',
+        badgeVariant: 'campaigns',
+      },
+    ],
+  },
 ];
