@@ -74,3 +74,13 @@ export function calculateBarHeight(value: number, maxValue = 60000): number {
 /**
  * Returns Tailwind class string for DealDeck percentage change pills
  */
+export function getDealDeckPillClass(isPositive: boolean): string {
+  if (isPositive) {
+    return 'bg-emerald-50 text-emerald-600 border border-emerald-100 text-xs font-semibold px-2.5 py-0.5 rounded-full';
+  }
+  return 'bg-rose-50 text-rose-500 border border-rose-100 text-xs font-semibold px-2.5 py-0.5 rounded-full';
+}
+
+/**
+ * Computes SVG stroke-dasharray for concentric circular progress rings
+ */
