@@ -106,4 +106,13 @@ describe('Admin Navigation & Categorized Menu Architecture', () => {
       expect(isItemPermitted(usersItem, 'editor', ['projects'])).toBe(false);
     });
   });
+
+  describe('getVisibleAdminNavCategories', () => {
+    it('returns all 5 categories and 15 items for super_admin', () => {
+      const visible = getVisibleAdminNavCategories({ role: 'super_admin' });
+      expect(visible).toHaveLength(5);
+      const totalItems = visible.reduce((acc, cat) => acc + cat.items.length, 0);
+      expect(totalItems).toBe(15);
+    });
+  });
 });
