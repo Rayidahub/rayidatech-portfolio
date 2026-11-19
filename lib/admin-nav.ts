@@ -59,4 +59,47 @@ export const ADMIN_NAV_CATEGORIES: AdminNavCategory[] = [
       },
     ],
   },
+  {
+    id: 'content',
+    title: 'Content Management',
+    shortLabel: 'CMS',
+    items: [
+      {
+        href: '/admin/projects',
+        label: 'Projects',
+        icon: Briefcase,
+        permission: 'projects',
+      },
+      {
+        href: '/admin/services',
+        label: 'Services',
+        icon: Package,
+        permission: 'services',
+      },
+      {
+        href: '/admin/products',
+        label: 'Products',
+        icon: Rocket,
+        permission: 'coming_soon',
+      },
+      {
+        href: '/admin/blog',
+        label: 'Blog',
+        icon: FileText,
+        permission: 'blog',
+      },
+      {
+        href: '/admin/testimonials',
+        label: 'Testimonials',
+        icon: MessageSquareQuote,
+        permission: 'testimonials',
+      },
+      {
+        href: '/admin/team',
+        label: 'Team',
+        icon: Users,
+        permission: 'team',
+      },
+    ],
+  },
 ];
