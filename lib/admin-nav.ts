@@ -201,3 +201,13 @@ export function getVisibleAdminNavCategories({
     items: category.items.filter((item) => isItemPermitted(item, role, permissions)),
   })).filter((category) => category.items.length > 0);
 }
+
+/**
+ * Determines whether an admin navigation route is currently active.
+ */
+export function isAdminRouteActive(pathname: string, href: string): boolean {
+  if (href === '/admin') {
+    return pathname === '/admin';
+  }
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
