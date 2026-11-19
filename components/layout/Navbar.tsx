@@ -61,14 +61,14 @@ export default function Navbar() {
         </Link>
 
         <div className="hidden items-center gap-8 md:flex">
-          {navLinks.map((link) => {
-            const active = pathname === link.href;
+          {MAIN_NAV_LINKS.map((link) => {
+            const active = isNavActive(pathname, link.href);
             return (
               <Link
                 key={link.href}
                 href={link.href}
                 className={`text-sm transition-colors ${
-                  active ? 'text-paper' : 'text-mist-1 hover:text-paper'
+                  active ? 'text-paper font-semibold' : 'text-mist-1 hover:text-paper'
                 }`}
               >
                 {link.label}
