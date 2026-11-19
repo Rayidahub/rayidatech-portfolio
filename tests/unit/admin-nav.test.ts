@@ -99,5 +99,11 @@ describe('Admin Navigation & Categorized Menu Architecture', () => {
       expect(isItemPermitted(projectsItem, 'admin', [])).toBe(true);
       expect(isItemPermitted(usersItem, 'admin', [])).toBe(false);
     });
+
+    it('permits content items for editor only if permission is granted', () => {
+      expect(isItemPermitted(projectsItem, 'editor', [])).toBe(false);
+      expect(isItemPermitted(projectsItem, 'editor', ['projects'])).toBe(true);
+      expect(isItemPermitted(usersItem, 'editor', ['projects'])).toBe(false);
+    });
   });
 });
