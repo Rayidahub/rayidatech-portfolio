@@ -45,5 +45,11 @@ describe('Navbar System & Mobile Menu Opaque Architecture', () => {
       expect(isNavActive('/', '/')).toBe(true);
       expect(isNavActive('/about', '/')).toBe(false);
     });
+
+    it('accurately identifies exact route match', () => {
+      expect(isNavActive('/about', '/about')).toBe(true);
+      expect(isNavActive('/projects', '/projects')).toBe(true);
+      expect(isNavActive('/contact', '/contact')).toBe(true);
+    });
   });
 });
