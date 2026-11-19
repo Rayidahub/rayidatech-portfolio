@@ -13,5 +13,17 @@ describe('Navbar System & Mobile Menu Opaque Architecture', () => {
     it('defines the complete standard set of 6 main navigation links', () => {
       expect(MAIN_NAV_LINKS).toHaveLength(6);
     });
+
+    it('contains the expected canonical navigation routes', () => {
+      const labels = MAIN_NAV_LINKS.map((l) => l.label);
+      expect(labels).toEqual([
+        'About',
+        'Projects',
+        'Services',
+        'Products',
+        'Blog',
+        'Contact',
+      ]);
+    });
   });
 });
