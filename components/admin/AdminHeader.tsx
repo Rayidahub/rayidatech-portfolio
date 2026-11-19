@@ -44,7 +44,7 @@ export default function AdminHeader({
             <Menu className="w-5 h-5" />
           </button>
         )}
-        <span className="text-xs text-mist-2 hidden sm:inline">Signed in as</span>
+        <span className="text-xs text-mist-2 hidden sm:inline">Admin Session</span>
         <span className="text-xl sm:text-2xl font-bold font-display text-slate-900 tracking-tight leading-none">
           {name || email}
         </span>
