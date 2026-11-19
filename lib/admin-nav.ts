@@ -211,3 +211,10 @@ export function isAdminRouteActive(pathname: string, href: string): boolean {
   }
   return pathname === href || pathname.startsWith(`${href}/`);
 }
+
+/**
+ * Returns class string for category section headers.
+ */
+export function getAdminCategoryHeaderClasses(): string {
+  return 'text-[10px] uppercase font-mono-tight font-semibold tracking-wider text-mist-2/70 px-3 pt-3 pb-1 flex items-center justify-between select-none';
+}
