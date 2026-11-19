@@ -54,11 +54,7 @@ export default function Navbar() {
   }, [isOpen]);
 
   return (
-    <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ${
-        scrolled ? 'glass' : 'border-b border-transparent'
-      }`}
-    >
+    <nav className={getNavbarContainerClasses({ isOpen, scrolled })}>
       <div className="w-full px-4 sm:px-6 md:px-10 lg:px-16 xl:px-[120px] flex items-center justify-between py-3.5 sm:py-4">
         <Link href="/" className="flex items-center">
           <BrandLogo priority />
