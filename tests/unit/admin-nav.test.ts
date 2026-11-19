@@ -138,4 +138,12 @@ describe('Admin Navigation & Categorized Menu Architecture', () => {
       expect(totalItems).toBe(15);
     });
   });
+
+  describe('isAdminRouteActive', () => {
+    it('matches exact root /admin only when on /admin', () => {
+      expect(isAdminRouteActive('/admin', '/admin')).toBe(true);
+      expect(isAdminRouteActive('/admin/projects', '/admin')).toBe(false);
+      expect(isAdminRouteActive('/admin/logs', '/admin')).toBe(false);
+    });
+  });
 });
