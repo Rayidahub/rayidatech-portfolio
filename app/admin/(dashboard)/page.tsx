@@ -381,6 +381,63 @@ export default async function AdminDashboard() {
             </div>
           </div>
 
+          {/* Quick Management CMS Grid */}
+          <div className="space-y-3">
+            <h3 className="font-display font-bold text-sm text-slate-900 px-1">
+              Quick Content Management
+            </h3>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
+              <Link
+                href="/admin/projects"
+                className="bg-white rounded-2xl p-4 border border-slate-100 shadow-[0_4px_16px_rgba(15,23,42,0.02)] hover:border-blue-300 hover:shadow-md transition-all group"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <Briefcase className="w-4 h-4 text-blue-600" />
+                  <ArrowRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-blue-600 group-hover:translate-x-0.5 transition-all" />
+                </div>
+                <div className="text-xl font-bold font-display text-slate-900">{projectCount ?? 0}</div>
+                <div className="text-xs text-slate-500 font-medium">Projects</div>
+              </Link>
+
+              <Link
+                href="/admin/products"
+                className="bg-white rounded-2xl p-4 border border-slate-100 shadow-[0_4px_16px_rgba(15,23,42,0.02)] hover:border-blue-300 hover:shadow-md transition-all group"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <Rocket className="w-4 h-4 text-indigo-600" />
+                  <ArrowRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-indigo-600 group-hover:translate-x-0.5 transition-all" />
+                </div>
+                <div className="text-xl font-bold font-display text-slate-900">{productCount ?? 0}</div>
+                <div className="text-xs text-slate-500 font-medium">Products</div>
+              </Link>
+
+              <Link
+                href="/admin/blog"
+                className="bg-white rounded-2xl p-4 border border-slate-100 shadow-[0_4px_16px_rgba(15,23,42,0.02)] hover:border-blue-300 hover:shadow-md transition-all group"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <FileText className="w-4 h-4 text-emerald-600" />
+                  <ArrowRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-emerald-600 group-hover:translate-x-0.5 transition-all" />
+                </div>
+                <div className="text-xl font-bold font-display text-slate-900">{postCount ?? 0}</div>
+                <div className="text-xs text-slate-500 font-medium">Articles</div>
+              </Link>
+
+              <Link
+                href="/admin/outreach"
+                className="bg-white rounded-2xl p-4 border border-slate-100 shadow-[0_4px_16px_rgba(15,23,42,0.02)] hover:border-blue-300 hover:shadow-md transition-all group"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <Mail className="w-4 h-4 text-amber-600" />
+                  <ArrowRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-amber-600 group-hover:translate-x-0.5 transition-all" />
+                </div>
+                <div className="text-xl font-bold font-display text-slate-900">Finder</div>
+                <div className="text-xs text-slate-500 font-medium">Leads &amp; Outreach</div>
+              </Link>
+            </div>
+          </div>
+        </div>
+
     </div>
   );
 }
