@@ -10,6 +10,7 @@ import {
   isAdminRouteActive,
   getAdminCategoryHeaderClasses,
   getAdminBadgeClasses,
+  getMinimalistAdminCategoryTitle,
 } from '@/lib/admin-nav';
 
 interface AdminSidebarProps {
