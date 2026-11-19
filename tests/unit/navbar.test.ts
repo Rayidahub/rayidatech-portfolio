@@ -98,5 +98,12 @@ describe('Navbar System & Mobile Menu Opaque Architecture', () => {
       expect(classes).toContain('glass');
       expect(classes).not.toContain('bg-[var(--ink-deep)]');
     });
+
+    it('applies transparent border when closed and at the top', () => {
+      const classes = getNavbarContainerClasses({ isOpen: false, scrolled: false });
+      expect(classes).toContain('border-b border-transparent');
+      expect(classes).not.toContain('glass');
+      expect(classes).not.toContain('bg-[var(--ink-deep)]');
+    });
   });
 });
