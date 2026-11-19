@@ -63,5 +63,11 @@ describe('Admin Navigation & Categorized Menu Architecture', () => {
         '/admin/outreach',
       ]);
     });
+
+    it('organizes system & access category with RBAC user controls', () => {
+      const systemCategory = ADMIN_NAV_CATEGORIES.find((c) => c.id === 'system');
+      expect(systemCategory?.title).toBe('System & Access');
+      expect(systemCategory?.items.map((i) => i.href)).toEqual(['/admin/users']);
+    });
   });
 });
