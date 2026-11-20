@@ -18,11 +18,11 @@ describe('Admin Navigation & Categorized Menu Architecture', () => {
       expect(ids).toEqual(['overview', 'content', 'appearance', 'communication', 'system']);
     });
 
-    it('contains all 15 canonical admin routes across all categories without duplicates', () => {
+    it('contains all 16 canonical admin routes across all categories without duplicates', () => {
       const allHrefs = ADMIN_NAV_CATEGORIES.flatMap((c) => c.items.map((i) => i.href));
-      expect(allHrefs).toHaveLength(15);
+      expect(allHrefs).toHaveLength(16);
       const uniqueHrefs = new Set(allHrefs);
-      expect(uniqueHrefs.size).toBe(15);
+      expect(uniqueHrefs.size).toBe(16);
     });
 
     it('organizes items in the expected functional categories', () => {
@@ -55,6 +55,7 @@ describe('Admin Navigation & Categorized Menu Architecture', () => {
         '/admin/contacts',
         '/admin/subscribers',
         '/admin/outreach',
+        '/admin/outreach/research',
       ]);
 
       const systemCategory = ADMIN_NAV_CATEGORIES.find((c) => c.id === 'system');
@@ -104,11 +105,11 @@ describe('Admin Navigation & Categorized Menu Architecture', () => {
   });
 
   describe('getVisibleAdminNavCategories', () => {
-    it('returns all 5 categories and 15 items for super_admin', () => {
+    it('returns all 5 categories and 16 items for super_admin', () => {
       const visible = getVisibleAdminNavCategories({ role: 'super_admin' });
       expect(visible).toHaveLength(5);
       const totalItems = visible.reduce((acc, cat) => acc + cat.items.length, 0);
-      expect(totalItems).toBe(15);
+      expect(totalItems).toBe(16);
     });
 
     it('omits System & Access category for admin role since Users & Roles is excluded', () => {
@@ -116,7 +117,7 @@ describe('Admin Navigation & Categorized Menu Architecture', () => {
       expect(visible).toHaveLength(4);
       expect(visible.some((c) => c.id === 'system')).toBe(false);
       const totalItems = visible.reduce((acc, cat) => acc + cat.items.length, 0);
-      expect(totalItems).toBe(14);
+      expect(totalItems).toBe(15);
     });
 
     it('filters categories and excludes empty categories for restricted editor role', () => {
