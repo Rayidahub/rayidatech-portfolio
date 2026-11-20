@@ -197,6 +197,15 @@ export type WebsiteOpportunityStatus =
   | 'Outdated / Needs Redesign'
   | 'Active Website';
 
+export interface ProspectVerificationDetails {
+  is_verified: boolean;
+  email_valid: boolean;
+  phone_valid: boolean;
+  status_badge: string;
+  confidence_score: number;
+  verified_at?: string;
+}
+
 export interface ProspectResearchItem {
   id: string;
   business_name: string;
@@ -213,6 +222,7 @@ export interface ProspectResearchItem {
   opportunity_score: 'High' | 'Medium' | 'Low';
   recommended_pitch: string;
   is_imported?: boolean;
+  verification?: ProspectVerificationDetails;
 }
 
 export interface ResearchFilterParams {
