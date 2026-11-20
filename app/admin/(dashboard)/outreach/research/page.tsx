@@ -22,10 +22,10 @@ export default async function ProspectResearchPage() {
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
-          <h1 className="font-display text-2xl font-semibold text-paper">
+          <h1 className="font-display text-2xl font-bold text-slate-900 tracking-tight">
             Lead Research &amp; Prospect Discovery
           </h1>
-          <p className="text-xs text-mist-2 mt-0.5">
+          <p className="text-xs text-slate-500 mt-1 font-normal">
             Identify, research, and audit prospective businesses across Abuja and Nigeria with public emails and website opportunities.
           </p>
         </div>
