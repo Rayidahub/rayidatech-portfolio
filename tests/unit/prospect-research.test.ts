@@ -5,6 +5,8 @@ import {
   ABUJA_AREAS,
   filterProspects,
   searchAndEnrichProspects,
+  verifyProspectLead,
+  verifyProspectList,
 } from '@/lib/email/prospect-research';
 
 describe('Prospect Research & Lead Discovery Engine', () => {
@@ -155,6 +157,49 @@ describe('Prospect Research & Lead Discovery Engine', () => {
       const results = searchAndEnrichProspects('Apex Architecture', 'All', 'All Areas');
       expect(results[0].business_category).toBe('General Services');
       expect(results[0].area).toBe('Abuja');
+    });
+
+    it('attaches verification details to discovered prospects automatically', () => {
+      const results = searchAndEnrichProspects('Abuja Fashion Hub', 'Fashion & Apparel', 'Wuse 2');
+      for (const item of results) {
+        expect(item.verification).toBeDefined();
+        expect(item.verification?.is_verified).toBe(true);
+        expect(item.verification?.email_valid).toBe(true);
+        expect(item.verification?.confidence_score).toBeGreaterThanOrEqual(80);
+      }
+    });
+  });
+
+  describe('verifyProspectLead and verifyProspectList functions', () => {
+    it('verifies prospect with valid email and phone', () => {
+      const item = CURATED_ABUJA_PROSPECTS[0]; // 1420 Events
+      const result = verifyProspectLead(item);
+      expect(result.is_verified).toBe(true);
+      expect(result.email_valid).toBe(true);
+      expect(result.phone_valid).toBe(true);
+      expect(result.status_badge).toBe('Verified Contact Data');
+      expect(result.confidence_score).toBe(100);
+    });
+
+    it('handles invalid email gracefully and marks unverified', () => {
+      const badLead = {
+        ...CURATED_ABUJA_PROSPECTS[0],
+        email: 'invalid-email-string',
+      };
+      const result = verifyProspectLead(badLead);
+      expect(result.is_verified).toBe(false);
+      expect(result.email_valid).toBe(false);
+      expect(result.status_badge).toBe('Phone Verified');
+    });
+
+    it('enriches a prospect list using verifyProspectList', () => {
+      const sample = CURATED_ABUJA_PROSPECTS.slice(0, 3);
+      const enriched = verifyProspectList(sample);
+      expect(enriched).toHaveLength(3);
+      for (const p of enriched) {
+        expect(p.verification).toBeDefined();
+        expect(p.verification?.is_verified).toBe(true);
+      }
     });
   });
 });
