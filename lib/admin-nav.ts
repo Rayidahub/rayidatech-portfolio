@@ -15,6 +15,7 @@ import {
   Activity,
   MailCheck,
   SendHorizontal,
+  Compass,
 } from 'lucide-react';
 import type { AdminRole, AdminPermission } from '@/types/admin-user';
 
@@ -151,6 +152,14 @@ export const ADMIN_NAV_CATEGORIES: AdminNavCategory[] = [
         permission: 'outreach',
         badge: 'Campaigns',
         badgeVariant: 'campaigns',
+      },
+      {
+        href: '/admin/outreach/research',
+        label: 'Lead Discovery',
+        icon: Compass,
+        permission: 'outreach',
+        badge: 'AI Leads',
+        badgeVariant: 'live',
       },
     ],
   },
