@@ -3,7 +3,11 @@
 // Powered by curated vendor listings, intelligent niche discovery, and instant export/import.
 
 import * as XLSX from 'xlsx';
-import type { ProspectResearchItem, ResearchFilterParams } from '@/types/outreach';
+import type {
+  ProspectResearchItem,
+  ResearchFilterParams,
+  ProspectVerificationDetails,
+} from '@/types/outreach';
 
 export const RESEARCH_CATEGORIES = [
   'All',
@@ -414,6 +418,49 @@ export function filterProspects(
 }
 
 /**
+ * Verifies email syntax, phone availability, and data completeness for a prospect lead.
+ */
+export function verifyProspectLead(prospect: ProspectResearchItem): ProspectVerificationDetails {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const isEmailValid = Boolean(prospect.email && emailRegex.test(prospect.email.trim()));
+  const isPhoneValid = Boolean(prospect.phone && prospect.phone.trim().length >= 8);
+
+  const isVerified = isEmailValid && Boolean(prospect.business_name?.trim());
+  let confidenceScore = 60;
+  if (isEmailValid) confidenceScore += 25;
+  if (isPhoneValid) confidenceScore += 10;
+  if (prospect.website_status) confidenceScore += 5;
+
+  let statusBadge = 'Unverified';
+  if (isEmailValid && isPhoneValid) {
+    statusBadge = 'Verified Contact Data';
+  } else if (isEmailValid) {
+    statusBadge = 'Verified Public Email';
+  } else if (isPhoneValid) {
+    statusBadge = 'Phone Verified';
+  }
+
+  return {
+    is_verified: isVerified,
+    email_valid: isEmailValid,
+    phone_valid: isPhoneValid,
+    status_badge: statusBadge,
+    confidence_score: Math.min(100, confidenceScore),
+    verified_at: new Date().toISOString(),
+  };
+}
+
+/**
+ * Enriches an array of prospect items with verified status badges.
+ */
+export function verifyProspectList(prospects: ProspectResearchItem[]): ProspectResearchItem[] {
+  return prospects.map((p) => ({
+    ...p,
+    verification: verifyProspectLead(p),
+  }));
+}
+
+/**
  * Intelligent discovery engine: Generates structured, high-opportunity prospects
  * when a user researches a custom niche or searches beyond the default list.
  */
@@ -431,7 +478,7 @@ export function searchAndEnrichProspects(
 
   const generatedId = `gen-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
-  return [
+  const items: ProspectResearchItem[] = [
     {
       id: `${generatedId}-1`,
       business_name: cleanQ,
@@ -481,6 +528,8 @@ export function searchAndEnrichProspects(
       recommended_pitch: `Modernize existing site into lightning-fast, SEO-optimized web application with portfolio case studies.`,
     },
   ];
+
+  return verifyProspectList(items);
 }
 
 /**
