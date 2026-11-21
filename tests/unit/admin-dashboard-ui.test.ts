@@ -2,6 +2,8 @@ import { describe, it, expect } from 'vitest';
 import {
   DEALDECK_THEME_TOKENS,
   formatDealDeckNumber,
+  formatNaira,
+  calculateActualSalesPipeline,
   calculateBarHeight,
   getDealDeckPillClass,
   calculateRingCircumference,
@@ -45,6 +47,18 @@ describe('DealDeck Modern White Admin Dashboard Architecture', () => {
       expect(formatDealDeckNumber(0)).toBe('0');
       expect(formatDealDeckNumber(42)).toBe('42');
       expect(formatDealDeckNumber(812)).toBe('812');
+    });
+
+    it('formats sales in Nigerian Naira (₦) with clean number grouping', () => {
+      expect(formatNaira(18550000)).toBe('₦18.550.000');
+      expect(formatNaira(2650000)).toBe('₦2.650.000');
+      expect(formatNaira(0)).toBe('₦0');
+    });
+
+    it('calculates actual agency sales pipeline based on project count', () => {
+      expect(calculateActualSalesPipeline(7)).toBe(18550000); // 7 * 2,650,000
+      expect(calculateActualSalesPipeline(0)).toBe(0);
+      expect(calculateActualSalesPipeline(1)).toBe(2650000);
     });
   });
 

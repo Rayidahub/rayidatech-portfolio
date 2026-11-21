@@ -63,6 +63,27 @@ export function formatDealDeckNumber(num: number): string {
 }
 
 /**
+ * Formats a currency amount in Nigerian Naira (₦) with clean DealDeck number grouping
+ * e.g., 18500000 -> "₦18.500.000"
+ */
+export function formatNaira(amount: number, useDotSeparators = true): string {
+  if (isNaN(amount) || amount === 0) return '₦0';
+  const formatted = useDotSeparators
+    ? formatDealDeckNumber(Math.round(amount))
+    : Math.round(amount).toLocaleString('en-NG');
+  return `₦${formatted}`;
+}
+
+/**
+ * Computes actual/estimated agency project delivery sales pipeline in Nigerian Naira (₦).
+ * Uses standard Nigerian enterprise agency project rate (₦2,650,000 per delivered project).
+ */
+export function calculateActualSalesPipeline(projectCount: number, averageContractValue = 2650000): number {
+  const count = Math.max(0, projectCount);
+  return count * averageContractValue;
+}
+
+/**
  * Calculates percentage height for bar charts based on max scale
  */
 export function calculateBarHeight(value: number, maxValue = 60000): number {
