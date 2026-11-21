@@ -79,3 +79,49 @@ export interface VisitorLogFilter {
   device_type?: string;
   limit?: number;
 }
+
+export interface VisitorDevice {
+  device_type: DeviceType;
+  browser: string;
+  os: string;
+  count: number;
+}
+
+export interface VisitorIpRecord {
+  ip: string;
+  isp?: string;
+  device_type?: DeviceType;
+  last_seen: string;
+  is_primary: boolean;
+}
+
+export interface VisitorSessionGroup {
+  visitor_key: string;
+  visitor_id: string;
+  primary_ip: string;
+  all_ips: VisitorIpRecord[];
+  email?: string | null;
+  country: string;
+  country_code?: string;
+  country_flag?: string;
+  city: string;
+  region: string;
+  postal_code?: string;
+  formatted_address: string;
+  latitude?: number;
+  longitude?: number;
+  maps_url?: string;
+  primary_isp: string;
+  organization?: string;
+  timezone?: string;
+  devices: VisitorDevice[];
+  total_events: number;
+  total_page_views: number;
+  unique_pages: string[];
+  total_dwell_seconds: number;
+  first_seen: string;
+  last_active: string;
+  recent_action: string;
+  events: VisitorLog[];
+}
+
