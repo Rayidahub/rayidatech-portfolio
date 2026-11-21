@@ -81,7 +81,7 @@ route is a Promise), verify against the real installed version in
 
 ## What's done (do not rebuild from scratch — extend/fix, don't replace blindly)
 - Design tokens, fonts, Navbar, Footer
-- Home page: Hero, TrustBar, StatsBar, WhatWeDo, Services, ComingSoon, WhyRayidaTech,
+- Home page: Hero, TrustBar, WhatWeDo, Services, ComingSoon, WhyRayidaTech,
   Team, PortfolioTeaser, Testimonials, Newsletter, FinalCTA
 - About page fully rewritten — bio, journey timeline, approach, skills
   (grouped), beliefs, featured projects, certifications, and final CTA.
