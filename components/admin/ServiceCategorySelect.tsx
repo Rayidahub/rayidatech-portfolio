@@ -11,6 +11,7 @@ import {
   Globe,
   GraduationCap,
   Share2,
+  Zap,
 } from 'lucide-react';
 import { SERVICE_CATEGORIES, type ServiceCategory } from '@/lib/data/services';
 import { getCaseStudyConfig } from '@/lib/data/case-study-templates';
@@ -23,6 +24,7 @@ interface ServiceCategorySelectProps {
 }
 
 const CATEGORY_ICONS: Record<ServiceCategory, React.ComponentType<{ className?: string }>> = {
+  'Business Digital Upgrade': Zap,
   'UI/UX Design': Palette,
   'Product Design': Package,
   'Brand Identity': Sparkles,

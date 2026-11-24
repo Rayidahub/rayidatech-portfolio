@@ -14,6 +14,7 @@ import {
   Share2,
   Info,
   ChevronDown,
+  Zap,
 } from 'lucide-react';
 import type { ServiceCategory } from '@/lib/data/services';
 
@@ -25,6 +26,7 @@ interface CaseStudyFieldsProps {
 }
 
 const CATEGORY_ICONS: Record<ServiceCategory, React.ComponentType<{ className?: string }>> = {
+  'Business Digital Upgrade': Zap,
   'UI/UX Design': Palette,
   'Product Design': Package,
   'Brand Identity': Sparkles,

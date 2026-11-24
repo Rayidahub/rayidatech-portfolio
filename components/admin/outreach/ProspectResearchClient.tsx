@@ -26,6 +26,7 @@ import {
   ArrowRight,
   ShieldCheck,
   CheckCheck,
+  GraduationCap,
 } from 'lucide-react';
 import {
   CURATED_ABUJA_PROSPECTS,
@@ -37,6 +38,8 @@ import {
   verifyProspectList,
   exportProspectsToExcel,
   exportProspectsToCsv,
+  OUTREACH_PITCH_TEMPLATES,
+  calculateProspectScore,
 } from '@/lib/email/prospect-research';
 import { batchImportContacts } from '@/app/actions/outreach-contacts';
 import type { ProspectResearchItem, WebsiteOpportunityStatus, OutreachContact } from '@/types/outreach';
@@ -85,6 +88,9 @@ export default function ProspectResearchClient({
   // 7. Action states
   const [isPending, startTransition] = useTransition();
   const [copiedEmail, setCopiedEmail] = useState<string | null>(null);
+  const [copiedPitchText, setCopiedPitchText] = useState(false);
+  const [activePitchProspect, setActivePitchProspect] = useState<ProspectResearchItem | null>(null);
+  const [activePitchVersion, setActivePitchVersion] = useState<'version_a' | 'version_b' | 'version_c'>('version_a');
   const [feedbackToast, setFeedbackToast] = useState<{
     type: 'success' | 'error' | 'info';
     message: string;
@@ -389,6 +395,17 @@ export default function ProspectResearchClient({
             <FileSpreadsheet className="w-4 h-4 text-emerald-600" />
             <span>Download Excel (.xlsx)</span>
           </button>
+
+          <Link
+            href="/projects/crestfield-academy"
+            target="_blank"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-blue-50 hover:bg-blue-100 text-[#3b5bfa] border border-blue-200 text-xs font-semibold transition-all shadow-xs cursor-pointer"
+            title="Inspect live Crestfield Academy demo showcase weapon"
+          >
+            <GraduationCap className="w-4 h-4" />
+            <span>Live Academy Demo</span>
+            <ExternalLink className="w-3 h-3" />
+          </Link>
 
           {selectedIds.size > 0 && (
             <button
@@ -927,21 +944,33 @@ export default function ProspectResearchClient({
                       {/* Phone / WhatsApp */}
                       <td className="py-3 px-3">
                         {item.phone ? (
-                          <div className="flex items-center gap-2 whitespace-nowrap">
+                          <div className="flex items-center gap-1.5 whitespace-nowrap">
                             <span className="font-mono-tight text-slate-700 text-[11px]">
                               {item.phone}
                             </span>
                             <a
                               href={`https://wa.me/${item.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
-                                `Hello ${item.business_name}, I saw your business profile in Abuja and would love to connect.`
+                                OUTREACH_PITCH_TEMPLATES.version_a.buildText(item.business_name)
                               )}`}
                               target="_blank"
                               rel="noreferrer"
                               className="text-emerald-600 hover:text-emerald-700 p-1"
-                              title="Message on WhatsApp"
+                              title="Send Version A on WhatsApp"
                             >
                               <MessageCircle className="w-3.5 h-3.5" />
                             </a>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setActivePitchProspect(item);
+                                setActivePitchVersion('version_a');
+                              }}
+                              className="px-2 py-0.5 rounded-lg bg-[#3b5bfa]/10 hover:bg-[#3b5bfa] text-[#3b5bfa] hover:text-white text-[10px] font-semibold transition-all inline-flex items-center gap-0.5 cursor-pointer"
+                              title="Open 1-Click WhatsApp Pitch Scripts (Version A, B, C)"
+                            >
+                              <Sparkles className="w-2.5 h-2.5" />
+                              <span>Pitch</span>
+                            </button>
                           </div>
                         ) : (
                           <span className="text-[11px] text-slate-400 italic">None listed</span>
@@ -950,22 +979,37 @@ export default function ProspectResearchClient({
 
                       {/* Website Opportunity */}
                       <td className="py-3 px-3">
-                        <span
-                          className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-semibold font-mono-tight ${
-                            item.website_status === 'No Website Found'
-                              ? 'bg-rose-50 text-rose-600 border border-rose-100'
-                              : item.website_status === 'Socials Only'
-                              ? 'bg-amber-50 text-amber-700 border border-amber-100'
-                              : item.website_status === 'Outdated / Needs Redesign'
-                              ? 'bg-blue-50 text-blue-600 border border-blue-100'
-                              : 'bg-emerald-50 text-emerald-600 border border-emerald-100'
-                          }`}
-                        >
-                          {item.website_status}
-                        </span>
-                        <p className="text-[10px] text-slate-400 mt-0.5 line-clamp-1 max-w-[200px]" title={item.verification_note}>
-                          {item.verification_note}
-                        </p>
+                        {(() => {
+                          const qScore = calculateProspectScore(item);
+                          return (
+                            <div>
+                              <div className="flex items-center gap-1.5 flex-wrap">
+                                <span
+                                  className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-semibold font-mono-tight ${
+                                    item.website_status === 'No Website Found'
+                                      ? 'bg-rose-50 text-rose-600 border border-rose-100'
+                                      : item.website_status === 'Socials Only'
+                                      ? 'bg-amber-50 text-amber-700 border border-amber-100'
+                                      : item.website_status === 'Outdated / Needs Redesign'
+                                      ? 'bg-blue-50 text-blue-600 border border-blue-100'
+                                      : 'bg-emerald-50 text-emerald-600 border border-emerald-100'
+                                  }`}
+                                >
+                                  {item.website_status}
+                                </span>
+                                <span
+                                  className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-slate-100 text-slate-600 font-bold"
+                                  title={qScore.reasons.join(', ')}
+                                >
+                                  Score: {qScore.score}/5
+                                </span>
+                              </div>
+                              <p className="text-[10px] text-slate-400 mt-0.5 line-clamp-1 max-w-[200px]" title={item.verification_note}>
+                                {item.verification_note}
+                              </p>
+                            </div>
+                          );
+                        })()}
                       </td>
 
                       {/* Source */}
@@ -1167,6 +1211,140 @@ export default function ProspectResearchClient({
               >
                 {autoAddCustomToExisting ? 'Save & Add to Existing List' : 'Save to Research Pool'}
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── 9. Sales Pitch Launcher Modal (1-Click Outreach Scripts) ── */}
+      {activePitchProspect && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-fade-in"
+          onClick={() => setActivePitchProspect(null)}
+        >
+          <div
+            className="w-full max-w-2xl bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden text-slate-800 text-xs p-6 space-y-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="flex items-start justify-between pb-3 border-b border-slate-100">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-2xl bg-blue-50 text-[#3b5bfa] flex items-center justify-center">
+                  <Sparkles className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-base font-bold text-slate-900">
+                      1-Click Outreach Pitch &bull; {activePitchProspect.business_name}
+                    </h3>
+                    {(() => {
+                      const qScore = calculateProspectScore(activePitchProspect);
+                      return (
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-semibold">
+                          Score: {qScore.score}/5 {qScore.priority} Priority
+                        </span>
+                      );
+                    })()}
+                  </div>
+                  <p className="text-xs text-slate-400 mt-0.5">
+                    Category: {activePitchProspect.business_category} &bull; Area: {activePitchProspect.area}
+                  </p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setActivePitchProspect(null)}
+                className="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Script Version Switcher Tabs */}
+            <div className="grid grid-cols-3 gap-2 p-1 rounded-2xl bg-slate-50 border border-slate-100">
+              {(['version_a', 'version_b', 'version_c'] as const).map((key) => {
+                const template = OUTREACH_PITCH_TEMPLATES[key];
+                const isActive = activePitchVersion === key;
+                return (
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => setActivePitchVersion(key)}
+                    className={`py-2 px-3 rounded-xl text-left transition-all cursor-pointer ${
+                      isActive
+                        ? 'bg-white text-[#3b5bfa] shadow-sm font-bold border border-slate-200'
+                        : 'text-slate-500 hover:text-slate-800'
+                    }`}
+                  >
+                    <span className="block text-[10px] uppercase font-mono tracking-wider text-slate-400">
+                      {template.badge}
+                    </span>
+                    <span className="text-xs truncate block">{template.title.split('—')[1] || template.title}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Template Description */}
+            <div className="p-3 rounded-xl bg-blue-50/60 border border-blue-100 text-blue-900 text-xs">
+              <p className="font-medium">
+                {OUTREACH_PITCH_TEMPLATES[activePitchVersion].description}
+              </p>
+            </div>
+
+            {/* Script Text Box */}
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-slate-500 font-semibold text-[11px] uppercase tracking-wider font-mono">
+                  Personalized WhatsApp Script:
+                </span>
+                <span className="text-slate-400 text-[10px]">Ready to copy or send directly</span>
+              </div>
+              <textarea
+                readOnly
+                rows={9}
+                value={OUTREACH_PITCH_TEMPLATES[activePitchVersion].buildText(activePitchProspect.business_name)}
+                className="w-full p-3.5 rounded-xl bg-slate-50 border border-slate-200 font-mono text-xs text-slate-800 leading-relaxed focus:outline-none"
+              />
+            </div>
+
+            {/* Modal Actions */}
+            <div className="flex items-center justify-between pt-3 border-t border-slate-100">
+              <div className="text-[11px] text-slate-400">
+                Target: <strong>Business Growth System (₦200,000)</strong>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const text = OUTREACH_PITCH_TEMPLATES[activePitchVersion].buildText(activePitchProspect.business_name);
+                    navigator.clipboard.writeText(text);
+                    setCopiedPitchText(true);
+                    showToast('success', 'Outreach script copied to clipboard.');
+                    setTimeout(() => setCopiedPitchText(false), 2500);
+                  }}
+                  className="px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold inline-flex items-center gap-1.5 transition-all cursor-pointer shadow-xs"
+                >
+                  {copiedPitchText ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                  <span>{copiedPitchText ? 'Copied Script!' : 'Copy Script'}</span>
+                </button>
+
+                {activePitchProspect.phone && (
+                  <a
+                    href={`https://wa.me/${activePitchProspect.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
+                      OUTREACH_PITCH_TEMPLATES[activePitchVersion].buildText(activePitchProspect.business_name)
+                    )}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold inline-flex items-center gap-1.5 transition-all shadow-sm shadow-emerald-600/20 cursor-pointer"
+                  >
+                    <MessageCircle className="w-3.5 h-3.5" />
+                    <span>Send on WhatsApp</span>
+                  </a>
+                )}
+              </div>
             </div>
           </div>
         </div>

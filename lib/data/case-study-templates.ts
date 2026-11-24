@@ -13,7 +13,7 @@ export interface CaseStudySectionMeta {
 export interface CategoryCaseStudyConfig {
   category: ServiceCategory;
   displayName: string;
-  iconName: 'Palette' | 'Package' | 'Sparkles' | 'PenTool' | 'Globe' | 'GraduationCap' | 'Share2';
+  iconName: 'Palette' | 'Package' | 'Sparkles' | 'PenTool' | 'Globe' | 'GraduationCap' | 'Share2' | 'Zap';
   themeColor: 'primary' | 'secondary' | 'emerald' | 'amber';
   tagline: string;
   description: string;
@@ -122,6 +122,158 @@ export interface CategoryCaseStudyConfig {
 }
 
 export const CATEGORY_CASE_STUDY_CONFIGS: Record<ServiceCategory, CategoryCaseStudyConfig> = {
+  'Business Digital Upgrade': {
+    category: 'Business Digital Upgrade',
+    displayName: 'Business Digital Upgrade',
+    iconName: 'Zap',
+    themeColor: 'secondary',
+    tagline: 'High-Converting Digital Systems & Admission Funnels',
+    description: 'Transform outdated online presence into automated customer acquisition systems, WhatsApp booking flows, and local authority.',
+    fields: {
+      overview: {
+        sectionTitle: 'Upgrade Overview & Target Clients',
+        clientLabel: 'Business / Academy Name',
+        clientPlaceholder: 'e.g. Crestfield Academy, Prime Medical Services',
+        objectiveLabel: 'Upgrade Mission & Commercial Objective',
+        objectivePlaceholder: 'What customer acquisition or inquiry bottleneck did this digital upgrade solve?',
+        targetAudienceLabel: 'Target Prospects & Customer Decision Pathways',
+        targetAudiencePlaceholder: '👨‍👩‍👧 **Prospective Parents**: Seek clear admission steps, curriculum trust, and tour bookings\n📱 **Local Customers**: Want 1-click WhatsApp inquiry without repetitive phone calls',
+        overviewImageLabel: 'Digital Upgrade Hero Showcase Image',
+        overviewImageDesc: 'Upload mockups of the landing page, WhatsApp integration, or mobile experience',
+      },
+      problem: {
+        sectionTitle: 'Previous Digital Bottlenecks & Inefficiency',
+        problemLabel: 'Identified Weaknesses & Revenue Leaks (one per line)',
+        problemPlaceholder: '• Socials-only presence lacking structured information and credibility\n• Inquiries lost in unstructured Instagram DMs\n• No streamlined booking or enrollment pathway',
+        userGoalsLabel: 'Customer Convenience Goals',
+        userGoalsPlaceholder: '• Review services and pricing in under 60 seconds\n• Inquire directly via pre-filled WhatsApp conversation\n• Book a consultation or tour seamlessly on mobile',
+        businessGoalsLabel: 'Business Conversion Targets',
+        businessGoalsPlaceholder: '• 3x increase in qualified weekly inquiry volume\n• Eliminate manual phone delays and paperwork\n• Establish immediate digital authority over local competitors',
+        problemImageLabel: 'Old Digital Presence / Problem Audit Image',
+        problemImageDesc: 'Upload screenshot of previous informal social page or broken site',
+      },
+      research: {
+        sectionTitle: 'Competitor Analysis & Conversion Architecture',
+        researchLabel: 'Strategic Conversion Decisions (one per line)',
+        researchPlaceholder: 'Funnel: 3-step zero-friction conversion pathway\nWhatsApp Bridge: Pre-filled query tags to qualify leads instantly\nTrust Anchors: Accreditation badges, social proof, and local Google discoverability',
+        researchImageLabel: 'Funnel Architecture & User Flow Diagram',
+        researchImageDesc: 'Upload inquiry user flow diagram or wireframe map',
+      },
+      process: {
+        sectionTitle: 'Execution Sprint & Rapid Turnaround',
+        processLabel: 'Sprint Milestones (one per line)',
+        processPlaceholder: 'Day 1–2: Brand positioning, offer structure & content copy\nDay 3–5: High-converting UI design & mobile responsiveness\nDay 6–7: WhatsApp lead integration, form setup & live deployment',
+        processImageLabel: 'Sprint Roadmap & Work-in-Progress Screenshot',
+        processImageDesc: 'Upload sprint boards, design components, or code review snapshots',
+      },
+      designSystem: {
+        sectionTitle: 'Brand Design Language & Conversion Components',
+        systemLabel: 'Visual Components & Conversion Hooks (one per line)',
+        systemPlaceholder: 'Typography: Clean, authoritative typeface hierarchy\nColor Psychology: Trust-building blue and emerald conversion accents\nComponents: Sticky inquiry bar, accordion FAQ, and dynamic trust metrics',
+        systemImageLabel: 'Design System & Style Guide Image',
+        systemImageDesc: 'Upload design token palette, UI kit, or typography specimen',
+      },
+      solution: {
+        sectionTitle: 'The Deployed Digital Upgrade System',
+        solutionLabel: 'System Capabilities & Deliverables Overview',
+        solutionPlaceholder: 'Delivered a lightning-fast, mobile-first web system featuring transparent services, 3-step admission pathway, and direct WhatsApp routing.',
+        mobileImageLabel: 'Mobile Viewport Showcase',
+        mobileImageDesc: 'Upload mobile smartphone mockup demonstrating 1-click inquiry flow',
+        desktopImageLabel: 'Desktop Platform Showcase',
+        desktopImageDesc: 'Upload desktop browser view of full homepage and admission portal',
+      },
+      features: {
+        sectionTitle: 'High-Value Conversion Features',
+        featuresLabel: 'Key System Features (one per line)',
+        featuresPlaceholder: '• 3-Step Guided Enrollment Pathway\n• Instant Pre-filled WhatsApp Lead Routing\n• Mobile-Optimized Performance (100% Core Web Vitals)\n• Google Business & Maps Local Discoverability\n• Automated Lead Capture to Email & Spreadsheet',
+        featuresImageLabel: 'Feature Deep-Dive Mockup Image',
+        featuresImageDesc: 'Upload zoomed-in interface card showing WhatsApp action or inquiry form',
+      },
+      results: {
+        sectionTitle: 'Commercial Impact & Performance Lift',
+        resultsLabel: 'Measurable Outcomes & Growth Metrics (one per line)',
+        resultsPlaceholder: '• 3.8x faster inquiry response and qualification turnaround\n• Zero manual paperwork for initial customer onboarding\n• 100% transparent client communication channel',
+        resultsImageLabel: 'Analytics Dashboard & Conversion Proof Image',
+        resultsImageDesc: 'Upload inquiry metrics chart, Google analytics screenshot, or client feedback',
+      },
+      reflection: {
+        sectionTitle: 'Operational Retrospective & Ongoing Retainer',
+        reflectionLabel: 'Long-Term Value & Ongoing Maintenance',
+        reflectionPlaceholder: 'The system transformed the client from a passive social media handle into an automated customer acquisition machine, backed by the Business Care monthly plan.',
+        reflectionImageLabel: 'Final Brand Asset or Launch Milestone Image',
+        reflectionImageDesc: 'Upload finished hero banner or celebration launch graphic',
+      },
+    },
+    publicView: {
+      sections: {
+        overview: {
+          stepNumber: '01 / Commercial Strategic Mission',
+          title: 'Upgrade Mission & Audience',
+          badge: 'Commercial Strategy',
+          subtitle: 'Bridging informal social media presence into an authoritative, client-converting system',
+        },
+        problem: {
+          stepNumber: '02 / Inefficiency Audit',
+          title: 'Bottlenecks & Conversion Targets',
+          badge: 'Friction Elimination',
+          subtitle: 'Fixing lost inquiries, broken mobile layouts, and absence of clear customer pathways',
+        },
+        research: {
+          stepNumber: '03 / Conversion Architecture',
+          title: 'Strategic Conversion Funnel',
+          badge: 'Conversion Engine',
+          subtitle: 'Designing 3-step inquiry flows, WhatsApp bridges, and local SEO discoverability',
+        },
+        process: {
+          stepNumber: '04 / 7-Day Sprint',
+          title: 'Rapid Sprint & Deployment',
+          badge: 'Agile Delivery',
+          subtitle: 'From content collection to fully deployed digital system in under 10 business days',
+        },
+        designSystem: {
+          stepNumber: '05 / Trust Foundation',
+          title: 'Visual Identity & Trust System',
+          badge: 'Design System',
+          subtitle: 'Authoritative typography, accessible palettes, and frictionless UI components',
+        },
+        solution: {
+          stepNumber: '06 / Live System',
+          title: 'The Deployed Upgrade System',
+          badge: 'Production Launch',
+          subtitle: 'Explore the live mobile and desktop interactive experience',
+        },
+        features: {
+          stepNumber: '07 / Conversion Suite',
+          title: 'Core System Capabilities',
+          badge: 'System Suite',
+          subtitle: 'Automated WhatsApp routing, local maps discoverability, and inquiry forms',
+        },
+        results: {
+          stepNumber: '08 / Business Growth',
+          title: 'Commercial Impact & Results',
+          badge: 'Verified Impact',
+          subtitle: 'Quantifiable inquiry velocity, zero administrative lag, and increased revenue',
+        },
+        reflection: {
+          stepNumber: '09 / Long-Term Scale',
+          title: 'Retainer & Operational Continuity',
+          badge: 'Care Plan Retainer',
+          subtitle: 'Ongoing monthly care, uptime monitoring, and continuous conversion optimization',
+        },
+      },
+      mockupLabels: {
+        slot1: { title: 'Mobile Smartphone Experience', subtitle: '1-Click WhatsApp Conversion', icon: 'smartphone' },
+        slot2: { title: 'Desktop Browser Portal', subtitle: 'Authoritative Digital Infrastructure', icon: 'laptop' },
+      },
+      resultsLabels: {
+        leftCardTitle: 'Inquiry Velocity',
+        leftCardSubtitle: 'Turnaround & Response Speed',
+        rightCardTitle: 'Lead Conversion Rate',
+        rightCardSubtitle: 'Inbound Bookings & Enrollments',
+      },
+    },
+  },
+
   'UI/UX Design': {
     category: 'UI/UX Design',
     displayName: 'UI/UX Design',

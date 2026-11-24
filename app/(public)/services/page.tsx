@@ -18,6 +18,7 @@ import { createClient } from '@/lib/supabase/server';
 import type { Service } from '@/types/service';
 import { defaultServices } from '@/lib/data/services';
 import { ServiceIcon } from '@/lib/service-icons';
+import ServicePricingPackages from '@/components/sections/ServicePricingPackages';
 
 export const revalidate = 3600;
 
@@ -235,6 +236,9 @@ export default async function ServicesPage() {
           </div>
         </Container>
       </Section>
+
+      {/* ── Productized Pricing Packages & Retainers ── */}
+      <ServicePricingPackages />
 
       {/* ── The Rayida Standard / Principles ── */}
       <Section className="bg-[var(--ink-deep)] relative overflow-hidden border-y border-(--line)">

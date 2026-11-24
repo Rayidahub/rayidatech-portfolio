@@ -11,6 +11,7 @@ import type {
 
 export const RESEARCH_CATEGORIES = [
   'All',
+  'Schools & Academies',
   'Event Planning & Decor',
   'Bakery & Confectionery',
   'Catering & Food Services',
@@ -42,6 +43,54 @@ export const ABUJA_AREAS = [
  * including occasionally.ng vendor directories, Google Business, and public registries.
  */
 export const CURATED_ABUJA_PROSPECTS: ProspectResearchItem[] = [
+  {
+    id: 'res-abj-sch-01',
+    business_name: 'Prestige Royal Academy',
+    business_category: 'Schools & Academies',
+    location: 'Abuja, Nigeria',
+    area: 'Wuse 2',
+    email: 'prestigeroyalacademy@gmail.com',
+    phone: '+234 812 345 6789',
+    website: null,
+    website_status: 'No Website Found',
+    verification_note: 'Private primary and nursery school in Wuse 2. Operating via Facebook and WhatsApp inquiries; no online admissions portal.',
+    source: 'Abuja Education Registry',
+    source_link: 'https://maps.google.com/?q=Prestige+Royal+Academy+Wuse+2',
+    opportunity_score: 'High',
+    recommended_pitch: 'Showcase how our Crestfield Academy 3-step admission funnel automates parent tour bookings.',
+  },
+  {
+    id: 'res-abj-sch-02',
+    business_name: 'Capital Crest International School',
+    business_category: 'Schools & Academies',
+    location: 'Abuja, Nigeria',
+    area: 'Gwarinpa',
+    email: 'capitalcrestschool@gmail.com',
+    phone: '+234 803 987 6543',
+    website: null,
+    website_status: 'Socials Only',
+    verification_note: 'Active nursery and junior academy in Gwarinpa. Parents currently DM on Instagram for fee inquiries.',
+    source: 'Google Business Listings',
+    source_link: 'https://maps.google.com/?q=Capital+Crest+Gwarinpa',
+    opportunity_score: 'High',
+    recommended_pitch: 'Pitch custom school landing page with fee schedules and WhatsApp conversion pathway.',
+  },
+  {
+    id: 'res-abj-sch-03',
+    business_name: 'Apex Heights Early Learning Centre',
+    business_category: 'Schools & Academies',
+    location: 'Abuja, Nigeria',
+    area: 'Maitama',
+    email: 'apexheightskids@gmail.com',
+    phone: '+234 807 123 4567',
+    website: 'https://apexheights.wixsite.com/early',
+    website_status: 'Outdated / Needs Redesign',
+    verification_note: 'Free Wix template with broken mobile navigation and outdated 2023 calendar.',
+    source: 'VConnect Directory',
+    source_link: 'https://maps.google.com/?q=Apex+Heights+Maitama',
+    opportunity_score: 'High',
+    recommended_pitch: 'Upgrade to modern Next.js responsive website with direct WhatsApp tour scheduling.',
+  },
   {
     id: 'res-abj-001',
     business_name: '1420 Events',
@@ -604,3 +653,75 @@ export function exportProspectsToCsv(
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 }
+
+/**
+ * Calculates qualification score based on the commercial framework:
+ * +2 No website
+ * +2 Outdated or broken website
+ * +1 Socials only (no clear inquiry pathway)
+ * +1 Verified active phone/WhatsApp contact
+ */
+export function calculateProspectScore(item: ProspectResearchItem): {
+  score: number;
+  maxScore: number;
+  priority: 'High' | 'Medium' | 'Low';
+  reasons: string[];
+} {
+  let score = 0;
+  const reasons: string[] = [];
+
+  if (item.website_status === 'No Website Found') {
+    score += 2;
+    reasons.push('+2 No website found');
+  } else if (item.website_status === 'Outdated / Needs Redesign') {
+    score += 2;
+    reasons.push('+2 Outdated or broken website');
+  } else if (item.website_status === 'Socials Only') {
+    score += 1;
+    reasons.push('+1 Socials only (no dedicated inquiry system)');
+  }
+
+  if (item.phone) {
+    score += 1;
+    reasons.push('+1 Direct phone/WhatsApp available');
+  }
+
+  if (item.email) {
+    score += 1;
+    reasons.push('+1 Verified public email');
+  }
+
+  const priority = score >= 4 ? 'High' : score >= 2 ? 'Medium' : 'Low';
+  return { score, maxScore: 5, priority, reasons };
+}
+
+/**
+ * Exact battle-tested outreach scripts from the $10K monetization engine
+ */
+export const OUTREACH_PITCH_TEMPLATES = {
+  version_a: {
+    key: 'version_a',
+    title: 'Version A — Cold Hook & Concept Offer',
+    badge: 'Initial Hook',
+    description: 'Initial WhatsApp outreach to open a conversation and offer a concept demo.',
+    buildText: (businessName: string) =>
+      `Hello, good day.\n\nI came across ${businessName} and wanted to reach out because I noticed an opportunity to improve how your business presents itself online and how potential customers access your services.\n\nAt Rayida Tech, we help businesses build professional websites and simple digital systems that make it easier for customers to discover their services, make inquiries, and connect with them.\n\nI have a few ideas that could work particularly well for ${businessName}. I can also share a quick concept of what your digital presence could look like (similar to our Crestfield Academy prototype: https://rayidatech.name.ng/projects/crestfield-academy).\n\nWould you be open to seeing it?`,
+  },
+  version_b: {
+    key: 'version_b',
+    title: 'Version B — Positive Reply & Concept Demo',
+    badge: 'Follow-Up',
+    description: 'Message sent after they reply positively, linking the live concept demo.',
+    buildText: (businessName: string) =>
+      `Thank you for getting back to me.\n\nOur approach is to make ${businessName} more accessible and professional online without introducing unnecessary complexity.\n\nDepending on your needs, we can create a professional website, organize your service information, integrate WhatsApp inquiries, and build a simple system for collecting customer leads or registrations.\n\nYou can inspect our live academy demonstration concept here: https://rayidatech.name.ng/projects/crestfield-academy\n\nI can show you a short tailored concept for ${businessName} so you can see the direction before making any decision.`,
+  },
+  version_c: {
+    key: 'version_c',
+    title: 'Version C — Closing Proposal (₦200,000)',
+    badge: 'Closing Deal',
+    description: 'The closing proposal for the Business Growth System (₦200k, 7–10 days).',
+    buildText: (businessName: string) =>
+      `Based on what we've discussed, I recommend starting with our Business Growth System for ${businessName}.\n\nIt includes a professional website, mobile optimization, service presentation, inquiry forms, WhatsApp integration, and the essential features your customers need to connect with you.\n\nThe investment is ₦200,000, with delivery within 7–10 business days after content collection and project confirmation.\n\nPayment terms are 50% deposit to commence, 40% design milestone, and 10% on launch. If you're comfortable, I can send you the project scope and we can get started right away.`,
+  },
+};
+

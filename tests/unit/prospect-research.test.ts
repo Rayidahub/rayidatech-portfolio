@@ -7,6 +7,8 @@ import {
   searchAndEnrichProspects,
   verifyProspectLead,
   verifyProspectList,
+  OUTREACH_PITCH_TEMPLATES,
+  calculateProspectScore,
 } from '@/lib/email/prospect-research';
 
 describe('Prospect Research & Lead Discovery Engine', () => {
@@ -200,6 +202,37 @@ describe('Prospect Research & Lead Discovery Engine', () => {
         expect(p.verification).toBeDefined();
         expect(p.verification?.is_verified).toBe(true);
       }
+    });
+  });
+
+  describe('Outreach Pitch Templates & Qualification Engine', () => {
+    it('defines Version A, Version B, and Version C scripts with dynamic business names', () => {
+      const bizName = 'Prestige Royal Academy';
+      const pitchA = OUTREACH_PITCH_TEMPLATES.version_a.buildText(bizName);
+      expect(pitchA).toContain('Prestige Royal Academy');
+      expect(pitchA).toContain('Crestfield Academy');
+      expect(pitchA).toContain('Would you be open to seeing it?');
+
+      const pitchB = OUTREACH_PITCH_TEMPLATES.version_b.buildText(bizName);
+      expect(pitchB).toContain('Prestige Royal Academy');
+      expect(pitchB).toContain('/projects/crestfield-academy');
+
+      const pitchC = OUTREACH_PITCH_TEMPLATES.version_c.buildText(bizName);
+      expect(pitchC).toContain('₦200,000');
+      expect(pitchC).toContain('Business Growth System');
+      expect(pitchC).toContain('7–10 business days');
+    });
+
+    it('calculates prospect score accurately based on website and contact availability', () => {
+      const noWebsiteLead = CURATED_ABUJA_PROSPECTS.find((p) => p.website_status === 'No Website Found')!;
+      const scoreObj = calculateProspectScore(noWebsiteLead);
+      expect(scoreObj.score).toBeGreaterThanOrEqual(3);
+      expect(scoreObj.reasons.some((r) => r.includes('No website found'))).toBe(true);
+      expect(scoreObj.priority).toMatch(/High|Medium/);
+    });
+
+    it('includes Schools & Academies in categories', () => {
+      expect(RESEARCH_CATEGORIES).toContain('Schools & Academies');
     });
   });
 });

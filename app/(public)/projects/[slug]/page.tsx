@@ -42,6 +42,8 @@ import { isProjectPublished } from '@/lib/project-status';
 import { SERVICE_CATEGORIES } from '@/lib/data/services';
 import { getCaseStudyConfig } from '@/lib/data/case-study-templates';
 import { normalizeSlug } from '@/lib/slug';
+import { DEMO_PROJECTS } from '@/lib/data/demo-projects';
+import AcademyDemoShowcase from '@/components/projects/AcademyDemoShowcase';
 
 export const revalidate = 3600;
 
@@ -50,6 +52,13 @@ export const revalidate = 3600;
    ───────────────────────────────────────────────────────────── */
 
 async function getProject(slug: string): Promise<Project | null> {
+  const normalizedSlug = normalizeSlug(slug);
+
+  // Check static/curated demo projects first (e.g. Crestfield Academy)
+  if (DEMO_PROJECTS[slug] || DEMO_PROJECTS[normalizedSlug]) {
+    return DEMO_PROJECTS[slug] || DEMO_PROJECTS[normalizedSlug];
+  }
+
   const supabase = await createClient();
 
   // Try exact canonical match first
@@ -66,7 +75,6 @@ async function getProject(slug: string): Promise<Project | null> {
   }
 
   // Fallback: match normalized slugs
-  const normalizedSlug = normalizeSlug(slug);
   const { data: allProjects, error: listError } = await supabase
     .from('projects')
     .select('*');
@@ -508,6 +516,13 @@ function CaseStudyProjectPage({
                 <span>Start Similar Project</span>
                 <ArrowRight className="w-4 h-4 text-secondary transition-transform group-hover:translate-x-1" />
               </Link>
+            </div>
+          )}
+
+          {/* Interactive Academy Live Demonstration */}
+          {project.slug === 'crestfield-academy' && (
+            <div className="mt-12">
+              <AcademyDemoShowcase />
             </div>
           )}
         </div>

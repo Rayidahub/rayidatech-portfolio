@@ -1,6 +1,7 @@
 import type { Service } from '@/types/service';
 
 export const SERVICE_CATEGORIES = [
+  'Business Digital Upgrade',
   'UI/UX Design',
   'Product Design',
   'Brand Identity',
@@ -13,6 +14,27 @@ export const SERVICE_CATEGORIES = [
 export type ServiceCategory = (typeof SERVICE_CATEGORIES)[number];
 
 export const defaultServices: Service[] = [
+  {
+    id: 'srv-0',
+    title: 'Business Digital Upgrade',
+    slug: 'business-digital-upgrade',
+    headline: 'Turn Weak Online Presence Into A Client Magnet',
+    description:
+      'We help businesses transform outdated websites and informal social-only pages into structured digital systems that capture high-intent customer inquiries.',
+    content:
+      'Most businesses lose qualified customers every day because their services are hard to find, their website looks amateurish, or there is no clear path to inquire. The Business Digital Upgrade sprint delivers a high-converting, mobile-first web system equipped with WhatsApp direct booking, inquiry lead capture, and local discoverability in 7–10 days.',
+    features: [
+      'High-converting mobile-first website architecture',
+      'Direct WhatsApp inquiry & appointment integration',
+      'Lead capture form synced to email or Google Sheets',
+      'Local SEO & Google Business discoverability',
+      'Transparent productized packages (₦100k - ₦350k)',
+    ],
+    icon_name: 'Zap',
+    image_url: '/img/card1.png',
+    order: 1,
+    created_at: '2025-01-01T00:00:00Z',
+  },
   {
     id: 'srv-1',
     title: 'UI/UX Design',
@@ -31,7 +53,7 @@ export const defaultServices: Service[] = [
     ],
     icon_name: 'Palette',
     image_url: '/img/card1.png',
-    order: 1,
+    order: 2,
     created_at: '2025-01-01T00:00:00Z',
   },
   {
