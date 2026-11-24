@@ -27,6 +27,9 @@ import {
   ShieldCheck,
   CheckCheck,
   GraduationCap,
+  FileText,
+  Target,
+  ClipboardList,
 } from 'lucide-react';
 import {
   CURATED_ABUJA_PROSPECTS,
@@ -41,6 +44,8 @@ import {
   OUTREACH_PITCH_TEMPLATES,
   calculateProspectScore,
 } from '@/lib/email/prospect-research';
+import { generateProposalData } from '@/lib/data/proposals';
+import MonetizationSprintTracker from './MonetizationSprintTracker';
 import { batchImportContacts } from '@/app/actions/outreach-contacts';
 import type { ProspectResearchItem, WebsiteOpportunityStatus, OutreachContact } from '@/types/outreach';
 
@@ -91,6 +96,14 @@ export default function ProspectResearchClient({
   const [copiedPitchText, setCopiedPitchText] = useState(false);
   const [activePitchProspect, setActivePitchProspect] = useState<ProspectResearchItem | null>(null);
   const [activePitchVersion, setActivePitchVersion] = useState<'version_a' | 'version_b' | 'version_c'>('version_a');
+  
+  // Proposal & Sprint states
+  const [showSprintTracker, setShowSprintTracker] = useState(false);
+  const [activeProposalProspect, setActiveProposalProspect] = useState<ProspectResearchItem | null>(null);
+  const [selectedProposalPackage, setSelectedProposalPackage] = useState<'growth' | 'starter' | 'transformation'>('growth');
+  const [copiedProposalLink, setCopiedProposalLink] = useState(false);
+  const [copiedProposalText, setCopiedProposalText] = useState(false);
+
   const [feedbackToast, setFeedbackToast] = useState<{
     type: 'success' | 'error' | 'info';
     message: string;
@@ -396,6 +409,20 @@ export default function ProspectResearchClient({
             <span>Download Excel (.xlsx)</span>
           </button>
 
+          <button
+            type="button"
+            onClick={() => setShowSprintTracker((prev) => !prev)}
+            className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all shadow-xs cursor-pointer ${
+              showSprintTracker
+                ? 'bg-[#3b5bfa] text-white shadow-sm'
+                : 'bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200'
+            }`}
+            title="Toggle 30-Day Monetization Sprint & Revenue Engine Tracker"
+          >
+            <Target className="w-4 h-4" />
+            <span>{showSprintTracker ? 'Hide Sprint Tracker' : '🎯 30-Day Sprint'}</span>
+          </button>
+
           <Link
             href="/projects/crestfield-academy"
             target="_blank"
@@ -404,6 +431,17 @@ export default function ProspectResearchClient({
           >
             <GraduationCap className="w-4 h-4" />
             <span>Live Academy Demo</span>
+            <ExternalLink className="w-3 h-3" />
+          </Link>
+
+          <Link
+            href="/onboarding"
+            target="_blank"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 text-xs font-semibold transition-all shadow-xs cursor-pointer"
+            title="Open 24-Hour Client Rapid Onboarding Portal"
+          >
+            <ClipboardList className="w-4 h-4" />
+            <span>Onboarding Portal</span>
             <ExternalLink className="w-3 h-3" />
           </Link>
 
@@ -423,6 +461,13 @@ export default function ProspectResearchClient({
           )}
         </div>
       </div>
+
+      {/* ── Sprint Tracker Drawer ── */}
+      {showSprintTracker && (
+        <div className="animate-fade-in">
+          <MonetizationSprintTracker onClose={() => setShowSprintTracker(false)} />
+        </div>
+      )}
 
       {/* Telemetry Stats Bar matching DealDeck 4-card metric row */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -971,9 +1016,35 @@ export default function ProspectResearchClient({
                               <Sparkles className="w-2.5 h-2.5" />
                               <span>Pitch</span>
                             </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setActiveProposalProspect(item);
+                                setSelectedProposalPackage('growth');
+                              }}
+                              className="px-2 py-0.5 rounded-lg bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white text-[10px] font-semibold transition-all inline-flex items-center gap-0.5 cursor-pointer"
+                              title="Generate 1-Click Proposal & Agreement Link"
+                            >
+                              <FileText className="w-2.5 h-2.5" />
+                              <span>Proposal</span>
+                            </button>
                           </div>
                         ) : (
-                          <span className="text-[11px] text-slate-400 italic">None listed</span>
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-[11px] text-slate-400 italic">None listed</span>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setActiveProposalProspect(item);
+                                setSelectedProposalPackage('growth');
+                              }}
+                              className="px-2 py-0.5 rounded-lg bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white text-[10px] font-semibold transition-all inline-flex items-center gap-0.5 cursor-pointer"
+                              title="Generate 1-Click Proposal & Agreement Link"
+                            >
+                              <FileText className="w-2.5 h-2.5" />
+                              <span>Proposal</span>
+                            </button>
+                          </div>
                         )}
                       </td>
 
@@ -1349,6 +1420,210 @@ export default function ProspectResearchClient({
           </div>
         </div>
       )}
+
+      {/* ── 10. 1-Page Proposal & Agreement Generator Modal ── */}
+      {activeProposalProspect && (() => {
+        const proposalData = generateProposalData(activeProposalProspect.business_name, {
+          category: activeProposalProspect.business_category,
+          packageId: selectedProposalPackage,
+          targetCity: `${activeProposalProspect.area}, Abuja`,
+        });
+
+        const proposalPath = `/proposals/${proposalData.slug}`;
+        const whatsappNumber = activeProposalProspect.phone ? activeProposalProspect.phone.replace(/[^0-9]/g, '') : '';
+        const whatsappShareUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+          `Hello, here is the official 1-Page Scope of Work & Proposal for ${activeProposalProspect.business_name} (${proposalData.formattedPrice}):\nhttps://rayidatech.name.ng${proposalPath}\n\nKey Highlights:\n• Package: ${proposalData.packageName}\n• Turnaround: ${proposalData.deliveryTimeline}\n• Milestones: 50% Kickoff (₦${Math.round(proposalData.totalPrice / 2).toLocaleString()}), 50% Live Launch\n\nYou can review deliverables and accept with 1 click directly on the link above.`
+        )}`;
+
+        return (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-fade-in"
+            onClick={() => setActiveProposalProspect(null)}
+          >
+            <div
+              className="w-full max-w-2xl bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden text-slate-800 text-xs p-6 space-y-4"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Modal Header */}
+              <div className="flex items-start justify-between pb-3 border-b border-slate-100">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                    <FileText className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-base font-bold text-slate-900">
+                        1-Page Proposal Generator &bull; {activeProposalProspect.business_name}
+                      </h3>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-semibold">
+                        7-Day Turnaround
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-400 mt-0.5">
+                      Shareable client link &bull; Scope of work, deliverables &amp; 50/50 milestones
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveProposalProspect(null)}
+                  className="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors cursor-pointer"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Package Selector */}
+              <div>
+                <label className="block text-slate-500 font-semibold text-[11px] uppercase tracking-wider font-mono mb-1.5">
+                  Choose Package to Propose:
+                </label>
+                <div className="grid grid-cols-3 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedProposalPackage('starter')}
+                    className={`p-2.5 rounded-xl text-left border transition-all cursor-pointer ${
+                      selectedProposalPackage === 'starter'
+                        ? 'border-blue-500 bg-blue-50 text-blue-900 font-bold'
+                        : 'border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-600'
+                    }`}
+                  >
+                    <span className="block text-[10px] font-mono uppercase text-slate-400">Entry Offer</span>
+                    <span className="text-xs block font-bold">Starter — ₦100,000</span>
+                    <span className="text-[10px] text-slate-500 block mt-0.5">3–5 Days Delivery</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setSelectedProposalPackage('growth')}
+                    className={`p-2.5 rounded-xl text-left border transition-all cursor-pointer ${
+                      selectedProposalPackage === 'growth'
+                        ? 'border-[#3b5bfa] bg-blue-50/80 text-blue-900 font-bold'
+                        : 'border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-600'
+                    }`}
+                  >
+                    <span className="block text-[10px] font-mono uppercase text-blue-600 font-bold">Core Offer</span>
+                    <span className="text-xs block font-bold">Growth System — ₦200,000</span>
+                    <span className="text-[10px] text-slate-500 block mt-0.5">7–10 Days Delivery</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setSelectedProposalPackage('transformation')}
+                    className={`p-2.5 rounded-xl text-left border transition-all cursor-pointer ${
+                      selectedProposalPackage === 'transformation'
+                        ? 'border-purple-500 bg-purple-50 text-purple-900 font-bold'
+                        : 'border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-600'
+                    }`}
+                  >
+                    <span className="block text-[10px] font-mono uppercase text-slate-400">Enterprise</span>
+                    <span className="text-xs block font-bold">Transformation — ₦350,000</span>
+                    <span className="text-[10px] text-slate-500 block mt-0.5">10–15 Days Delivery</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Proposal Link Box */}
+              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                <div className="flex items-center justify-between text-[11px]">
+                  <span className="font-semibold text-slate-700">Dedicated Public Proposal Link:</span>
+                  <Link
+                    href={proposalPath}
+                    target="_blank"
+                    className="text-[#3b5bfa] hover:underline font-semibold inline-flex items-center gap-1"
+                  >
+                    <span>Open Live Proposal Preview</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </Link>
+                </div>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    readOnly
+                    value={`https://rayidatech.name.ng${proposalPath}`}
+                    className="w-full bg-white border border-slate-200 rounded-xl px-3 py-1.5 font-mono text-xs text-slate-700 outline-none"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      navigator.clipboard.writeText(`https://rayidatech.name.ng${proposalPath}`);
+                      setCopiedProposalLink(true);
+                      showToast('success', 'Proposal link copied to clipboard.');
+                      setTimeout(() => setCopiedProposalLink(false), 2500);
+                    }}
+                    className="shrink-0 px-3 py-1.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold text-xs flex items-center gap-1 cursor-pointer transition-all"
+                  >
+                    {copiedProposalLink ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                    <span>{copiedProposalLink ? 'Copied!' : 'Copy Link'}</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Scope of Work Preview */}
+              <div className="space-y-1.5">
+                <span className="text-slate-500 font-semibold text-[11px] uppercase tracking-wider font-mono">
+                  Deliverables Preview ({proposalData.deliverables.length} Items):
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 bg-slate-50/70 p-3 rounded-2xl border border-slate-100 max-h-36 overflow-y-auto">
+                  {proposalData.deliverables.map((d, i) => (
+                    <div key={i} className="flex items-start gap-1.5 text-[11px] text-slate-700">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                      <div>
+                        <strong className="block text-slate-900 leading-tight">{d.title}</strong>
+                        <span className="text-[10px] text-slate-500 line-clamp-1">{d.description}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Milestones Info */}
+              <div className="flex items-center justify-between p-3 rounded-xl bg-emerald-50/70 border border-emerald-100 text-emerald-900 text-xs">
+                <div>
+                  <span className="font-bold block">50/50 Milestone Structure</span>
+                  <span className="text-[11px] text-emerald-700">
+                    Milestone 1: ₦{Math.round(proposalData.totalPrice / 2).toLocaleString()} to begin &bull; Milestone 2: ₦{Math.round(proposalData.totalPrice / 2).toLocaleString()} at live release
+                  </span>
+                </div>
+                <span className="font-extrabold text-sm text-emerald-800">
+                  {proposalData.formattedPrice}
+                </span>
+              </div>
+
+              {/* Modal Actions */}
+              <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const text = `PROPOSAL & AGREEMENT: ${activeProposalProspect.business_name}\nPackage: ${proposalData.packageName} (${proposalData.formattedPrice})\nLink: https://rayidatech.name.ng${proposalPath}\nMilestones: 50% Kickoff, 50% Launch`;
+                    navigator.clipboard.writeText(text);
+                    setCopiedProposalText(true);
+                    showToast('success', 'Proposal summary copied to clipboard.');
+                    setTimeout(() => setCopiedProposalText(false), 2500);
+                  }}
+                  className="px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold inline-flex items-center gap-1.5 transition-all cursor-pointer shadow-xs"
+                >
+                  {copiedProposalText ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                  <span>{copiedProposalText ? 'Copied Summary!' : 'Copy Summary'}</span>
+                </button>
+
+                {activeProposalProspect.phone && (
+                  <a
+                    href={whatsappShareUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold inline-flex items-center gap-1.5 transition-all shadow-sm shadow-emerald-600/20 cursor-pointer"
+                  >
+                    <MessageCircle className="w-3.5 h-3.5" />
+                    <span>Send Proposal on WhatsApp</span>
+                  </a>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      })()}
     </div>
   );
 }
