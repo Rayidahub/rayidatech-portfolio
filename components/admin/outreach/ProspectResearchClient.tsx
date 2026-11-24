@@ -30,6 +30,9 @@ import {
   FileText,
   Target,
   ClipboardList,
+  ShieldAlert,
+  Receipt,
+  CreditCard,
 } from 'lucide-react';
 import {
   CURATED_ABUJA_PROSPECTS,
@@ -45,7 +48,9 @@ import {
   calculateProspectScore,
 } from '@/lib/email/prospect-research';
 import { generateProposalData } from '@/lib/data/proposals';
+import { generateMilestoneInvoice, type InvoiceMilestoneType } from '@/lib/data/invoices';
 import MonetizationSprintTracker from './MonetizationSprintTracker';
+import ObjectionBattlecardsModal from './ObjectionBattlecardsModal';
 import { batchImportContacts } from '@/app/actions/outreach-contacts';
 import type { ProspectResearchItem, WebsiteOpportunityStatus, OutreachContact } from '@/types/outreach';
 
@@ -103,6 +108,13 @@ export default function ProspectResearchClient({
   const [selectedProposalPackage, setSelectedProposalPackage] = useState<'growth' | 'starter' | 'transformation'>('growth');
   const [copiedProposalLink, setCopiedProposalLink] = useState(false);
   const [copiedProposalText, setCopiedProposalText] = useState(false);
+
+  // Invoice & Battlecards states
+  const [showBattlecardsModal, setShowBattlecardsModal] = useState(false);
+  const [activeInvoiceProspect, setActiveInvoiceProspect] = useState<ProspectResearchItem | null>(null);
+  const [selectedInvoiceMilestone, setSelectedInvoiceMilestone] = useState<InvoiceMilestoneType>('kickoff_50');
+  const [copiedInvoiceLink, setCopiedInvoiceLink] = useState(false);
+  const [copiedInvoiceSummary, setCopiedInvoiceSummary] = useState(false);
 
   const [feedbackToast, setFeedbackToast] = useState<{
     type: 'success' | 'error' | 'info';
@@ -407,6 +419,16 @@ export default function ProspectResearchClient({
           >
             <FileSpreadsheet className="w-4 h-4 text-emerald-600" />
             <span>Download Excel (.xlsx)</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setShowBattlecardsModal(true)}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 text-xs font-semibold transition-all shadow-xs cursor-pointer"
+            title="Open Objection Battlecards & Sales Call Cheatsheet"
+          >
+            <ShieldAlert className="w-4 h-4 text-amber-600" />
+            <span>🛡️ Objection Battlecards</span>
           </button>
 
           <button
@@ -1028,6 +1050,18 @@ export default function ProspectResearchClient({
                               <FileText className="w-2.5 h-2.5" />
                               <span>Proposal</span>
                             </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setActiveInvoiceProspect(item);
+                                setSelectedInvoiceMilestone('kickoff_50');
+                              }}
+                              className="px-2 py-0.5 rounded-lg bg-amber-50 hover:bg-amber-600 text-amber-700 hover:text-white text-[10px] font-semibold transition-all inline-flex items-center gap-0.5 cursor-pointer"
+                              title="Generate 1-Click Milestone Invoice Link"
+                            >
+                              <Receipt className="w-2.5 h-2.5" />
+                              <span>Invoice</span>
+                            </button>
                           </div>
                         ) : (
                           <div className="flex items-center gap-1.5">
@@ -1043,6 +1077,18 @@ export default function ProspectResearchClient({
                             >
                               <FileText className="w-2.5 h-2.5" />
                               <span>Proposal</span>
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setActiveInvoiceProspect(item);
+                                setSelectedInvoiceMilestone('kickoff_50');
+                              }}
+                              className="px-2 py-0.5 rounded-lg bg-amber-50 hover:bg-amber-600 text-amber-700 hover:text-white text-[10px] font-semibold transition-all inline-flex items-center gap-0.5 cursor-pointer"
+                              title="Generate 1-Click Milestone Invoice Link"
+                            >
+                              <Receipt className="w-2.5 h-2.5" />
+                              <span>Invoice</span>
                             </button>
                           </div>
                         )}
@@ -1624,6 +1670,216 @@ export default function ProspectResearchClient({
           </div>
         );
       })()}
+
+      {/* ── 11. Milestone Invoice & Bank Remittance Generator Modal ── */}
+      {activeInvoiceProspect && (() => {
+        const invoiceData = generateMilestoneInvoice(
+          activeInvoiceProspect.business_name,
+          selectedInvoiceMilestone,
+          {
+            category: activeInvoiceProspect.business_category,
+            area: `${activeInvoiceProspect.area}, Abuja`,
+          }
+        );
+
+        const invoicePath = `/invoices/${invoiceData.id}`;
+        const whatsappNumber = activeInvoiceProspect.phone ? activeInvoiceProspect.phone.replace(/[^0-9]/g, '') : '';
+        const whatsappShareUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+          `Hello, here is the official Milestone Invoice ${invoiceData.invoiceNumber} for ${activeInvoiceProspect.business_name} (${invoiceData.formattedAmount}):\nhttps://rayidatech.name.ng${invoicePath}\n\nBank Remittance Instructions:\n• Bank: ${invoiceData.bankDetails.bankName}\n• Account: ${invoiceData.bankDetails.accountNumber} (${invoiceData.bankDetails.accountName})\n• Reference: ${invoiceData.bankDetails.paymentReference}\n\nPlease reply with proof of payment receipt to initiate development immediately.`
+        )}`;
+
+        return (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-fade-in text-xs text-slate-800"
+            onClick={() => setActiveInvoiceProspect(null)}
+          >
+            <div
+              className="w-full max-w-2xl bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden text-slate-800 text-xs p-6 space-y-4"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Modal Header */}
+              <div className="flex items-start justify-between pb-3 border-b border-slate-100">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                    <Receipt className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-base font-bold text-slate-900">
+                        Milestone Invoice Generator &bull; {activeInvoiceProspect.business_name}
+                      </h3>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 font-semibold">
+                        {invoiceData.invoiceNumber}
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-400 mt-0.5">
+                      Bank remittance instructions &bull; 50/50 milestone invoicing &bull; Instant WhatsApp dispatch
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveInvoiceProspect(null)}
+                  className="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors cursor-pointer"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Milestone Type Selector */}
+              <div>
+                <label className="block text-slate-500 font-semibold text-[11px] uppercase tracking-wider font-mono mb-1.5">
+                  Select Milestone to Invoice:
+                </label>
+                <div className="grid grid-cols-3 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedInvoiceMilestone('kickoff_50')}
+                    className={`p-2.5 rounded-xl text-left border transition-all cursor-pointer ${
+                      selectedInvoiceMilestone === 'kickoff_50'
+                        ? 'border-blue-500 bg-blue-50 text-blue-900 font-bold'
+                        : 'border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-600'
+                    }`}
+                  >
+                    <span className="block text-[10px] font-mono uppercase text-blue-600 font-bold">Milestone 1</span>
+                    <span className="text-xs block font-bold">Kickoff (50%) — ₦100,000</span>
+                    <span className="text-[10px] text-slate-500 block mt-0.5">To initiate development</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setSelectedInvoiceMilestone('handover_50')}
+                    className={`p-2.5 rounded-xl text-left border transition-all cursor-pointer ${
+                      selectedInvoiceMilestone === 'handover_50'
+                        ? 'border-emerald-500 bg-emerald-50 text-emerald-900 font-bold'
+                        : 'border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-600'
+                    }`}
+                  >
+                    <span className="block text-[10px] font-mono uppercase text-emerald-600 font-bold">Milestone 2</span>
+                    <span className="text-xs block font-bold">Handover (50%) — ₦100,000</span>
+                    <span className="text-[10px] text-slate-500 block mt-0.5">At final live launch</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setSelectedInvoiceMilestone('care_retainer')}
+                    className={`p-2.5 rounded-xl text-left border transition-all cursor-pointer ${
+                      selectedInvoiceMilestone === 'care_retainer'
+                        ? 'border-purple-500 bg-purple-50 text-purple-900 font-bold'
+                        : 'border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-600'
+                    }`}
+                  >
+                    <span className="block text-[10px] font-mono uppercase text-purple-600 font-bold">Retainer</span>
+                    <span className="text-xs block font-bold">Monthly Care — ₦35,000</span>
+                    <span className="text-[10px] text-slate-500 block mt-0.5">Recurring maintenance</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Public Invoice Link Box */}
+              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                <div className="flex items-center justify-between text-[11px]">
+                  <span className="font-semibold text-slate-700">Official Digital Invoice Link:</span>
+                  <Link
+                    href={invoicePath}
+                    target="_blank"
+                    className="text-[#3b5bfa] hover:underline font-semibold inline-flex items-center gap-1"
+                  >
+                    <span>Open Live Invoice Page</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </Link>
+                </div>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    readOnly
+                    value={`https://rayidatech.name.ng${invoicePath}`}
+                    className="w-full bg-white border border-slate-200 rounded-xl px-3 py-1.5 font-mono text-xs text-slate-700 outline-none"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      navigator.clipboard.writeText(`https://rayidatech.name.ng${invoicePath}`);
+                      setCopiedInvoiceLink(true);
+                      showToast('success', 'Invoice link copied to clipboard.');
+                      setTimeout(() => setCopiedInvoiceLink(false), 2500);
+                    }}
+                    className="shrink-0 px-3 py-1.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold text-xs flex items-center gap-1 cursor-pointer transition-all"
+                  >
+                    {copiedInvoiceLink ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                    <span>{copiedInvoiceLink ? 'Copied!' : 'Copy Link'}</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Bank Remittance Preview */}
+              <div className="p-3.5 rounded-2xl bg-amber-50/60 border border-amber-200/80 text-amber-950 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold flex items-center gap-1 text-xs">
+                    <CreditCard className="w-3.5 h-3.5 text-amber-700" />
+                    Bank Remittance Details:
+                  </span>
+                  <span className="font-mono font-bold text-sm text-slate-900">{invoiceData.formattedAmount}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 text-[11px]">
+                  <div>
+                    <span className="text-slate-500 block">Bank Name:</span>
+                    <span className="font-semibold text-slate-800">{invoiceData.bankDetails.bankName}</span>
+                  </div>
+                  <div>
+                    <span className="text-slate-500 block">Account Number:</span>
+                    <span className="font-mono font-bold text-slate-900">{invoiceData.bankDetails.accountNumber}</span>
+                  </div>
+                  <div>
+                    <span className="text-slate-500 block">Account Name:</span>
+                    <span className="font-semibold text-slate-800">{invoiceData.bankDetails.accountName}</span>
+                  </div>
+                  <div>
+                    <span className="text-slate-500 block">Reference:</span>
+                    <span className="font-mono font-bold text-blue-600">{invoiceData.bankDetails.paymentReference}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Modal Actions */}
+              <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const text = `INVOICE ${invoiceData.invoiceNumber}: ${activeInvoiceProspect.business_name}\nAmount: ${invoiceData.formattedAmount}\nBank: ${invoiceData.bankDetails.bankName}\nAccount: ${invoiceData.bankDetails.accountNumber} (${invoiceData.bankDetails.accountName})\nRef: ${invoiceData.bankDetails.paymentReference}\nLink: https://rayidatech.name.ng${invoicePath}`;
+                    navigator.clipboard.writeText(text);
+                    setCopiedInvoiceSummary(true);
+                    showToast('success', 'Invoice details copied to clipboard.');
+                    setTimeout(() => setCopiedInvoiceSummary(false), 2500);
+                  }}
+                  className="px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold inline-flex items-center gap-1.5 transition-all cursor-pointer shadow-xs"
+                >
+                  {copiedInvoiceSummary ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                  <span>{copiedInvoiceSummary ? 'Copied Summary!' : 'Copy Details'}</span>
+                </button>
+
+                {activeInvoiceProspect.phone && (
+                  <a
+                    href={whatsappShareUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold inline-flex items-center gap-1.5 transition-all shadow-sm shadow-emerald-600/20 cursor-pointer"
+                  >
+                    <MessageCircle className="w-3.5 h-3.5" />
+                    <span>Send Invoice on WhatsApp</span>
+                  </a>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
+      {/* ── 12. Objection Battlecards Modal ── */}
+      {showBattlecardsModal && (
+        <ObjectionBattlecardsModal onClose={() => setShowBattlecardsModal(false)} />
+      )}
     </div>
   );
 }
